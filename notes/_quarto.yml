@@ -1,0 +1,26 @@
+project:
+  type: book
+  output-dir: ../output/book
+
+book:
+  title: "Project Intelligence"
+  subtitle: "Mathematics, Physics, Algorithms, and Engineering for Autonomous Systems"
+  chapters:
+    - index.qmd
+    - part: "Part I - Motion, Mechanics, and Control"
+      chapters:
+        - 01_geometry_and_coordinate_frames.qmd
+
+lang: en-AU
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    code-copy: true
+  pdf:
+    documentclass: scrreprt
+    pdf-engine: lualatex
+    toc: true
+
+number-sections: true

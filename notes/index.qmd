@@ -1,0 +1,69 @@
+# Preface {.unnumbered}
+
+## Purpose
+
+Project Intelligence studies one central question:
+
+> How can an embodied agent construct useful internal models of the world,
+> reason about possible futures, and safely pursue long-term goals under
+> uncertainty?
+
+These notes develop the mathematics, physics, algorithms, and engineering
+interpretation needed to investigate that question. They are organised around
+autonomous-system capabilities rather than treating mathematics, physics,
+robotics, control, and learning as unrelated subjects.
+
+The simulated differential-drive robot is the first experimental platform.
+Later phases transfer the resulting ideas to a simulated multirotor UAV.
+
+## How to use this book
+
+Each chapter follows the project lifecycle:
+
+```text
+Learn and write -> Engineer -> Verify and release
+```
+
+During the learning stage:
+
+1. read one concept and reproduce its notation;
+2. work through the derivation without skipping steps;
+3. explain the physical or geometric meaning in plain language;
+4. complete the short retrieval test without looking at the notes;
+5. check the answers or hints and revisit only the missed material;
+6. connect the documented model to later requirements, implementation, and
+   verification.
+
+Code blocks are display-only unless their opening fence names an executable
+Quarto engine such as `{python}`. Display-only examples explain theory without
+requiring Jupyter.
+
+## Global conventions
+
+- SI units are used unless a section states otherwise.
+- Angles are measured in radians for mathematics and software.
+- Vectors are column vectors.
+- Coordinate frames are right-handed and orthonormal unless stated otherwise.
+- A superscript identifies the frame in which coordinates are expressed, such
+  as ${}^{a}\mathbf{v}$.
+- A rotation matrix $R_{ab}$ describes the orientation of frame $\{b\}$
+  relative to frame $\{a\}$ and maps coordinates from $\{b\}$ to $\{a\}$.
+- Equations state their assumptions and units close to where they are used.
+- Project notation is defined explicitly before material from different sources
+  is combined.
+
+## Current status
+
+| Item | Status |
+|---|---|
+| Active phase | Phase 1 - Geometry, mechanics, and control |
+| Phase question | How can desired motion be converted into stable physical action? |
+| Current learning block | Vectors, matrices, and coordinate-frame notation |
+| Robot implementation | Not started; begins only after the learning gate passes |
+
+## Source policy
+
+The local [textbook retrieval index](../textbooks/INDEX.md) is the first routing
+point for theory. Chapters record the source, chapter or section, and page
+convention used. Supplementary material is labelled rather than silently
+presented as textbook content.

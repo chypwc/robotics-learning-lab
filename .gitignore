@@ -1,0 +1,16 @@
+.obsidian/
+.agents/
+.codex/
+.venv/
+.vscode/
+
+# ROS 2 workspace
+ros_ws/build/
+ros_ws/install/
+ros_ws/log/
+
+*.md.orig
+*:Zone.Identifier
+
+output/
+textbooks/
