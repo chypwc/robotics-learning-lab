@@ -14,3 +14,9 @@ ros_ws/log/
 
 output/
 textbooks/
+
+.pytest_cache/
+
+AGENTS.md
+CHECKLIST.md
+PLAN.md

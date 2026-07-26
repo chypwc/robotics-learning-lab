@@ -1,0 +1,357 @@
+# ROS 2 Package Development Workflow
+
+## Goal
+
+This workflow creates, builds, runs, and tests a small ROS 2 Python package from scratch. It uses `my_robot_package` as an example package name and `my_node` as an example executable name; replace them in a real project.
+
+A **workspace** holds packages developed and built together. A **ROS 2 package** combines source code with the metadata needed for building, installing, and discovery. An **executable** is a program installed by a package and started with `ros2 run`.
+
+The generated `my_node` executable only prints a message. It demonstrates the package workflow but does not yet communicate with other ROS 2 nodes.
+
+## Step 1 — Source the ROS 2 underlay
+
+For Zsh, run:
+
+```zsh
+source /opt/ros/jazzy/setup.zsh
+```
+
+For Bash, run:
+
+```bash
+source /opt/ros/jazzy/setup.bash
+```
+
+Use the script matching the current shell.
+
+**What happens:** `/opt/ros/jazzy` is the ROS 2 Jazzy **underlay**, meaning the existing installation on which the new workspace depends. Its setup script adds ROS installation prefixes, Python packages, and executables to the current shell's search environment.
+
+The command uses `source` because the environment of the current shell must change. If the script ran in a separate **child process**, meaning a process started by the shell, its environment changes would disappear when that child exited.
+
+Verify the environment:
+
+```bash
+printf '%s\n' "$ROS_DISTRO"
+command -v ros2
+command -v colcon
+```
+
+The expected observations are `jazzy` and executable paths for `ros2` and `colcon`.
+
+## Step 2 — Create a workspace
+
+For a new standalone workspace, run:
+
+```zsh
+mkdir -p ~/ros_ws/src
+cd ~/ros_ws
+```
+
+The workspace develops into:
+
+```text
+ros_ws/
+├── src/       # Editable source
+├── build/     # Generated build workspace
+├── install/   # Generated runnable workspace image
+└── log/       # Generated build and test records
+```
+
+Only `src/` exists initially. `colcon` creates the other directories. Edit `src/`, not the generated files in `build/`, `install/`, or `log/`.
+
+## Step 3 — Create a Python package
+
+From the workspace root, run:
+
+```zsh
+cd src
+ros2 pkg create \
+  --build-type ament_python \
+  --license Apache-2.0 \
+  --node-name my_node \
+  my_robot_package
+cd ..
+```
+
+Run this command only when the package does not already exist.
+
+**What happens:** `ros2 pkg create` generates `src/my_robot_package`.'
+
+
+- `ament_python` selects Python packaging through `setuptools`.
+- `Apache-2.0` is recorded in `package.xml`, and a matching `LICENSE` file is created.
+- `--node-name my_node` creates a minimal Python executable and its `setup.py` entry point.
+
+Omit `--node-name` when creating a library-only package.
+
+For comparison, create a C++ package with:
+
+```zsh
+ros2 pkg create \
+  --build-type ament_cmake \
+  --license Apache-2.0 \
+  robot_controller
+```
+
+The common build types are `ament_python` for Python with `setuptools` and `ament_cmake` for C++ with CMake.
+
+## Step 4 — Inspect the generated package
+
+```text
+src/my_robot_package/
+├── LICENSE
+├── package.xml
+├── setup.py
+├── setup.cfg
+├── resource/
+│   └── my_robot_package
+├── my_robot_package/
+│   ├── __init__.py
+│   └── my_node.py
+└── test/
+    ├── test_copyright.py
+    ├── test_flake8.py
+    └── test_pep257.py
+```
+
+The outer `my_robot_package/` is the ROS package root. The inner directory is the Python import package used by `import my_robot_package`; the repeated name does not indicate nested repositories.
+
+| File or directory | Purpose |
+|---|---|
+| `package.xml` | Declares package identity, licence, dependencies, and build type |
+| `setup.py` | Selects Python packages, data files, and executables to install |
+| `setup.cfg` | Selects the ROS-compatible destination for Python executables |
+| `resource/my_robot_package` | Registers the installed package in the ament resource index |
+| `my_robot_package/` | Contains importable Python source |
+| `test/` | Contains checks run by `pytest` and `colcon test` |
+
+The resource marker is intentionally empty. Its filename identifies the package.
+
+## Step 5 — Complete the package metadata
+
+Replace placeholder descriptions and maintainer details in `package.xml` and `setup.py`. Keep their package name, version, and licence consistent. The `package.xml` export tells `colcon` which build integration to use:
+
+```xml
+<export>
+  <build_type>ament_python</build_type>
+</export>
+```
+
+A concise `setup.py` for the example is:
+
+```python
+from setuptools import find_packages, setup
+
+package_name = "my_robot_package"
+
+setup(
+    name=package_name,
+    version="0.0.0",
+    packages=find_packages(exclude=["test"]),
+    data_files=[
+        (
+            "share/ament_index/resource_index/packages",
+            [f"resource/{package_name}"],
+        ),
+        (f"share/{package_name}", ["package.xml"]),
+    ],
+    install_requires=["setuptools"],
+    zip_safe=True,
+    maintainer="Your Name",
+    maintainer_email="you@example.com",
+    description="Example ROS 2 Python package.",
+    license="Apache-2.0",
+    entry_points={
+        "console_scripts": [
+            "my_node = my_robot_package.my_node:main",
+        ],
+    },
+)
+```
+
+The important connections are:
+
+- `packages` installs importable Python packages.
+- `data_files` installs the resource marker and `package.xml` where ROS expects them.
+- `console_scripts` creates an executable that calls a Python function.
+
+The entry point `my_node = my_robot_package.my_node:main` maps the executable name `my_node` to the function `main()` in the Python module `my_robot_package.my_node`.
+
+The matching `setup.cfg` is:
+
+```ini
+[develop]
+script_dir=$base/lib/my_robot_package
+
+[install]
+install_scripts=$base/lib/my_robot_package
+```
+
+Here, `$base` is the package installation prefix. `setup.cfg` specifies that executable scripts belong under `lib/my_robot_package`, where `ros2 run` looks for them. It does not create an executable by itself; the `console_scripts` entry does that.
+
+## Step 6 — Resolve dependencies and run fast tests
+
+Resolve dependencies declared by packages under `src/`:
+
+```zsh
+rosdep install \
+  --from-paths src \
+  --ignore-src \
+  --rosdistro jazzy \
+  -r \
+  -y
+```
+
+`rosdep` ignores dependencies supplied by source packages in the workspace, maps the remaining dependency keys to operating-system packages, and installs missing packages.
+
+Run fast tests directly against the source tree:
+
+```zsh
+python3 -m pytest \
+  src/my_robot_package/test -q
+```
+
+Source-level tests provide fast feedback but do not verify ROS metadata or the installed layout. Continue only when they pass; the count and duration depend on the package.
+
+## Step 7 — Build and install the package
+
+From the workspace root, run:
+
+```zsh
+colcon build \
+  --packages-select my_robot_package \
+  --symlink-install
+```
+
+**What happens:** `colcon` discovers packages under `src/`, reads their manifests, orders them by declared dependencies, and selects the appropriate build integration. `ament_python` then invokes `setuptools` using `setup.py` and `setup.cfg`.
+
+The logical installed layout is:
+
+```text
+install/my_robot_package/
+├── lib/
+│   ├── python3.12/
+│   │   └── site-packages/
+│   │       └── my_robot_package/
+│   │           ├── __init__.py
+│   │           └── my_node.py
+│   └── my_robot_package/
+│       └── my_node
+└── share/
+    ├── ament_index/
+    │   └── resource_index/
+    │       └── packages/
+    │           └── my_robot_package
+    └── my_robot_package/
+        └── package.xml
+```
+
+The Python version in the path depends on the system.
+
+- `site-packages/my_robot_package` supplies importable Python code.
+- `lib/my_robot_package/my_node` supplies the executable used by `ros2 run`.
+- The resource marker registers the package with ROS.
+- The installed `package.xml` supplies package metadata.
+
+ROS 2 needs this standard runtime layout to locate packages, executables, metadata, launch files, configuration, Python imports, and dependency environment hooks.
+
+### What `--symlink-install` changes
+
+Supported files are linked back to editable source rather than copied:
+
+```text
+install/.../my_node.py
+        ↓ symbolic link
+src/my_robot_package/my_robot_package/my_node.py
+```
+
+Python packages may use an `.egg-link` instead of the copied directory shown in the logical tree. Consequently, edits to existing linked Python files may appear without rebuilding, but `install/` is still needed for metadata, executables, and environment scripts.
+
+Rebuild after changing `setup.py`, `setup.cfg`, `console_scripts`, installed data, dependencies, CMake configuration, or compiled C++ code. Rebuild after structural changes and before formal verification to avoid stale state.
+
+## Step 8 — Source the overlay and run the package
+
+After a successful build, source the script matching the current shell.
+
+```zsh
+source install/setup.zsh
+```
+
+```bash
+source install/setup.bash
+```
+
+This command does not install anything. It adds the workspace's `install/` tree as an **overlay** on the ROS underlay by updating variables such as `AMENT_PREFIX_PATH`, `PYTHONPATH`, and `PATH`.
+
+Sourcing affects only the current shell. A new terminal must source the ROS underlay and then the workspace overlay again.
+
+Verify package discovery, Python import, and executable discovery:
+
+```zsh
+ros2 pkg prefix my_robot_package
+python3 -c "import my_robot_package"
+ros2 run my_robot_package my_node
+```
+
+The final command should print:
+
+```text
+Hi from my_robot_package.
+```
+
+`ros2 pkg prefix` queries the ament resource index. `ros2 run` uses the first argument as the package name and the second as the executable name, then starts `lib/my_robot_package/my_node`.
+
+## Step 9 — Run tests through `colcon`
+
+```zsh
+colcon test --packages-select my_robot_package
+colcon test-result --verbose
+```
+
+`colcon test` runs the package's configured tests and stores structured results under the build tree. `colcon test-result` aggregates them. A completed command is not necessarily successful; verification passes only when the summary reports no errors or failures.
+
+## Step 10 — Repeat the daily development loop
+
+From the workspace root, repeat:
+
+```zsh
+# 1. Edit source.
+vim src/my_robot_package/my_robot_package/my_node.py
+
+# 2. Run fast tests.
+python3 -m pytest src/my_robot_package/test -q
+
+# 3. Build and install.
+colcon build \
+  --packages-select my_robot_package \
+  --symlink-install
+
+# 4. Reload the overlay.
+source install/setup.zsh
+
+# 5. Run the executable.
+ros2 run my_robot_package my_node
+
+# 6. Run package-level verification.
+colcon test --packages-select my_robot_package
+colcon test-result --verbose
+```
+
+Use `source install/setup.bash` in Bash.
+
+## Common failure checks
+
+| Symptom | Check |
+|---|---|
+| `ros2: command not found` | Source the ROS underlay in the current shell |
+| Package absent from `colcon list` | Check its location under `src/` and validate `package.xml` |
+| Python package is not installed | Check `__init__.py` and the `packages` argument in `setup.py` |
+| `ros2 pkg prefix` cannot find the package | Build and source the overlay |
+| `ros2 run` cannot find the executable | Check `console_scripts` and `setup.cfg`, then rebuild and source |
+| Test status is unclear | Run `colcon test-result --verbose` |
+
+## References
+
+- Open Robotics, [“Developing a ROS 2 package,”](https://docs.ros.org/en/jazzy/How-To-Guides/Developing-a-ROS-2-Package.html) *ROS 2 Jazzy Documentation*.
+- Open Robotics, [“Using Python Packages with ROS 2,”](https://docs.ros.org/en/jazzy/How-To-Guides/Using-Python-Packages.html) *ROS 2 Jazzy Documentation*.
+- colcon, [“What is a Workspace?”](https://colcon.readthedocs.io/en/released/user/what-is-a-workspace.html) *colcon Documentation*.

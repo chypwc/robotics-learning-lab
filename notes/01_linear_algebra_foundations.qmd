@@ -1,0 +1,1384 @@
+# Linear Algebra Foundations
+
+## Why linear algebra matters
+
+Autonomous robots represent directions, velocities, forces, sensor measurements, model parameters, and control commands with vectors. Matrices transform those vectors, combine coordinate descriptions, solve systems of equations, and expose whether information has been preserved or lost. Linear algebra provides the language needed to reason about these operations before they are used in geometry, kinematics, estimation, optimisation, and control.
+
+This chapter develops that language from first principles. It distinguishes geometric vectors from coordinate columns, explains matrices as linear maps, connects null spaces and rank to invertibility, defines determinants as signed volume scaling, and derives the properties of orthogonal matrices used later for rotations.
+
+## Prerequisites and assumptions
+
+### Prerequisites
+
+The reader should be comfortable with:
+
+- arithmetic and elementary algebra;
+- Cartesian coordinates;
+- solving simple equations;
+- sine and cosine; and
+- the project notation conventions.
+
+### Assumptions
+
+- Scalars are real numbers unless stated otherwise.
+- Vectors are written as columns.
+- Matrix and vector dimensions are declared when symbols are introduced.
+- Coordinate bases used for Euclidean lengths and angles are orthonormal.
+- Physical units are carried by the represented quantity; abstract basis and transformation matrices are dimensionless unless stated otherwise.
+
+## Dependency map
+
+```text
+Vectors and linear combinations
+        |
+        v
+Bases and coordinate columns
+        |
+        v
+Matrices as linear maps
+        |
+        v
+Null spaces, rank, and inverses
+        |
+        v
+Determinants and orthogonal matrices
+        |
+        v
+Coordinate frames, rotations, kinematics, estimation, and control
+```
+
+## 1. Vectors: quantities with magnitude and direction
+
+### 1.1 Geometric vector versus coordinate column
+
+A geometric vector is independent of any coordinate frame. A coordinate column is the numerical description of that vector in a chosen basis.
+
+Let $\{a\}$ denote a right-handed coordinate frame with orthonormal basis vectors $\mathbf{e}_{x,a}$, $\mathbf{e}_{y,a}$, and $\mathbf{e}_{z,a}$. For a geometric vector $\mathbf{v}$, the symbol ${}^{a}\mathbf{v}$ denotes its coordinate column expressed in frame $\{a\}$. In three-dimensional space,
+
+$$
+{}^{a}\mathbf{v}
+=
+\begin{bmatrix}
+v_x \\
+v_y \\
+v_z
+\end{bmatrix}.
+$$
+
+The entries mean that
+
+$$
+\mathbf{v}
+=
+v_x\mathbf{e}_{x,a}
++v_y\mathbf{e}_{y,a}
++v_z\mathbf{e}_{z,a}.
+$$
+
+The vector $\mathbf{v}$ is the physical or geometric object, whereas the column ${}^{a}\mathbf{v}$ depends on frame $\{a\}$. Omitting the frame label is safe only when the surrounding context makes the frame unambiguous.
+
+### 1.2 Addition and scalar multiplication
+
+For vectors expressed in the same frame,
+
+$$
+{}^{a}\mathbf{u}
++{}^{a}\mathbf{v}
+=
+\begin{bmatrix}
+u_x+v_x \\
+u_y+v_y \\
+u_z+v_z
+\end{bmatrix}.
+$$
+
+For a scalar $\alpha$,
+
+$$
+\alpha\,{}^{a}\mathbf{v}
+=
+\begin{bmatrix}
+\alpha v_x \\
+\alpha v_y \\
+\alpha v_z
+\end{bmatrix}.
+$$
+
+The algebra is valid only when the quantities are physically compatible. For example, adding two positions expressed in different frames is not meaningful until one has been transformed. Adding a velocity in metres per second to a position in metres is dimensionally invalid even if both are three-element columns.
+
+### 1.3 Length and unit direction
+
+The Euclidean norm is
+
+$$
+\left\|{}^{a}\mathbf{v}\right\|_2
+=
+\sqrt{v_x^2+v_y^2+v_z^2}.
+$$
+
+If $\mathbf{v}\neq\mathbf{0}$, let ${}^{a}\mathbf{e}_v$ denote its unit direction expressed in frame $\{a\}$:
+
+$$
+{}^{a}\mathbf{e}_v
+=
+\frac{{}^{a}\mathbf{v}}
+{\left\|{}^{a}\mathbf{v}\right\|_2}.
+$$
+
+The norm has the same physical units as the vector, while the unit vector is dimensionless because the units cancel.
+
+### 1.4 Dot product and angle
+
+Let two vectors be expressed as coordinate columns in the same orthonormal frame:
+
+$$
+{}^{a}\mathbf{u}
+=
+\begin{bmatrix}
+u_x\\
+u_y\\
+u_z
+\end{bmatrix},
+\qquad
+{}^{a}\mathbf{v}
+=
+\begin{bmatrix}
+v_x\\
+v_y\\
+v_z
+\end{bmatrix}.
+$$
+
+The superscript $\mathsf{T}$ denotes the **transpose** operation. It turns the column ${}^{a}\mathbf{u}\in\mathbb{R}^{3\times 1}$ into the row
+
+$$
+\left({}^{a}\mathbf{u}\right)^\mathsf{T}
+=
+{}^{a}\mathbf{u}^\mathsf{T}
+=
+\begin{bmatrix}
+u_x & u_y & u_z
+\end{bmatrix}
+\in\mathbb{R}^{1\times 3}.
+$$
+
+Here, $\mathsf{T}$ is an operation on the coordinate column; it is not a power.
+Multiplying this row by the column ${}^{a}\mathbf{v}$ produces a scalar:
+
+$$
+{}^{a}\mathbf{u}^\mathsf{T}\,{}^{a}\mathbf{v}
+=
+\begin{bmatrix}
+u_x & u_y & u_z
+\end{bmatrix}
+\begin{bmatrix}
+v_x\\
+v_y\\
+v_z
+\end{bmatrix}
+=
+u_xv_x+u_yv_y+u_zv_z.
+$$
+
+This scalar is the **dot product**, or Euclidean inner product, of the two
+vectors:
+
+$$
+\mathbf{u}\boldsymbol{\cdot}\mathbf{v}
+\mathrel{:=}
+{}^{a}\mathbf{u}^\mathsf{T}\,{}^{a}\mathbf{v}.
+$$
+
+The norm introduced in Section 1.3 can equivalently be defined from the dot
+product of a vector with itself:
+
+$$
+\begin{aligned}
+\left\|{}^{a}\mathbf{u}\right\|_2
+&\mathrel{:=}
+\sqrt{{}^{a}\mathbf{u}^\mathsf{T}\,{}^{a}\mathbf{u}}\\
+&=
+\sqrt{u_x^2+u_y^2+u_z^2}.
+\end{aligned}
+$$
+
+Equivalently, the squared norm is
+
+$$
+\left\|{}^{a}\mathbf{u}\right\|_2^2
+=
+{}^{a}\mathbf{u}^\mathsf{T}\,{}^{a}\mathbf{u}.
+$$
+
+Thus, dotting a vector with itself gives its squared length, and taking the
+nonnegative square root gives its length. Because frame $\{a\}$ is
+orthonormal, this coordinate norm equals the geometric length $\|\mathbf{u}\|_2$.
+
+The coordinate formula above has a geometric interpretation. To establish it,
+we first derive the law of cosines.
+
+#### Law of cosines
+
+Consider a triangle with two sides of lengths $r$ and $s$ and included angle
+$\theta$. Place its vertices at
+
+$$
+\mathbf{p}_0=(0,0),
+\qquad
+\mathbf{p}_1=(r,0),
+\qquad
+\mathbf{p}_2=(s\cos\theta,s\sin\theta).
+$$
+
+Let $c$ be the length of the side from $\mathbf{p}_1$ to $\mathbf{p}_2$. The horizontal and vertical displacements along that side are $s\cos\theta-r$ and $s\sin\theta$. By the Pythagorean theorem,
+
+$$
+\begin{aligned}
+c^2
+&=(s\cos\theta-r)^2+(s\sin\theta)^2\\
+&=s^2\cos^2\theta-2rs\cos\theta+r^2
+  +s^2\sin^2\theta\\
+&=r^2+s^2\left(\cos^2\theta+\sin^2\theta\right)
+  -2rs\cos\theta\\
+&=r^2+s^2-2rs\cos\theta.
+\end{aligned}
+$$
+
+Therefore, the law of cosines is
+
+$$
+\boxed{c^2=r^2+s^2-2rs\cos\theta}.
+$$
+
+#### Deriving the dot-product angle formula
+
+For nonzero vectors $\mathbf{u}$ and $\mathbf{v}$, place their tails at the same point and let $\theta$ be the angle between them. The vectors form a triangle whose side lengths are
+
+$$
+r=\|\mathbf{u}\|_2,
+\qquad
+s=\|\mathbf{v}\|_2,
+\qquad
+c=\|\mathbf{u}-\mathbf{v}\|_2.
+$$
+
+The law of cosines therefore gives
+
+$$
+\|\mathbf{u}-\mathbf{v}\|_2^2
+=
+\|\mathbf{u}\|_2^2+\|\mathbf{v}\|_2^2
+-2\|\mathbf{u}\|_2\|\mathbf{v}\|_2\cos\theta.
+$$
+
+Because frame $\{a\}$ is orthonormal, Euclidean lengths are preserved by its
+coordinate representation. Expanding the same squared length using coordinate columns gives
+
+$$
+\begin{aligned}
+\|\mathbf{u}-\mathbf{v}\|_2^2
+&=
+\left({}^{a}\mathbf{u}-{}^{a}\mathbf{v}\right)^\mathsf{T}
+\left({}^{a}\mathbf{u}-{}^{a}\mathbf{v}\right)\\
+&=
+\|\mathbf{u}\|_2^2+\|\mathbf{v}\|_2^2
+-2\,{}^{a}\mathbf{u}^\mathsf{T}\,{}^{a}\mathbf{v}.
+\end{aligned}
+$$
+
+Equating the two expressions for $\|\mathbf{u}-\mathbf{v}\|_2^2$ and cancelling their common terms gives
+
+$$
+{}^{a}\mathbf{u}^\mathsf{T}\,{}^{a}\mathbf{v}
+=
+\|\mathbf{u}\|_2\|\mathbf{v}\|_2\cos\theta,
+$$
+
+which is the dot-product angle formula. Solving it for the angle gives
+
+$$
+\theta
+=
+\cos^{-1}
+\left(
+\frac{{}^{a}\mathbf{u}^\mathsf{T}\,{}^{a}\mathbf{v}}
+{\|\mathbf{u}\|_2\|\mathbf{v}\|_2}
+\right),
+$$
+
+provided neither vector is zero.
+
+The dot product is useful for projection, alignment, and checking orthogonality. If
+
+$$
+{}^{a}\mathbf{u}^\mathsf{T}\,{}^{a}\mathbf{v}=0,
+$$
+
+then nonzero $\mathbf{u}$ and $\mathbf{v}$ are perpendicular.
+
+### 1.5 Linear combinations, span, and basis
+
+Let $\mathbf v_1,\ldots,\mathbf v_k\in\mathbb R^n$ and let $\alpha_1,\ldots,\alpha_k\in\mathbb R$. A **linear combination** of these vectors is any vector of the form
+
+$$
+\alpha_1\mathbf v_1+\cdots+\alpha_k\mathbf v_k.
+$$
+
+The **span** of $\mathbf v_1,\ldots,\mathbf v_k$ is the set of every linear combination that can be formed from them:
+
+$$
+\operatorname{span}\{\mathbf v_1,\ldots,\mathbf v_k\}
+\mathrel{:=}
+\left\{
+\sum_{j=1}^{k}\alpha_j\mathbf v_j:
+\alpha_1,\ldots,\alpha_k\in\mathbb R
+\right\}.
+$$
+
+The vectors are **linearly independent** if
+
+$$
+\alpha_1\mathbf v_1+\cdots+\alpha_k\mathbf v_k=\mathbf 0_n
+$$
+
+implies $\alpha_1=\cdots=\alpha_k=0$, where $\mathbf 0_n\in\mathbb R^n$ is the zero vector. If a nonzero set of coefficients produces $\mathbf 0_n$, the vectors are linearly dependent.
+
+A **basis** of $\mathbb R^n$ is a set of $n$ linearly independent vectors that spans $\mathbb R^n$. If $\mathbf e_1,\ldots,\mathbf e_n$ is a basis, every $\mathbf x\in\mathbb R^n$ has a unique expansion
+
+$$
+\mathbf x=x_1\mathbf e_1+\cdots+x_n\mathbf e_n.
+$$
+
+The scalar coefficients $x_1,\ldots,x_n\in\mathbb R$ form the coordinate column of $\mathbf x$ in that basis. Uniqueness is essential: if the basis vectors were dependent, the same vector could have more than one coefficient description.
+
+The **standard basis** of $\mathbb R^n$ is $\mathbf e_1,\ldots,\mathbf e_n$, where $\mathbf e_i$ has entry $1$ in position $i$ and entry $0$ in every other position. In the standard basis,
+
+$$
+\mathbf x=x_1\mathbf e_1+\cdots+x_n\mathbf e_n
+\quad\Longleftrightarrow\quad
+\mathbf x=
+\begin{bmatrix}
+x_1&\cdots&x_n
+\end{bmatrix}^{\mathsf T}.
+$$
+
+
+## Quick test A: vectors and bases
+
+Complete this test without looking back at the section.
+
+1. **Recall:** What is the difference between a geometric vector $\mathbf v$ and a coordinate column ${}^{a}\mathbf v$?
+2. **Explanation:** Why must coordinate columns be associated with a basis?
+3. **Derivation:** Use the law of cosines and an algebraic expansion of $\|\mathbf u-\mathbf v\|_2^2$ to derive ${}^{a}\mathbf u^{\mathsf T}{}^{a}\mathbf v=\|\mathbf u\|_2\|\mathbf v\|_2\cos\theta$.
+4. **Application:** Find the norm and unit direction of $\mathbf x=[3\;\;4]^\mathsf T$.
+5. **Limitations:** Why is the angle formula undefined when either vector is zero?
+6. **Basis:** Explain why two parallel nonzero vectors cannot form a basis of $\mathbb R^2$.
+
+### Answers and hints
+
+1. $\mathbf v$ is the coordinate-independent geometric object; ${}^{a}\mathbf v$ is its numerical representation in basis or frame $\{a\}$.
+2. The entries are coefficients multiplying particular basis vectors. Without the basis, the numbers do not determine physical or geometric directions.
+3. Equate the law-of-cosines expression for $\|\mathbf u-\mathbf v\|_2^2$ with its dot-product expansion and cancel the common norm terms.
+4. $\|\mathbf x\|_2=5$ and the unit direction is $[0.6\;\;0.8]^\mathsf T$.
+5. The denominator $\|\mathbf u\|_2\|\mathbf v\|_2$ becomes zero, and a zero vector has no direction.
+6. One vector is a scalar multiple of the other, so their span is only a line and their coefficient representation is not unique.
+
+
+## 2. Matrices: linear maps and basis changes
+
+### 2.1 Matrix dimensions
+
+A matrix $\mathbf{A}\in\mathbb{R}^{m\times n}$ maps an $n$-element coordinate vector to an $m$-element coordinate vector:
+
+$$
+\mathbf{y}=\mathbf{A}\mathbf{x}
+$$
+
+where $\mathbf{y} \in \mathbb{R}^m$ and $\mathbf{x} \in \mathbb{R}^n$.
+
+If
+
+$$
+\mathbf{A}=
+\begin{bmatrix}
+a_{11} & a_{12} \\
+a_{21} & a_{22}
+\end{bmatrix},
+\qquad
+\mathbf{x}=
+\begin{bmatrix}
+x_1\\
+x_2
+\end{bmatrix},
+$$
+
+then
+
+$$
+\mathbf{A}\mathbf{x}
+=
+\begin{bmatrix}
+a_{11}x_1+a_{12}x_2\\
+a_{21}x_1+a_{22}x_2
+\end{bmatrix}.
+$$
+
+Equivalently, if $\mathbf{a}_1$ and $\mathbf{a}_2$ are the columns of $\mathbf{A}$,
+
+$$
+\mathbf{A}\mathbf{x}=x_1\mathbf{a}_1+x_2\mathbf{a}_2.
+$$
+
+This column interpretation is central to rotation matrices: their columns are the axes of one frame expressed in another frame.
+
+### 2.2 Identity, transpose, null space, rank, and inverse
+
+Let $\mathbf{I}_n$ denote the $n\times n$ identity matrix. It leaves compatible coordinates unchanged:
+
+$$
+\mathbf{I}_n\mathbf{x}=\mathbf{x}.
+$$
+
+The transpose swaps rows and columns:
+
+$$
+\left(\mathbf{A}^\mathsf{T}\right)_{ij}=a_{ji}.
+$$
+
+Let $\mathbf A\in\mathbb R^{m\times n}$. Its **column space**, denoted $\operatorname{Col}(\mathbf A)$, is the set of all linear combinations of its columns. The **rank**, denoted $\operatorname{rank}(\mathbf A)$, is the number of linearly independent columns, equivalently the dimension of $\operatorname{Col}(\mathbf A)$.
+
+The **null space** of $\mathbf A$ is
+
+$$
+\mathcal N(\mathbf A)
+\mathrel{:=}
+\left\{\mathbf x\in\mathbb R^n:\mathbf A\mathbf x=\mathbf 0_m\right\},
+$$
+
+where $\mathbf 0_m\in\mathbb R^m$ is the zero vector. The null space contains all input directions that the mapping sends to zero.
+
+#### Injective mappings and unique recovery
+
+Let $\mathbf A\in\mathbb R^{m\times n}$ define the linear map
+
+$$
+T_{\mathbf A}:\mathbb R^n\rightarrow\mathbb R^m,
+\qquad
+T_{\mathbf A}(\mathbf x)=\mathbf A\mathbf x.
+$$
+
+The map $T_{\mathbf A}$ is **injective**, or **one-to-one**, if equal outputs can occur only when the inputs are equal. Formally, for every $\mathbf x^{(1)},\mathbf x^{(2)}\in\mathbb R^n$, where the parenthesised superscripts $(1)$ and $(2)$ label two inputs and are not exponents,
+
+$$
+\mathbf A\mathbf x^{(1)}=\mathbf A\mathbf x^{(2)}
+\quad\Longrightarrow\quad
+\mathbf x^{(1)}=\mathbf x^{(2)}.
+$$
+
+Equivalently, distinct inputs must produce distinct outputs:
+
+$$
+\mathbf x^{(1)}\neq\mathbf x^{(2)}
+\quad\Longrightarrow\quad
+\mathbf A\mathbf x^{(1)}\neq\mathbf A\mathbf x^{(2)}.
+$$
+
+The map is **not injective** if at least one pair of distinct inputs produces the same output:
+
+$$
+\exists\,\mathbf x^{(1)},\mathbf x^{(2)}\in\mathbb R^n:
+\quad
+\mathbf x^{(1)}\neq\mathbf x^{(2)},
+\qquad
+\mathbf A\mathbf x^{(1)}=\mathbf A\mathbf x^{(2)}.
+$$
+
+To connect injectivity to the null space, suppose two inputs have the same output. Subtracting the outputs gives
+
+$$
+\begin{aligned}
+\mathbf A\mathbf x^{(1)}&=\mathbf A\mathbf x^{(2)}\\
+\Longrightarrow\quad
+\mathbf A(\mathbf x^{(1)}-\mathbf x^{(2)})&=\mathbf0_m.
+\end{aligned}
+$$
+
+If $\mathcal N(\mathbf A)=\{\mathbf0_n\}$, then $\mathbf x^{(1)}-\mathbf x^{(2)}=\mathbf0_n$, so the inputs must be equal. Conversely, if a nonzero vector $\mathbf z\in\mathcal N(\mathbf A)$ exists, then for any $\mathbf x\in\mathbb R^n$,
+
+$$
+\mathbf A(\mathbf x+\mathbf z)
+=\mathbf A\mathbf x+\mathbf A\mathbf z
+=\mathbf A\mathbf x.
+$$
+
+Because $\mathbf z\neq\mathbf0_n$, the inputs $\mathbf x$ and $\mathbf x+\mathbf z$ are different but produce the same output. Therefore,
+
+$$
+\boxed{
+T_{\mathbf A}\text{ is injective}
+\quad\Longleftrightarrow\quad
+\mathcal N(\mathbf A)=\{\mathbf0_n\}
+\quad\Longleftrightarrow\quad
+\mathbf A\text{ has full column rank}
+}.
+$$
+
+For a square matrix, these conditions are also equivalent to nonsingularity and invertibility. If the map is injective, its output uniquely identifies its input; if it is not injective, some input information cannot be recovered from the output.
+
+Let $\mathbf A\in\mathbb R^{n\times n}$ be a square matrix with columns $\mathbf a_1,\ldots,\mathbf a_n\in\mathbb R^n$, and let $\mathbf x=[x_1\;\cdots\;x_n]^\mathsf T\in\mathbb R^n$. Matrix-vector multiplication forms the linear combination
+
+$$
+\mathbf A\mathbf x
+=
+x_1\mathbf a_1+\cdots+x_n\mathbf a_n
+=
+\sum_{j=1}^{n}x_j\mathbf a_j.
+$$
+
+For every matrix, $\mathbf x=\mathbf 0$ implies $\mathbf A\mathbf x=\mathbf 0$. The square matrix $\mathbf A$ is **nonsingular** when the converse is also true:
+
+$$
+\mathbf A\mathbf x=\mathbf 0
+\quad\Longleftrightarrow\quad
+\mathbf x=\mathbf 0.
+$$
+
+Equivalently,
+
+$$
+\mathbf x\neq\mathbf 0
+\quad\Longrightarrow\quad
+\mathbf A\mathbf x\neq\mathbf 0.
+$$
+
+Because $\mathbf A\mathbf x=\sum_{j=1}^{n}x_j\mathbf a_j$, nonsingularity means that
+
+$$
+x_1\mathbf a_1+\cdots+x_n\mathbf a_n=\mathbf 0
+$$
+
+only when $x_1=\cdots=x_n=0$. This is precisely the definition that the columns $\mathbf a_1,\ldots,\mathbf a_n$ are linearly independent.
+
+A square matrix that is not nonsingular is called **singular**. For a singular matrix, at least one nonzero $\mathbf x$ satisfies $\mathbf A\mathbf x=\mathbf 0$, so the mapping loses information about that input direction.
+
+More generally, if $\mathbf A\in\mathbb R^{m\times n}$, then its columns are $\mathbf a_1,\ldots,\mathbf a_n\in\mathbb R^m$ and $\mathbf A\mathbf x=\sum_{j=1}^{n}x_j\mathbf a_j$. The condition $\mathbf A\mathbf x=\mathbf 0_m\Rightarrow\mathbf x=\mathbf 0_n$ means that $\mathcal N(\mathbf A)=\{\mathbf 0_n\}$ and that all $n$ columns are linearly independent. In that case $\operatorname{rank}(\mathbf A)=n$, which is called **full column rank**. The term *nonsingular* is normally reserved for the square case $m=n$.
+
+Only a nonsingular square matrix has an inverse $\mathbf A^{-1}\in\mathbb R^{n\times n}$. The inverse reverses the action of $\mathbf A$ and satisfies
+
+$$
+\mathbf{A}^{-1}\mathbf{A}=\mathbf{A}\mathbf{A}^{-1}=\mathbf{I}_n.
+$$
+
+### 2.3 Multiplication order
+
+Let $n$ be a positive integer. Let $\mathbf A,\mathbf B,\mathbf C\in\mathbb R^{n\times n}$ be three matrices, and let $\mathbf x,\mathbf y,\mathbf z\in\mathbb R^n$ be coordinate vectors. Define the intermediate vector $\mathbf z$ and output vector $\mathbf y$ by
+
+$$
+\mathbf z=\mathbf B\mathbf x
+\qquad\text{and}\qquad
+\mathbf y=\mathbf A\mathbf z.
+$$
+
+Substituting the expression for $\mathbf z$ into the expression for $\mathbf y$ gives
+
+$$
+\mathbf y
+=\mathbf A(\mathbf B\mathbf x)
+=(\mathbf A\mathbf B)\mathbf x.
+$$
+
+Thus, the rightmost matrix acts first: $\mathbf B$ maps $\mathbf x$ to $\mathbf z$, and then $\mathbf A$ maps $\mathbf z$ to $\mathbf y$.
+
+The third matrix $\mathbf C$ allows three transformations to be composed. Matrix multiplication is **associative**, meaning that changing the grouping does not change the product:
+
+$$
+(\mathbf A\mathbf B)\mathbf C
+=
+\mathbf A(\mathbf B\mathbf C).
+$$
+
+Both sides are matrices in $\mathbb R^{n\times n}$. However, matrix multiplication is generally **not commutative**, meaning that changing the order can change the result:
+
+$$
+\mathbf A\mathbf B\neq\mathbf B\mathbf A.
+$$
+
+This order becomes critical when several coordinate transformations are composed.
+
+## Quick test B: matrices, rank, and inverses
+
+1. **Recall:** For $\mathbf A\in\mathbb R^{m\times n}$, what are the dimensions of an input $\mathbf x$ and output $\mathbf y=\mathbf A\mathbf x$?
+2. **Explanation:** What does column $j$ of $\mathbf A$ tell us about the mapping?
+3. **Derivation:** Explain why $\mathbf A\mathbf x=\mathbf 0$ has only the zero solution exactly when the columns of $\mathbf A$ are linearly independent.
+4. **Application:** Determine the null space and rank of $\mathbf A=\begin{bmatrix}1&2\\2&4\end{bmatrix}$.
+5. **Limitations:** Why can a nonsquare matrix not have a two-sided inverse of the same kind as a nonsingular square matrix?
+6. **Composition:** If $\mathbf z=\mathbf B\mathbf x$ and $\mathbf y=\mathbf A\mathbf z$, which matrix acts first in $\mathbf y=\mathbf A\mathbf B\mathbf x$?
+7. **Injectivity:** Define an injective matrix mapping and explain why it is equivalent to $\mathcal N(\mathbf A)=\{\mathbf0\}$.
+
+### Answers and hints
+
+1. $\mathbf x\in\mathbb R^n$ and $\mathbf y\in\mathbb R^m$.
+2. It is the output produced by applying $\mathbf A$ to the corresponding standard basis input; general outputs are linear combinations of the columns.
+3. The equation is the linear combination $x_1\mathbf a_1+\cdots+x_n\mathbf a_n=\mathbf 0$. Only zero coefficients solve it precisely when the columns are independent.
+4. The second column is twice the first, so the rank is $1$. Solving $x_1+2x_2=0$ gives $\mathcal N(\mathbf A)=\{t[-2\;\;1]^\mathsf T:t\in\mathbb R\}$.
+5. A two-sided inverse would have to undo mappings in both domain and codomain, which requires equal dimensions and no lost directions.
+6. $\mathbf B$ acts first, followed by $\mathbf A$.
+7. A map is injective if $\mathbf A\mathbf x^{(1)}=\mathbf A\mathbf x^{(2)}$ implies $\mathbf x^{(1)}=\mathbf x^{(2)}$. If $\mathcal N(\mathbf A)=\{\mathbf0\}$, subtracting equal outputs gives $\mathbf A(\mathbf x^{(1)}-\mathbf x^{(2)})=\mathbf0$, so $\mathbf x^{(1)}-\mathbf x^{(2)}=\mathbf0$. Conversely, a nonzero null vector $\mathbf z$ makes $\mathbf x$ and $\mathbf x+\mathbf z$ distinct inputs with the same output.
+
+
+## 3. Determinants and signed volume
+
+### 3.1 What the determinant measures
+
+The determinant is defined for a square matrix $\mathbf A\in\mathbb R^{n\times n}$ and returns a scalar:
+
+$$
+\det:\mathbb R^{n\times n}\rightarrow\mathbb R.
+$$
+
+Geometrically, $|\det(\mathbf A)|$ is the factor by which the linear map $\mathbf x\mapsto\mathbf A\mathbf x$ scales $n$-dimensional volume. The sign records whether the ordered basis orientation is preserved or reversed.
+
+For $\mathbf A=\begin{bmatrix}a&b\\c&d\end{bmatrix}\in\mathbb R^{2\times2}$,
+
+$$
+\det(\mathbf A)=ad-bc.
+$$
+
+Its magnitude is the area of the parallelogram formed by the columns of $\mathbf A$. For $\mathbf A=[\mathbf a_1\;\mathbf a_2\;\mathbf a_3]\in\mathbb R^{3\times3}$, the determinant is the scalar triple product
+
+$$
+\det(\mathbf A)
+=
+\mathbf a_1^{\mathsf T}(\mathbf a_2\times\mathbf a_3).
+$$
+
+Its magnitude is the volume of the parallelepiped formed by the columns.
+
+#### Determinant sign, the right-hand rule, and reflection
+
+The columns of $\mathbf A=[\mathbf a_1\;\cdots\;\mathbf a_n]$ are the images of the standard basis vectors because $\mathbf A\mathbf e_i=\mathbf a_i$. The determinant sign therefore compares the orientation of the ordered transformed columns with the orientation of the ordered standard basis.
+
+In three dimensions, the standard basis is right-handed:
+
+$$
+\mathbf e_1\times\mathbf e_2=\mathbf e_3.
+$$
+
+For $\mathbf A=[\mathbf a_1\;\mathbf a_2\;\mathbf a_3]\in\mathbb R^{3\times3}$, the determinant can be written as
+
+$$
+\det(\mathbf A)
+=
+(\mathbf a_1\times\mathbf a_2)^{\mathsf T}\mathbf a_3.
+$$
+
+The cross product $\mathbf a_1\times\mathbf a_2$ points in the right-hand-rule normal direction determined by the first two columns. Consequently:
+
+- If $\det(\mathbf A)>0$, then $\mathbf a_3$ has a positive component in that right-hand-rule direction. The ordered columns $(\mathbf a_1,\mathbf a_2,\mathbf a_3)$ are right-handed, so the transformation preserves orientation.
+- If $\det(\mathbf A)<0$, then $\mathbf a_3$ points to the opposite side of the plane spanned by $\mathbf a_1$ and $\mathbf a_2$. The ordered columns are left-handed, so the transformation reverses orientation.
+- If $\det(\mathbf A)=0$, then the three columns are coplanar or otherwise linearly dependent. The three-dimensional volume collapses to zero, so a full three-dimensional orientation is no longer defined.
+
+A reflection reverses orientation. For example, reflection across the $y$-$z$ plane is represented by
+
+$$
+\mathbf S
+=
+\begin{bmatrix}
+-1&0&0\\
+0&1&0\\
+0&0&1
+\end{bmatrix},
+\qquad
+\det(\mathbf S)=-1.
+$$
+
+This transformation sends $\mathbf e_1$ to $-\mathbf e_1$ while leaving $\mathbf e_2$ and $\mathbf e_3$ unchanged. The transformed basis is left-handed because
+
+$$
+(-\mathbf e_1)\times\mathbf e_2=-\mathbf e_3,
+$$
+
+whereas its third basis vector is $+\mathbf e_3$. Thus, the negative determinant detects the orientation reversal introduced by the reflection.
+
+A matrix with negative determinant need not be a pure reflection: it may also stretch, scale, or shear. The negative sign means that its total action contains an orientation-reversing, or reflection-like, component. By contrast, a proper rotation preserves right-handedness and has determinant $+1$.
+
+### 3.2 Algebraic definition
+
+The determinant is the unique scalar-valued function of the columns of a square matrix with three defining properties:
+
+1. **Multilinearity:** it is linear in each column while the other columns are held fixed.
+2. **Alternation:** swapping two columns changes the sign; consequently, a matrix with repeated columns has determinant zero.
+3. **Normalisation:** $\det(\mathbf I_n)=1$.
+
+#### Multilinearity in one column
+
+Write the columns of $\mathbf A\in\mathbb R^{n\times n}$ as $\mathbf A=[\mathbf a_1\;\cdots\;\mathbf a_n]$, where each $\mathbf a_i\in\mathbb R^n$. Choose a column index $j\in\{1,\ldots,n\}$ and hold every column except column $j$ fixed. For any vectors $\mathbf u,\mathbf v\in\mathbb R^n$ and scalars $\alpha,\beta\in\mathbb R$, linearity in column $j$ means
+
+$$
+\begin{aligned}
+&\det(\mathbf a_1,\ldots,\mathbf a_{j-1},\alpha\mathbf u+\beta\mathbf v,\mathbf a_{j+1},\ldots,\mathbf a_n)\\
+&\quad=
+\alpha\det(\mathbf a_1,\ldots,\mathbf a_{j-1},\mathbf u,\mathbf a_{j+1},\ldots,\mathbf a_n)\\
+&\qquad+
+\beta\det(\mathbf a_1,\ldots,\mathbf a_{j-1},\mathbf v,\mathbf a_{j+1},\ldots,\mathbf a_n).
+\end{aligned}
+$$
+
+Thus, a sum placed in one column can be separated into a sum of determinants, and a scalar multiplying one column can be moved outside the determinant. The word **multilinear** means that this linearity property holds separately for every column. It does not mean that the determinant is linear in the whole matrix at once; in general,
+
+$$
+\det(\mathbf A+\mathbf B)\neq\det(\mathbf A)+\det(\mathbf B).
+$$
+
+For a two-dimensional check, let $\mathbf u=[u_1\;u_2]^\mathsf T$, $\mathbf v=[v_1\;v_2]^\mathsf T$, and $\mathbf w=[w_1\;w_2]^\mathsf T$. Linearity in the first column follows directly from
+
+$$
+\begin{aligned}
+\det\!\begin{bmatrix}\alpha u_1+\beta v_1&w_1\\\alpha u_2+\beta v_2&w_2\end{bmatrix}
+&=(\alpha u_1+\beta v_1)w_2-w_1(\alpha u_2+\beta v_2)\\
+&=\alpha(u_1w_2-w_1u_2)+\beta(v_1w_2-w_1v_2)\\
+&=\alpha\det[\mathbf u\;\mathbf w]+\beta\det[\mathbf v\;\mathbf w].
+\end{aligned}
+$$
+
+#### Alternation and repeated columns
+
+Let $\mathbf A'$ be obtained from $\mathbf A$ by swapping columns $i$ and $j$, where $i\neq j$. Alternation means
+
+$$
+\det(\mathbf A')=-\det(\mathbf A).
+$$
+
+A single swap reverses the orientation of the ordered columns, so it reverses the sign of the signed volume without changing its magnitude.
+
+Now suppose columns $i$ and $j$ are equal to the same vector $\mathbf c\in\mathbb R^n$. Let the determinant of this matrix be $D$. Swapping the two equal columns leaves the matrix numerically unchanged, so its determinant is still $D$. Alternation simultaneously requires the determinant to become $-D$. Therefore,
+
+$$
+D=-D
+\quad\Longrightarrow\quad
+2D=0
+\quad\Longrightarrow\quad
+D=0.
+$$
+
+Hence, every matrix with two identical columns has determinant zero. Geometrically, two identical column directions cannot span an $n$-dimensional parallelepiped, so its $n$-dimensional volume collapses to zero.
+
+Equivalently, if $\mathbf A=[a_{ij}]\in\mathbb R^{n\times n}$, then
+
+$$
+\det(\mathbf A)
+=
+\sum_{\sigma\in S_n}
+\operatorname{sgn}(\sigma)
+\prod_{j=1}^{n}a_{\sigma(j),j}.
+$$
+
+Here, $S_n$ is the set of all permutations of the indices $1,\ldots,n$. The sign $\operatorname{sgn}(\sigma)$ equals $+1$ when the permutation can be produced by an even number of pairwise swaps and $-1$ when it requires an odd number.
+
+If the columns of $\mathbf A$ are linearly dependent, one column can be written as a linear combination of the others. Multilinearity and alternation then force $\det(\mathbf A)=0$. Conversely, $\det(\mathbf A)=0$ means that the signed volume has collapsed, so the columns do not span $\mathbb R^n$. Therefore,
+
+$$
+\boxed{
+\det(\mathbf A)\neq0
+\quad\Longleftrightarrow\quad
+\mathbf A\text{ is nonsingular}
+}.
+$$
+
+#### Example: a singular matrix loses one input component
+
+Consider the linear map $\mathbf x\mapsto\mathbf A\mathbf x$ from $\mathbb R^2$ to $\mathbb R^2$, where
+
+$$
+\mathbf A
+=
+\begin{bmatrix}
+1&0\\
+0&0
+\end{bmatrix}.
+$$
+
+Its determinant is
+
+$$
+\det(\mathbf A)=0.
+$$
+
+For an input coordinate column
+
+$$
+\mathbf x
+=
+\begin{bmatrix}
+x_1\\
+x_2
+\end{bmatrix}
+\in\mathbb R^2,
+$$
+
+the output is
+
+$$
+\mathbf A\mathbf x
+=
+\begin{bmatrix}
+x_1\\
+0
+\end{bmatrix}
+\in\mathbb R^2.
+$$
+
+The output retains $x_1$ but completely removes $x_2$. For example,
+
+$$
+\mathbf A
+\begin{bmatrix}
+3\\
+1
+\end{bmatrix}
+=
+\begin{bmatrix}
+3\\
+0
+\end{bmatrix},
+\qquad
+\mathbf A
+\begin{bmatrix}
+3\\
+7
+\end{bmatrix}
+=
+\begin{bmatrix}
+3\\
+0
+\end{bmatrix}.
+$$
+
+The two inputs are different, but their outputs are identical. From the output $[3\;0]^{\mathsf T}$, we can recover $x_1=3$, but we cannot determine whether $x_2$ was $1$, $7$, or any other real number. In fact,
+
+$$
+\mathcal N(\mathbf A)
+=
+\left\{
+ t
+ \begin{bmatrix}
+ 0\\
+ 1
+ \end{bmatrix}
+ :t\in\mathbb R
+\right\},
+$$
+
+so the entire input direction $[0\;1]^{\mathsf T}$ is lost.
+
+Geometrically, $\mathbf A$ maps the entire two-dimensional plane onto the one-dimensional $x$-axis:
+
+$$
+\mathbb R^2
+\longrightarrow
+\left\{
+\begin{bmatrix}
+y_1\\
+0
+\end{bmatrix}
+:y_1\in\mathbb R
+\right\}.
+$$
+
+Every two-dimensional region is flattened into a line segment, whose two-dimensional area is zero. This agrees with $\det(\mathbf A)=0$.
+
+Recall that **not injective** means that there exist at least two distinct inputs $\mathbf x^{(1)},\mathbf x^{(2)}\in\mathbb R^n$ with the same output:
+
+$$
+\mathbf x^{(1)}\neq\mathbf x^{(2)},
+\qquad
+\mathbf A\mathbf x^{(1)}=\mathbf A\mathbf x^{(2)}.
+$$
+
+The statement does not mean that every pair of inputs has the same output; it means that at least one distinct pair cannot be distinguished from the output. 
+
+If $\mathbf A$ is singular, then there exists $\mathbf z \in \mathcal N(\mathbf A)$ such that $\mathbf A \mathbf z = \mathbf 0$. This implies $\mathbf A(\mathbf x+\mathbf z) = \mathbf A\mathbf x$ for all $\mathbf x \in \mathbb R^n$. Hence, a singular matrix is not injective and different inputs can produce the same output. 
+
+For a square matrix $\mathbf A\in\mathbb R^{n\times n}$, the general equivalences are
+
+$$
+\boxed{
+\begin{aligned}
+\det(\mathbf A)=0
+&\Longleftrightarrow \mathbf A\text{ is singular}\\
+&\Longleftrightarrow \mathcal N(\mathbf A)\neq\{\mathbf0\}\\
+&\Longleftrightarrow \mathbf A\text{ is not injective}\\
+&\Longleftrightarrow \text{different inputs can produce the same output}\\
+&\Longleftrightarrow \text{the input cannot be uniquely recovered}.
+\end{aligned}
+}
+$$
+
+### 3.3 Why determinants multiply
+
+Let $\mathbf A,\mathbf B\in\mathbb R^{n\times n}$. The product $\mathbf A\mathbf B$ represents the composition
+
+$$
+\mathbf x \mapsto \mathbf B\mathbf x \mapsto \mathbf A\mathbf B\mathbf x.
+$$
+
+Geometrically, $\mathbf B$ first scales signed volume by $\det(\mathbf B)$, and $\mathbf A$ then scales the result by $\det(\mathbf A)$. This suggests
+
+$$
+\det(\mathbf A\mathbf B)=\det(\mathbf A)\det(\mathbf B).
+$$
+
+A formal proof follows from the defining properties of the determinant. Hold $\mathbf A$ fixed and define
+
+$$
+F:\mathbb R^{n\times n}\rightarrow\mathbb R,
+\qquad
+F(\mathbf B)\mathrel{:=}\det(\mathbf A\mathbf B).
+$$
+
+Write $\mathbf B=[\mathbf b_1\;\cdots\;\mathbf b_n]$, where each $\mathbf b_j\in\mathbb R^n$. Then
+
+$$
+\mathbf A\mathbf B
+=
+\begin{bmatrix}
+\mathbf A\mathbf b_1&\cdots&\mathbf A\mathbf b_n
+\end{bmatrix}.
+$$
+
+To check linearity in column $j$, let $\mathbf u,\mathbf v\in\mathbb R^n$ and $\alpha,\beta\in\mathbb R$. Because multiplication by $\mathbf A$ is linear,
+
+$$
+\mathbf A(\alpha\mathbf u+\beta\mathbf v)
+=
+\alpha\mathbf A\mathbf u+\beta\mathbf A\mathbf v.
+$$
+
+The determinant is linear in column $j$, so
+
+$$
+\begin{aligned}
+&F(\mathbf b_1,\ldots,\alpha\mathbf u+\beta\mathbf v,\ldots,\mathbf b_n)\\
+&=\alpha F(\mathbf b_1,\ldots,\mathbf u,\ldots,\mathbf b_n)
++\beta F(\mathbf b_1,\ldots,\mathbf v,\ldots,\mathbf b_n).
+\end{aligned}
+$$
+
+Thus, $F$ is multilinear in the columns of $\mathbf B$. If two columns of $\mathbf B$ are equal, their images under $\mathbf A$ are equal, so $\mathbf A\mathbf B$ has repeated columns and $F(\mathbf B)=0$. Swapping two columns of $\mathbf B$ swaps the corresponding columns of $\mathbf A\mathbf B$ and changes the determinant sign.
+
+Hence, $F$ is an alternating multilinear scalar-valued function of the columns of $\mathbf B$. We claim that
+
+$$
+F(\mathbf B)=c\det(\mathbf B),
+\qquad
+c\mathrel{:=}F(\mathbf e_1,\ldots,\mathbf e_n).
+$$
+
+The following expansion proves the claim.
+
+Let $\mathbf e_1,\ldots,\mathbf e_n$ be the standard basis of $\mathbb R^n$. Because it is a basis, every column $\mathbf b_j$ of $\mathbf B$ has the unique expansion
+
+$$
+\mathbf b_j=\sum_{i=1}^{n}b_{ij}\mathbf e_i.
+$$
+
+Using multilinearity once for each of the $n$ columns gives
+
+$$
+F(\mathbf B)
+=
+\sum_{i_1=1}^{n}\cdots\sum_{i_n=1}^{n}
+\left(\prod_{j=1}^{n}b_{i_j,j}\right)
+F(\mathbf e_{i_1},\ldots,\mathbf e_{i_n}).
+$$
+
+This sum initially contains $n^n$ terms. If two indices are equal, such as $i_p=i_q$, then the corresponding argument list contains the same basis vector twice. Alternation makes that term zero:
+
+$$
+F(\ldots,\mathbf e_{i_p},\ldots,\mathbf e_{i_p},\ldots)=0.
+$$
+
+A term can therefore survive only when $i_1,\ldots,i_n$ are all different. Because every $i_j$ belongs to $\{1,\ldots,n\}$, the surviving index list must contain every index exactly once. Thus, it has the form
+
+$$
+(i_1,\ldots,i_n)=(\sigma(1),\ldots,\sigma(n))
+$$
+
+for some permutation $\sigma\in S_n$.
+
+Alternation determines the value of every surviving basis term relative to the ordered basis term. Reordering $(\mathbf e_{\sigma(1)},\ldots,\mathbf e_{\sigma(n)})$ into $(\mathbf e_1,\ldots,\mathbf e_n)$ requires an even or odd number of swaps, so
+
+$$
+F(\mathbf e_{\sigma(1)},\ldots,\mathbf e_{\sigma(n)})
+=
+\operatorname{sgn}(\sigma)
+F(\mathbf e_1,\ldots,\mathbf e_n).
+$$
+
+Substituting this result into the expansion for $F(\mathbf B)$ leaves only the permutation terms:
+
+$$
+\begin{aligned}
+F(\mathbf B)
+&=\sum_{\sigma\in S_n}
+\operatorname{sgn}(\sigma)
+\prod_{j=1}^{n}b_{\sigma(j),j}  F(\mathbf e_1,\ldots,\mathbf e_n)\\
+\end{aligned}
+$$
+
+The scalar appearing in the claim is
+
+$$
+c\mathrel{:=}F(\mathbf e_1,\ldots,\mathbf e_n).
+$$
+
+The columns of $\mathbf I_n$ are the ordered standard basis vectors, so the same reference value can be written as
+
+$$
+c=F(\mathbf e_1,\ldots,\mathbf e_n)=F(\mathbf I_n).
+$$
+
+Substituting the surviving terms into the expansion gives
+
+$$
+\begin{aligned}
+F(\mathbf B)
+&=c\sum_{\sigma\in S_n}
+\operatorname{sgn}(\sigma)
+\prod_{j=1}^{n}b_{\sigma(j),j}\\
+&=c\det(\mathbf B).
+\end{aligned}
+$$
+
+A two-dimensional example makes the one-free-value idea explicit. In this example, $F(\mathbf u,\mathbf v)$ is shorthand for $F([\mathbf u\;\mathbf v])$, where $\mathbf u$ and $\mathbf v$ are the two columns of the input matrix. Let $\mathbf u=u_1\mathbf e_1+u_2\mathbf e_2$ and $\mathbf v=v_1\mathbf e_1+v_2\mathbf e_2$. Using multilinearity in both columns gives
+
+$$
+\begin{aligned}
+F(\mathbf u,\mathbf v)
+&=u_1v_1F(\mathbf e_1,\mathbf e_1)
++u_1v_2F(\mathbf e_1,\mathbf e_2)\\
+&\quad+u_2v_1F(\mathbf e_2,\mathbf e_1)
++u_2v_2F(\mathbf e_2,\mathbf e_2).
+\end{aligned}
+$$
+
+The repeated-basis terms are zero, $F(\mathbf e_1,\mathbf e_2)=c$, and $F(\mathbf e_2,\mathbf e_1)=-c$. Therefore,
+
+$$
+\begin{aligned}
+F(\mathbf u,\mathbf v)
+&=u_1v_2c-u_2v_1c\\
+&=c(u_1v_2-u_2v_1)\\
+&=c\det[\mathbf u\;\mathbf v].
+\end{aligned}
+$$
+
+After $c$ is known, this equation fixes $F(\mathbf u,\mathbf v)$ for every pair $\mathbf u,\mathbf v\in\mathbb R^2$.
+
+For the particular function $F(\mathbf B)=\det(\mathbf A\mathbf B)$,
+
+$$
+\begin{aligned}
+c
+&=F(\mathbf I_n)\\
+&=\det(\mathbf A\mathbf I_n)\\
+&=\det(\mathbf A).
+\end{aligned}
+$$
+
+Consequently,
+
+$$
+\boxed{
+\det(\mathbf A\mathbf B)
+=
+\det(\mathbf A)\det(\mathbf B)
+}.
+$$
+
+#### Why transposition does not change the determinant
+
+The related identity
+
+$$
+\boxed{\det(\mathbf A^{\mathsf T})=\det(\mathbf A)}
+$$
+
+does not follow from multiplicativity alone. It follows directly from the permutation definition of the determinant.
+
+Let $\mathbf A=[a_{ij}]\in\mathbb R^{n\times n}$. Because $(\mathbf A^{\mathsf T})_{ij}=a_{ji}$,
+
+$$
+\begin{aligned}
+\det(\mathbf A^{\mathsf T})
+&=\sum_{\sigma\in S_n}\operatorname{sgn}(\sigma)
+\prod_{j=1}^{n}(\mathbf A^{\mathsf T})_{\sigma(j),j}\\
+&=\sum_{\sigma\in S_n}\operatorname{sgn}(\sigma)
+\prod_{j=1}^{n}a_{j,\sigma(j)}.
+\end{aligned}
+$$
+
+A permutation $\sigma\in S_n$ is a bijection from the index set $\{1,\ldots,n\}$ to itself. Because it is bijective, it has a unique **inverse permutation**, denoted by $\sigma^{-1}$, that reverses the mapping performed by $\sigma$. Define
+
+$$
+\tau\mathrel{:=}\sigma^{-1}.
+$$
+
+The defining identities are
+
+$$
+\tau(\sigma(j))=j,
+\qquad
+\sigma(\tau(k))=k.
+$$
+
+Equivalently,
+
+$$
+k=\sigma(j)
+\quad\Longleftrightarrow\quad
+j=\tau(k).
+$$
+
+For example, suppose $n=3$ and
+
+$$
+\sigma(1)=2,
+\qquad
+\sigma(2)=3,
+\qquad
+\sigma(3)=1.
+$$
+
+The inverse permutation reverses these assignments:
+
+$$
+\tau(1)=3,
+\qquad
+\tau(2)=1,
+\qquad
+\tau(3)=2.
+$$
+
+For instance, $\sigma(1)=2$ is reversed by $\tau(2)=1$.
+
+As $\sigma$ runs through all permutations in $S_n$, $\tau=\sigma^{-1}$ also runs through all permutations in $S_n$. This is because inversion pairs every $\sigma$ with exactly one $\tau$, and the pairing is reversible: $\sigma=\tau^{-1}$. Therefore, replacing the summation index $\sigma$ by $\tau$ neither loses nor duplicates a permutation.
+
+The inverse permutation also has the same sign as the original permutation. Suppose $\sigma$ can be produced by $r$ pairwise swaps. To undo $\sigma$, perform those same $r$ swaps in reverse order. Thus, $\sigma^{-1}$ uses the same number of swaps as $\sigma$. They therefore have the same even-or-odd parity, so
+
+$$
+\operatorname{sgn}(\tau)
+=
+\operatorname{sgn}(\sigma^{-1})
+=
+\operatorname{sgn}(\sigma).
+$$
+
+Now consider the product
+
+$$
+\prod_{j=1}^{n}a_{j,\sigma(j)}.
+$$
+
+Introduce the new index
+
+$$
+k\mathrel{:=}\sigma(j).
+$$
+
+Because $\sigma$ is a permutation, as $j$ visits $1,\ldots,n$, the index $k=\sigma(j)$ also visits every value $1,\ldots,n$ exactly once. From $\tau=\sigma^{-1}$, the relation $k=\sigma(j)$ implies $j=\tau(k)$. Each factor can therefore be rewritten as
+
+$$
+a_{j,\sigma(j)}=a_{\tau(k),k}.
+$$
+
+Consequently,
+
+$$
+\prod_{j=1}^{n}a_{j,\sigma(j)}
+=
+\prod_{k=1}^{n}a_{\tau(k),k}.
+$$
+
+The two products contain the same scalar factors, possibly in a different order. Scalar multiplication is commutative, so their order does not affect the product. In the three-dimensional example above,
+
+$$
+\begin{aligned}
+\prod_{j=1}^{3}a_{j,\sigma(j)}
+&=a_{1,2}a_{2,3}a_{3,1},\\
+\prod_{k=1}^{3}a_{\tau(k),k}
+&=a_{3,1}a_{1,2}a_{2,3}.
+\end{aligned}
+$$
+
+These products are equal because they contain exactly the same three factors.
+
+Therefore,
+
+$$
+\begin{aligned}
+\det(\mathbf A^{\mathsf T})
+&=\sum_{\tau\in S_n}\operatorname{sgn}(\tau)
+\prod_{k=1}^{n}a_{\tau(k),k}\\
+&=\det(\mathbf A).
+\end{aligned}
+$$
+
+Thus, exchanging the rows and columns changes how the same determinant terms are indexed but does not change their values or signs.
+
+#### Determinant of an inverse
+
+For nonsingular $\mathbf A$, multiplicativity does give the inverse identity. Taking determinants of $\mathbf A^{-1}\mathbf A=\mathbf I_n$ yields
+
+$$
+\begin{aligned}
+1
+&=\det(\mathbf I_n)\\
+&=\det(\mathbf A^{-1}\mathbf A)\\
+&=\det(\mathbf A^{-1})\det(\mathbf A).
+\end{aligned}
+$$
+
+Since $\det(\mathbf A)\neq0$,
+
+$$
+\boxed{
+\det(\mathbf A^{-1})
+=
+\frac{1}{\det(\mathbf A)}
+}.
+$$
+
+## Quick test C: determinants
+
+1. **Recall:** What does $|\det(\mathbf A)|$ measure geometrically?
+2. **Explanation:** What does the sign of a determinant record?
+3. **Derivation:** Explain why repeated columns force the determinant to be zero.
+4. **Application:** Compute $\det\begin{bmatrix}2&1\\3&4\end{bmatrix}$ and interpret its magnitude.
+5. **Limitations:** Why is the determinant not defined in the same way for a rectangular matrix?
+6. **Composition:** Explain geometrically why $\det(\mathbf A\mathbf B)=\det(\mathbf A)\det(\mathbf B)$.
+7. **Reindexing:** If $\sigma(1)=2$, $\sigma(2)=3$, and $\sigma(3)=1$, find $\tau=\sigma^{-1}$ and verify $\prod_{j=1}^{3}a_{j,\sigma(j)}=\prod_{k=1}^{3}a_{\tau(k),k}$.
+
+### Answers and hints
+
+1. The factor by which the associated linear map scales $n$-dimensional volume.
+2. A positive determinant preserves the ordered right-handed orientation; a negative determinant reverses it to a left-handed orientation and therefore indicates a reflection component; a zero determinant collapses the volume, so no full-dimensional orientation remains.
+3. Swapping identical columns leaves the matrix unchanged but must negate the determinant, so the determinant equals its own negative and is zero.
+4. The determinant is $2(4)-1(3)=5$, so areas are scaled by a factor of $5$ and orientation is preserved.
+5. A rectangular map changes dimension, so it does not map an $n$-dimensional volume to another volume in the same $n$-dimensional space.
+6. $\mathbf B$ scales signed volume first and $\mathbf A$ scales the resulting signed volume second, so the factors multiply.
+7. The inverse is $\tau(1)=3$, $\tau(2)=1$, and $\tau(3)=2$. The left product is $a_{1,2}a_{2,3}a_{3,1}$, while the reindexed product is $a_{3,1}a_{1,2}a_{2,3}$; these are equal because scalar factors commute.
+
+
+## 4. Orthogonal matrices
+
+Let $\mathbf Q\in\mathbb R^{n\times n}$. The matrix $\mathbf Q$ is **orthogonal** if
+
+$$
+\mathbf Q^{\mathsf T}\mathbf Q=\mathbf I_n.
+$$
+
+The entries of $\mathbf Q^{\mathsf T}\mathbf Q$ are pairwise dot products between columns of $\mathbf Q$. Therefore, this equation is equivalent to saying that the columns form an orthonormal basis of $\mathbb R^n$.
+
+Because $\mathbf Q^{\mathsf T}\mathbf Q=\mathbf I_n$, the transpose satisfies the defining equation for the inverse:
+
+$$
+\boxed{\mathbf Q^{-1}=\mathbf Q^{\mathsf T}}.
+$$
+
+For $\mathbf x,\mathbf y\in\mathbb R^n$,
+
+$$
+(\mathbf Q\mathbf x)^{\mathsf T}(\mathbf Q\mathbf y)
+=
+\mathbf x^{\mathsf T}\mathbf Q^{\mathsf T}\mathbf Q\mathbf y
+=
+\mathbf x^{\mathsf T}\mathbf y.
+$$
+
+Thus, orthogonal matrices preserve dot products, lengths, and angles.
+
+Taking determinants of $\mathbf Q^{\mathsf T}\mathbf Q=\mathbf I_n$ gives
+
+$$
+\det(\mathbf Q)^2=1,
+$$
+
+so
+
+$$
+\det(\mathbf Q)=+1
+\qquad\text{or}\qquad
+\det(\mathbf Q)=-1.
+$$
+
+The **orthogonal group** is
+
+$$
+O(n)
+\mathrel{:=}
+\left\{\mathbf Q\in\mathbb R^{n\times n}:\mathbf Q^{\mathsf T}\mathbf Q=\mathbf I_n\right\}.
+$$
+
+The **special orthogonal group** is
+
+$$
+SO(n)
+\mathrel{:=}
+\left\{\mathbf Q\in O(n):\det(\mathbf Q)=1\right\}.
+$$
+
+Matrices in $SO(n)$ preserve lengths, angles, and orientation. Orthogonal matrices with determinant $-1$ preserve lengths and angles but reverse orientation through a reflection. Rotation matrices used for right-handed coordinate frames belong to $SO(2)$ or $SO(3)$.
+
+## Quick test D: orthogonal matrices
+
+1. **Recall:** What equation defines an orthogonal matrix?
+2. **Explanation:** Why is the inverse of an orthogonal matrix its transpose?
+3. **Derivation:** Show that $\|\mathbf Q\mathbf x\|_2=\|\mathbf x\|_2$.
+4. **Application:** Determine whether $\begin{bmatrix}0&1\\1&0\end{bmatrix}$ belongs to $SO(2)$.
+5. **Limitations:** Why is $\mathbf Q^{\mathsf T}\mathbf Q=\mathbf I_n$ insufficient by itself to identify a proper rotation?
+
+### Answers and hints
+
+1. $\mathbf Q^{\mathsf T}\mathbf Q=\mathbf I_n$.
+2. The transpose already satisfies the defining inverse equation.
+3. Square both norms and use $\mathbf Q^{\mathsf T}\mathbf Q=\mathbf I_n$.
+4. It is orthogonal but has determinant $-1$, so it is a reflection in $O(2)$ and does not belong to $SO(2)$.
+5. Orthogonality permits determinant $-1$ reflections as well as determinant $+1$ rotations.
+
+
+## Cumulative chapter test
+
+1. Define a basis and explain why coordinate columns are unique in a basis.
+2. Given $\mathbf A\in\mathbb R^{3\times2}$ and $\mathbf x\in\mathbb R^2$, state the dimension of $\mathbf A\mathbf x$ and interpret it using the columns of $\mathbf A$.
+3. Explain the relationship between $\mathcal N(\mathbf A)$, independent columns, and full column rank.
+4. Prove that a nonsingular square matrix cannot map a nonzero vector to zero.
+5. Define the determinant using multilinearity, alternation, and normalisation.
+6. Explain why $\det(\mathbf A)=0$ indicates lost information.
+7. Derive $\det(\mathbf A^{-1})=1/\det(\mathbf A)$.
+8. Distinguish $O(3)$ from $SO(3)$ and explain which set contains rigid-body rotation matrices.
+
+### Cumulative answers and hints
+
+1. A basis is a linearly independent spanning set. Independence prevents multiple coefficient descriptions, while spanning guarantees that a description exists.
+2. $\mathbf A\mathbf x\in\mathbb R^3$ and equals $x_1\mathbf a_1+x_2\mathbf a_2$.
+3. $\mathcal N(\mathbf A)=\{\mathbf0\}$ exactly when the columns are independent; for $n$ columns this gives $\operatorname{rank}(\mathbf A)=n$.
+4. Nonsingularity is equivalent to $\mathbf A\mathbf x=\mathbf0\Rightarrow\mathbf x=\mathbf0$; the contrapositive is $\mathbf x\neq\mathbf0\Rightarrow\mathbf A\mathbf x\neq\mathbf0$.
+5. The determinant is the unique scalar function that is linear in each column, changes sign under a column swap, and equals $1$ on $\mathbf I_n$.
+6. For $\mathbf A\in\mathbb R^{n\times n}$, $\det(\mathbf A)=0$ means that $\mathbf A$ is singular, so its null space contains a nonzero vector $\mathbf z\in\mathbb R^n$ satisfying $\mathbf A\mathbf z=\mathbf0$. For any $\mathbf x\in\mathbb R^n$,
+
+   $$
+   \mathbf A(\mathbf x+\mathbf z)
+   =\mathbf A\mathbf x+\mathbf A\mathbf z
+   =\mathbf A\mathbf x.
+   $$
+
+   Therefore, the distinct inputs $\mathbf x$ and $\mathbf x+\mathbf z$ produce the same output. The output cannot reveal the input component in the null-space direction $\mathbf z$, so the input cannot be uniquely recovered. This is the meaning of **lost information** here: an independent input direction or degree of freedom has disappeared, not that Shannon information has been calculated. Geometrically, the map collapses $n$-dimensional volume into a lower-dimensional set, which is why its volume-scaling factor is zero.
+7. Take determinants of $\mathbf A^{-1}\mathbf A=\mathbf I_n$ and use multiplicativity.
+8. $O(3)$ contains all orthogonal $3\times3$ matrices with determinant $\pm1$; $SO(3)$ contains the determinant-$1$ members and therefore the proper rigid-body rotations.
+
+## References
+
+- Richard Szeliski, *Computer Vision: Algorithms and Applications*, 2nd ed., Appendix A, especially the discussion of orthonormal matrices, rank, singular values, and matrix factorisations.
+- Kevin M. Lynch and Frank C. Park, *Modern Robotics*, Chapter 3, especially Section 3.2.1 on rotation matrices and the distinction between orthogonality and right-handed orientation.
+

@@ -1,0 +1,93 @@
+# Unified Notation and Conventions
+
+This note is the canonical notation registry for the project. Chapters may
+introduce local symbols, but they must not redefine symbols listed here. When a textbook uses different notation, translate it into these conventions.
+
+## Core conventions
+
+1. Scalars use italic lowercase letters, vectors use bold lowercase letters,
+   and matrices use bold uppercase letters.
+2. Vectors are column vectors unless stated otherwise.
+3. SI units are used in calculations. Angles are expressed in radians.
+4. Coordinate frames are right-handed. A leading left superscript identifies
+   the frame in which coordinates are expressed.
+5. Continuous time uses $t$; sampled time uses the integer index $k$.
+6. Subscripts such as $\mathrm{ref}$, $\mathrm{cmd}$, $\min$, and $\max$
+   describe roles rather than coordinate frames.
+7. A hat, as in $\hat{\mathbf{x}}$, is reserved for an estimated quantity.
+
+## Phase 1 notation
+
+### General mathematics and time
+
+| Symbol | Meaning | Units or convention |
+|---|---|---|
+| $a,\alpha$ | Scalar quantity | Depends on the quantity |
+| $\mathbf{v}\in\mathbb{R}^n$ | Column vector with $n$ components | Depends on the quantity |
+| $\mathbf{A}\in\mathbb{R}^{m\times n}$ | Matrix with $m$ rows and $n$ columns | Depends on the map |
+| $\mathcal{S}$ | Set or mathematical space | — |
+| $\mathbf{I}_n$ | $n\times n$ identity matrix | Dimensionless |
+| $\mathbf{0}_n$ | Zero vector with $n$ components | Depends on the quantity |
+| $(\cdot)^\mathsf{T}$ | Transpose | — |
+| $(\cdot)^{-1}$ | Inverse, when it exists | — |
+| $\lVert\mathbf{v}\rVert_2$ | Euclidean norm of $\mathbf{v}$ | Same units as $\mathbf{v}$ |
+| $t$ | Continuous time | $\mathrm{s}$ |
+| $t_k$ | Time at sample $k$ | $\mathrm{s}$ |
+| $\Delta t=t_{k+1}-t_k$ | Sampling or numerical-integration interval | $\mathrm{s}$ |
+| $\dot{\mathbf{x}},\ddot{\mathbf{x}}$ | First and second derivatives with respect to time | Quantity per $\mathrm{s}$ and per $\mathrm{s}^2$ |
+| $\mathbf{x}_k$ | Value of $\mathbf{x}$ at sample $k$ | Same units as $\mathbf{x}$ |
+
+### Frames, geometry, and kinematics
+
+| Symbol | Meaning | Units or convention |
+|---|---|---|
+| $\{a\}$ | Coordinate frame named $a$ | Right-handed |
+| $O_a$ | Origin of frame $\{a\}$ | — |
+| $\mathbf{e}_{x,a},\mathbf{e}_{y,a},\mathbf{e}_{z,a}$ | Unit basis vectors of frame $\{a\}$ | Dimensionless |
+| ${}^{a}\mathbf{v}$ | Coordinates of geometric vector $\mathbf{v}$ expressed in frame $\{a\}$ | Depends on $\mathbf{v}$ |
+| ${}^{a}\mathbf{p}_P$ | Position of point $P$ relative to $O_a$, expressed in frame $\{a\}$ | $\mathrm{m}$ |
+| $\mathbf{R}_{ab}$ | Rotation mapping coordinates from frame $\{b\}$ to frame $\{a\}$ | $\mathbf{R}_{ab}\in SO(2)$ or $SO(3)$ |
+| ${}^{a}\mathbf{p}_b$ | Position of origin $O_b$ relative to $O_a$, expressed in frame $\{a\}$ | $\mathrm{m}$ |
+| $\mathbf{T}_{ab}$ | Homogeneous transform mapping coordinates from frame $\{b\}$ to frame $\{a\}$ | $\mathbf{T}_{ab}\in SE(2)$ or $SE(3)$ |
+| $[\mathbf{v}]_\times$ | Skew-symmetric matrix satisfying $[\mathbf{v}]_\times\mathbf{w}=\mathbf{v}\times\mathbf{w}$ | Same units as $\mathbf{v}$ |
+| $\mathbf{q}$ | Robot configuration or generalised coordinates | Components may have different units |
+| $\mathbf{J}(\mathbf{q})$ | Jacobian mapping configuration rates to a specified task velocity | Depends on the mapping |
+
+### Differential-drive motion and mechanics
+
+| Symbol | Meaning | Units or convention |
+|---|---|---|
+| $\{w\},\{b\}$ | World and robot body frames | — |
+| $\mathbf{q}=[x,y,\theta]^\mathsf{T}$ | Planar robot pose in the world frame | $\mathrm{m},\mathrm{m},\mathrm{rad}$ |
+| $\theta$ | Counter-clockwise heading of $\{b\}$ relative to $\{w\}$ | $\mathrm{rad}$ |
+| $v,\omega$ | Body-forward speed and yaw rate | $\mathrm{m\,s^{-1}},\mathrm{rad\,s^{-1}}$ |
+| $\phi_L,\phi_R$ | Left and right wheel angles | $\mathrm{rad}$ |
+| $\dot{\phi}_L,\dot{\phi}_R$ | Left and right wheel angular speeds | $\mathrm{rad\,s^{-1}}$ |
+| $r,L$ | Wheel radius and distance between wheel contact lines | $\mathrm{m}$ |
+| $m$ | Robot mass | $\mathrm{kg}$ |
+| $\mathbf{F}$ | Force | $\mathrm{N}$ |
+| $\boldsymbol{\tau}$ | Torque | $\mathrm{N\,m}$ |
+| $I_z$ | Yaw moment of inertia about the body vertical axis | $\mathrm{kg\,m^2}$ |
+| $\mu$ | Coefficient of friction | Dimensionless |
+
+### Dynamics, control, limits, and verification
+
+| Symbol | Meaning | Units or convention |
+|---|---|---|
+| $\mathbf{x}(t)$ | System state | Declared with each model |
+| $\mathbf{u}(t)$ | Applied control input | Declared with each model |
+| $\mathbf{d}(t)$ | External disturbance or unmodelled input | Declared with each model |
+| $\dot{\mathbf{x}}=\mathbf{f}(\mathbf{x},\mathbf{u},\mathbf{d},t)$ | Continuous-time state model | Units must be consistent |
+| $\mathbf{x}_{k+1}=\mathbf{f}_d(\mathbf{x}_k,\mathbf{u}_k,\mathbf{d}_k,\Delta t)$ | Discrete-time state update | Units must be consistent |
+| $\mathbf{x}_{\mathrm{ref}}$ | Desired or reference state | Same units as $\mathbf{x}$ |
+| $\mathbf{e}=\mathbf{x}_{\mathrm{ref}}-\mathbf{x}$ | Tracking error; angular components must be wrapped | Same units as $\mathbf{x}$ |
+| $\mathbf{u}_{\mathrm{cmd}}$ | Controller-requested input before limits | Same units as $\mathbf{u}$ |
+| $\operatorname{sat}(\mathbf{u}_{\mathrm{cmd}})$ | Command after applying declared actuator limits | Same units as $\mathbf{u}$ |
+| $\mathbf{K}_P,\mathbf{K}_I,\mathbf{K}_D$ | Proportional, integral, and derivative gain matrices | Chosen for dimensional consistency |
+| $T_d$ | Command, sensing, or computation delay | $\mathrm{s}$ |
+| $e_p,e_\theta$ | Position and heading tracking errors | $\mathrm{m},\mathrm{rad}$ |
+| $\operatorname{RMSE}_p$ | Root-mean-square position error over a declared interval | $\mathrm{m}$ |
+| $M_p,t_s$ | Peak overshoot and settling time | Declared output units, $\mathrm{s}$ |
+| $E_u=\int\mathbf{u}^\mathsf{T}\mathbf{u}\,dt$ | Control-effort measure | Determined by the input units |
+| $N_{\mathrm{viol}}$ | Number of declared constraint violations | Count |
+

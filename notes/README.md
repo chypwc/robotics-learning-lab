@@ -5,8 +5,7 @@ This directory is the single source for the project's theory book. Its chapters 
 ## Organisation
 
 - Keep every source chapter directly in this directory.
-- Order chapter filenames numerically, such as
-  `01_geometry_and_coordinate_frames.qmd`.
+- Order chapter filenames numerically, such as `01_linear_algebra_foundations.qmd`, `02_geometry_and_coordinate_frames.qmd`, and `03_kinematics_and_numerical_integration.qmd`.
 - Use the headings below as book parts, not as subdirectories.
 - Use [the textbook index](../textbooks/INDEX.md) to find relevant sources.
 - Add a chapter to this table of contents only when its note file exists.
@@ -20,6 +19,7 @@ This directory is the single source for the project's theory book. Its chapters 
 
 ### Part I — Motion, mechanics, and control
 
+- Linear algebra foundations
 - Geometry and coordinate frames
 - Kinematics and numerical integration
 - Dynamics, forces, torque, friction, and actuator limits
@@ -66,13 +66,80 @@ Each chapter should be self-contained:
 
 ## Compilation
 
-The chapters are Quarto Markdown (`.qmd`) sources ordered by `_quarto.yml`.
-Render the complete book from this directory:
+The chapters are Quarto Markdown (`.qmd`) sources ordered by `_quarto.yml`. Render the complete book from this directory:
 
 ```zsh
 cd /home/maxwell/Repos/robotics_autonomous/notes
 quarto render
 ```
 
-The configured output directory is `output/book` at the repository root. Treat
-that directory as generated output rather than source material.
+The configured output directory is `output/book` at the repository root. Treat that directory as generated output rather than source material.
+
+
+
+```python
+@dataclass(frozen=True, slots=True)
+class WheelAngularSpeeds:
+    """Signed left and right wheel angular speeds in radians per second."""
+
+    left_angular_speed_rad_s: float
+    right_angular_speed_rad_s: float
+
+
+def body_to_wheel(
+    *,
+    forward_speed_m_s: float,
+    yaw_rate_rad_s: float,
+    wheel_radius_m: float,
+    track_width_m: float,
+) -> WheelAngularSpeeds:
+    """Apply the body-to-wheel equations to validated inputs."""
+    forward_component_rad_s = forward_speed_m_s / wheel_radius_m
+    turning_component_rad_s = (
+        track_width_m * yaw_rate_rad_s / (2 * wheel_radius_m)
+    )
+    left_angular_speed_rad_s = (
+        forward_component_rad_s - turning_component_rad_s
+    )
+    right_angular_speed_rad_s = (
+        forward_component_rad_s + turning_component_rad_s
+    )
+
+    return WheelAngularSpeeds(
+        left_angular_speed_rad_s=left_angular_speed_rad_s,
+        right_angular_speed_rad_s=right_angular_speed_rad_s,
+    )
+```
+```python
+@dataclass(frozen=True, slots=True)
+class WheelAngularSpeeds:
+    """Signed left and right wheel angular speeds in radians per second."""
+
+    left_angular_speed_rad_s: float
+    right_angular_speed_rad_s: float
+
+
+def body_to_wheel(
+    *,
+    forward_speed_m_s: float,
+    yaw_rate_rad_s: float,
+    wheel_radius_m: float,
+    track_width_m: float,
+) -> WheelAngularSpeeds:
+    """Apply the body-to-wheel equations to validated inputs."""
+    forward_component_rad_s = forward_speed_m_s / wheel_radius_m
+    turning_component_rad_s = (
+        track_width_m * yaw_rate_rad_s / (2 * wheel_radius_m)
+    )
+    left_angular_speed_rad_s = (
+        forward_component_rad_s - turning_component_rad_s
+    )
+    right_angular_speed_rad_s = (
+        forward_component_rad_s + turning_component_rad_s
+    )
+
+    return WheelAngularSpeeds(
+        left_angular_speed_rad_s=left_angular_speed_rad_s,
+        right_angular_speed_rad_s=right_angular_speed_rad_s,
+    )
+```

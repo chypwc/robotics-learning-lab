@@ -1,0 +1,331 @@
+# Geometry and Motion Implementation
+
+## Purpose and scope
+
+This companion translates the reviewed differential-drive mathematics into reusable software contracts, invariants, validation rules, and tests. The mathematical derivations remain in the kinematics and numerical-integration chapter; this chapter records how those equations map into dependable software.
+
+## 1. Wheel-to-body velocity mapping
+
+Let $r>0$ be the common effective wheel radius in metres and let $L>0$ be the track width in metres. Let $\dot\phi_L$ and $\dot\phi_R$ be the signed left and right wheel angular speeds in $\mathrm{rad\,s^{-1}}$, where positive angular speed rolls the corresponding wheel forward.
+
+The software implements
+
+$$
+v
+=
+\frac{r}{2}
+\left(\dot\phi_R+\dot\phi_L\right),
+\qquad
+\omega
+=
+\frac{r}{L}
+\left(\dot\phi_R-\dot\phi_L\right),
+$$
+
+where $v$ is signed body-forward speed in $\mathrm{m\,s^{-1}}$ and $\omega$ is signed counter-clockwise yaw rate in $\mathrm{rad\,s^{-1}}$.
+
+### Software contract
+
+The `wheel_to_body` operation accepts four finite scalar inputs: left wheel angular speed, right wheel angular speed, wheel radius, and track width. The wheel radius and track width must be strictly positive. Invalid inputs raise `ValueError`; the operation does not clamp values or substitute default geometry.
+
+The operation returns an immutable `BodyVelocity` value containing `forward_speed_m_s` and `yaw_rate_rad_s`. It is deterministic, does not mutate its inputs, and does not depend on ROS state, timestamps, configuration files, or hidden global state.
+
+### Simplified reference snippet
+
+The following equation-focused snippet shows how the mathematical factors map to Python expressions. It assumes that all inputs are finite and that `wheel_radius_m` and `track_width_m` are strictly positive; the production operation enforces those preconditions before performing the calculation.
+
+```python
+@dataclass(frozen=True, slots=True)
+class BodyVelocity:
+    """Reduced planar body velocity in SI units."""
+
+    forward_speed_m_s: float
+    yaw_rate_rad_s: float
+
+
+def wheel_to_body(
+    *,
+    left_angular_speed_rad_s: float,
+    right_angular_speed_rad_s: float,
+    wheel_radius_m: float,
+    track_width_m: float,
+) -> BodyVelocity:
+    """Apply the wheel-to-body equations to validated inputs."""
+    forward_speed_m_s = (
+        wheel_radius_m / 2
+        * (right_angular_speed_rad_s + left_angular_speed_rad_s)
+    )
+    yaw_rate_rad_s = (
+        wheel_radius_m / track_width_m
+        * (right_angular_speed_rad_s - left_angular_speed_rad_s)
+    )
+
+    return BodyVelocity(
+        forward_speed_m_s=forward_speed_m_s,
+        yaw_rate_rad_s=yaw_rate_rad_s,
+    )
+```
+
+### Invariants
+
+- Equal wheel speeds produce zero yaw rate.
+- Equal and opposite wheel speeds produce zero forward speed.
+- Swapping the left and right wheel speeds preserves forward speed and reverses yaw rate.
+- Two zero wheel speeds produce zero forward speed and zero yaw rate.
+- Positive right-wheel speed relative to left-wheel speed produces positive counter-clockwise yaw.
+
+## 2. Body-to-wheel velocity mapping
+
+The `body_to_wheel` operation implements the inverse of the wheel-to-body mapping. Its inputs are signed body-forward speed $v$ in $\mathrm{m\,s^{-1}}$, signed counter-clockwise yaw rate $\omega$ in $\mathrm{rad\,s^{-1}}$, wheel radius $r>0$ in metres, and track width $L>0$ in metres.
+
+The required wheel angular speeds are
+
+$$
+\dot\phi_L
+=
+\frac{v}{r}
+-
+\frac{L\omega}{2r},
+\qquad
+\dot\phi_R
+=
+\frac{v}{r}
++
+\frac{L\omega}{2r},
+$$
+
+where $\dot\phi_L$ and $\dot\phi_R$ are the signed left and right wheel angular speeds in $\mathrm{rad\,s^{-1}}$.
+
+### Software contract
+
+The operation accepts four finite scalar inputs. The wheel radius and track width must be strictly positive. Invalid inputs raise `ValueError`; the operation does not clamp values or substitute geometry.
+
+The result is an immutable `WheelAngularSpeeds` value containing `left_angular_speed_rad_s` and `right_angular_speed_rad_s`.
+
+### Implementation mapping
+
+The calculation separates forward and turning contributions:
+
+```python
+@dataclass(frozen=True, slots=True)
+class WheelAngularSpeeds:
+    """Signed left and right wheel angular speeds in radians per second."""
+
+    left_angular_speed_rad_s: float
+    right_angular_speed_rad_s: float
+
+
+def body_to_wheel(
+    *,
+    forward_speed_m_s: float,
+    yaw_rate_rad_s: float,
+    wheel_radius_m: float,
+    track_width_m: float,
+) -> WheelAngularSpeeds:
+    """Apply the body-to-wheel equations to validated inputs."""
+    forward_component_rad_s = forward_speed_m_s / wheel_radius_m
+    turning_component_rad_s = (
+        track_width_m * yaw_rate_rad_s / (2 * wheel_radius_m)
+    )
+    left_angular_speed_rad_s = (
+        forward_component_rad_s - turning_component_rad_s
+    )
+    right_angular_speed_rad_s = (
+        forward_component_rad_s + turning_component_rad_s
+    )
+
+    return WheelAngularSpeeds(
+        left_angular_speed_rad_s=left_angular_speed_rad_s,
+        right_angular_speed_rad_s=right_angular_speed_rad_s,
+    )
+```
+
+The forward component contributes equally to both wheels. The turning component is subtracted from the left wheel and added to the right wheel. Therefore, a positive yaw rate makes the right wheel turn faster than the left wheel.
+
+### Invariants and required tests
+
+- Zero yaw rate produces equal wheel speeds of $v/r$.
+- Zero forward speed produces equal-and-opposite wheel speeds.
+- Reversing the yaw-rate sign swaps the left and right wheel speeds.
+- Applying `body_to_wheel` and then `wheel_to_body` recovers the original $v$ and $\omega$ within the declared floating-point tolerance.
+- Non-finite inputs and non-positive geometry raise `ValueError`.
+
+## 3. Exact constant-input pose integration
+
+Let the initial planar pose be $(x_k,y_k,\theta_k)$, where $x_k$ and $y_k$ are the world-frame coordinates of the axle midpoint in metres and $\theta_k$ is the unwrapped counter-clockwise heading in radians.
+
+Assume that forward speed $v$ in $\mathrm{m\,s^{-1}}$ and yaw rate $\omega$ in $\mathrm{rad\,s^{-1}}$ remain constant over a time step $\Delta t>0$ in seconds. Define the heading change
+
+$$
+\Delta\theta
+=
+\omega\Delta t.
+$$
+
+The exact update is
+
+$$
+\begin{aligned}
+x_{k+1}
+&=
+x_k+
+v\Delta t\,
+\operatorname{sinc}\left(\frac{\Delta\theta}{2}\right)
+\cos\left(\theta_k+\frac{\Delta\theta}{2}\right),\\
+y_{k+1}
+&=
+y_k+
+v\Delta t\,
+\operatorname{sinc}\left(\frac{\Delta\theta}{2}\right)
+\sin\left(\theta_k+\frac{\Delta\theta}{2}\right),\\
+\theta_{k+1}
+&=
+\theta_k+\Delta\theta,
+\end{aligned}
+$$
+
+where the unnormalised sinc function is
+
+$$
+\operatorname{sinc}(z)
+=
+\begin{cases}
+\dfrac{\sin z}{z}, & z\neq0,\\[4pt]
+1, & z=0.
+\end{cases}
+$$
+
+The update is exact for the ideal continuous kinematic model only when $v$ and $\omega$ remain constant during the time step. It does not account for wheel slip, changing commands, actuator dynamics, or model error.
+
+### Software contract
+
+The `integrate_exact` operation accepts an immutable `PlanarPose`, finite forward speed, finite yaw rate, and a finite positive time step. A non-finite input or non-positive time step raises `ValueError`.
+
+The operation returns a new `PlanarPose`. It does not mutate the initial pose or wrap the resulting heading into a fixed angular interval.
+
+### Numerically stable implementation mapping
+
+The implementation avoids evaluating $v/\omega$, which would be undefined when $\omega=0$. Instead, it uses the sinc form:
+
+```python
+@dataclass(frozen=True, slots=True)
+class PlanarPose:
+    """Pose of the robot's axle midpoint in the world frame.
+    
+    Attributes:
+        position_x_m: World-frame x-coordinate in metres.
+        position_y_m: World-frame y-coordinate in metres.
+        heading_rad: Counter-clockwise heading from the world-frame
+            positive x-axis in radians.
+    """
+
+    position_x_m: float
+    position_y_m: float
+    heading_rad: float
+    
+
+def _sinc(value: float) -> float:
+    """Return the unnormalised sinc function, including its value at zero."""
+    if value == 0.0:
+        return 1.0
+
+    return sin(value) / value
+
+
+heading_change_rad = yaw_rate_rad_s * time_step_s
+half_heading_change_rad = heading_change_rad / 2
+midpoint_heading_rad = pose.heading_rad + half_heading_change_rad
+
+signed_displacement_m = (
+    forward_speed_m_s
+    * time_step_s
+    * _sinc(half_heading_change_rad)
+)
+
+next_pose = PlanarPose(
+    position_x_m=(
+        pose.position_x_m
+        + signed_displacement_m * cos(midpoint_heading_rad)
+    ),
+    position_y_m=(
+        pose.position_y_m
+        + signed_displacement_m * sin(midpoint_heading_rad)
+    ),
+    heading_rad=pose.heading_rad + heading_change_rad,
+)
+```
+
+When $\omega=0$, we have $\Delta\theta=0$ and $\operatorname{sinc}(0)=1$. The same implementation therefore reduces smoothly to straight motion without a separate division by zero.
+
+### Invariants and required tests
+
+- Zero yaw rate produces the exact straight-motion update.
+- Zero forward speed changes only the heading.
+- Constant nonzero forward speed and yaw rate produce constant-curvature motion.
+- The input pose remains unchanged.
+- The output heading remains unwrapped.
+- Non-finite inputs raise `ValueError`.
+- A zero or negative time step raises `ValueError`.
+
+## 4. Forward Euler pose integration
+
+Forward Euler approximates motion over a time step $\Delta t>0$ by evaluating the pose derivative at the beginning of the step. For initial pose $(x_k,y_k,\theta_k)$, constant forward speed $v$, and constant yaw rate $\omega$, the update is
+
+$$
+\begin{aligned}
+x_{k+1}^{\mathrm E}
+&=
+x_k+\Delta t\,v\cos\theta_k,\\
+y_{k+1}^{\mathrm E}
+&=
+y_k+\Delta t\,v\sin\theta_k,\\
+\theta_{k+1}^{\mathrm E}
+&=
+\theta_k+\Delta t\,\omega.
+\end{aligned}
+$$
+
+The superscript $\mathrm E$ identifies a Forward Euler approximation. Position is calculated entirely from the beginning-of-step heading $\theta_k$; the changing heading within the step does not affect that step's position increment.
+
+### Software contract
+
+The `integrate_forward_euler` operation accepts the same inputs and validation rules as `integrate_exact`: an immutable `PlanarPose`, finite forward speed, finite yaw rate, and a finite positive time step.
+
+The operation returns a new `PlanarPose`, does not mutate the input pose, and leaves the heading unwrapped. Invalid inputs raise `ValueError`.
+
+### Implementation mapping
+
+```python
+next_pose = PlanarPose(
+    position_x_m=(
+        pose.position_x_m
+        + time_step_s * forward_speed_m_s * cos(pose.heading_rad)
+    ),
+    position_y_m=(
+        pose.position_y_m
+        + time_step_s * forward_speed_m_s * sin(pose.heading_rad)
+    ),
+    heading_rad=(
+        pose.heading_rad + time_step_s * yaw_rate_rad_s
+    ),
+)
+```
+
+### Exact and approximate cases
+
+When $\omega=0$, the heading remains constant. The world-frame velocity is therefore constant, so one Forward Euler step produces the exact straight-motion position.
+
+When $v=0$, position remains unchanged and the heading update is exact because $\dot\theta=\omega$ is constant.
+
+When both $v\neq0$ and $\omega\neq0$, the true path curves during the time step. Forward Euler instead follows the tangent defined by $\theta_k$, so its one-step position is generally approximate.
+
+For repeated integration over a fixed duration, Forward Euler has global error $O(\Delta t)$. In this regime, halving $\Delta t$ should approximately halve the accumulated error.
+
+### Invariants and required tests
+
+- Straight constant-speed motion agrees with the exact update.
+- Pure rotation changes only the heading.
+- A turning step uses the beginning-of-step heading.
+- Smaller time steps reduce accumulated turning-position error.
+- Halving the time step approximately halves global error in the first-order regime.
+- Non-finite inputs and non-positive time steps raise `ValueError`.

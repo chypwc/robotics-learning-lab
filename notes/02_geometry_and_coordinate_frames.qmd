@@ -1,0 +1,1359 @@
+---
+jupyter: python3
+---
+
+# Geometry and Coordinate Frames
+
+## Why coordinate frames matter
+
+A robot represents positions, directions, velocities, measurements, and commands with numbers. Those numbers acquire physical meaning only when their coordinate frame and units are known. A controller that combines quantities expressed in incompatible frames can perform a mathematically valid calculation and produce a physically incorrect command.
+
+Coordinate-frame methods allow us to:
+
+- represent a robot's pose relative to a world frame;
+- distinguish world-frame and body-frame quantities;
+- transform sensor measurements into a shared frame;
+- express target and tracking errors consistently;
+- convert body-relative motion into world-relative motion; and
+- detect invalid transformations before they reach a controller.
+
+The central rule is simple: interpret every coordinate column together with the frame in which it is expressed.
+
+## Prerequisites and assumptions
+
+### Prerequisites
+
+The reader should understand the material in the [linear algebra foundations chapter](01_linear_algebra_foundations.qmd), especially:
+
+- geometric vectors and coordinate columns;
+- dot products, norms, and orthogonality;
+- matrices as linear maps and compositions;
+- linear independence, rank, and inverses;
+- determinants and signed orientation; and
+- orthogonal matrices.
+
+The reader should also be comfortable with sine, cosine, and angles measured in radians.
+
+### Assumptions
+
+- Physical space is modelled as Euclidean space.
+- Robot links and sensor mounts are treated as rigid bodies.
+- Coordinate frames are right-handed and use orthonormal basis vectors.
+- Length is measured in metres, time in seconds, and angles in radians.
+- Coordinate vectors are written as columns.
+- Numerical examples ignore measurement noise unless stated otherwise.
+
+These idealisations isolate the geometry. A physical robot also introduces measurement noise, calibration error, structural compliance, and model mismatch.
+
+## Dependency map
+
+```text
+Linear algebra foundations
+        |
+        v
+Cross products and rigid-body velocity
+        |
+        v
+Coordinate frames and units
+        |
+        v
+Rotation matrices
+        |
+        v
+Point transformations
+        |
+        v
+Differential-drive motion and feedback control
+```
+
+## 1. Cross product and rigid-body velocity
+
+Let $\mathbf u$ and $\mathbf v$ be geometric vectors with coordinate columns ${}^{a}\mathbf u,{}^{a}\mathbf v\in\mathbb R^3$ expressed in the same right-handed orthonormal frame $\{a\}$. Their cross product, expressed in frame $\{a\}$, is defined by
+
+$$
+{}^{a}\mathbf{u}\times{}^{a}\mathbf{v}
+=
+\begin{bmatrix}
+u_yv_z-u_zv_y \\
+u_zv_x-u_xv_z \\
+u_xv_y-u_yv_x
+\end{bmatrix}
+\in\mathbb R^3.
+$$
+
+Its direction follows the right-hand rule. If both vectors are nonzero, let $\theta\in[0,\pi]$ be the smaller angle between them. The cross-product magnitude is
+
+$$
+\left\|{}^{a}\mathbf{u}\times{}^{a}\mathbf{v}\right\|_2
+=
+\|\mathbf{u}\|_2\|\mathbf{v}\|_2\sin\theta.
+$$
+
+The cross product is perpendicular to both input vectors because
+
+$$
+{}^{a}\mathbf{u}^\mathsf{T}
+\left({}^{a}\mathbf{u}\times{}^{a}\mathbf{v}\right)=0,
+\qquad
+{}^{a}\mathbf{v}^\mathsf{T}
+\left({}^{a}\mathbf{u}\times{}^{a}\mathbf{v}\right)=0.
+$$
+
+### 1.1 Example: velocity of a point on a rotating rigid body
+
+Let $O$ and $P$ be two points fixed to the same rigid body. Point $O$ is the chosen reference point; it need not be stationary, and it need not be the body's centre. The vector ${}^{a}\mathbf{r}_{OP}$ runs from $O$ to $P$. Although this vector is fixed relative to the body, its coordinates generally change as the body rotates. Express every quantity in the same orthonormal frame $\{a\}$:
+
+- ${}^{a}\boldsymbol{\omega}$ as the body's angular-velocity vector, measured in $\mathrm{rad\,s^{-1}}$;
+- ${}^{a}\mathbf{r}_{OP}$ as the position of $P$ relative to $O$, measured in $\mathrm{m}$;
+- ${}^{a}\mathbf{v}_O$ as the linear velocity of $O$, measured in $\mathrm{m\,s^{-1}}$; and
+- ${}^{a}\mathbf{v}_P$ as the linear velocity of $P$, measured in $\mathrm{m\,s^{-1}}$.
+
+At any instant, the motion of $P$ can be understood as the sum of two simultaneous contributions:
+
+1. **Translation with $O$.** If the body were not rotating, $P$ would share the reference-point velocity ${}^{a}\mathbf v_O$.
+2. **Motion relative to $O$ caused by rotation.** Rotation adds a velocity whose direction and magnitude depend on ${}^{a}\boldsymbol{\omega}$ and ${}^{a}\mathbf r_{OP}$.
+
+The angular-velocity vector points along the instantaneous rotation axis according to the right-hand rule, and its magnitude is the angular speed. Define the rotational contribution to the velocity of $P$ by
+
+$$
+{}^{a}\mathbf{v}_{P/O}
+\mathrel{:=}
+{}^{a}\boldsymbol{\omega}\times{}^{a}\mathbf{r}_{OP}.
+$$
+
+The cross product determines both the direction and the magnitude of this contribution. In particular,
+
+$$
+{}^{a}\boldsymbol{\omega}^{\mathsf T}{}^{a}\mathbf{v}_{P/O}=0,
+\qquad
+{}^{a}\mathbf{r}_{OP}^{\mathsf T}{}^{a}\mathbf{v}_{P/O}=0.
+$$
+
+Therefore, ${}^{a}\mathbf{v}_{P/O}$ is perpendicular to the rotation axis and to ${}^{a}\mathbf r_{OP}$. It points tangent to the instantaneous circular path generated by the rotation. Adding the translational and rotational contributions gives the rigid-body velocity relation
+
+$$
+\boxed{
+{}^{a}\mathbf{v}_P
+=
+{}^{a}\mathbf{v}_O
++{}^{a}\boldsymbol{\omega}\times{}^{a}\mathbf{r}_{OP}
+}.
+$$
+
+#### Velocity-vector construction
+
+The construction in @fig-rigid-body-point-velocity shows this addition for one instant:
+
+- The green arrow ${}^{a}\mathbf r_{OP}$ locates $P$ relative to $O$.
+- The magenta arrow is the reference-point velocity ${}^{a}\mathbf v_O$. It is deliberately not parallel to ${}^{a}\mathbf r_{OP}$.
+- The orange arrow is the rotational contribution ${}^{a}\boldsymbol{\omega}\times{}^{a}\mathbf r_{OP}={}^{a}\mathbf v_{P/O}$. The right-angle marker shows that it is perpendicular to ${}^{a}\mathbf r_{OP}$.
+- The dashed arrows are translated copies of the two velocity contributions. Moving a vector without rotating or resizing it does not change the vector, so the copies can be arranged head to tail.
+- The blue arrow joins the beginning of the first contribution to the end of the second. It is therefore the resultant velocity ${}^{a}\mathbf v_P$.
+
+In this planar view, ${}^{a}\boldsymbol{\omega}$ points along $+z_a$, out of the page. The right-hand rule then gives the displayed tangential direction for ${}^{a}\boldsymbol{\omega}\times{}^{a}\mathbf r_{OP}$. Notice that only the rotational contribution must be perpendicular to ${}^{a}\mathbf r_{OP}$. The total velocity ${}^{a}\mathbf v_P$ generally is not, because ${}^{a}\mathbf v_O$ may point in any direction.
+
+```{python}
+#| label: fig-rigid-body-point-velocity
+#| fig-cap: "Velocity construction for two points on a rigid body. The rotational contribution is perpendicular to the position vector, while the reference-point velocity is independent of that perpendicular relationship."
+#| fig-width: 10.5
+#| fig-height: 7.2
+#| echo: true
+#| code-fold: true
+#| code-summary: "Show the Python code"
+#| warning: false
+
+"""Generate the rigid-body point-velocity diagram used in the geometry note."""
+
+from __future__ import annotations
+
+import math
+from io import BytesIO
+
+import matplotlib
+
+matplotlib.use("Agg")
+
+import matplotlib.pyplot as plt
+from IPython.display import Image, display
+from matplotlib.lines import Line2D
+from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch
+from matplotlib.transforms import Affine2D
+
+
+
+def add_arrow(
+    axes: plt.Axes,
+    start: tuple[float, float],
+    vector: tuple[float, float],
+    *,
+    colour: str,
+    linestyle: str = "-",
+    linewidth: float = 2.8,
+    zorder: int = 5,
+) -> None:
+    """Draw a vector from ``start`` with the supplied Cartesian components."""
+
+    end = (start[0] + vector[0], start[1] + vector[1])
+    arrow = FancyArrowPatch(
+        start,
+        end,
+        arrowstyle="-|>",
+        mutation_scale=17,
+        color=colour,
+        linestyle=linestyle,
+        linewidth=linewidth,
+        shrinkA=0,
+        shrinkB=0,
+        zorder=zorder,
+    )
+    axes.add_patch(arrow)
+
+
+def main() -> None:
+    """Create and save the deterministic textbook figure."""
+
+    colours = {
+        "body_fill": "#dce6ef",
+        "body_edge": "#7d8790",
+        "position": "#2f735e",
+        "translation": "#cf4f96",
+        "rotation": "#e2a52b",
+        "resultant": "#3f7fe5",
+        "axis": "#73777a",
+        "guide": "#c9cdd1",
+        "omega": "#3ba8cb",
+        "point": "#202326",
+        "background": "#faf9f5",
+    }
+
+    figure, axes = plt.subplots(figsize=(10.5, 7.2), dpi=180)
+    figure.patch.set_facecolor(colours["background"])
+    axes.set_facecolor(colours["background"])
+    axes.set_aspect("equal")
+    axes.set_xlim(-1.7, 6.6)
+    axes.set_ylim(-0.4, 5.3)
+    axes.axis("off")
+
+    frame_origin = (-0.8, 0.35)
+    add_arrow(axes, frame_origin, (1.25, 0.0), colour=colours["axis"], linewidth=1.5)
+    add_arrow(axes, frame_origin, (0.0, 1.25), colour=colours["axis"], linewidth=1.5)
+    axes.text(0.55, 0.22, r"$x_a$", fontsize=12)
+    axes.text(-0.96, 1.72, r"$y_a$", fontsize=12)
+    axes.text(-1.23, 0.02, r"frame $\{a\}$", fontsize=11)
+
+    point_o = (1.45, 1.85)
+    theta = math.radians(30.0)
+    radius = 3.05
+    radial_unit = (math.cos(theta), math.sin(theta))
+    tangent_unit = (-math.sin(theta), math.cos(theta))
+    r_op = (radius * radial_unit[0], radius * radial_unit[1])
+    point_p = (point_o[0] + r_op[0], point_o[1] + r_op[1])
+
+    orbit = Circle(
+        point_o,
+        radius,
+        fill=False,
+        color=colours["guide"],
+        linewidth=1.2,
+        linestyle=(0, (4, 6)),
+        alpha=0.7,
+        zorder=0,
+    )
+    axes.add_patch(orbit)
+
+    body_transform = (
+        Affine2D().rotate_deg_around(point_o[0], point_o[1], math.degrees(theta))
+        + axes.transData
+    )
+    body = FancyBboxPatch(
+        (point_o[0] - 0.48, point_o[1] - 0.52),
+        radius + 1.05,
+        1.04,
+        boxstyle="round,pad=0.02,rounding_size=0.5",
+        facecolor=colours["body_fill"],
+        edgecolor=colours["body_edge"],
+        linewidth=1.5,
+        alpha=0.72,
+        transform=body_transform,
+        zorder=1,
+    )
+    axes.add_patch(body)
+    axes.add_patch(
+        Circle(
+            point_o,
+            0.36,
+            facecolor=colours["body_fill"],
+            edgecolor=colours["body_edge"],
+            linewidth=1.4,
+            zorder=2,
+        )
+    )
+    axes.add_patch(
+        Circle(
+            point_p,
+            0.30,
+            facecolor=colours["body_fill"],
+            edgecolor=colours["body_edge"],
+            linewidth=1.4,
+            zorder=2,
+        )
+    )
+
+    add_arrow(axes, point_o, r_op, colour=colours["position"], linewidth=3.1)
+    axes.text(
+        point_o[0] + 0.57 * r_op[0],
+        point_o[1] + 0.57 * r_op[1] - 0.28,
+        r"${}^{a}\mathbf{r}_{OP}$",
+        fontsize=13,
+        zorder=8,
+    )
+
+    v_o = (-1.30, 0.0)
+    rotational = (1.65 * tangent_unit[0], 1.65 * tangent_unit[1])
+    sum_corner = (point_p[0] + v_o[0], point_p[1] + v_o[1])
+    sum_end = (
+        sum_corner[0] + rotational[0],
+        sum_corner[1] + rotational[1],
+    )
+    v_p = (sum_end[0] - point_p[0], sum_end[1] - point_p[1])
+
+    add_arrow(axes, point_o, v_o, colour=colours["translation"])
+    axes.text(
+        point_o[0] - 0.88,
+        point_o[1] + 0.20,
+        r"${}^{a}\mathbf{v}_O$",
+        fontsize=13,
+        zorder=8,
+    )
+
+    add_arrow(axes, point_p, rotational, colour=colours["rotation"])
+    add_arrow(
+        axes,
+        point_p,
+        v_o,
+        colour=colours["translation"],
+        linestyle=(0, (4, 4)),
+        linewidth=2.4,
+    )
+    add_arrow(
+        axes,
+        sum_corner,
+        rotational,
+        colour=colours["rotation"],
+        linestyle=(0, (4, 4)),
+        linewidth=2.4,
+    )
+    add_arrow(axes, point_p, v_p, colour=colours["resultant"], linewidth=3.2)
+
+    corner_size = 0.23
+    radial_back = (-radial_unit[0], -radial_unit[1])
+    q1 = (
+        point_p[0] + corner_size * radial_back[0],
+        point_p[1] + corner_size * radial_back[1],
+    )
+    q2 = (
+        q1[0] + corner_size * tangent_unit[0],
+        q1[1] + corner_size * tangent_unit[1],
+    )
+    q3 = (
+        point_p[0] + corner_size * tangent_unit[0],
+        point_p[1] + corner_size * tangent_unit[1],
+    )
+    axes.plot(
+        [q1[0], q2[0], q3[0]],
+        [q1[1], q2[1], q3[1]],
+        color=colours["point"],
+        linewidth=1.3,
+        zorder=8,
+    )
+
+    for point, label, offset in (
+        (point_o, r"$O$", (-0.22, -0.38)),
+        (point_p, r"$P$", (0.15, -0.18)),
+    ):
+        axes.scatter(*point, s=95, color=colours["point"], edgecolor=colours["background"], zorder=9)
+        axes.text(
+            point[0] + offset[0],
+            point[1] + offset[1],
+            label,
+            fontsize=13,
+            zorder=10,
+        )
+
+    omega_key = (-1.05, 4.78)
+    axes.add_patch(
+        Circle(
+            omega_key,
+            0.24,
+            facecolor="none",
+            edgecolor=colours["omega"],
+            linewidth=2,
+            zorder=6,
+        )
+    )
+    axes.scatter(*omega_key, s=40, color=colours["omega"], zorder=7)
+    axes.text(
+        -0.68,
+        4.70,
+        r"${}^{a}\omega$ along $+z_a$ (out of plane)",
+        fontsize=12,
+        zorder=8,
+    )
+
+    legend_handles = [
+        Line2D([0], [0], color=colours["rotation"], linewidth=3),
+        Line2D([0], [0], color=colours["resultant"], linewidth=3.2),
+        Line2D([0], [0], color=colours["translation"], linewidth=2.4, linestyle="--"),
+        Line2D([0], [0], color=colours["rotation"], linewidth=2.4, linestyle="--"),
+    ]
+    legend_labels = [
+        r"${}^{a}\omega\times{}^{a}\mathbf{r}_{OP}$",
+        r"${}^{a}\mathbf{v}_P$",
+        r"translated ${}^{a}\mathbf{v}_O$",
+        r"translated ${}^{a}\omega\times{}^{a}\mathbf{r}_{OP}$",
+    ]
+    axes.legend(
+        legend_handles,
+        legend_labels,
+        loc="lower right",
+        frameon=False,
+        fontsize=10.5,
+        handlelength=3.0,
+        borderaxespad=0.5,
+    )
+
+    image_buffer = BytesIO()
+    figure.savefig(
+        image_buffer,
+        format="png",
+        dpi=180,
+        bbox_inches="tight",
+        facecolor=figure.get_facecolor(),
+    )
+    plt.close(figure)
+    display(Image(data=image_buffer.getvalue(), width=950))
+
+
+if __name__ == "__main__":
+    main()
+```
+
+For pure rotation about a fixed axis through $O$, the reference point is stationary, so ${}^{a}\mathbf{v}_O=\mathbf{0}$. Therefore,
+
+$$
+\boxed{{}^{a}\mathbf{v}_P
+=
+{}^{a}\boldsymbol{\omega}\times{}^{a}\mathbf{r}_{OP}}.
+$$
+
+If $\phi$ is the angle between ${}^{a}\boldsymbol{\omega}$ and ${}^{a}\mathbf{r}_{OP}$, then the relative speed caused by rotation is
+
+$$
+\left\|{}^{a}\mathbf{v}_{P/O}\right\|_2
+=
+\left\|{}^{a}\boldsymbol{\omega}\right\|_2
+\left\|{}^{a}\mathbf{r}_{OP}\right\|_2
+\sin\phi
+=
+\omega r_\perp,
+$$
+
+where $r_\perp$ is the perpendicular distance from $P$ to the rotation axis. A point on the axis has $r_\perp=0$ and therefore has no relative linear velocity due to rotation. Under the pure-rotation assumption, ${}^{a}\mathbf{v}_P={}^{a}\mathbf{v}_{P/O}$.
+
+For planar counter-clockwise rotation about the positive $z$-axis,
+
+$$
+{}^{a}\boldsymbol{\omega}
+=
+\begin{bmatrix}
+0\\0\\\omega
+\end{bmatrix},
+\qquad
+{}^{a}\mathbf{r}_{OP}
+=
+\begin{bmatrix}
+x\\y\\0
+\end{bmatrix}.
+$$
+
+The point velocity is
+
+$$
+{}^{a}\mathbf{v}_P
+=
+{}^{a}\boldsymbol{\omega}\times{}^{a}\mathbf{r}_{OP}
+=
+\begin{bmatrix}
+-\omega y\\
+\omega x\\
+0
+\end{bmatrix}.
+$$
+
+For example, if $\omega=2\,\mathrm{rad\,s^{-1}}$ and ${}^{a}\mathbf{r}_{OP}=[0.5\;\;0\;\;0]^\mathsf{T}\,\mathrm{m}$, then
+
+$$
+{}^{a}\mathbf{v}_P
+=
+\begin{bmatrix}
+0\\1\\0
+\end{bmatrix}
+\mathrm{m\,s^{-1}}.
+$$
+
+The point lies on the positive $x$-axis, while its instantaneous velocity points along the positive $y$-axis, tangent to its circular path.
+
+## Quick test A: cross products and rigid-body velocity
+
+Complete this test without looking back at the section.
+
+1. **Recall:** What rule determines the direction of $\mathbf u\times\mathbf v$?
+2. **Explanation:** Why is $\mathbf u\times\mathbf v$ perpendicular to both input vectors?
+3. **Derivation:** Substitute the component formula for ${}^{a}\mathbf u\times{}^{a}\mathbf v$ into ${}^{a}\mathbf u^{\mathsf T}({}^{a}\mathbf u\times{}^{a}\mathbf v)$ and show that the terms cancel.
+4. **Application:** Compute $[1\;\;2\;\;0]^\mathsf T\times[0\;\;1\;\;0]^\mathsf T$.
+5. **Limitations:** What happens to the cross product when the input vectors are parallel, and why does that prevent it from defining a unique normal direction?
+6. **Transfer:** At one instant, a rigid body has ${}^{a}\boldsymbol{\omega}=[0\;\;0\;\;2]^\mathsf{T}\,\mathrm{rad\,s^{-1}}$, ${}^{a}\mathbf r_{OP}=[1\;\;0\;\;0]^\mathsf{T}\,\mathrm{m}$, and ${}^{a}\mathbf v_O=[0.5\;\;0.5\;\;0]^\mathsf{T}\,\mathrm{m\,s^{-1}}$. Find ${}^{a}\mathbf v_{P/O}$ and ${}^{a}\mathbf v_P$. Which velocity is perpendicular to ${}^{a}\mathbf r_{OP}$?
+
+### Answers and hints
+
+1. The right-hand rule, applied in the order from $\mathbf u$ to $\mathbf v$.
+2. Its dot product with either input is zero.
+3. Expanding gives $u_x(u_yv_z-u_zv_y)+u_y(u_zv_x-u_xv_z)+u_z(u_xv_y-u_yv_x)=0$ after pairwise cancellation.
+4. The result is $[0\;\;0\;\;1]^\mathsf T$.
+5. Parallel vectors have $\sin\theta=0$, so their cross product is the zero vector. A zero vector has no direction and therefore cannot specify a unique normal.
+6. ${}^{a}\mathbf v_{P/O}=[0\;\;2\;\;0]^\mathsf T\,\mathrm{m\,s^{-1}}$ and ${}^{a}\mathbf v_P=[0.5\;\;2.5\;\;0]^\mathsf T\,\mathrm{m\,s^{-1}}$. The rotational contribution is perpendicular to ${}^{a}\mathbf r_{OP}$; the total velocity is not.
+
+
+## 2. Coordinate frames
+
+### 2.1 What defines a frame?
+
+A three-dimensional coordinate frame $\{a\}$ consists of:
+
+1. an origin $O_a$, which is the physical point from which positions in frame $\{a\}$ are measured; and
+2. three right-handed orthonormal basis vectors $\mathbf e_{x,a}$, $\mathbf e_{y,a}$, and $\mathbf e_{z,a}$, which define the positive $x_a$-, $y_a$-, and $z_a$-axis directions.
+
+The subscript $a$ associates the origin and basis vectors with frame $\{a\}$. Orthonormal means that each basis vector has unit length and that distinct basis vectors are perpendicular. Right-handed means that $\mathbf e_{x,a}\times\mathbf e_{y,a}=\mathbf e_{z,a}$.
+
+A free vector depends only on the basis orientation used to describe it. A point also depends on the frame origin. This distinction explains why changing the coordinate frame of a free vector requires only a rotation, whereas changing the coordinates of a point generally requires a rotation and a translation.
+
+### 2.2 Orientation convention
+
+Let $\{a\}$ and $\{b\}$ be three-dimensional right-handed orthonormal frames. Define $\mathbf R_{ab}\in\mathbb R^{3\times3}$ as the rotation matrix that maps coordinate columns from frame $\{b\}$ to frame $\{a\}$. Its columns are the basis vectors of $\{b\}$ expressed in frame $\{a\}$:
+
+$$
+\mathbf{R}_{ab}
+=
+\begin{bmatrix}
+{}^{a}\mathbf{e}_{x,b} &
+{}^{a}\mathbf{e}_{y,b} &
+{}^{a}\mathbf{e}_{z,b}
+\end{bmatrix},
+$$
+
+where each column ${}^{a}\mathbf e_{i,b}\in\mathbb R^3$ is an axis of frame $\{b\}$ written using the basis of frame $\{a\}$, for $i\in\{x,y,z\}$.
+
+The following notation distinguishes a geometric vector from its coordinate representations:
+
+| Symbol | Meaning |
+|---|---|
+| $\mathbf v$ | A geometric vector, independent of the coordinate frame used to describe it. |
+| $\mathbf e_{x,b}$ | The geometric unit vector along the positive $x_b$-axis of frame $\{b\}$. |
+| $[\mathbf v]_b={}^{b}\mathbf v\in\mathbb R^3$ | The numerical coordinate column of $\mathbf v$ in frame $\{b\}$. |
+| $[\mathbf v]_a={}^{a}\mathbf v\in\mathbb R^3$ | The numerical coordinate column of $\mathbf v$ in frame $\{a\}$. |
+| $[\mathbf e_{x,b}]_a={}^{a}\mathbf e_{x,b}\in\mathbb R^3$ | The coordinate column of frame $\{b\}$'s geometric $x$-axis, expressed in frame $\{a\}$. |
+
+The bracket operator $[\,\cdot\,]_a$ means “take the coordinate column of the enclosed geometric vector in frame $\{a\}$.” The geometric vector $\mathbf v$ can be expanded using either frame's basis:
+
+$$
+\boxed{
+\mathbf v
+=
+v_x^{(b)}\mathbf e_{x,b}
++
+v_y^{(b)}\mathbf e_{y,b}
++
+v_z^{(b)}\mathbf e_{z,b}
+=
+v_x^{(a)}\mathbf e_{x,a}
++
+v_y^{(a)}\mathbf e_{y,a}
++
+v_z^{(a)}\mathbf e_{z,a}
+}.
+$$
+
+Here, $v_i^{(b)}\in\mathbb R$ and $v_i^{(a)}\in\mathbb R$ are the scalar components of $\mathbf v$ along axis $i\in\{x,y,z\}$ of frames $\{b\}$ and $\{a\}$, respectively. The corresponding coordinate columns are
+
+$$
+{}^{b}\mathbf v
+=
+[\mathbf v]_b
+=
+\begin{bmatrix}
+v_x^{(b)}\\
+v_y^{(b)}\\
+v_z^{(b)}
+\end{bmatrix},
+\qquad
+{}^{a}\mathbf v
+=
+[\mathbf v]_a
+=
+\begin{bmatrix}
+v_x^{(a)}\\
+v_y^{(a)}\\
+v_z^{(a)}
+\end{bmatrix}.
+$$
+
+Apply the coordinate operator $[\,\cdot\,]_a$ to the expansion of $\mathbf v$ in the frame-$\{b\}$ basis. Because taking coordinates is a linear operation,
+
+$$
+[\mathbf v]_a
+=
+v_x^{(b)}[\mathbf e_{x,b}]_a
++
+v_y^{(b)}[\mathbf e_{y,b}]_a
++
+v_z^{(b)}[\mathbf e_{z,b}]_a.
+$$
+
+Using the equivalent superscript notation gives
+
+$$
+{}^{a}\mathbf v
+=
+v_x^{(b)}\,{}^{a}\mathbf e_{x,b}
++
+v_y^{(b)}\,{}^{a}\mathbf e_{y,b}
++
+v_z^{(b)}\,{}^{a}\mathbf e_{z,b}.
+$$
+
+Writing this linear combination as matrix-vector multiplication gives
+
+$$
+{}^{a}\mathbf v
+=
+\underbrace{
+\begin{bmatrix}
+{}^{a}\mathbf e_{x,b} &
+{}^{a}\mathbf e_{y,b} &
+{}^{a}\mathbf e_{z,b}
+\end{bmatrix}
+}_{\mathbf R_{ab}}
+\underbrace{
+\begin{bmatrix}
+v_x^{(b)}\\
+v_y^{(b)}\\
+v_z^{(b)}
+\end{bmatrix}
+}_{{}^{b}\mathbf v}.
+$$
+
+Therefore,
+
+$$
+\boxed{{}^{a}\mathbf v=\mathbf R_{ab}\,{}^{b}\mathbf v}.
+$$
+
+The subscript order can be read as:
+
+> $\mathbf{R}_{ab}$ maps coordinates **from frame $\{b\}$ to frame $\{a\}$**.
+
+The [linear algebra foundations chapter](01_linear_algebra_foundations.qmd) develops orthogonal matrices, determinants, and inverses in general. Applying those results to the orthonormal, right-handed columns of $\mathbf R_{ab}$ gives:
+
+$$
+\boxed{
+\mathbf{R}_{ab}^\mathsf{T}\mathbf{R}_{ab}=\mathbf{I}_3,
+\qquad
+\det(\mathbf{R}_{ab})=1,
+\qquad
+\mathbf{R}_{ab}^{-1}=\mathbf{R}_{ab}^\mathsf{T}=\mathbf{R}_{ba}
+}.
+$$
+
+The following derivations explain each property.
+
+#### Orthonormal columns
+
+Let $\mathbf r_1,\mathbf r_2,\mathbf r_3\in\mathbb R^3$ denote the columns of $\mathbf R_{ab}$:
+
+$$
+\mathbf R_{ab}
+=
+\begin{bmatrix}
+\mathbf r_1 & \mathbf r_2 & \mathbf r_3
+\end{bmatrix},
+$$
+
+where $\mathbf r_1={}^{a}\mathbf e_{x,b}$, $\mathbf r_2={}^{a}\mathbf e_{y,b}$, and $\mathbf r_3={}^{a}\mathbf e_{z,b}$. Multiplying the transpose by the original matrix forms every pairwise dot product between these columns:
+
+$$
+\mathbf R_{ab}^{\mathsf T}\mathbf R_{ab}
+=
+\begin{bmatrix}
+\mathbf r_1^{\mathsf T}\mathbf r_1 & \mathbf r_1^{\mathsf T}\mathbf r_2 & \mathbf r_1^{\mathsf T}\mathbf r_3\\
+\mathbf r_2^{\mathsf T}\mathbf r_1 & \mathbf r_2^{\mathsf T}\mathbf r_2 & \mathbf r_2^{\mathsf T}\mathbf r_3\\
+\mathbf r_3^{\mathsf T}\mathbf r_1 & \mathbf r_3^{\mathsf T}\mathbf r_2 & \mathbf r_3^{\mathsf T}\mathbf r_3
+\end{bmatrix}.
+$$
+
+Because the frame axes are orthonormal, every column has unit length,
+
+$$
+\mathbf r_i^{\mathsf T}\mathbf r_i=1,
+$$
+
+and distinct columns are perpendicular,
+
+$$
+\mathbf r_i^{\mathsf T}\mathbf r_j=0
+\qquad\text{for }i\neq j,
+$$
+
+where $i,j\in\{1,2,3\}$ are column indices. Therefore,
+
+$$
+\boxed{
+\mathbf R_{ab}^{\mathsf T}\mathbf R_{ab}
+=
+\begin{bmatrix}
+1&0&0\\
+0&1&0\\
+0&0&1
+\end{bmatrix}
+=
+\mathbf I_3
+}.
+$$
+
+This identity means that $\mathbf R_{ab}$ preserves dot products and therefore preserves vector lengths and angles.
+
+#### Inverse and reverse coordinate mapping
+
+The inverse $\mathbf R_{ab}^{-1}\in\mathbb R^{3\times3}$ is defined by
+
+$$
+\mathbf R_{ab}^{-1}\mathbf R_{ab}=\mathbf I_3.
+$$
+
+Because $\mathbf R_{ab}^{\mathsf T}\mathbf R_{ab}=\mathbf I_3$, the transpose satisfies the defining property of the inverse. Hence,
+
+$$
+\boxed{\mathbf R_{ab}^{-1}=\mathbf R_{ab}^{\mathsf T}}.
+$$
+
+The coordinate transformation from frame $\{b\}$ to frame $\{a\}$ is
+
+$$
+{}^{a}\mathbf v=\mathbf R_{ab}\,{}^{b}\mathbf v.
+$$
+
+Multiplying by the inverse gives
+
+$$
+{}^{b}\mathbf v=\mathbf R_{ab}^{-1}\,{}^{a}\mathbf v.
+$$
+
+Define $\mathbf R_{ba}\in\mathbb R^{3\times3}$ as the matrix that maps coordinates in the reverse direction, from frame $\{a\}$ to frame $\{b\}$. By definition,
+
+$$
+{}^{b}\mathbf v=\mathbf R_{ba}\,{}^{a}\mathbf v.
+$$
+
+The two reverse mappings must be the same, so
+
+$$
+\boxed{
+\mathbf R_{ba}
+=
+\mathbf R_{ab}^{-1}
+=
+\mathbf R_{ab}^{\mathsf T}
+}.
+$$
+
+#### Determinant and orientation
+
+The notation $\det(\mathbf R)$ denotes the **determinant** of a square matrix $\mathbf R$. Geometrically, $|\det(\mathbf R)|$ is the volume-scaling factor of the corresponding linear transformation. For an orthogonal matrix $\mathbf R$, taking determinants of $\mathbf R^{\mathsf T}\mathbf R=\mathbf I_3$ gives
+
+$$
+\det(\mathbf R^{\mathsf T}\mathbf R)
+=
+\det(\mathbf I_3),
+$$
+
+and therefore by $\det(\mathbf R^{\mathsf T}\mathbf R) = \det(\mathbf R^{\mathsf T})\det(\mathbf R)$ and $\det(R^{\mathsf T})=\det(\mathbf R)$ gives
+
+$$
+\det(\mathbf R)^2=1.
+$$
+
+Thus, an orthogonal matrix can have determinant $+1$ or $-1$. Here, **orientation** means the handedness of the ordered coordinate axes. A right-handed frame satisfies
+
+$$
+\mathbf e_x\times\mathbf e_y=\mathbf e_z.
+$$
+
+The determinant sign has the following interpretation:
+
+- $\det(\mathbf R)=+1$ preserves handedness, so a right-handed ordered basis remains right-handed.
+- $\det(\mathbf R)=-1$ reverses handedness, so the transformation contains a reflection and produces a left-handed ordered basis from a right-handed one.
+
+For example, consider
+
+$$
+\mathbf M
+=
+\begin{bmatrix}
+-1&0&0\\
+0&1&0\\
+0&0&1
+\end{bmatrix}.
+$$
+
+The matrix $\mathbf M\in\mathbb R^{3\times3}$ reflects the $x$-coordinate. Its columns remain orthonormal, so $\mathbf M^{\mathsf T}\mathbf M=\mathbf I_3$, but $\det(\mathbf M)=-1$. It reverses handedness and is therefore a reflection rather than a rigid-body rotation.
+
+Because frames $\{a\}$ and $\{b\}$ are both right-handed, their rotation matrix must satisfy
+
+$$
+\boxed{
+\mathbf R_{ab}^{\mathsf T}\mathbf R_{ab}=\mathbf I_3
+\quad\text{and}\quad
+\det(\mathbf R_{ab})=1
+}.
+$$
+
+The determinant sign does not indicate whether a rotation is clockwise or counter-clockwise. It indicates whether the transformation preserves or reverses the handedness of space.
+
+### 2.3 Points require translation
+
+Let $O_a$ and $O_b$ be the origins of frames $\{a\}$ and $\{b\}$. Define ${}^{a}\mathbf p_b\in\mathbb R^3$ as the position of $O_b$ relative to $O_a$, expressed in frame $\{a\}$ and measured in metres.
+
+For a physical point $P$, let ${}^{b}\mathbf p_P\in\mathbb R^3$ be the position of $P$ relative to $O_b$, expressed in frame $\{b\}$, and let ${}^{a}\mathbf p_P\in\mathbb R^3$ be the position of $P$ relative to $O_a$, expressed in frame $\{a\}$. Both position columns are measured in metres. Their relationship is
+
+$$
+{}^{a}\mathbf{p}_P
+=
+\mathbf{R}_{ab}\,{}^{b}\mathbf{p}_P
++{}^{a}\mathbf{p}_b.
+$$
+
+The rotation $\mathbf R_{ab}\,{}^{b}\mathbf p_P$ changes the basis used to express the displacement from $O_b$ to $P$. The translation ${}^{a}\mathbf p_b$ then accounts for the displacement from $O_a$ to $O_b$. A homogeneous transformation combines these two operations into one matrix equation.
+
+## 3. Worked frame-change example
+
+Consider two planar frames $\{a\}$ and $\{b\}$ whose axes differ by an angle $\theta\in\mathbb R$, measured in radians. A positive $\theta$ means that frame $\{b\}$ is rotated counter-clockwise relative to frame $\{a\}$. Define $\mathbf R_{ab}(\theta)\in\mathbb R^{2\times2}$ as the rotation matrix that maps two-dimensional coordinate columns from frame $\{b\}$ to frame $\{a\}$:
+
+$$
+{}^{a}\mathbf v
+=
+\mathbf R_{ab}(\theta)\,{}^{b}\mathbf v,
+$$
+
+where $\mathbf v$ is a geometric free vector and ${}^{a}\mathbf v,{}^{b}\mathbf v\in\mathbb R^2$ are its coordinate columns in frames $\{a\}$ and $\{b\}$.
+
+Let $\mathbf e_{x,a}$ and $\mathbf e_{y,a}$ be the geometric unit axes of frame $\{a\}$, and let $\mathbf e_{x,b}$ and $\mathbf e_{y,b}$ be the geometric unit axes of frame $\{b\}$. By definition, the columns of $\mathbf R_{ab}$ are the axes of frame $\{b\}$ expressed in frame $\{a\}$:
+
+$$
+\mathbf R_{ab}
+=
+\begin{bmatrix}
+{}^{a}\mathbf e_{x,b}&{}^{a}\mathbf e_{y,b}
+\end{bmatrix}.
+$$
+
+The $x_b$-axis makes angle $\theta$ with the $x_a$-axis. Its projection onto $\mathbf e_{x,a}$ is $\cos\theta$, and its projection onto $\mathbf e_{y,a}$ is $\sin\theta$. Therefore,
+
+$$
+{}^{a}\mathbf e_{x,b}
+=
+\begin{bmatrix}
+\cos\theta\\
+\sin\theta
+\end{bmatrix}.
+$$
+
+Because the planar frames are right-handed and orthonormal, the $y_b$-axis is obtained by rotating the $x_b$-axis counter-clockwise by $\pi/2$. Its angle measured from the $x_a$-axis is therefore $\theta+\pi/2$, so
+
+$$
+{}^{a}\mathbf e_{y,b}
+=
+\begin{bmatrix}
+\cos(\theta+\pi/2)\\
+\sin(\theta+\pi/2)
+\end{bmatrix}.
+$$
+
+Using
+
+$$
+\cos(\theta+\pi/2)=-\sin\theta,
+\qquad
+\sin(\theta+\pi/2)=\cos\theta,
+$$
+
+gives
+
+$$
+{}^{a}\mathbf e_{y,b}
+=
+\begin{bmatrix}
+-\sin\theta\\
+\cos\theta
+\end{bmatrix}.
+$$
+
+Placing these two coordinate columns side by side produces
+
+$$
+\boxed{
+\mathbf R_{ab}(\theta)
+=
+\begin{bmatrix}
+\cos\theta&-\sin\theta\\
+\sin\theta&\cos\theta
+\end{bmatrix}
+}.
+$$
+
+The column construction also explains why this matrix maps coordinates from frame $\{b\}$ to frame $\{a\}$. If
+
+$$
+{}^{b}\mathbf v
+=
+\begin{bmatrix}
+v_x^{(b)}\\
+v_y^{(b)}
+\end{bmatrix},
+$$
+
+where $v_x^{(b)},v_y^{(b)}\in\mathbb R$ are the components of $\mathbf v$ along the $x_b$- and $y_b$-axes, then
+
+$$
+\begin{aligned}
+{}^{a}\mathbf v
+&=v_x^{(b)}\,{}^{a}\mathbf e_{x,b}
++v_y^{(b)}\,{}^{a}\mathbf e_{y,b}\\
+&=
+\begin{bmatrix}
+{}^{a}\mathbf e_{x,b}&{}^{a}\mathbf e_{y,b}
+\end{bmatrix}
+\begin{bmatrix}
+v_x^{(b)}\\
+v_y^{(b)}
+\end{bmatrix}\\
+&=\mathbf R_{ab}(\theta)\,{}^{b}\mathbf v.
+\end{aligned}
+$$
+
+For the worked example, $\theta=\pi/2\,\mathrm{rad}$. Substitution gives
+
+$$
+\mathbf R_{ab}(\pi/2)
+=
+\begin{bmatrix}
+0&-1\\
+1&0
+\end{bmatrix}.
+$$
+
+The first column $[0\;1]^{\mathsf T}$ says that the positive $x_b$-axis points along the positive $y_a$-axis. The second column $[-1\;0]^{\mathsf T}$ says that the positive $y_b$-axis points along the negative $x_a$-axis.
+
+Let ${}^{b}\mathbf v\in\mathbb R^2$ be the coordinate column of a free vector $\mathbf v$, expressed in frame $\{b\}$ and measured in metres:
+
+$$
+{}^{b}\mathbf{v}
+=
+\begin{bmatrix}
+2\\
+1
+\end{bmatrix}
+\mathrm{m}.
+$$
+
+The coordinate column of the same geometric vector in frame $\{a\}$ is ${}^{a}\mathbf v\in\mathbb R^2$:
+
+$$
+{}^{a}\mathbf{v}
+=
+\mathbf{R}_{ab}(\theta)\,{}^{b}\mathbf{v}
+=
+\begin{bmatrix}
+0 & -1\\
+1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+2\\
+1
+\end{bmatrix}
+=
+\begin{bmatrix}
+-1\\
+2
+\end{bmatrix}
+\mathrm{m}.
+$$
+
+The coordinates changed, but the physical length did not:
+
+$$
+\left\|{}^{b}\mathbf{v}\right\|_2
+=
+\sqrt{2^2+1^2}
+=
+\sqrt{5}
+=
+\sqrt{(-1)^2+2^2}
+=
+\left\|{}^{a}\mathbf{v}\right\|_2.
+$$
+
+### Interactive frame-rotation graph
+
+Fix the frame-$\{b\}$ coordinate column
+
+$$
+{}^{b}\mathbf v
+=
+\begin{bmatrix}
+2\\
+1
+\end{bmatrix}.
+$$
+
+For each angle $\theta\in[-\pi,\pi]$, the corresponding frame-$\{a\}$ coordinate column is
+
+$$
+{}^{a}\mathbf v(\theta)
+=
+\mathbf R_{ab}(\theta)\,{}^{b}\mathbf v
+=
+\begin{bmatrix}
+2\cos\theta-\sin\theta\\
+2\sin\theta+\cos\theta
+\end{bmatrix}.
+$$
+
+In the HTML book, move the angle slider to rotate frame $\{b\}$ relative to frame $\{a\}$. The graph keeps ${}^{b}\mathbf v=[2\;1]^{\mathsf T}$ fixed, so the geometric vector rotates with frame $\{b\}$ and its coordinates ${}^{a}\mathbf v(\theta)$ update continuously.
+
+::: {.content-visible when-format="html"}
+```{=html}
+<div id="frame-rotation-demo">
+  <label class="form-label" for="frame-rotation-theta">Rotation angle <span aria-hidden="true">θ</span>: <output id="frame-rotation-theta-value" for="frame-rotation-theta"></output></label>
+  <input id="frame-rotation-theta" class="form-range" type="range" min="-180" max="180" step="5" value="90" aria-describedby="frame-rotation-values">
+  <svg id="frame-rotation-svg" class="rotation-plot" viewBox="0 0 720 460" role="img" aria-label="Interactive planar frame rotation">
+    <defs>
+      <marker id="frame-rotation-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"></path>
+      </marker>
+    </defs>
+    <g class="rotation-grid" aria-hidden="true">
+      <line x1="150" y1="230" x2="570" y2="230"></line>
+      <line x1="360" y1="440" x2="360" y2="20"></line>
+      <circle cx="360" cy="230" r="70"></circle>
+      <circle cx="360" cy="230" r="140"></circle>
+      <circle cx="360" cy="230" r="210"></circle>
+    </g>
+    <g aria-hidden="true">
+      <line class="rotation-axis-a" x1="150" y1="230" x2="570" y2="230" marker-end="url(#frame-rotation-arrow)"></line>
+      <line class="rotation-axis-a" x1="360" y1="440" x2="360" y2="20" marker-end="url(#frame-rotation-arrow)"></line>
+      <text class="rotation-label" x="580" y="225">xₐ</text>
+      <text class="rotation-label" x="368" y="24">yₐ</text>
+      <line id="frame-rotation-xb" class="rotation-axis-b" marker-end="url(#frame-rotation-arrow)"></line>
+      <line id="frame-rotation-yb" class="rotation-axis-b" marker-end="url(#frame-rotation-arrow)"></line>
+      <text id="frame-rotation-xb-label" class="rotation-label">xᵦ</text>
+      <text id="frame-rotation-yb-label" class="rotation-label">yᵦ</text>
+      <line id="frame-rotation-component-x" class="rotation-component-x" marker-end="url(#frame-rotation-arrow)"></line>
+      <line id="frame-rotation-component-y" class="rotation-component-y" marker-end="url(#frame-rotation-arrow)"></line>
+      <text id="frame-rotation-component-x-label" class="rotation-label">2eₓ,ᵦ</text>
+      <text id="frame-rotation-component-y-label" class="rotation-label">1eᵧ,ᵦ</text>
+      <line id="frame-rotation-vector" class="rotation-vector" marker-end="url(#frame-rotation-arrow)"></line>
+      <text id="frame-rotation-vector-label" class="rotation-label">ᵃv</text>
+      <circle class="rotation-origin" cx="360" cy="230" r="5"></circle>
+      <text class="rotation-label" x="346" y="250">O</text>
+    </g>
+  </svg>
+  <div id="frame-rotation-values" class="rotation-values font-monospace" aria-live="polite"></div>
+</div>
+<style>
+#frame-rotation-demo { color: var(--bs-body-color); }
+#frame-rotation-demo .rotation-plot { display: block; width: 100%; height: auto; }
+#frame-rotation-demo .rotation-grid line,
+#frame-rotation-demo .rotation-grid circle { fill: none; stroke: currentColor; stroke-width: 1; opacity: 0.1; }
+#frame-rotation-demo .rotation-axis-a { stroke: currentColor; stroke-width: 2; opacity: 0.55; }
+#frame-rotation-demo .rotation-axis-b { stroke: var(--bs-primary); stroke-width: 3; }
+#frame-rotation-demo .rotation-component-x { stroke: var(--bs-primary); stroke-width: 2; stroke-dasharray: 7 5; opacity: 0.72; }
+#frame-rotation-demo .rotation-component-y { stroke: var(--bs-success); stroke-width: 2; stroke-dasharray: 7 5; opacity: 0.8; }
+#frame-rotation-demo .rotation-vector { stroke: var(--bs-danger); stroke-width: 4; }
+#frame-rotation-demo .rotation-origin { fill: currentColor; }
+#frame-rotation-demo .rotation-label { fill: var(--bs-body-color); font-size: 16px; font-weight: 500; }
+#frame-rotation-demo .rotation-values { white-space: normal; overflow-wrap: anywhere; }
+</style>
+<script>
+(() => {
+  const root = document.getElementById("frame-rotation-demo");
+  if (!root || root.dataset.initialized === "true") return;
+  root.dataset.initialized = "true";
+
+  const slider = document.getElementById("frame-rotation-theta");
+  const angleOutput = document.getElementById("frame-rotation-theta-value");
+  const valuesOutput = document.getElementById("frame-rotation-values");
+  const svg = document.getElementById("frame-rotation-svg");
+  const centreX = 360;
+  const centreY = 230;
+  const scale = 70;
+
+  const screenPoint = ([x, y]) => [centreX + scale * x, centreY - scale * y];
+  const add = ([x1, y1], [x2, y2]) => [x1 + x2, y1 + y2];
+  const multiply = (scalar, [x, y]) => [scalar * x, scalar * y];
+  const format = value => Math.abs(value) < 0.0005 ? "0.000" : value.toFixed(3);
+
+  const setLine = (id, start, end) => {
+    const line = document.getElementById(id);
+    const [x1, y1] = screenPoint(start);
+    const [x2, y2] = screenPoint(end);
+    line.setAttribute("x1", x1);
+    line.setAttribute("y1", y1);
+    line.setAttribute("x2", x2);
+    line.setAttribute("y2", y2);
+  };
+
+  const setLabel = (id, point, offsetX, offsetY) => {
+    const label = document.getElementById(id);
+    const [x, y] = screenPoint(point);
+    label.setAttribute("x", x + offsetX);
+    label.setAttribute("y", y + offsetY);
+  };
+
+  const update = () => {
+    const degrees = Number(slider.value);
+    const theta = degrees * Math.PI / 180;
+    const cosine = Math.cos(theta);
+    const sine = Math.sin(theta);
+    const xBasisB = [cosine, sine];
+    const yBasisB = [-sine, cosine];
+    const xComponent = multiply(2, xBasisB);
+    const vectorA = add(xComponent, yBasisB);
+    const origin = [0, 0];
+
+    setLine("frame-rotation-xb", origin, multiply(2.8, xBasisB));
+    setLine("frame-rotation-yb", origin, multiply(2.8, yBasisB));
+    setLine("frame-rotation-component-x", origin, xComponent);
+    setLine("frame-rotation-component-y", xComponent, vectorA);
+    setLine("frame-rotation-vector", origin, vectorA);
+
+    setLabel("frame-rotation-xb-label", multiply(2.45, xBasisB), 4, -4);
+    setLabel("frame-rotation-yb-label", multiply(2.45, yBasisB), 4, -4);
+    setLabel("frame-rotation-component-x-label", multiply(1.05, xBasisB), 6, -8);
+    setLabel("frame-rotation-component-y-label", add(xComponent, multiply(0.55, yBasisB)), 6, -8);
+    setLabel("frame-rotation-vector-label", vectorA, 8, -10);
+
+    angleOutput.value = `${degrees}° (${theta.toFixed(3)} rad)`;
+    valuesOutput.textContent = `R_ab = [[${format(cosine)}, ${format(-sine)}], [${format(sine)}, ${format(cosine)}]]   ·   v_b = [2.000, 1.000]ᵀ   ·   v_a = [${format(vectorA[0])}, ${format(vectorA[1])}]ᵀ`;
+    svg.setAttribute("aria-label", `Frame b rotated ${degrees} degrees. The fixed frame-b coordinates 2, 1 map to frame-a coordinates ${format(vectorA[0])}, ${format(vectorA[1])}.`);
+  };
+
+  slider.addEventListener("input", update);
+  update();
+})();
+</script>
+```
+:::
+
+::: {.content-visible unless-format="html"}
+The PDF shows the default slider state $\theta=\pi/2\,\mathrm{rad}$. Use the HTML book to vary $\theta$ interactively.
+
+```{python}
+#| label: fig-planar-frame-rotation-static
+#| echo: false
+#| warning: false
+#| fig-cap: "Static PDF view of the frame rotation at $\\theta=\\pi/2$ with ${}^{b}\\mathbf v=[2\\;1]^{\\mathsf T}$ and ${}^{a}\\mathbf v=[-1\\;2]^{\\mathsf T}$."
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+theta_static = np.pi / 2
+R_ab_static = np.array([
+    [np.cos(theta_static), -np.sin(theta_static)],
+    [np.sin(theta_static),  np.cos(theta_static)],
+])
+v_b_static = np.array([2.0, 1.0])
+v_a_static = R_ab_static @ v_b_static
+x_b_static = R_ab_static[:, 0]
+y_b_static = R_ab_static[:, 1]
+x_component_static = 2.0 * x_b_static
+
+fig, ax = plt.subplots(figsize=(7.2, 5.2))
+
+arrow = dict(arrowstyle="-|>", mutation_scale=14, linewidth=2)
+ax.annotate("", xy=(3.0, 0.0), xytext=(-3.0, 0.0), arrowprops={**arrow, "color": "0.45"})
+ax.annotate("", xy=(0.0, 3.0), xytext=(0.0, -3.0), arrowprops={**arrow, "color": "0.45"})
+ax.annotate("", xy=2.8 * x_b_static, xytext=(0.0, 0.0), arrowprops={**arrow, "color": "tab:blue"})
+ax.annotate("", xy=2.8 * y_b_static, xytext=(0.0, 0.0), arrowprops={**arrow, "color": "tab:blue"})
+ax.annotate("", xy=x_component_static, xytext=(0.0, 0.0), arrowprops={**arrow, "color": "tab:blue", "linestyle": "--"})
+ax.annotate("", xy=v_a_static, xytext=x_component_static, arrowprops={**arrow, "color": "tab:green", "linestyle": "--"})
+ax.annotate("", xy=v_a_static, xytext=(0.0, 0.0), arrowprops={**arrow, "color": "tab:red", "linewidth": 3})
+
+ax.text(3.05, -0.12, r"$x_a$")
+ax.text(0.08, 3.02, r"$y_a$")
+ax.text(*(2.95 * x_b_static + np.array([0.05, 0.05])), r"$x_b$")
+ax.text(*(2.95 * y_b_static + np.array([0.05, 0.05])), r"$y_b$")
+ax.text(*(v_a_static + np.array([0.08, 0.08])), r"${}^{a}\mathbf v$")
+ax.scatter([0.0], [0.0], color="0.2", zorder=5)
+
+ax.set_xlim(-3.2, 3.2)
+ax.set_ylim(-3.2, 3.2)
+ax.set_aspect("equal", adjustable="box")
+ax.grid(alpha=0.2)
+ax.set_xlabel(r"$x_a$")
+ax.set_ylabel(r"$y_a$")
+ax.set_title(r"$\theta=\pi/2$, ${}^{b}\mathbf v=[2\;1]^{\mathsf T}$, ${}^{a}\mathbf v=[-1\;2]^{\mathsf T}$")
+plt.show()
+```
+:::
+
+
+#### Equivalent NumPy calculation
+
+The following NumPy snippet is the direct software translation of ${}^{a}\mathbf v=\mathbf R_{ab}(\theta){}^{b}\mathbf v$. The scalar `theta` stores $\theta$ in radians; `R_ab` is a NumPy array with shape `(2, 2)` representing $\mathbf R_{ab}(\theta)\in\mathbb R^{2\times2}$; `v_b` is a NumPy array with shape `(2,)` representing the fixed coordinate column ${}^{b}\mathbf v=[2\;1]^{\mathsf T}$; and `v_a` is a NumPy array with shape `(2,)` representing ${}^{a}\mathbf v\in\mathbb R^2$. The operator `@` performs matrix-vector multiplication.
+
+```python
+import numpy as np
+
+theta = np.pi / 2  # radians; replace this value with the selected angle
+
+R_ab = np.array([
+    [np.cos(theta), -np.sin(theta)],
+    [np.sin(theta),  np.cos(theta)],
+])
+
+v_b = np.array([2.0, 1.0])
+v_a = R_ab @ v_b
+```
+
+For $\theta=\pi/2\,\mathrm{rad}$, the calculation gives `v_a` approximately equal to `[-1.0, 2.0]`. Changing `theta` recomputes the same values displayed by the interactive graph while `v_b` remains fixed.
+
+## 4. Differential-drive interpretation
+
+For a planar mobile robot, let frame $\{w\}$ be fixed to the world and frame $\{b\}$ be attached to the robot. Let $\theta\in\mathbb R$ be the robot's heading angle, measured counter-clockwise in radians from the positive $x_w$-axis to the positive $x_b$-axis. Let $v\in\mathbb R$ be the signed forward speed, measured in $\mathrm{m\,s^{-1}}$; positive $v$ means motion along the positive $x_b$-axis.
+
+The body-frame velocity ${}^{b}\mathbf v\in\mathbb R^2$ is
+
+$$
+{}^{b}\mathbf{v}
+=
+\begin{bmatrix}
+v\\
+0
+\end{bmatrix}
+\mathrm{m\,s^{-1}}.
+$$
+
+Define $\mathbf R_{wb}(\theta)\in\mathbb R^{2\times2}$ as the rotation matrix that maps planar coordinates from the robot frame $\{b\}$ to the world frame $\{w\}$. The world-frame velocity ${}^{w}\mathbf v\in\mathbb R^2$ is therefore
+
+$$
+{}^{w}\mathbf{v}
+=
+\mathbf{R}_{wb}(\theta)\,{}^{b}\mathbf{v}
+=
+\begin{bmatrix}
+\cos\theta & -\sin\theta\\
+\sin\theta & \cos\theta
+\end{bmatrix}
+\begin{bmatrix}
+v\\
+0
+\end{bmatrix}
+=
+\begin{bmatrix}
+v\cos\theta\\
+v\sin\theta
+\end{bmatrix}
+\mathrm{m\,s^{-1}}.
+$$
+
+This equation is the coordinate-frame foundation of the differential-drive kinematic model. It shows why a controller must distinguish a forward command in the robot frame from motion observed in the world frame.
+
+## 5. Failure modes and engineering checks
+
+### Missing frame labels
+
+Two identical columns can describe different physical directions when they are expressed in different frames. Interfaces should name the frame explicitly.
+
+### Reversed transformation
+
+Using $\mathbf{R}_{ba}$ where $\mathbf{R}_{ab}$ is required rotates coordinates in the opposite direction. Check the subscript rule before multiplying.
+
+### Mixed units
+
+Degrees passed to a function expecting radians produce valid-looking but wrong numbers. Convert at the system boundary and use radians internally.
+
+### Point-vector confusion
+
+A point changes under translation; a free vector does not. Applying a translation to velocity or direction data is a modelling error.
+
+### Invalid numerical rotation
+
+Let $\mathbf R\in\mathbb R^{n\times n}$ be a numerically stored matrix intended to represent a rotation, and let $\mathbf I_n\in\mathbb R^{n\times n}$ be the identity matrix. Rounding, integration drift, or corrupted data can make $\mathbf R$ non-orthonormal.
+
+For a matrix $\mathbf M\in\mathbb R^{n\times n}$ with entries $m_{ij}$, define the Frobenius norm by
+
+$$
+\lVert\mathbf M\rVert_F
+\mathrel{:=}
+\sqrt{\sum_{i=1}^{n}\sum_{j=1}^{n}m_{ij}^2}.
+$$
+
+Let $\varepsilon_{\mathrm{orth}}>0$ and $\varepsilon_{\det}>0$ be declared numerical tolerances. A robust interface checks
+
+$$
+\left\lVert\mathbf{R}^\mathsf{T}\mathbf{R}-\mathbf{I}_n\right\rVert_F
+\leq
+\varepsilon_{\mathrm{orth}}
+$$
+
+and
+
+$$
+\left|\det(\mathbf R)-1\right|
+\leq
+\varepsilon_{\det}.
+$$
+
+The first condition tests approximate orthonormality; the second tests approximate preservation of right-handed orientation.
+
+## Quick test B: coordinate frames and rotations
+
+1. **Recall:** What do the columns of $\mathbf{R}_{ab}$ represent?
+2. **Explanation:** Explain in words why $\mathbf{R}_{ab}^{-1}=\mathbf{R}_{ba}$.
+3. **Derivation:** Starting with ${}^{a}\mathbf{v}=\mathbf{R}_{ab}{}^{b}\mathbf{v}$, solve for ${}^{b}\mathbf{v}$.
+4. **Application:** A robot has heading $\theta=\pi/2$ and forward speed $v=0.5\,\mathrm{m\,s^{-1}}$. Find its world-frame velocity.
+5. **Limitations:** Give two ways a numerically stored matrix intended to be a rotation matrix can become invalid.
+6. **Derivation:** Let $\{a\}$ and $\{b\}$ be right-handed orthonormal planar frames. Frame $\{b\}$ is rotated counter-clockwise by $\theta\,\mathrm{rad}$ relative to frame $\{a\}$, and $\mathbf R_{ab}(\theta)\in\mathbb R^{2\times2}$ maps coordinate columns from frame $\{b\}$ to frame $\{a\}$. First express the $x_b$-axis and $y_b$-axis as coordinate columns ${}^{a}\mathbf e_{x,b},{}^{a}\mathbf e_{y,b}\in\mathbb R^2$; then place those columns side by side to derive $\mathbf R_{ab}(\theta)$.
+
+### Answers and hints
+
+1. The axes of frame $\{b\}$ expressed in coordinates of frame $\{a\}$.
+2. Reversing the frame change undoes the original change; for an orthonormal rotation matrix, the inverse is its transpose.
+3. Premultiply by $\mathbf{R}_{ab}^{-1}=\mathbf{R}_{ba}$: ${}^{b}\mathbf{v}=\mathbf{R}_{ba}{}^{a}\mathbf{v}$.
+4. $[0\;\;0.5]^\mathsf{T}\,\mathrm{m\,s^{-1}}$, up to floating-point rounding.
+5. Examples include accumulated integration error, rounded entries, malformed input, unit mistakes in angle construction, and data corruption.
+6. Since the $x_b$-axis makes angle $\theta$ with the $x_a$-axis, its frame-$\{a\}$ coordinate column is ${}^{a}\mathbf e_{x,b}=[\cos\theta\;\sin\theta]^{\mathsf T}$. Right-handed orthonormality places the $y_b$-axis at angle $\theta+\pi/2$, so ${}^{a}\mathbf e_{y,b}=[\cos(\theta+\pi/2)\;\sin(\theta+\pi/2)]^{\mathsf T}=[-\sin\theta\;\cos\theta]^{\mathsf T}$. Because these two coordinate columns are the columns of $\mathbf R_{ab}(\theta)$,
+
+   $$
+   \mathbf R_{ab}(\theta)
+   =
+   \begin{bmatrix}
+   \cos\theta&-\sin\theta\\
+   \sin\theta&\cos\theta
+   \end{bmatrix}.
+   $$
+
+## References
+
+- Kevin M. Lynch and Frank C. Park, *Modern Robotics*, Chapter 3, especially Sections 3.1 and 3.2.1 on free vectors, frames, rotation matrices, and rigid-body motions.
+- Steven M. LaValle, *Planning Algorithms*, Chapters 3 and 4 on geometric representations, transformations, and configuration spaces.
+
