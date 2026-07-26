@@ -1,4 +1,4 @@
-# Phase 0 Verification Report
+# Development Environment Verification Report
 
 **Verification date:** 2026-07-23
 **Result:** PASS
@@ -6,7 +6,7 @@
 ## Scope
 
 This report verifies environment requirement **ENV-001** from
-[phase0_setup.md](phase0_setup.md). It does not verify a robot capability;
+[environment_setup.md](environment_setup.md). It does not verify a robot capability;
 capability learning and implementation begin in Phase 1.
 
 ## Results

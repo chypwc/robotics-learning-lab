@@ -1,4 +1,4 @@
-# Phase 0 Environment Setup
+# Development Environment Setup
 
 ## Purpose
 
@@ -135,7 +135,7 @@ cd /home/maxwell/Repos/robotics_autonomous
 quarto render notes/<chapter>.qmd
 ```
 
-The temporary Quarto smoke source and PDF were removed after successful verification; the result remains recorded in [phase0_verification.md](phase0_verification.md).
+The temporary Quarto smoke source and PDF were removed after successful verification; the result remains recorded in [environment_verification.md](environment_verification.md).
 
 Jupyter is not required for prose, mathematics, or display-only code blocks. It
 will be installed inside `.venv` only when a note first requires executable
