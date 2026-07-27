@@ -12,7 +12,6 @@ ros_ws/log/
 *.md.orig
 *:Zone.Identifier
 
-output/
 textbooks/
 
 .pytest_cache/
@@ -20,3 +19,21 @@ textbooks/
 AGENTS.md
 CHECKLIST.md
 PLAN.md
+
+# Quarto working state
+/.quarto/
+/_freeze/
+/.jupyter_cache/
+
+# Temporary notebooks
+*.quarto_ipynb*
+
+# Intermediate figure directories created beside source notes
+/notes/*_files/
+
+# LaTeX intermediates left by failed renders
+index.aux
+index.log
+index.out
+index.tex
+index.toc

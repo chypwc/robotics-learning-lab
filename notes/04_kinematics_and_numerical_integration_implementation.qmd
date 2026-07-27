@@ -1,8 +1,8 @@
-# Geometry and Motion Implementation
+# Differential-Drive Kinematics and Numerical Integration: Implementation
 
 ## Purpose and scope
 
-This companion translates the reviewed differential-drive mathematics into reusable software contracts, invariants, validation rules, and tests. The mathematical derivations remain in the kinematics and numerical-integration chapter; this chapter records how those equations map into dependable software.
+This companion translates the differential-drive mathematics derived in [Differential-Drive Kinematics and Numerical Integration: Model and Derivation](03_kinematics_and_numerical_integration.qmd) into reusable software contracts, invariants, validation rules, and tests. It records how those equations map into dependable software without repeating the derivations.
 
 ## 1. Wheel-to-body velocity mapping
 

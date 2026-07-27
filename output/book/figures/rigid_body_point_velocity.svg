@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 720" role="img" aria-labelledby="title desc">
+  <title id="title">Velocity construction for two points on a planar rigid body</title>
+  <desc id="desc">A rigid body contains reference point O and point P. The relative-position vector points from O to P. Reference-point velocity and rotational velocity are added with translated copies to obtain the velocity of P. A right-angle marker shows that rotational velocity is perpendicular to the relative-position vector.</desc>
+  <defs>
+    <clipPath id="plot-clip"><rect x="34" y="38" width="748" height="648" rx="18"/></clipPath>
+    <marker id="arrow-axis" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#73777a"/></marker>
+    <marker id="arrow-position" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#2f735e"/></marker>
+    <marker id="arrow-translation" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#cf4f96"/></marker>
+    <marker id="arrow-rotation" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#e2a52b"/></marker>
+    <marker id="arrow-result" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#3f7fe5"/></marker>
+  </defs>
+
+  <rect width="1320" height="720" fill="#faf9f5"/>
+  <rect class="plot-panel" x="34" y="38" width="748" height="648" rx="18"/>
+  <rect class="legend-panel" x="800" y="38" width="486" height="648" rx="18"/>
+
+  <g clip-path="url(#plot-clip)">
+    <circle class="orbit" cx="430" cy="430" r="340"/>
+    <g class="body" transform="rotate(-30 430 430)">
+      <rect x="375" y="375" width="405" height="110" rx="52"/>
+      <path class="body-centreline" d="M405 430H756"/>
+    </g>
+  </g>
+
+  <g class="frame">
+    <circle cx="115" cy="620" r="5"/>
+    <path d="M115 620H255" marker-end="url(#arrow-axis)"/>
+    <path d="M115 620V480" marker-end="url(#arrow-axis)"/>
+    <text x="267" y="626">x<tspan baseline-shift="sub">a</tspan></text>
+    <text x="96" y="468">y<tspan baseline-shift="sub">a</tspan></text>
+    <text x="75" y="652">frame {a}</text>
+  </g>
+
+  <g class="omega-key">
+    <circle cx="108" cy="104" r="22"/>
+    <circle cx="108" cy="104" r="6"/>
+    <text x="145" y="111"><tspan baseline-shift="super">a</tspan><tspan class="vector-symbol">ω</tspan> along +z<tspan baseline-shift="sub">a</tspan> (out of plane)</text>
+  </g>
+
+  <path class="position" d="M430 430L724 260" marker-end="url(#arrow-position)"/>
+  <text class="vector-label position-label" x="555" y="324"><tspan baseline-shift="super">a</tspan><tspan class="vector-symbol">r</tspan><tspan baseline-shift="sub">OP</tspan></text>
+
+  <path class="translation" d="M430 430L285 430" marker-end="url(#arrow-translation)"/>
+  <text class="vector-label translation-label" x="316" y="411"><tspan baseline-shift="super">a</tspan><tspan class="vector-symbol">v</tspan><tspan baseline-shift="sub">O</tspan></text>
+
+  <path class="rotation" d="M724 260L632 101" marker-end="url(#arrow-rotation)"/>
+  <path class="translation-copy" d="M724 260L579 260" marker-end="url(#arrow-translation)"/>
+  <path class="rotation-copy" d="M579 260L487 101" marker-end="url(#arrow-rotation)"/>
+  <path class="result" d="M724 260L487 101" marker-end="url(#arrow-result)"/>
+
+  <text class="vector-label rotation-label" x="633" y="82"><tspan baseline-shift="super">a</tspan><tspan class="vector-symbol">ω</tspan> × <tspan baseline-shift="super">a</tspan><tspan class="vector-symbol">r</tspan><tspan baseline-shift="sub">OP</tspan></text>
+  <text class="vector-label result-label" x="525" y="148"><tspan baseline-shift="super">a</tspan><tspan class="vector-symbol">v</tspan><tspan baseline-shift="sub">P</tspan></text>
+
+  <circle class="endpoint-ring" cx="430" cy="430" r="34"/>
+  <circle class="endpoint-ring" cx="724" cy="260" r="30"/>
+  <circle class="point" cx="430" cy="430" r="8"/>
+  <circle class="point" cx="724" cy="260" r="8"/>
+  <text class="point-label" x="405" y="471">O</text>
+  <text class="point-label" x="741" y="282">P</text>
+  <path class="right-angle-halo" d="M688 281L667 245L703 224"/>
+  <path class="right-angle" d="M688 281L667 245L703 224"/>
+
+  <g class="legend" aria-label="Vector legend">
+    <text class="legend-title" x="818" y="84">Vector construction</text>
+    <path class="legend-rotation" d="M820 134H884" marker-end="url(#arrow-rotation)"/>
+    <text x="904" y="141"><tspan baseline-shift="super">a</tspan><tspan class="vector-symbol">ω</tspan> × <tspan baseline-shift="super">a</tspan><tspan class="vector-symbol">r</tspan><tspan baseline-shift="sub">OP</tspan></text>
+
+    <path class="legend-result" d="M820 202H884" marker-end="url(#arrow-result)"/>
+    <text x="904" y="209"><tspan baseline-shift="super">a</tspan><tspan class="vector-symbol">v</tspan><tspan baseline-shift="sub">P</tspan></text>
+
+    <path class="legend-translation-copy" d="M820 270H884" marker-end="url(#arrow-translation)"/>
+    <text x="904" y="277">translated <tspan baseline-shift="super">a</tspan><tspan class="vector-symbol">v</tspan><tspan baseline-shift="sub">O</tspan></text>
+
+    <path class="legend-rotation-copy" d="M820 338H884" marker-end="url(#arrow-rotation)"/>
+    <text x="904" y="345">translated rotational term</text>
+
+    <path class="legend-position" d="M820 406H884" marker-end="url(#arrow-position)"/>
+    <text x="904" y="413"><tspan baseline-shift="super">a</tspan><tspan class="vector-symbol">r</tspan><tspan baseline-shift="sub">OP</tspan></text>
+
+    <path class="legend-right-angle" d="M820 472H842V450"/>
+    <text x="904" y="469">perpendicular</text>
+  </g>
+
+  <text class="note" x="820" y="558">The dashed vectors are translated copies.</text>
+  <text class="note" x="820" y="588">Their direction and magnitude do not change.</text>
+  <text class="note" x="820" y="636">Only the rotational contribution must be</text>
+  <text class="note" x="820" y="666">perpendicular to the relative-position vector.</text>
+
+  <style>
+    text{fill:#202326;font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:400}
+    .plot-panel,.legend-panel{fill:#fff;stroke:#ddd9d2;stroke-width:1.5}
+    .orbit{fill:none;stroke:#c9cdd1;stroke-width:1.6;stroke-dasharray:7 7;opacity:.8}
+    .body rect{fill:#dce6ef;stroke:#7d8790;stroke-width:2;opacity:.76}
+    .body-centreline{fill:none;stroke:#9aa2a9;stroke-width:1.5;stroke-dasharray:7 6}
+    .frame path,.frame circle{fill:#73777a;stroke:#73777a;stroke-width:2}
+    .omega-key circle:first-child{fill:none;stroke:#3ba8cb;stroke-width:2.5}.omega-key circle:nth-child(2){fill:#3ba8cb}
+    .position,.legend-position{fill:none;stroke:#2f735e;stroke-width:3.6}
+    .translation{fill:none;stroke:#cf4f96;stroke-width:3.4}
+    .rotation,.legend-rotation{fill:none;stroke:#e2a52b;stroke-width:3.4}
+    .result,.legend-result{fill:none;stroke:#3f7fe5;stroke-width:3.8}
+    .translation-copy,.legend-translation-copy{fill:none;stroke:#cf4f96;stroke-width:2.8;stroke-dasharray:8 6}
+    .rotation-copy,.legend-rotation-copy{fill:none;stroke:#e2a52b;stroke-width:2.8;stroke-dasharray:8 6}
+    .right-angle-halo{fill:none;stroke:#fff;stroke-width:7}.right-angle,.legend-right-angle{fill:none;stroke:#202326;stroke-width:2}
+    .endpoint-ring{fill:#dce6ef;stroke:#7d8790;stroke-width:1.8}.point{fill:#202326;stroke:#faf9f5;stroke-width:3}
+    .point-label{font-size:20px;font-weight:600}
+    .vector-label{font-size:19px;font-style:italic;font-weight:400;paint-order:stroke;stroke:#faf9f5;stroke-width:5;stroke-linejoin:round}
+    .vector-symbol{font-weight:700;font-style:italic}
+    .position-label{fill:#2f735e}.translation-label{fill:#b43f82}.rotation-label{fill:#b47713}.result-label{fill:#2f68bd}
+    .legend-title{font-size:21px;font-weight:600}.legend text{font-size:17px}.note{font-size:16px;fill:#555}
+  </style>
+</svg>

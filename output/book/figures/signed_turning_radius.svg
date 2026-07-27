@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 736 455" role="img" aria-labelledby="title desc">
+  <title id="title">Signed turning radius and instantaneous centre of curvature</title>
+  <desc id="desc">Two top-view diagrams show a forward-moving robot. The instantaneous centre C lies left for positive radius and right for negative radius. Velocity is tangent to the circular path and perpendicular to the radius.</desc>
+  <defs>
+    <marker id="arrow-x" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#d35f9f"/></marker>
+    <marker id="arrow-y" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#2f8f6b"/></marker>
+    <marker id="arrow-v" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#377fe5"/></marker>
+    <marker id="arrow-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#333"/></marker>
+    <marker id="arrow-turn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#c58c18"/></marker>
+  </defs>
+  <rect width="736" height="455" fill="#fbfaf7"/>
+  <path class="divider" d="M368 28V427"/>
+  <text class="panel-title" x="184" y="35" text-anchor="middle">Left turn: R = +ρ</text>
+  <circle class="path" cx="165" cy="245" r="130"/>
+  <path class="turn" d="M295 245A130 130 0 0 0 165 115" marker-end="url(#arrow-turn)"/>
+  <text x="236" y="118">ω &gt; 0</text>
+  <circle class="icc" cx="165" cy="245" r="7"/>
+  <text x="142" y="237">C</text>
+  <rect class="body" x="265" y="195" width="60" height="100" rx="18"/>
+  <path class="front" d="M276 195L295 178L314 195Z"/>
+  <circle class="origin" cx="295" cy="245" r="7"/>
+  <text x="304" y="266">O<tspan baseline-shift="sub">b</tspan></text>
+  <path class="axis-x" d="M295 245V145" marker-end="url(#arrow-x)"/>
+  <text x="304" y="158">+x<tspan baseline-shift="sub">b</tspan></text>
+  <path class="axis-y" d="M295 245H211" marker-end="url(#arrow-y)"/>
+  <text x="225" y="231">+y<tspan baseline-shift="sub">b</tspan></text>
+  <path class="velocity" d="M336 245V150" marker-end="url(#arrow-v)"/>
+  <text x="345" y="176">v</text>
+  <path class="right-angle" d="M279 245V229H295"/>
+  <path class="extension" d="M165 255V321M295 255V321"/>
+  <path class="radius" d="M295 312H165" marker-end="url(#arrow-r)"/>
+  <text x="230" y="340" text-anchor="middle">r<tspan baseline-shift="sub">O_bC</tspan> = R e<tspan baseline-shift="sub">y,b</tspan></text>
+  <text class="note" x="184" y="383" text-anchor="middle">C is on +y<tspan baseline-shift="sub">b</tspan>; |R| = ρ</text>
+  <text class="panel-title" x="552" y="35" text-anchor="middle">Right turn: R = −ρ</text>
+  <circle class="path" cx="571" cy="245" r="130"/>
+  <path class="turn" d="M441 245A130 130 0 0 1 571 115" marker-end="url(#arrow-turn)"/>
+  <text x="478" y="118">ω &lt; 0</text>
+  <circle class="icc" cx="571" cy="245" r="7"/>
+  <text x="581" y="237">C</text>
+  <rect class="body" x="411" y="195" width="60" height="100" rx="18"/>
+  <path class="front" d="M422 195L441 178L460 195Z"/>
+  <circle class="origin" cx="441" cy="245" r="7"/>
+  <text x="450" y="266">O<tspan baseline-shift="sub">b</tspan></text>
+  <path class="axis-x" d="M441 245V145" marker-end="url(#arrow-x)"/>
+  <text x="450" y="158">+x<tspan baseline-shift="sub">b</tspan></text>
+  <path class="axis-y" d="M441 245H375" marker-end="url(#arrow-y)"/>
+  <text x="379" y="231">+y<tspan baseline-shift="sub">b</tspan></text>
+  <path class="velocity" d="M482 245V150" marker-end="url(#arrow-v)"/>
+  <text x="491" y="176">v</text>
+  <path class="right-angle" d="M441 229H457V245"/>
+  <path class="extension" d="M441 255V321M571 255V321"/>
+  <path class="radius" d="M441 312H571" marker-end="url(#arrow-r)"/>
+  <text x="506" y="340" text-anchor="middle">r<tspan baseline-shift="sub">O_bC</tspan> = R e<tspan baseline-shift="sub">y,b</tspan></text>
+  <text class="note" x="552" y="383" text-anchor="middle">C is on −y<tspan baseline-shift="sub">b</tspan>; |R| = ρ</text>
+  <path class="legend-v" d="M182 420H227" marker-end="url(#arrow-v)"/>
+  <text class="note" x="238" y="426">tangent velocity</text>
+  <path class="legend-r" d="M407 420H452" marker-end="url(#arrow-r)"/>
+  <text class="note" x="463" y="426">radius direction</text>
+  <style>
+    text{fill:#222;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:400}
+    .panel-title{font-size:18px;font-weight:500}.note{font-size:14px}
+    .divider{stroke:#dedbd5;stroke-width:1}.path{fill:none;stroke:#c8c5bf;stroke-width:1.5;stroke-dasharray:7 6}
+    .body{fill:#f2dfcc;stroke:#777;stroke-width:2}.front{fill:#f8d6e5;stroke:#d35f9f;stroke-width:2}
+    .origin{fill:#333;stroke:#fbfaf7;stroke-width:3}.icc{fill:#5aa6bf;stroke:#333;stroke-width:1.5}
+    .axis-x{fill:none;stroke:#d35f9f;stroke-width:3}.axis-y{fill:none;stroke:#2f8f6b;stroke-width:3}
+    .velocity,.legend-v{fill:none;stroke:#377fe5;stroke-width:3}.radius,.legend-r{fill:none;stroke:#333;stroke-width:2}
+    .turn{fill:none;stroke:#c58c18;stroke-width:3}.right-angle{fill:none;stroke:#555;stroke-width:1.5}
+    .extension{fill:none;stroke:#aaa;stroke-width:1;stroke-dasharray:4 4}
+  </style>
+</svg>

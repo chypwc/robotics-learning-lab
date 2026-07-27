@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" role="img" aria-labelledby="title description">
+  <title id="title">Planar frame rotation at theta equals pi over two</title>
+  <desc id="description">Frame b is rotated ninety degrees relative to frame a. A vector with coordinates two, one in frame b has coordinates minus one, two in frame a. Dashed arrows show its two frame-b basis components and the red arrow shows their resultant.</desc>
+  <defs>
+    <marker id="arrow-grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#70757a"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#2673c9"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#2f7d5c"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#c43d4d"/>
+    </marker>
+    <style>
+      .label { fill: #24282c; font: 500 18px "DejaVu Sans", sans-serif; }
+      .small { font-size: 15px; }
+      .grid { fill: none; stroke: #60666b; stroke-width: 1; opacity: 0.13; }
+      .axis-a { stroke: #70757a; stroke-width: 2.2; marker-end: url(#arrow-grey); }
+      .axis-b { stroke: #2673c9; stroke-width: 3.2; marker-end: url(#arrow-blue); }
+      .component-x { stroke: #2673c9; stroke-width: 2.5; stroke-dasharray: 8 6; marker-end: url(#arrow-blue); }
+      .component-y { stroke: #2f7d5c; stroke-width: 2.5; stroke-dasharray: 8 6; marker-end: url(#arrow-green); }
+      .vector { stroke: #c43d4d; stroke-width: 4.2; marker-end: url(#arrow-red); }
+    </style>
+  </defs>
+
+  <rect width="720" height="520" rx="18" fill="#faf9f5"/>
+  <text class="label" x="360" y="30" text-anchor="middle">θ = π/2,  ᵇv = [2, 1]ᵀ,  ᵃv = [−1, 2]ᵀ</text>
+
+  <g aria-hidden="true" transform="translate(0 40)">
+    <line class="grid" x1="150" y1="230" x2="570" y2="230"/>
+    <line class="grid" x1="360" y1="440" x2="360" y2="20"/>
+    <circle class="grid" cx="360" cy="230" r="70"/>
+    <circle class="grid" cx="360" cy="230" r="140"/>
+    <circle class="grid" cx="360" cy="230" r="210"/>
+
+    <line class="axis-a" x1="150" y1="230" x2="570" y2="230"/>
+    <line class="axis-a" x1="360" y1="440" x2="360" y2="20"/>
+    <text class="label" x="580" y="225">xₐ</text>
+    <text class="label" x="368" y="24">yₐ</text>
+
+    <line class="axis-b" x1="360" y1="230" x2="360" y2="34"/>
+    <line class="axis-b" x1="360" y1="230" x2="164" y2="230"/>
+    <text class="label" x="372" y="55">xᵦ</text>
+    <text class="label" x="190" y="218">yᵦ</text>
+
+    <line class="component-x" x1="360" y1="230" x2="360" y2="90"/>
+    <line class="component-y" x1="360" y1="90" x2="290" y2="90"/>
+    <text class="label small" x="372" y="155">2eₓ,ᵦ</text>
+    <text class="label small" x="316" y="78">1eᵧ,ᵦ</text>
+
+    <line class="vector" x1="360" y1="230" x2="290" y2="90"/>
+    <text class="label" x="274" y="78" text-anchor="end" fill="#c43d4d">ᵃv</text>
+
+    <circle cx="360" cy="230" r="5.5" fill="#24282c"/>
+    <text class="label small" x="344" y="252">O</text>
+  </g>
+</svg>

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 736 490" role="img" aria-labelledby="title desc">
+  <title id="title">Differential-drive robot geometry</title>
+  <desc id="desc">Top view of a rigid differential-drive robot with world and body frames, track width, forward velocity, zero lateral velocity, and a side view of wheel radius.</desc>
+  <defs>
+    <marker id="forward" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#d35f9f"/></marker>
+    <marker id="left" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#2f8f6b"/></marker>
+    <marker id="neutral" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#333"/></marker>
+  </defs>
+  <rect width="736" height="490" fill="#fbfaf7"/>
+  <g class="grid" aria-hidden="true"><path d="M45 80H695M45 145H695M45 210H695M45 275H695M45 340H695M100 45V420M180 45V420M260 45V420M340 45V420M420 45V420M500 45V420M580 45V420M660 45V420"/></g>
+  <g class="world">
+    <circle cx="93" cy="375" r="4"/><path d="M93 375H168" marker-end="url(#neutral)"/><path d="M93 375V300" marker-end="url(#neutral)"/>
+    <text x="178" y="381">x<tspan baseline-shift="sub">w</tspan></text><text x="78" y="289">y<tspan baseline-shift="sub">w</tspan></text><text x="55" y="407">frame {w}: fixed to world</text>
+  </g>
+  <g class="robot" transform="rotate(-25 370 235)">
+    <rect class="body" x="245" y="145" width="250" height="180" rx="52"/><path class="front" d="M495 190L525 235L495 280Z"/><path class="centre" d="M270 235H480"/>
+    <rect class="wheel" x="305" y="125" width="110" height="24" rx="4"/><rect class="wheel" x="305" y="321" width="110" height="24" rx="4"/>
+    <path class="contact" d="M315 137H405M315 333H405"/><text x="306" y="112">left wheel</text><text x="300" y="371">right wheel</text>
+    <circle class="dot" cx="370" cy="235" r="6"/><circle class="zring" cx="370" cy="235" r="18"/><circle class="dot" cx="370" cy="235" r="5"/>
+    <path class="xb" d="M370 235H485" marker-end="url(#forward)"/><path class="yb" d="M370 235V154" marker-end="url(#left)"/>
+    <text class="axis-label" x="418" y="220">+x<tspan baseline-shift="sub">b</tspan></text><text class="axis-label" x="380" y="184">+y<tspan baseline-shift="sub">b</tspan></text><text class="axis-label" x="326" y="205">+z<tspan baseline-shift="sub">b</tspan></text>
+    <path class="move" d="M400 275H475" marker-end="url(#forward)"/>
+    <path class="dim" d="M276 137H254M276 333H254M261 143V327" marker-start="url(#neutral)" marker-end="url(#neutral)"/><text x="232" y="240">L</text>
+    <text x="324" y="305">rigid body; frame {b}</text>
+  </g>
+  <g class="inset">
+    <text x="530" y="43">Wheel side view</text><path class="ground" d="M525 126H690"/><circle class="wheel" cx="603" cy="91" r="35"/><circle class="dot" cx="603" cy="91" r="4"/>
+    <path class="dim" d="M603 91L628 66" marker-end="url(#neutral)"/><text x="641" y="69">r</text><circle class="dot" cx="603" cy="126" r="4"/><text x="615" y="149">ground contact</text>
+    <path class="move" d="M603 168H675" marker-end="url(#forward)"/>
+  </g>
+  <g class="legend" aria-label="Motion legend">
+    <path class="move" d="M235 452H290" marker-end="url(#forward)"/><text x="304" y="458">forward rolling velocity</text>
+    <text x="485" y="458">no lateral velocity: v<tspan baseline-shift="sub">y</tspan> = 0</text>
+  </g>
+  <style>
+    text{fill:#222;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:400}
+    .grid path{fill:none;stroke:#dedbd5;stroke-width:1}
+    .world path,.world circle{fill:#333;stroke:#333;stroke-width:2}
+    .body{fill:#f2dfcc;stroke:#777;stroke-width:2}
+    .front{fill:#f8d6e5;stroke:#d35f9f;stroke-width:2}
+    .wheel{fill:#e2e0dc;stroke:#555;stroke-width:2}
+    .centre{stroke:#8b8b8b;stroke-dasharray:6 5}
+    .contact{stroke:#5aa6bf;stroke-width:5}
+    .dot{fill:#333}.zring{fill:none;stroke:#5aa6bf;stroke-width:2}
+    .xb,.move{fill:none;stroke:#d35f9f;stroke-width:3}
+    .yb{fill:none;stroke:#2f8f6b;stroke-width:3}
+    .axis-label{paint-order:stroke;stroke:#fbfaf7;stroke-width:4;stroke-linejoin:round}
+    .dim{fill:none;stroke:#333;stroke-width:1.5}
+    .ground{stroke:#333;stroke-width:2}
+  </style>
+</svg>

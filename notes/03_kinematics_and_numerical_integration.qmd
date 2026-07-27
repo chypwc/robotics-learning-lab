@@ -1,4 +1,4 @@
-# Kinematics and Numerical Integration
+# Differential-Drive Kinematics and Numerical Integration: Model and Derivation
 
 ## Why this chapter matters
 

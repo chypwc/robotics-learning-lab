@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Position and velocity of a point fixed to a planar rigid body</title>
+  <desc id="desc">Two panels show the world position of a body origin and a fixed point, their relative-position vector, and the vector addition of body-origin velocity and perpendicular rotational velocity to obtain the point velocity.</desc>
+  <defs>
+    <marker id="arrow-position-body" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#198c8c"/></marker>
+    <marker id="arrow-position-relative" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#7651a8"/></marker>
+    <marker id="arrow-position-point" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#4f6078"/></marker>
+    <marker id="arrow-axis-x" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#d35f9f"/></marker>
+    <marker id="arrow-axis-y" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#2f8f6b"/></marker>
+    <marker id="arrow-translation" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#377fe5"/></marker>
+    <marker id="arrow-rotation" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#d98218"/></marker>
+    <marker id="arrow-result" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#23835b"/></marker>
+    <marker id="arrow-neutral" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#444"/></marker>
+  </defs>
+
+  <rect width="1200" height="620" fill="#fbfaf7"/>
+  <rect class="panel" x="24" y="22" width="552" height="574" rx="18"/>
+  <rect class="panel" x="624" y="22" width="552" height="574" rx="18"/>
+  <path class="divider" d="M600 42V576"/>
+
+  <text class="panel-title" x="300" y="58" text-anchor="middle">(a) Position vectors in the world frame</text>
+
+  <g class="world-frame">
+    <circle cx="86" cy="518" r="6"/>
+    <path d="M86 518H186" marker-end="url(#arrow-neutral)"/>
+    <path d="M86 518V418" marker-end="url(#arrow-neutral)"/>
+    <text x="194" y="525">+x<tspan baseline-shift="sub">w</tspan></text>
+    <text x="66" y="407">+y<tspan baseline-shift="sub">w</tspan></text>
+    <text x="47" y="548">O<tspan baseline-shift="sub">w</tspan></text>
+  </g>
+
+  <path class="position-point" d="M86 518L475 195" marker-end="url(#arrow-position-point)"/>
+  <path class="position-body" d="M86 518L300 385" marker-end="url(#arrow-position-body)"/>
+
+  <g class="body" transform="rotate(-48 300 385)">
+    <rect x="247" y="340" width="290" height="90" rx="24"/>
+    <path class="body-centreline" d="M268 385H520"/>
+    <path class="body-front" d="M537 356L563 385L537 414Z"/>
+    <path class="axis-x" d="M300 385H420" marker-end="url(#arrow-axis-x)"/>
+    <path class="axis-y" d="M300 385V292" marker-end="url(#arrow-axis-y)"/>
+  </g>
+
+  <path class="position-relative" d="M300 385L475 195" marker-end="url(#arrow-position-relative)"/>
+  <path class="heading-angle" d="M345 385A45 45 0 0 0 330 352"/>
+  <text class="angle-label" x="350" y="352">θ</text>
+  <circle class="origin" cx="300" cy="385" r="7"/>
+  <circle class="point" cx="475" cy="195" r="8"/>
+  <text class="label-halo" x="275" y="415">O<tspan baseline-shift="sub">b</tspan></text>
+  <text class="label-halo" x="487" y="190">P</text>
+  <text class="label-halo" x="379" y="283">+x<tspan baseline-shift="sub">b</tspan></text>
+  <text class="label-halo" x="222" y="322">+y<tspan baseline-shift="sub">b</tspan></text>
+
+  <text class="vector-label position-body-label" x="165" y="425">
+    <tspan baseline-shift="super">w</tspan><tspan class="vector-symbol">p</tspan><tspan baseline-shift="sub">b</tspan>
+  </text>
+  <text class="vector-label position-relative-label" x="381" y="247">
+    <tspan baseline-shift="super">w</tspan><tspan class="vector-symbol">r</tspan><tspan baseline-shift="sub">O</tspan><tspan baseline-shift="sub" font-size="12">b</tspan><tspan baseline-shift="sub">P</tspan>
+  </text>
+  <text class="vector-label position-point-label" x="222" y="304">
+    <tspan baseline-shift="super">w</tspan><tspan class="vector-symbol">p</tspan><tspan baseline-shift="sub">P</tspan>
+  </text>
+  <text class="panel-note" x="300" y="574" text-anchor="middle">world position of P = body-origin position + relative position</text>
+
+  <text class="panel-title" x="900" y="58" text-anchor="middle">(b) Velocity of the fixed point P</text>
+
+  <path class="relative-guide" d="M720 490L850 375" marker-end="url(#arrow-position-relative)"/>
+  <circle class="origin" cx="720" cy="490" r="7"/>
+  <circle class="point" cx="850" cy="375" r="8"/>
+  <text class="label-halo" x="688" y="519">O<tspan baseline-shift="sub">b</tspan></text>
+  <text class="label-halo" x="860" y="397">P</text>
+  <text class="vector-label position-relative-label" x="752" y="421">
+    <tspan baseline-shift="super">w</tspan><tspan class="vector-symbol">r</tspan><tspan baseline-shift="sub">O</tspan><tspan baseline-shift="sub" font-size="12">b</tspan><tspan baseline-shift="sub">P</tspan>
+  </text>
+
+  <path class="translation" d="M850 375L1030 345" marker-end="url(#arrow-translation)"/>
+  <path class="rotation-copy" d="M850 375L750 270" marker-end="url(#arrow-rotation)"/>
+  <path class="translation-copy" d="M750 270L930 240"/>
+  <path class="rotation" d="M1030 345L930 240" marker-end="url(#arrow-rotation)"/>
+  <path class="result" d="M850 375L930 240" marker-end="url(#arrow-result)"/>
+
+  <path class="right-angle-halo" d="M865 362L851 347L837 361"/>
+  <path class="right-angle" d="M865 362L851 347L837 361"/>
+
+  <text class="vector-label translation-label" x="952" y="376">
+    <tspan baseline-shift="super">w</tspan><tspan class="vector-symbol">v</tspan><tspan baseline-shift="sub">b</tspan>
+  </text>
+  <text class="vector-label rotation-label" x="1002" y="274">ω S<tspan baseline-shift="sub">2</tspan> <tspan baseline-shift="super">w</tspan><tspan class="vector-symbol">r</tspan><tspan baseline-shift="sub">O</tspan><tspan baseline-shift="sub" font-size="12">b</tspan><tspan baseline-shift="sub">P</tspan></text>
+  <text class="vector-label result-label" x="895" y="302">
+    <tspan baseline-shift="super">w</tspan><tspan class="vector-symbol">v</tspan><tspan baseline-shift="sub">P</tspan>
+  </text>
+
+  <g class="legend" aria-label="Velocity vector legend">
+    <path class="legend-translation" d="M672 536H714" marker-end="url(#arrow-translation)"/>
+    <text x="726" y="542">translation</text>
+    <path class="legend-rotation" d="M836 536H878" marker-end="url(#arrow-rotation)"/>
+    <text x="890" y="542">rotation</text>
+    <path class="legend-result" d="M1002 536H1044" marker-end="url(#arrow-result)"/>
+    <text x="1056" y="542">sum</text>
+  </g>
+  <text class="panel-note" x="900" y="574" text-anchor="middle">only the rotational contribution is perpendicular to the relative position</text>
+
+  <style>
+    text{fill:#222;font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:400}
+    .panel{fill:#fff;stroke:#dedbd5;stroke-width:1.5}.divider{stroke:#d4d0c9;stroke-width:1}
+    .panel-title{font-size:20px;font-weight:600}.panel-note{font-size:15px;fill:#555}
+    .world-frame path,.world-frame circle{fill:#444;stroke:#444;stroke-width:2.2}
+    .body rect{fill:#edf1f4;stroke:#747d85;stroke-width:2}.body-front{fill:#f8d6e5;stroke:#d35f9f;stroke-width:2}
+    .body-centreline{fill:none;stroke:#a4abb0;stroke-width:1.5;stroke-dasharray:6 5}
+    .axis-x{fill:none;stroke:#d35f9f;stroke-width:3}.axis-y{fill:none;stroke:#2f8f6b;stroke-width:3}
+    .heading-angle{fill:none;stroke:#555;stroke-width:1.6}.angle-label{font-style:italic}
+    .origin{fill:#333;stroke:#fff;stroke-width:3}.point{fill:#7651a8;stroke:#fff;stroke-width:3}
+    .position-body{fill:none;stroke:#198c8c;stroke-width:3}.position-relative,.relative-guide{fill:none;stroke:#7651a8;stroke-width:3}
+    .position-point{fill:none;stroke:#4f6078;stroke-width:2.2;stroke-dasharray:8 6}
+    .translation{fill:none;stroke:#377fe5;stroke-width:3.5}.rotation,.rotation-copy{fill:none;stroke:#d98218;stroke-width:3.5}
+    .rotation-copy{stroke-dasharray:7 5;opacity:.55}.translation-copy{fill:none;stroke:#377fe5;stroke-width:2.4;stroke-dasharray:7 5;opacity:.55}
+    .result{fill:none;stroke:#23835b;stroke-width:4}.right-angle-halo{fill:none;stroke:#fff;stroke-width:7}.right-angle{fill:none;stroke:#555;stroke-width:2.2}
+    .vector-label{font-size:18px;font-weight:400;paint-order:stroke;stroke:#fff;stroke-width:5;stroke-linejoin:round}
+    .vector-symbol{font-weight:700;font-style:italic}
+    .position-body-label{fill:#126f6f}.position-relative-label{fill:#62408f}.position-point-label{fill:#4f6078}
+    .translation-label{fill:#2868bd}.rotation-label{fill:#ad6812}.result-label{fill:#176b49}
+    .label-halo{paint-order:stroke;stroke:#fff;stroke-width:5;stroke-linejoin:round;font-weight:600}
+    .legend text{font-size:15px}.legend-translation{fill:none;stroke:#377fe5;stroke-width:3}
+    .legend-rotation{fill:none;stroke:#d98218;stroke-width:3}.legend-result{fill:none;stroke:#23835b;stroke-width:3}
+  </style>
+</svg>
