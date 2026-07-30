@@ -1,10 +1,10 @@
-# Differential-Drive Kinematics and Numerical Integration: Implementation
+# Differential-Drive Kinematics and Numerical Integration: Implementation {#sec-kinematics-integration-implementation}
 
-## Purpose and scope
+## Purpose and scope {.unnumbered}
 
 This companion translates the differential-drive mathematics derived in [Differential-Drive Kinematics and Numerical Integration: Model and Derivation](03_kinematics_and_numerical_integration.qmd) into reusable software contracts, invariants, validation rules, and tests. It records how those equations map into dependable software without repeating the derivations.
 
-## 1. Wheel-to-body velocity mapping
+## Wheel-to-body velocity mapping
 
 Let $r>0$ be the common effective wheel radius in metres and let $L>0$ be the track width in metres. Let $\dot\phi_L$ and $\dot\phi_R$ be the signed left and right wheel angular speeds in $\mathrm{rad\,s^{-1}}$, where positive angular speed rolls the corresponding wheel forward.
 
@@ -74,7 +74,7 @@ def wheel_to_body(
 - Two zero wheel speeds produce zero forward speed and zero yaw rate.
 - Positive right-wheel speed relative to left-wheel speed produces positive counter-clockwise yaw.
 
-## 2. Body-to-wheel velocity mapping
+## Body-to-wheel velocity mapping
 
 The `body_to_wheel` operation implements the inverse of the wheel-to-body mapping. Its inputs are signed body-forward speed $v$ in $\mathrm{m\,s^{-1}}$, signed counter-clockwise yaw rate $\omega$ in $\mathrm{rad\,s^{-1}}$, wheel radius $r>0$ in metres, and track width $L>0$ in metres.
 
@@ -150,7 +150,7 @@ The forward component contributes equally to both wheels. The turning component 
 - Applying `body_to_wheel` and then `wheel_to_body` recovers the original $v$ and $\omega$ within the declared floating-point tolerance.
 - Non-finite inputs and non-positive geometry raise `ValueError`.
 
-## 3. Exact constant-input pose integration
+## Exact constant-input pose integration
 
 Let the initial planar pose be $(x_k,y_k,\theta_k)$, where $x_k$ and $y_k$ are the world-frame coordinates of the axle midpoint in metres and $\theta_k$ is the unwrapped counter-clockwise heading in radians.
 
@@ -267,7 +267,7 @@ When $\omega=0$, we have $\Delta\theta=0$ and $\operatorname{sinc}(0)=1$. The sa
 - Non-finite inputs raise `ValueError`.
 - A zero or negative time step raises `ValueError`.
 
-## 4. Forward Euler pose integration
+## Forward Euler pose integration
 
 Forward Euler approximates motion over a time step $\Delta t>0$ by evaluating the pose derivative at the beginning of the step. For initial pose $(x_k,y_k,\theta_k)$, constant forward speed $v$, and constant yaw rate $\omega$, the update is
 

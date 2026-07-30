@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Geometry and Coordinate Frames – Foundations of Autonomous Robotics</title>
+<title>2&nbsp; Geometry and Coordinate Frames – Foundations of Autonomous Robotics</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1b9b2d75225f2ddb203017a594491b92.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-9bd9da8a43abe092e8fe8e55ae6bd24f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-1b9b2d75225f2ddb203017a594491b92.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a1d20fa37053390459103e27c0ac45a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-bff5d7cd845da349ee67ccc3e95b2326.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-a1d20fa37053390459103e27c0ac45a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -142,6 +142,7 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -318,6 +319,7 @@ window.Quarto = {
     </a>
   </div>
         <div class="quarto-navbar-tools tools-end">
+    <a href="./Foundations-of-Autonomous-Robotics.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
           <div id="quarto-search" class="" title="Search"></div>
@@ -328,7 +330,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Part I - Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./02_geometry_and_coordinate_frames.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./02_geometry_and_coordinate_frames.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -343,19 +345,19 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Foundations of Autonomous Robotics</span></span></a>
+ <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./notation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Unified Notation and Conventions</span></span></a>
+ <span class="menu-text">Unified Notation and Conventions</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Part I - Motion, Mechanics, and Control</span></a>
+ <span class="menu-text">Motion, Mechanics, and Control</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -364,43 +366,49 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_linear_algebra_foundations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Linear Algebra Foundations</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Linear Algebra Foundations</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02_geometry_and_coordinate_frames.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03_kinematics_and_numerical_integration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04_kinematics_and_numerical_integration_implementation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05_ros2_packages_and_development_workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./06_planar_rigid_body_motion_se2_and_twists.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_degrees_of_freedom_and_spatial_motion_so3_se3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08_dynamics_forces_and_actuator_limits.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></a>
   </div>
 </li>
       </ul>
@@ -415,45 +423,45 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#why-coordinate-frames-matter" id="toc-why-coordinate-frames-matter" class="nav-link active" data-scroll-target="#why-coordinate-frames-matter"><span class="header-section-number">4.1</span> Why coordinate frames matter</a></li>
-  <li><a href="#prerequisites-and-assumptions" id="toc-prerequisites-and-assumptions" class="nav-link" data-scroll-target="#prerequisites-and-assumptions"><span class="header-section-number">4.2</span> Prerequisites and assumptions</a>
+  <li><a href="#why-coordinate-frames-matter" id="toc-why-coordinate-frames-matter" class="nav-link active" data-scroll-target="#why-coordinate-frames-matter">Why coordinate frames matter</a></li>
+  <li><a href="#prerequisites-and-assumptions" id="toc-prerequisites-and-assumptions" class="nav-link" data-scroll-target="#prerequisites-and-assumptions">Prerequisites and assumptions</a>
   <ul class="collapse">
-  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites"><span class="header-section-number">4.2.1</span> Prerequisites</a></li>
-  <li><a href="#assumptions" id="toc-assumptions" class="nav-link" data-scroll-target="#assumptions"><span class="header-section-number">4.2.2</span> Assumptions</a></li>
+  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#assumptions" id="toc-assumptions" class="nav-link" data-scroll-target="#assumptions">Assumptions</a></li>
   </ul></li>
-  <li><a href="#dependency-map" id="toc-dependency-map" class="nav-link" data-scroll-target="#dependency-map"><span class="header-section-number">4.3</span> Dependency map</a></li>
-  <li><a href="#cross-product-and-rigid-body-velocity" id="toc-cross-product-and-rigid-body-velocity" class="nav-link" data-scroll-target="#cross-product-and-rigid-body-velocity"><span class="header-section-number">4.4</span> 1. Cross product and rigid-body velocity</a>
+  <li><a href="#dependency-map" id="toc-dependency-map" class="nav-link" data-scroll-target="#dependency-map">Dependency map</a></li>
+  <li><a href="#cross-product-and-rigid-body-velocity" id="toc-cross-product-and-rigid-body-velocity" class="nav-link" data-scroll-target="#cross-product-and-rigid-body-velocity"><span class="header-section-number">2.1</span> Cross product and rigid-body velocity</a>
   <ul class="collapse">
-  <li><a href="#example-velocity-of-a-point-on-a-rotating-rigid-body" id="toc-example-velocity-of-a-point-on-a-rotating-rigid-body" class="nav-link" data-scroll-target="#example-velocity-of-a-point-on-a-rotating-rigid-body"><span class="header-section-number">4.4.1</span> 1.1 Example: velocity of a point on a rotating rigid body</a></li>
+  <li><a href="#example-velocity-of-a-point-on-a-rotating-rigid-body" id="toc-example-velocity-of-a-point-on-a-rotating-rigid-body" class="nav-link" data-scroll-target="#example-velocity-of-a-point-on-a-rotating-rigid-body"><span class="header-section-number">2.1.1</span> Example: velocity of a point on a rotating rigid body</a></li>
   </ul></li>
-  <li><a href="#quick-test-a-cross-products-and-rigid-body-velocity" id="toc-quick-test-a-cross-products-and-rigid-body-velocity" class="nav-link" data-scroll-target="#quick-test-a-cross-products-and-rigid-body-velocity"><span class="header-section-number">4.5</span> Quick test A: cross products and rigid-body velocity</a>
+  <li><a href="#quick-test-a-cross-products-and-rigid-body-velocity" id="toc-quick-test-a-cross-products-and-rigid-body-velocity" class="nav-link" data-scroll-target="#quick-test-a-cross-products-and-rigid-body-velocity">Quick test A: cross products and rigid-body velocity</a>
   <ul class="collapse">
-  <li><a href="#answers-and-hints" id="toc-answers-and-hints" class="nav-link" data-scroll-target="#answers-and-hints"><span class="header-section-number">4.5.1</span> Answers and hints</a></li>
+  <li><a href="#answers-and-hints" id="toc-answers-and-hints" class="nav-link" data-scroll-target="#answers-and-hints">Answers and hints</a></li>
   </ul></li>
-  <li><a href="#coordinate-frames" id="toc-coordinate-frames" class="nav-link" data-scroll-target="#coordinate-frames"><span class="header-section-number">4.6</span> 2. Coordinate frames</a>
+  <li><a href="#coordinate-frames" id="toc-coordinate-frames" class="nav-link" data-scroll-target="#coordinate-frames"><span class="header-section-number">2.2</span> Coordinate frames</a>
   <ul class="collapse">
-  <li><a href="#what-defines-a-frame" id="toc-what-defines-a-frame" class="nav-link" data-scroll-target="#what-defines-a-frame"><span class="header-section-number">4.6.1</span> 2.1 What defines a frame?</a></li>
-  <li><a href="#orientation-convention" id="toc-orientation-convention" class="nav-link" data-scroll-target="#orientation-convention"><span class="header-section-number">4.6.2</span> 2.2 Orientation convention</a></li>
-  <li><a href="#points-require-translation" id="toc-points-require-translation" class="nav-link" data-scroll-target="#points-require-translation"><span class="header-section-number">4.6.3</span> 2.3 Points require translation</a></li>
+  <li><a href="#what-defines-a-frame" id="toc-what-defines-a-frame" class="nav-link" data-scroll-target="#what-defines-a-frame"><span class="header-section-number">2.2.1</span> What defines a frame?</a></li>
+  <li><a href="#orientation-convention" id="toc-orientation-convention" class="nav-link" data-scroll-target="#orientation-convention"><span class="header-section-number">2.2.2</span> Orientation convention</a></li>
+  <li><a href="#points-require-translation" id="toc-points-require-translation" class="nav-link" data-scroll-target="#points-require-translation"><span class="header-section-number">2.2.3</span> Points require translation</a></li>
   </ul></li>
-  <li><a href="#worked-frame-change-example" id="toc-worked-frame-change-example" class="nav-link" data-scroll-target="#worked-frame-change-example"><span class="header-section-number">4.7</span> 3. Worked frame-change example</a>
+  <li><a href="#worked-frame-change-example" id="toc-worked-frame-change-example" class="nav-link" data-scroll-target="#worked-frame-change-example"><span class="header-section-number">2.3</span> Worked frame-change example</a>
   <ul class="collapse">
-  <li><a href="#interactive-frame-rotation-graph" id="toc-interactive-frame-rotation-graph" class="nav-link" data-scroll-target="#interactive-frame-rotation-graph"><span class="header-section-number">4.7.1</span> Interactive frame-rotation graph</a></li>
+  <li><a href="#interactive-frame-rotation-graph" id="toc-interactive-frame-rotation-graph" class="nav-link" data-scroll-target="#interactive-frame-rotation-graph"><span class="header-section-number">2.3.1</span> Interactive frame-rotation graph</a></li>
   </ul></li>
-  <li><a href="#differential-drive-interpretation" id="toc-differential-drive-interpretation" class="nav-link" data-scroll-target="#differential-drive-interpretation"><span class="header-section-number">4.8</span> 4. Differential-drive interpretation</a></li>
-  <li><a href="#failure-modes-and-engineering-checks" id="toc-failure-modes-and-engineering-checks" class="nav-link" data-scroll-target="#failure-modes-and-engineering-checks"><span class="header-section-number">4.9</span> 5. Failure modes and engineering checks</a>
+  <li><a href="#differential-drive-interpretation" id="toc-differential-drive-interpretation" class="nav-link" data-scroll-target="#differential-drive-interpretation"><span class="header-section-number">2.4</span> Differential-drive interpretation</a></li>
+  <li><a href="#failure-modes-and-engineering-checks" id="toc-failure-modes-and-engineering-checks" class="nav-link" data-scroll-target="#failure-modes-and-engineering-checks"><span class="header-section-number">2.5</span> Failure modes and engineering checks</a>
   <ul class="collapse">
-  <li><a href="#missing-frame-labels" id="toc-missing-frame-labels" class="nav-link" data-scroll-target="#missing-frame-labels"><span class="header-section-number">4.9.1</span> Missing frame labels</a></li>
-  <li><a href="#reversed-transformation" id="toc-reversed-transformation" class="nav-link" data-scroll-target="#reversed-transformation"><span class="header-section-number">4.9.2</span> Reversed transformation</a></li>
-  <li><a href="#mixed-units" id="toc-mixed-units" class="nav-link" data-scroll-target="#mixed-units"><span class="header-section-number">4.9.3</span> Mixed units</a></li>
-  <li><a href="#point-vector-confusion" id="toc-point-vector-confusion" class="nav-link" data-scroll-target="#point-vector-confusion"><span class="header-section-number">4.9.4</span> Point-vector confusion</a></li>
-  <li><a href="#invalid-numerical-rotation" id="toc-invalid-numerical-rotation" class="nav-link" data-scroll-target="#invalid-numerical-rotation"><span class="header-section-number">4.9.5</span> Invalid numerical rotation</a></li>
+  <li><a href="#missing-frame-labels" id="toc-missing-frame-labels" class="nav-link" data-scroll-target="#missing-frame-labels"><span class="header-section-number">2.5.1</span> Missing frame labels</a></li>
+  <li><a href="#reversed-transformation" id="toc-reversed-transformation" class="nav-link" data-scroll-target="#reversed-transformation"><span class="header-section-number">2.5.2</span> Reversed transformation</a></li>
+  <li><a href="#mixed-units" id="toc-mixed-units" class="nav-link" data-scroll-target="#mixed-units"><span class="header-section-number">2.5.3</span> Mixed units</a></li>
+  <li><a href="#point-vector-confusion" id="toc-point-vector-confusion" class="nav-link" data-scroll-target="#point-vector-confusion"><span class="header-section-number">2.5.4</span> Point-vector confusion</a></li>
+  <li><a href="#invalid-numerical-rotation" id="toc-invalid-numerical-rotation" class="nav-link" data-scroll-target="#invalid-numerical-rotation"><span class="header-section-number">2.5.5</span> Invalid numerical rotation</a></li>
   </ul></li>
-  <li><a href="#quick-test-b-coordinate-frames-and-rotations" id="toc-quick-test-b-coordinate-frames-and-rotations" class="nav-link" data-scroll-target="#quick-test-b-coordinate-frames-and-rotations"><span class="header-section-number">4.10</span> Quick test B: coordinate frames and rotations</a>
+  <li><a href="#quick-test-b-coordinate-frames-and-rotations" id="toc-quick-test-b-coordinate-frames-and-rotations" class="nav-link" data-scroll-target="#quick-test-b-coordinate-frames-and-rotations">Quick test B: coordinate frames and rotations</a>
   <ul class="collapse">
-  <li><a href="#answers-and-hints-1" id="toc-answers-and-hints-1" class="nav-link" data-scroll-target="#answers-and-hints-1"><span class="header-section-number">4.10.1</span> Answers and hints</a></li>
+  <li><a href="#answers-and-hints-1" id="toc-answers-and-hints-1" class="nav-link" data-scroll-target="#answers-and-hints-1">Answers and hints</a></li>
   </ul></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">4.11</span> References</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -461,9 +469,9 @@ window.Quarto = {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Part I - Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./02_geometry_and_coordinate_frames.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./02_geometry_and_coordinate_frames.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></h1>
+<h1 class="title"><span id="sec-geometry-coordinate-frames" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></span></h1>
 </div>
 
 
@@ -480,8 +488,8 @@ window.Quarto = {
 </header>
 
 
-<section id="why-coordinate-frames-matter" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="why-coordinate-frames-matter"><span class="header-section-number">4.1</span> Why coordinate frames matter</h2>
+<section id="why-coordinate-frames-matter" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="why-coordinate-frames-matter">Why coordinate frames matter</h2>
 <p>A robot represents positions, directions, velocities, measurements, and commands with numbers. Those numbers acquire physical meaning only when their coordinate frame and units are known. A controller that combines quantities expressed in incompatible frames can perform a mathematically valid calculation and produce a physically incorrect command.</p>
 <p>Coordinate-frame methods allow us to:</p>
 <ul>
@@ -494,11 +502,11 @@ window.Quarto = {
 </ul>
 <p>The central rule is simple: interpret every coordinate column together with the frame in which it is expressed.</p>
 </section>
-<section id="prerequisites-and-assumptions" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="prerequisites-and-assumptions"><span class="header-section-number">4.2</span> Prerequisites and assumptions</h2>
-<section id="prerequisites" class="level3" data-number="4.2.1">
-<h3 data-number="4.2.1" class="anchored" data-anchor-id="prerequisites"><span class="header-section-number">4.2.1</span> Prerequisites</h3>
-<p>The reader should understand the material in the <a href="./01_linear_algebra_foundations.html">linear algebra foundations chapter</a>, especially:</p>
+<section id="prerequisites-and-assumptions" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="prerequisites-and-assumptions">Prerequisites and assumptions</h2>
+<section id="prerequisites" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="prerequisites">Prerequisites</h3>
+<p>The reader should understand the material in <a href="01_linear_algebra_foundations.html" class="quarto-xref"><span>Chapter 1</span></a>, especially:</p>
 <ul>
 <li>geometric vectors and coordinate columns;</li>
 <li>dot products, norms, and orthogonality;</li>
@@ -509,8 +517,8 @@ window.Quarto = {
 </ul>
 <p>The reader should also be comfortable with sine, cosine, and angles measured in radians.</p>
 </section>
-<section id="assumptions" class="level3" data-number="4.2.2">
-<h3 data-number="4.2.2" class="anchored" data-anchor-id="assumptions"><span class="header-section-number">4.2.2</span> Assumptions</h3>
+<section id="assumptions" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="assumptions">Assumptions</h3>
 <ul>
 <li>Physical space is modelled as Euclidean space.</li>
 <li>Robot links and sensor mounts are treated as rigid bodies.</li>
@@ -522,8 +530,8 @@ window.Quarto = {
 <p>These idealisations isolate the geometry. A physical robot also introduces measurement noise, calibration error, structural compliance, and model mismatch.</p>
 </section>
 </section>
-<section id="dependency-map" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="dependency-map"><span class="header-section-number">4.3</span> Dependency map</h2>
+<section id="dependency-map" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="dependency-map">Dependency map</h2>
 <pre class="text"><code>Linear algebra foundations
         |
         v
@@ -541,8 +549,8 @@ Point transformations
         v
 Differential-drive motion and feedback control</code></pre>
 </section>
-<section id="cross-product-and-rigid-body-velocity" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="cross-product-and-rigid-body-velocity"><span class="header-section-number">4.4</span> 1. Cross product and rigid-body velocity</h2>
+<section id="cross-product-and-rigid-body-velocity" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="cross-product-and-rigid-body-velocity"><span class="header-section-number">2.1</span> Cross product and rigid-body velocity</h2>
 <p>Let <span class="math inline">\(\mathbf u\)</span> and <span class="math inline">\(\mathbf v\)</span> be geometric vectors with coordinate columns <span class="math inline">\({}^{a}\mathbf u,{}^{a}\mathbf v\in\mathbb R^3\)</span> expressed in the same right-handed orthonormal frame <span class="math inline">\(\{a\}\)</span>. Their cross product, expressed in frame <span class="math inline">\(\{a\}\)</span>, is defined by</p>
 <p><span class="math display">\[
 {}^{a}\mathbf{u}\times{}^{a}\mathbf{v}
@@ -568,8 +576,8 @@ u_xv_y-u_yv_x
 {}^{a}\mathbf{v}^\mathsf{T}
 \left({}^{a}\mathbf{u}\times{}^{a}\mathbf{v}\right)=0.
 \]</span></p>
-<section id="example-velocity-of-a-point-on-a-rotating-rigid-body" class="level3" data-number="4.4.1">
-<h3 data-number="4.4.1" class="anchored" data-anchor-id="example-velocity-of-a-point-on-a-rotating-rigid-body"><span class="header-section-number">4.4.1</span> 1.1 Example: velocity of a point on a rotating rigid body</h3>
+<section id="example-velocity-of-a-point-on-a-rotating-rigid-body" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="example-velocity-of-a-point-on-a-rotating-rigid-body"><span class="header-section-number">2.1.1</span> Example: velocity of a point on a rotating rigid body</h3>
 <p>Let <span class="math inline">\(O\)</span> and <span class="math inline">\(P\)</span> be two points fixed to the same rigid body. Point <span class="math inline">\(O\)</span> is the chosen reference point; it need not be stationary, and it need not be the body’s centre. The vector <span class="math inline">\({}^{a}\mathbf{r}_{OP}\)</span> runs from <span class="math inline">\(O\)</span> to <span class="math inline">\(P\)</span>. Although this vector is fixed relative to the body, its coordinates generally change as the body rotates. Express every quantity in the same orthonormal frame <span class="math inline">\(\{a\}\)</span>:</p>
 <ul>
 <li><span class="math inline">\({}^{a}\boldsymbol{\omega}\)</span> as the body’s angular-velocity vector, measured in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>;</li>
@@ -603,9 +611,9 @@ u_xv_y-u_yv_x
 +{}^{a}\boldsymbol{\omega}\times{}^{a}\mathbf{r}_{OP}
 }.
 \]</span></p>
-<section id="velocity-vector-construction" class="level4" data-number="4.4.1.1">
-<h4 data-number="4.4.1.1" class="anchored" data-anchor-id="velocity-vector-construction"><span class="header-section-number">4.4.1.1</span> Velocity-vector construction</h4>
-<p>The construction in <a href="#fig-rigid-body-point-velocity" class="quarto-xref">Figure&nbsp;<span>4.1</span></a> shows this addition for one instant:</p>
+<section id="velocity-vector-construction" class="level4">
+<h4 class="anchored" data-anchor-id="velocity-vector-construction">Velocity-vector construction</h4>
+<p>The construction in <a href="#fig-rigid-body-point-velocity" class="quarto-xref">Figure&nbsp;<span>2.1</span></a> shows this addition for one instant:</p>
 <ul>
 <li>The green arrow <span class="math inline">\({}^{a}\mathbf r_{OP}\)</span> locates <span class="math inline">\(P\)</span> relative to <span class="math inline">\(O\)</span>.</li>
 <li>The magenta arrow is the reference-point velocity <span class="math inline">\({}^{a}\mathbf v_O\)</span>. It is deliberately not parallel to <span class="math inline">\({}^{a}\mathbf r_{OP}\)</span>.</li>
@@ -620,7 +628,7 @@ u_xv_y-u_yv_x
 <img src="figures/rigid_body_point_velocity.svg" class="img-fluid figure-img" style="width:100.0%" data-fig-pos="H">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-rigid-body-point-velocity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.1: Velocity construction for two points on a rigid body. The rotational contribution is perpendicular to the position vector, while the reference-point velocity is independent of that perpendicular relationship.
+Figure&nbsp;2.1: Velocity construction for two points on a rigid body. The rotational contribution is perpendicular to the position vector, while the reference-point velocity is independent of that perpendicular relationship.
 </figcaption>
 </figure>
 </div>
@@ -680,8 +688,8 @@ x\\y\\0
 </section>
 </section>
 </section>
-<section id="quick-test-a-cross-products-and-rigid-body-velocity" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="quick-test-a-cross-products-and-rigid-body-velocity"><span class="header-section-number">4.5</span> Quick test A: cross products and rigid-body velocity</h2>
+<section id="quick-test-a-cross-products-and-rigid-body-velocity" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="quick-test-a-cross-products-and-rigid-body-velocity">Quick test A: cross products and rigid-body velocity</h2>
 <p>Complete this test without looking back at the section.</p>
 <ol type="1">
 <li><strong>Recall:</strong> What rule determines the direction of <span class="math inline">\(\mathbf u\times\mathbf v\)</span>?</li>
@@ -691,8 +699,8 @@ x\\y\\0
 <li><strong>Limitations:</strong> What happens to the cross product when the input vectors are parallel, and why does that prevent it from defining a unique normal direction?</li>
 <li><strong>Transfer:</strong> At one instant, a rigid body has <span class="math inline">\({}^{a}\boldsymbol{\omega}=[0\;\;0\;\;2]^\mathsf{T}\,\mathrm{rad\,s^{-1}}\)</span>, <span class="math inline">\({}^{a}\mathbf r_{OP}=[1\;\;0\;\;0]^\mathsf{T}\,\mathrm{m}\)</span>, and <span class="math inline">\({}^{a}\mathbf v_O=[0.5\;\;0.5\;\;0]^\mathsf{T}\,\mathrm{m\,s^{-1}}\)</span>. Find <span class="math inline">\({}^{a}\mathbf v_{P/O}\)</span> and <span class="math inline">\({}^{a}\mathbf v_P\)</span>. Which velocity is perpendicular to <span class="math inline">\({}^{a}\mathbf r_{OP}\)</span>?</li>
 </ol>
-<section id="answers-and-hints" class="level3" data-number="4.5.1">
-<h3 data-number="4.5.1" class="anchored" data-anchor-id="answers-and-hints"><span class="header-section-number">4.5.1</span> Answers and hints</h3>
+<section id="answers-and-hints" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="answers-and-hints">Answers and hints</h3>
 <ol type="1">
 <li>The right-hand rule, applied in the order from <span class="math inline">\(\mathbf u\)</span> to <span class="math inline">\(\mathbf v\)</span>.</li>
 <li>Its dot product with either input is zero.</li>
@@ -703,10 +711,10 @@ x\\y\\0
 </ol>
 </section>
 </section>
-<section id="coordinate-frames" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="coordinate-frames"><span class="header-section-number">4.6</span> 2. Coordinate frames</h2>
-<section id="what-defines-a-frame" class="level3" data-number="4.6.1">
-<h3 data-number="4.6.1" class="anchored" data-anchor-id="what-defines-a-frame"><span class="header-section-number">4.6.1</span> 2.1 What defines a frame?</h3>
+<section id="coordinate-frames" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="coordinate-frames"><span class="header-section-number">2.2</span> Coordinate frames</h2>
+<section id="what-defines-a-frame" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="what-defines-a-frame"><span class="header-section-number">2.2.1</span> What defines a frame?</h3>
 <p>A three-dimensional coordinate frame <span class="math inline">\(\{a\}\)</span> consists of:</p>
 <ol type="1">
 <li>an origin <span class="math inline">\(O_a\)</span>, which is the physical point from which positions in frame <span class="math inline">\(\{a\}\)</span> are measured; and</li>
@@ -715,8 +723,8 @@ x\\y\\0
 <p>The subscript <span class="math inline">\(a\)</span> associates the origin and basis vectors with frame <span class="math inline">\(\{a\}\)</span>. Orthonormal means that each basis vector has unit length and that distinct basis vectors are perpendicular. Right-handed means that <span class="math inline">\(\mathbf e_{x,a}\times\mathbf e_{y,a}=\mathbf e_{z,a}\)</span>.</p>
 <p>A free vector depends only on the basis orientation used to describe it. A point also depends on the frame origin. This distinction explains why changing the coordinate frame of a free vector requires only a rotation, whereas changing the coordinates of a point generally requires a rotation and a translation.</p>
 </section>
-<section id="orientation-convention" class="level3" data-number="4.6.2">
-<h3 data-number="4.6.2" class="anchored" data-anchor-id="orientation-convention"><span class="header-section-number">4.6.2</span> 2.2 Orientation convention</h3>
+<section id="orientation-convention" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="orientation-convention"><span class="header-section-number">2.2.2</span> Orientation convention</h3>
 <p>Let <span class="math inline">\(\{a\}\)</span> and <span class="math inline">\(\{b\}\)</span> be three-dimensional right-handed orthonormal frames. Define <span class="math inline">\(\mathbf R_{ab}\in\mathbb R^{3\times3}\)</span> as the rotation matrix that maps coordinate columns from frame <span class="math inline">\(\{b\}\)</span> to frame <span class="math inline">\(\{a\}\)</span>. Its columns are the basis vectors of <span class="math inline">\(\{b\}\)</span> expressed in frame <span class="math inline">\(\{a\}\)</span>:</p>
 <p><span class="math display">\[
 \mathbf{R}_{ab}
@@ -861,8 +869,8 @@ v_z^{(b)}
 }.
 \]</span></p>
 <p>The following derivations explain each property.</p>
-<section id="orthonormal-columns" class="level4" data-number="4.6.2.1">
-<h4 data-number="4.6.2.1" class="anchored" data-anchor-id="orthonormal-columns"><span class="header-section-number">4.6.2.1</span> Orthonormal columns</h4>
+<section id="orthonormal-columns" class="level4">
+<h4 class="anchored" data-anchor-id="orthonormal-columns">Orthonormal columns</h4>
 <p>Let <span class="math inline">\(\mathbf r_1,\mathbf r_2,\mathbf r_3\in\mathbb R^3\)</span> denote the columns of <span class="math inline">\(\mathbf R_{ab}\)</span>:</p>
 <p><span class="math display">\[
 \mathbf R_{ab}
@@ -906,8 +914,8 @@ v_z^{(b)}
 \]</span></p>
 <p>This identity means that <span class="math inline">\(\mathbf R_{ab}\)</span> preserves dot products and therefore preserves vector lengths and angles.</p>
 </section>
-<section id="inverse-and-reverse-coordinate-mapping" class="level4" data-number="4.6.2.2">
-<h4 data-number="4.6.2.2" class="anchored" data-anchor-id="inverse-and-reverse-coordinate-mapping"><span class="header-section-number">4.6.2.2</span> Inverse and reverse coordinate mapping</h4>
+<section id="inverse-and-reverse-coordinate-mapping" class="level4">
+<h4 class="anchored" data-anchor-id="inverse-and-reverse-coordinate-mapping">Inverse and reverse coordinate mapping</h4>
 <p>The inverse <span class="math inline">\(\mathbf R_{ab}^{-1}\in\mathbb R^{3\times3}\)</span> is defined by</p>
 <p><span class="math display">\[
 \mathbf R_{ab}^{-1}\mathbf R_{ab}=\mathbf I_3.
@@ -939,8 +947,8 @@ v_z^{(b)}
 }.
 \]</span></p>
 </section>
-<section id="determinant-and-orientation" class="level4" data-number="4.6.2.3">
-<h4 data-number="4.6.2.3" class="anchored" data-anchor-id="determinant-and-orientation"><span class="header-section-number">4.6.2.3</span> Determinant and orientation</h4>
+<section id="determinant-and-orientation" class="level4">
+<h4 class="anchored" data-anchor-id="determinant-and-orientation">Determinant and orientation</h4>
 <p>The notation <span class="math inline">\(\det(\mathbf R)\)</span> denotes the <strong>determinant</strong> of a square matrix <span class="math inline">\(\mathbf R\)</span>. Geometrically, <span class="math inline">\(|\det(\mathbf R)|\)</span> is the volume-scaling factor of the corresponding linear transformation. For an orthogonal matrix <span class="math inline">\(\mathbf R\)</span>, taking determinants of <span class="math inline">\(\mathbf R^{\mathsf T}\mathbf R=\mathbf I_3\)</span> gives</p>
 <p><span class="math display">\[
 \det(\mathbf R^{\mathsf T}\mathbf R)
@@ -982,8 +990,8 @@ v_z^{(b)}
 <p>The determinant sign does not indicate whether a rotation is clockwise or counter-clockwise. It indicates whether the transformation preserves or reverses the handedness of space.</p>
 </section>
 </section>
-<section id="points-require-translation" class="level3" data-number="4.6.3">
-<h3 data-number="4.6.3" class="anchored" data-anchor-id="points-require-translation"><span class="header-section-number">4.6.3</span> 2.3 Points require translation</h3>
+<section id="points-require-translation" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="points-require-translation"><span class="header-section-number">2.2.3</span> Points require translation</h3>
 <p>Let <span class="math inline">\(O_a\)</span> and <span class="math inline">\(O_b\)</span> be the origins of frames <span class="math inline">\(\{a\}\)</span> and <span class="math inline">\(\{b\}\)</span>. Define <span class="math inline">\({}^{a}\mathbf p_b\in\mathbb R^3\)</span> as the position of <span class="math inline">\(O_b\)</span> relative to <span class="math inline">\(O_a\)</span>, expressed in frame <span class="math inline">\(\{a\}\)</span> and measured in metres.</p>
 <p>For a physical point <span class="math inline">\(P\)</span>, let <span class="math inline">\({}^{b}\mathbf p_P\in\mathbb R^3\)</span> be the position of <span class="math inline">\(P\)</span> relative to <span class="math inline">\(O_b\)</span>, expressed in frame <span class="math inline">\(\{b\}\)</span>, and let <span class="math inline">\({}^{a}\mathbf p_P\in\mathbb R^3\)</span> be the position of <span class="math inline">\(P\)</span> relative to <span class="math inline">\(O_a\)</span>, expressed in frame <span class="math inline">\(\{a\}\)</span>. Both position columns are measured in metres. Their relationship is</p>
 <p><span class="math display">\[
@@ -995,8 +1003,8 @@ v_z^{(b)}
 <p>The rotation <span class="math inline">\(\mathbf R_{ab}\,{}^{b}\mathbf p_P\)</span> changes the basis used to express the displacement from <span class="math inline">\(O_b\)</span> to <span class="math inline">\(P\)</span>. The translation <span class="math inline">\({}^{a}\mathbf p_b\)</span> then accounts for the displacement from <span class="math inline">\(O_a\)</span> to <span class="math inline">\(O_b\)</span>. A homogeneous transformation combines these two operations into one matrix equation.</p>
 </section>
 </section>
-<section id="worked-frame-change-example" class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="worked-frame-change-example"><span class="header-section-number">4.7</span> 3. Worked frame-change example</h2>
+<section id="worked-frame-change-example" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="worked-frame-change-example"><span class="header-section-number">2.3</span> Worked frame-change example</h2>
 <p>Consider two planar frames <span class="math inline">\(\{a\}\)</span> and <span class="math inline">\(\{b\}\)</span> whose axes differ by an angle <span class="math inline">\(\theta\in\mathbb R\)</span>, measured in radians. A positive <span class="math inline">\(\theta\)</span> means that frame <span class="math inline">\(\{b\}\)</span> is rotated counter-clockwise relative to frame <span class="math inline">\(\{a\}\)</span>. Define <span class="math inline">\(\mathbf R_{ab}(\theta)\in\mathbb R^{2\times2}\)</span> as the rotation matrix that maps two-dimensional coordinate columns from frame <span class="math inline">\(\{b\}\)</span> to frame <span class="math inline">\(\{a\}\)</span>:</p>
 <p><span class="math display">\[
 {}^{a}\mathbf v
@@ -1135,8 +1143,8 @@ v_y^{(b)}
 =
 \left\|{}^{a}\mathbf{v}\right\|_2.
 \]</span></p>
-<section id="interactive-frame-rotation-graph" class="level3" data-number="4.7.1">
-<h3 data-number="4.7.1" class="anchored" data-anchor-id="interactive-frame-rotation-graph"><span class="header-section-number">4.7.1</span> Interactive frame-rotation graph</h3>
+<section id="interactive-frame-rotation-graph" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="interactive-frame-rotation-graph"><span class="header-section-number">2.3.1</span> Interactive frame-rotation graph</h3>
 <p>Fix the frame-<span class="math inline">\(\{b\}\)</span> coordinate column</p>
 <p><span class="math display">\[
 {}^{b}\mathbf v
@@ -1277,8 +1285,8 @@ v_y^{(b)}
   update();
 })();
 </script>
-<section id="equivalent-numpy-calculation" class="level4" data-number="4.7.1.1">
-<h4 data-number="4.7.1.1" class="anchored" data-anchor-id="equivalent-numpy-calculation"><span class="header-section-number">4.7.1.1</span> Equivalent NumPy calculation</h4>
+<section id="equivalent-numpy-calculation" class="level4">
+<h4 class="anchored" data-anchor-id="equivalent-numpy-calculation">Equivalent NumPy calculation</h4>
 <p>The following NumPy snippet is the direct software translation of <span class="math inline">\({}^{a}\mathbf v=\mathbf R_{ab}(\theta){}^{b}\mathbf v\)</span>. The scalar <code>theta</code> stores <span class="math inline">\(\theta\)</span> in radians; <code>R_ab</code> is a NumPy array with shape <code>(2, 2)</code> representing <span class="math inline">\(\mathbf R_{ab}(\theta)\in\mathbb R^{2\times2}\)</span>; <code>v_b</code> is a NumPy array with shape <code>(2,)</code> representing the fixed coordinate column <span class="math inline">\({}^{b}\mathbf v=[2\;1]^{\mathsf T}\)</span>; and <code>v_a</code> is a NumPy array with shape <code>(2,)</code> representing <span class="math inline">\({}^{a}\mathbf v\in\mathbb R^2\)</span>. The operator <code>@</code> performs matrix-vector multiplication.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1295,8 +1303,8 @@ v_y^{(b)}
 </section>
 </section>
 </section>
-<section id="differential-drive-interpretation" class="level2" data-number="4.8">
-<h2 data-number="4.8" class="anchored" data-anchor-id="differential-drive-interpretation"><span class="header-section-number">4.8</span> 4. Differential-drive interpretation</h2>
+<section id="differential-drive-interpretation" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="differential-drive-interpretation"><span class="header-section-number">2.4</span> Differential-drive interpretation</h2>
 <p>For a planar mobile robot, let frame <span class="math inline">\(\{w\}\)</span> be fixed to the world and frame <span class="math inline">\(\{b\}\)</span> be attached to the robot. Let <span class="math inline">\(\theta\in\mathbb R\)</span> be the robot’s heading angle, measured counter-clockwise in radians from the positive <span class="math inline">\(x_w\)</span>-axis to the positive <span class="math inline">\(x_b\)</span>-axis. Let <span class="math inline">\(v\in\mathbb R\)</span> be the signed forward speed, measured in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>; positive <span class="math inline">\(v\)</span> means motion along the positive <span class="math inline">\(x_b\)</span>-axis.</p>
 <p>The body-frame velocity <span class="math inline">\({}^{b}\mathbf v\in\mathbb R^2\)</span> is</p>
 <p><span class="math display">\[
@@ -1331,26 +1339,26 @@ v\sin\theta
 \]</span></p>
 <p>This equation is the coordinate-frame foundation of the differential-drive kinematic model. It shows why a controller must distinguish a forward command in the robot frame from motion observed in the world frame.</p>
 </section>
-<section id="failure-modes-and-engineering-checks" class="level2" data-number="4.9">
-<h2 data-number="4.9" class="anchored" data-anchor-id="failure-modes-and-engineering-checks"><span class="header-section-number">4.9</span> 5. Failure modes and engineering checks</h2>
-<section id="missing-frame-labels" class="level3" data-number="4.9.1">
-<h3 data-number="4.9.1" class="anchored" data-anchor-id="missing-frame-labels"><span class="header-section-number">4.9.1</span> Missing frame labels</h3>
+<section id="failure-modes-and-engineering-checks" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="failure-modes-and-engineering-checks"><span class="header-section-number">2.5</span> Failure modes and engineering checks</h2>
+<section id="missing-frame-labels" class="level3" data-number="2.5.1">
+<h3 data-number="2.5.1" class="anchored" data-anchor-id="missing-frame-labels"><span class="header-section-number">2.5.1</span> Missing frame labels</h3>
 <p>Two identical columns can describe different physical directions when they are expressed in different frames. Interfaces should name the frame explicitly.</p>
 </section>
-<section id="reversed-transformation" class="level3" data-number="4.9.2">
-<h3 data-number="4.9.2" class="anchored" data-anchor-id="reversed-transformation"><span class="header-section-number">4.9.2</span> Reversed transformation</h3>
+<section id="reversed-transformation" class="level3" data-number="2.5.2">
+<h3 data-number="2.5.2" class="anchored" data-anchor-id="reversed-transformation"><span class="header-section-number">2.5.2</span> Reversed transformation</h3>
 <p>Using <span class="math inline">\(\mathbf{R}_{ba}\)</span> where <span class="math inline">\(\mathbf{R}_{ab}\)</span> is required rotates coordinates in the opposite direction. Check the subscript rule before multiplying.</p>
 </section>
-<section id="mixed-units" class="level3" data-number="4.9.3">
-<h3 data-number="4.9.3" class="anchored" data-anchor-id="mixed-units"><span class="header-section-number">4.9.3</span> Mixed units</h3>
+<section id="mixed-units" class="level3" data-number="2.5.3">
+<h3 data-number="2.5.3" class="anchored" data-anchor-id="mixed-units"><span class="header-section-number">2.5.3</span> Mixed units</h3>
 <p>Degrees passed to a function expecting radians produce valid-looking but wrong numbers. Convert at the system boundary and use radians internally.</p>
 </section>
-<section id="point-vector-confusion" class="level3" data-number="4.9.4">
-<h3 data-number="4.9.4" class="anchored" data-anchor-id="point-vector-confusion"><span class="header-section-number">4.9.4</span> Point-vector confusion</h3>
+<section id="point-vector-confusion" class="level3" data-number="2.5.4">
+<h3 data-number="2.5.4" class="anchored" data-anchor-id="point-vector-confusion"><span class="header-section-number">2.5.4</span> Point-vector confusion</h3>
 <p>A point changes under translation; a free vector does not. Applying a translation to velocity or direction data is a modelling error.</p>
 </section>
-<section id="invalid-numerical-rotation" class="level3" data-number="4.9.5">
-<h3 data-number="4.9.5" class="anchored" data-anchor-id="invalid-numerical-rotation"><span class="header-section-number">4.9.5</span> Invalid numerical rotation</h3>
+<section id="invalid-numerical-rotation" class="level3" data-number="2.5.5">
+<h3 data-number="2.5.5" class="anchored" data-anchor-id="invalid-numerical-rotation"><span class="header-section-number">2.5.5</span> Invalid numerical rotation</h3>
 <p>Let <span class="math inline">\(\mathbf R\in\mathbb R^{n\times n}\)</span> be a numerically stored matrix intended to represent a rotation, and let <span class="math inline">\(\mathbf I_n\in\mathbb R^{n\times n}\)</span> be the identity matrix. Rounding, integration drift, or corrupted data can make <span class="math inline">\(\mathbf R\)</span> non-orthonormal.</p>
 <p>For a matrix <span class="math inline">\(\mathbf M\in\mathbb R^{n\times n}\)</span> with entries <span class="math inline">\(m_{ij}\)</span>, define the Frobenius norm by</p>
 <p><span class="math display">\[
@@ -1373,8 +1381,8 @@ v\sin\theta
 <p>The first condition tests approximate orthonormality; the second tests approximate preservation of right-handed orientation.</p>
 </section>
 </section>
-<section id="quick-test-b-coordinate-frames-and-rotations" class="level2" data-number="4.10">
-<h2 data-number="4.10" class="anchored" data-anchor-id="quick-test-b-coordinate-frames-and-rotations"><span class="header-section-number">4.10</span> Quick test B: coordinate frames and rotations</h2>
+<section id="quick-test-b-coordinate-frames-and-rotations" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="quick-test-b-coordinate-frames-and-rotations">Quick test B: coordinate frames and rotations</h2>
 <ol type="1">
 <li><strong>Recall:</strong> What do the columns of <span class="math inline">\(\mathbf{R}_{ab}\)</span> represent?</li>
 <li><strong>Explanation:</strong> Explain in words why <span class="math inline">\(\mathbf{R}_{ab}^{-1}=\mathbf{R}_{ba}\)</span>.</li>
@@ -1383,8 +1391,8 @@ v\sin\theta
 <li><strong>Limitations:</strong> Give two ways a numerically stored matrix intended to be a rotation matrix can become invalid.</li>
 <li><strong>Derivation:</strong> Let <span class="math inline">\(\{a\}\)</span> and <span class="math inline">\(\{b\}\)</span> be right-handed orthonormal planar frames. Frame <span class="math inline">\(\{b\}\)</span> is rotated counter-clockwise by <span class="math inline">\(\theta\,\mathrm{rad}\)</span> relative to frame <span class="math inline">\(\{a\}\)</span>, and <span class="math inline">\(\mathbf R_{ab}(\theta)\in\mathbb R^{2\times2}\)</span> maps coordinate columns from frame <span class="math inline">\(\{b\}\)</span> to frame <span class="math inline">\(\{a\}\)</span>. First express the <span class="math inline">\(x_b\)</span>-axis and <span class="math inline">\(y_b\)</span>-axis as coordinate columns <span class="math inline">\({}^{a}\mathbf e_{x,b},{}^{a}\mathbf e_{y,b}\in\mathbb R^2\)</span>; then place those columns side by side to derive <span class="math inline">\(\mathbf R_{ab}(\theta)\)</span>.</li>
 </ol>
-<section id="answers-and-hints-1" class="level3" data-number="4.10.1">
-<h3 data-number="4.10.1" class="anchored" data-anchor-id="answers-and-hints-1"><span class="header-section-number">4.10.1</span> Answers and hints</h3>
+<section id="answers-and-hints-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="answers-and-hints-1">Answers and hints</h3>
 <ol type="1">
 <li><p>The axes of frame <span class="math inline">\(\{b\}\)</span> expressed in coordinates of frame <span class="math inline">\(\{a\}\)</span>.</p></li>
 <li><p>Reversing the frame change undoes the original change; for an orthonormal rotation matrix, the inverse is its transpose.</p></li>
@@ -1403,8 +1411,8 @@ v\sin\theta
 </ol>
 </section>
 </section>
-<section id="references" class="level2" data-number="4.11">
-<h2 data-number="4.11" class="anchored" data-anchor-id="references"><span class="header-section-number">4.11</span> References</h2>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
 <ul>
 <li>Kevin M. Lynch and Frank C. Park, <em>Modern Robotics</em>, Chapter 3, especially Sections 3.1 and 3.2.1 on free vectors, frames, rotation matrices, and rigid-body motions.</li>
 <li>Steven M. LaValle, <em>Planning Algorithms</em>, Chapters 3 and 4 on geometric representations, transformations, and configuration spaces.</li>
@@ -1830,12 +1838,12 @@ v\sin\theta
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./01_linear_algebra_foundations.html" class="pagination-link" aria-label="Linear Algebra Foundations">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Linear Algebra Foundations</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Linear Algebra Foundations</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./03_kinematics_and_numerical_integration.html" class="pagination-link" aria-label="Differential-Drive Kinematics and Numerical Integration: Model and Derivation">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

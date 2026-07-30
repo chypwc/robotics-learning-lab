@@ -37,3 +37,6 @@ index.log
 index.out
 index.tex
 index.toc
+
+**/*.quarto_ipynb
+.tex

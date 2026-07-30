@@ -1,6 +1,6 @@
-# Geometry and Coordinate Frames
+# Geometry and Coordinate Frames {#sec-geometry-coordinate-frames}
 
-## Why coordinate frames matter
+## Why coordinate frames matter {.unnumbered}
 
 A robot represents positions, directions, velocities, measurements, and commands with numbers. Those numbers acquire physical meaning only when their coordinate frame and units are known. A controller that combines quantities expressed in incompatible frames can perform a mathematically valid calculation and produce a physically incorrect command.
 
@@ -15,11 +15,11 @@ Coordinate-frame methods allow us to:
 
 The central rule is simple: interpret every coordinate column together with the frame in which it is expressed.
 
-## Prerequisites and assumptions
+## Prerequisites and assumptions {.unnumbered}
 
-### Prerequisites
+### Prerequisites {.unnumbered}
 
-The reader should understand the material in the [linear algebra foundations chapter](01_linear_algebra_foundations.qmd), especially:
+The reader should understand the material in @sec-linear-algebra-foundations, especially:
 
 - geometric vectors and coordinate columns;
 - dot products, norms, and orthogonality;
@@ -30,7 +30,7 @@ The reader should understand the material in the [linear algebra foundations cha
 
 The reader should also be comfortable with sine, cosine, and angles measured in radians.
 
-### Assumptions
+### Assumptions {.unnumbered}
 
 - Physical space is modelled as Euclidean space.
 - Robot links and sensor mounts are treated as rigid bodies.
@@ -41,7 +41,7 @@ The reader should also be comfortable with sine, cosine, and angles measured in 
 
 These idealisations isolate the geometry. A physical robot also introduces measurement noise, calibration error, structural compliance, and model mismatch.
 
-## Dependency map
+## Dependency map {.unnumbered}
 
 ```text
 Linear algebra foundations
@@ -62,7 +62,7 @@ Point transformations
 Differential-drive motion and feedback control
 ```
 
-## 1. Cross product and rigid-body velocity
+## Cross product and rigid-body velocity
 
 Let $\mathbf u$ and $\mathbf v$ be geometric vectors with coordinate columns ${}^{a}\mathbf u,{}^{a}\mathbf v\in\mathbb R^3$ expressed in the same right-handed orthonormal frame $\{a\}$. Their cross product, expressed in frame $\{a\}$, is defined by
 
@@ -95,7 +95,7 @@ $$
 \left({}^{a}\mathbf{u}\times{}^{a}\mathbf{v}\right)=0.
 $$
 
-### 1.1 Example: velocity of a point on a rotating rigid body
+### Example: velocity of a point on a rotating rigid body
 
 Let $O$ and $P$ be two points fixed to the same rigid body. Point $O$ is the chosen reference point; it need not be stationary, and it need not be the body's centre. The vector ${}^{a}\mathbf{r}_{OP}$ runs from $O$ to $P$. Although this vector is fixed relative to the body, its coordinates generally change as the body rotates. Express every quantity in the same orthonormal frame $\{a\}$:
 
@@ -215,7 +215,7 @@ $$
 
 The point lies on the positive $x$-axis, while its instantaneous velocity points along the positive $y$-axis, tangent to its circular path.
 
-## Quick test A: cross products and rigid-body velocity
+## Quick test A: cross products and rigid-body velocity {.unnumbered}
 
 Complete this test without looking back at the section.
 
@@ -226,7 +226,7 @@ Complete this test without looking back at the section.
 5. **Limitations:** What happens to the cross product when the input vectors are parallel, and why does that prevent it from defining a unique normal direction?
 6. **Transfer:** At one instant, a rigid body has ${}^{a}\boldsymbol{\omega}=[0\;\;0\;\;2]^\mathsf{T}\,\mathrm{rad\,s^{-1}}$, ${}^{a}\mathbf r_{OP}=[1\;\;0\;\;0]^\mathsf{T}\,\mathrm{m}$, and ${}^{a}\mathbf v_O=[0.5\;\;0.5\;\;0]^\mathsf{T}\,\mathrm{m\,s^{-1}}$. Find ${}^{a}\mathbf v_{P/O}$ and ${}^{a}\mathbf v_P$. Which velocity is perpendicular to ${}^{a}\mathbf r_{OP}$?
 
-### Answers and hints
+### Answers and hints {.unnumbered}
 
 1. The right-hand rule, applied in the order from $\mathbf u$ to $\mathbf v$.
 2. Its dot product with either input is zero.
@@ -236,9 +236,9 @@ Complete this test without looking back at the section.
 6. ${}^{a}\mathbf v_{P/O}=[0\;\;2\;\;0]^\mathsf T\,\mathrm{m\,s^{-1}}$ and ${}^{a}\mathbf v_P=[0.5\;\;2.5\;\;0]^\mathsf T\,\mathrm{m\,s^{-1}}$. The rotational contribution is perpendicular to ${}^{a}\mathbf r_{OP}$; the total velocity is not.
 
 
-## 2. Coordinate frames
+## Coordinate frames
 
-### 2.1 What defines a frame?
+### What defines a frame?
 
 A three-dimensional coordinate frame $\{a\}$ consists of:
 
@@ -249,7 +249,7 @@ The subscript $a$ associates the origin and basis vectors with frame $\{a\}$. Or
 
 A free vector depends only on the basis orientation used to describe it. A point also depends on the frame origin. This distinction explains why changing the coordinate frame of a free vector requires only a rotation, whereas changing the coordinates of a point generally requires a rotation and a translation.
 
-### 2.2 Orientation convention
+### Orientation convention
 
 Let $\{a\}$ and $\{b\}$ be three-dimensional right-handed orthonormal frames. Define $\mathbf R_{ab}\in\mathbb R^{3\times3}$ as the rotation matrix that maps coordinate columns from frame $\{b\}$ to frame $\{a\}$. Its columns are the basis vectors of $\{b\}$ expressed in frame $\{a\}$:
 
@@ -540,7 +540,7 @@ $$
 
 The determinant sign does not indicate whether a rotation is clockwise or counter-clockwise. It indicates whether the transformation preserves or reverses the handedness of space.
 
-### 2.3 Points require translation
+### Points require translation
 
 Let $O_a$ and $O_b$ be the origins of frames $\{a\}$ and $\{b\}$. Define ${}^{a}\mathbf p_b\in\mathbb R^3$ as the position of $O_b$ relative to $O_a$, expressed in frame $\{a\}$ and measured in metres.
 
@@ -555,7 +555,7 @@ $$
 
 The rotation $\mathbf R_{ab}\,{}^{b}\mathbf p_P$ changes the basis used to express the displacement from $O_b$ to $P$. The translation ${}^{a}\mathbf p_b$ then accounts for the displacement from $O_a$ to $O_b$. A homogeneous transformation combines these two operations into one matrix equation.
 
-## 3. Worked frame-change example
+## Worked frame-change example
 
 Consider two planar frames $\{a\}$ and $\{b\}$ whose axes differ by an angle $\theta\in\mathbb R$, measured in radians. A positive $\theta$ means that frame $\{b\}$ is rotated counter-clockwise relative to frame $\{a\}$. Define $\mathbf R_{ab}(\theta)\in\mathbb R^{2\times2}$ as the rotation matrix that maps two-dimensional coordinate columns from frame $\{b\}$ to frame $\{a\}$:
 
@@ -902,7 +902,7 @@ v_a = R_ab @ v_b
 
 For $\theta=\pi/2\,\mathrm{rad}$, the calculation gives `v_a` approximately equal to `[-1.0, 2.0]`. Changing `theta` recomputes the same values displayed by the interactive graph while `v_b` remains fixed.
 
-## 4. Differential-drive interpretation
+## Differential-drive interpretation
 
 For a planar mobile robot, let frame $\{w\}$ be fixed to the world and frame $\{b\}$ be attached to the robot. Let $\theta\in\mathbb R$ be the robot's heading angle, measured counter-clockwise in radians from the positive $x_w$-axis to the positive $x_b$-axis. Let $v\in\mathbb R$ be the signed forward speed, measured in $\mathrm{m\,s^{-1}}$; positive $v$ means motion along the positive $x_b$-axis.
 
@@ -943,7 +943,7 @@ $$
 
 This equation is the coordinate-frame foundation of the differential-drive kinematic model. It shows why a controller must distinguish a forward command in the robot frame from motion observed in the world frame.
 
-## 5. Failure modes and engineering checks
+## Failure modes and engineering checks
 
 ### Missing frame labels
 
@@ -991,7 +991,7 @@ $$
 
 The first condition tests approximate orthonormality; the second tests approximate preservation of right-handed orientation.
 
-## Quick test B: coordinate frames and rotations
+## Quick test B: coordinate frames and rotations {.unnumbered}
 
 1. **Recall:** What do the columns of $\mathbf{R}_{ab}$ represent?
 2. **Explanation:** Explain in words why $\mathbf{R}_{ab}^{-1}=\mathbf{R}_{ba}$.
@@ -1000,7 +1000,7 @@ The first condition tests approximate orthonormality; the second tests approxima
 5. **Limitations:** Give two ways a numerically stored matrix intended to be a rotation matrix can become invalid.
 6. **Derivation:** Let $\{a\}$ and $\{b\}$ be right-handed orthonormal planar frames. Frame $\{b\}$ is rotated counter-clockwise by $\theta\,\mathrm{rad}$ relative to frame $\{a\}$, and $\mathbf R_{ab}(\theta)\in\mathbb R^{2\times2}$ maps coordinate columns from frame $\{b\}$ to frame $\{a\}$. First express the $x_b$-axis and $y_b$-axis as coordinate columns ${}^{a}\mathbf e_{x,b},{}^{a}\mathbf e_{y,b}\in\mathbb R^2$; then place those columns side by side to derive $\mathbf R_{ab}(\theta)$.
 
-### Answers and hints
+### Answers and hints {.unnumbered}
 
 1. The axes of frame $\{b\}$ expressed in coordinates of frame $\{a\}$.
 2. Reversing the frame change undoes the original change; for an orthonormal rotation matrix, the inverse is its transpose.
@@ -1018,7 +1018,7 @@ The first condition tests approximate orthonormality; the second tests approxima
    \end{bmatrix}.
    $$
 
-## References
+## References {.unnumbered}
 
 - Kevin M. Lynch and Frank C. Park, *Modern Robotics*, Chapter 3, especially Sections 3.1 and 3.2.1 on free vectors, frames, rotation matrices, and rigid-body motions.
 - Steven M. LaValle, *Planning Algorithms*, Chapters 3 and 4 on geometric representations, transformations, and configuration spaces.

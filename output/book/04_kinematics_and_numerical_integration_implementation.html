@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>6&nbsp; Differential-Drive Kinematics and Numerical Integration: Implementation – Foundations of Autonomous Robotics</title>
+<title>4&nbsp; Differential-Drive Kinematics and Numerical Integration: Implementation – Foundations of Autonomous Robotics</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1b9b2d75225f2ddb203017a594491b92.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-9bd9da8a43abe092e8fe8e55ae6bd24f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-1b9b2d75225f2ddb203017a594491b92.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a1d20fa37053390459103e27c0ac45a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-bff5d7cd845da349ee67ccc3e95b2326.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-a1d20fa37053390459103e27c0ac45a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -142,6 +142,7 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -318,6 +319,7 @@ window.Quarto = {
     </a>
   </div>
         <div class="quarto-navbar-tools tools-end">
+    <a href="./Foundations-of-Autonomous-Robotics.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
           <div id="quarto-search" class="" title="Search"></div>
@@ -328,7 +330,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Part I - Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./04_kinematics_and_numerical_integration_implementation.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./04_kinematics_and_numerical_integration_implementation.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -343,19 +345,19 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Foundations of Autonomous Robotics</span></span></a>
+ <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./notation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Unified Notation and Conventions</span></span></a>
+ <span class="menu-text">Unified Notation and Conventions</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Part I - Motion, Mechanics, and Control</span></a>
+ <span class="menu-text">Motion, Mechanics, and Control</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -364,43 +366,49 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_linear_algebra_foundations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Linear Algebra Foundations</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Linear Algebra Foundations</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02_geometry_and_coordinate_frames.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03_kinematics_and_numerical_integration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04_kinematics_and_numerical_integration_implementation.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05_ros2_packages_and_development_workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./06_planar_rigid_body_motion_se2_and_twists.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_degrees_of_freedom_and_spatial_motion_so3_se3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08_dynamics_forces_and_actuator_limits.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></a>
   </div>
 </li>
       </ul>
@@ -415,31 +423,31 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#purpose-and-scope" id="toc-purpose-and-scope" class="nav-link active" data-scroll-target="#purpose-and-scope"><span class="header-section-number">6.1</span> Purpose and scope</a></li>
-  <li><a href="#wheel-to-body-velocity-mapping" id="toc-wheel-to-body-velocity-mapping" class="nav-link" data-scroll-target="#wheel-to-body-velocity-mapping"><span class="header-section-number">6.2</span> 1. Wheel-to-body velocity mapping</a>
+  <li><a href="#purpose-and-scope" id="toc-purpose-and-scope" class="nav-link active" data-scroll-target="#purpose-and-scope">Purpose and scope</a></li>
+  <li><a href="#wheel-to-body-velocity-mapping" id="toc-wheel-to-body-velocity-mapping" class="nav-link" data-scroll-target="#wheel-to-body-velocity-mapping"><span class="header-section-number">4.1</span> Wheel-to-body velocity mapping</a>
   <ul class="collapse">
-  <li><a href="#software-contract" id="toc-software-contract" class="nav-link" data-scroll-target="#software-contract"><span class="header-section-number">6.2.1</span> Software contract</a></li>
-  <li><a href="#simplified-reference-snippet" id="toc-simplified-reference-snippet" class="nav-link" data-scroll-target="#simplified-reference-snippet"><span class="header-section-number">6.2.2</span> Simplified reference snippet</a></li>
-  <li><a href="#invariants" id="toc-invariants" class="nav-link" data-scroll-target="#invariants"><span class="header-section-number">6.2.3</span> Invariants</a></li>
+  <li><a href="#software-contract" id="toc-software-contract" class="nav-link" data-scroll-target="#software-contract"><span class="header-section-number">4.1.1</span> Software contract</a></li>
+  <li><a href="#simplified-reference-snippet" id="toc-simplified-reference-snippet" class="nav-link" data-scroll-target="#simplified-reference-snippet"><span class="header-section-number">4.1.2</span> Simplified reference snippet</a></li>
+  <li><a href="#invariants" id="toc-invariants" class="nav-link" data-scroll-target="#invariants"><span class="header-section-number">4.1.3</span> Invariants</a></li>
   </ul></li>
-  <li><a href="#body-to-wheel-velocity-mapping" id="toc-body-to-wheel-velocity-mapping" class="nav-link" data-scroll-target="#body-to-wheel-velocity-mapping"><span class="header-section-number">6.3</span> 2. Body-to-wheel velocity mapping</a>
+  <li><a href="#body-to-wheel-velocity-mapping" id="toc-body-to-wheel-velocity-mapping" class="nav-link" data-scroll-target="#body-to-wheel-velocity-mapping"><span class="header-section-number">4.2</span> Body-to-wheel velocity mapping</a>
   <ul class="collapse">
-  <li><a href="#software-contract-1" id="toc-software-contract-1" class="nav-link" data-scroll-target="#software-contract-1"><span class="header-section-number">6.3.1</span> Software contract</a></li>
-  <li><a href="#implementation-mapping" id="toc-implementation-mapping" class="nav-link" data-scroll-target="#implementation-mapping"><span class="header-section-number">6.3.2</span> Implementation mapping</a></li>
-  <li><a href="#invariants-and-required-tests" id="toc-invariants-and-required-tests" class="nav-link" data-scroll-target="#invariants-and-required-tests"><span class="header-section-number">6.3.3</span> Invariants and required tests</a></li>
+  <li><a href="#software-contract-1" id="toc-software-contract-1" class="nav-link" data-scroll-target="#software-contract-1"><span class="header-section-number">4.2.1</span> Software contract</a></li>
+  <li><a href="#implementation-mapping" id="toc-implementation-mapping" class="nav-link" data-scroll-target="#implementation-mapping"><span class="header-section-number">4.2.2</span> Implementation mapping</a></li>
+  <li><a href="#invariants-and-required-tests" id="toc-invariants-and-required-tests" class="nav-link" data-scroll-target="#invariants-and-required-tests"><span class="header-section-number">4.2.3</span> Invariants and required tests</a></li>
   </ul></li>
-  <li><a href="#exact-constant-input-pose-integration" id="toc-exact-constant-input-pose-integration" class="nav-link" data-scroll-target="#exact-constant-input-pose-integration"><span class="header-section-number">6.4</span> 3. Exact constant-input pose integration</a>
+  <li><a href="#exact-constant-input-pose-integration" id="toc-exact-constant-input-pose-integration" class="nav-link" data-scroll-target="#exact-constant-input-pose-integration"><span class="header-section-number">4.3</span> Exact constant-input pose integration</a>
   <ul class="collapse">
-  <li><a href="#software-contract-2" id="toc-software-contract-2" class="nav-link" data-scroll-target="#software-contract-2"><span class="header-section-number">6.4.1</span> Software contract</a></li>
-  <li><a href="#numerically-stable-implementation-mapping" id="toc-numerically-stable-implementation-mapping" class="nav-link" data-scroll-target="#numerically-stable-implementation-mapping"><span class="header-section-number">6.4.2</span> Numerically stable implementation mapping</a></li>
-  <li><a href="#invariants-and-required-tests-1" id="toc-invariants-and-required-tests-1" class="nav-link" data-scroll-target="#invariants-and-required-tests-1"><span class="header-section-number">6.4.3</span> Invariants and required tests</a></li>
+  <li><a href="#software-contract-2" id="toc-software-contract-2" class="nav-link" data-scroll-target="#software-contract-2"><span class="header-section-number">4.3.1</span> Software contract</a></li>
+  <li><a href="#numerically-stable-implementation-mapping" id="toc-numerically-stable-implementation-mapping" class="nav-link" data-scroll-target="#numerically-stable-implementation-mapping"><span class="header-section-number">4.3.2</span> Numerically stable implementation mapping</a></li>
+  <li><a href="#invariants-and-required-tests-1" id="toc-invariants-and-required-tests-1" class="nav-link" data-scroll-target="#invariants-and-required-tests-1"><span class="header-section-number">4.3.3</span> Invariants and required tests</a></li>
   </ul></li>
-  <li><a href="#forward-euler-pose-integration" id="toc-forward-euler-pose-integration" class="nav-link" data-scroll-target="#forward-euler-pose-integration"><span class="header-section-number">6.5</span> 4. Forward Euler pose integration</a>
+  <li><a href="#forward-euler-pose-integration" id="toc-forward-euler-pose-integration" class="nav-link" data-scroll-target="#forward-euler-pose-integration"><span class="header-section-number">4.4</span> Forward Euler pose integration</a>
   <ul class="collapse">
-  <li><a href="#software-contract-3" id="toc-software-contract-3" class="nav-link" data-scroll-target="#software-contract-3"><span class="header-section-number">6.5.1</span> Software contract</a></li>
-  <li><a href="#implementation-mapping-1" id="toc-implementation-mapping-1" class="nav-link" data-scroll-target="#implementation-mapping-1"><span class="header-section-number">6.5.2</span> Implementation mapping</a></li>
-  <li><a href="#exact-and-approximate-cases" id="toc-exact-and-approximate-cases" class="nav-link" data-scroll-target="#exact-and-approximate-cases"><span class="header-section-number">6.5.3</span> Exact and approximate cases</a></li>
-  <li><a href="#invariants-and-required-tests-2" id="toc-invariants-and-required-tests-2" class="nav-link" data-scroll-target="#invariants-and-required-tests-2"><span class="header-section-number">6.5.4</span> Invariants and required tests</a></li>
+  <li><a href="#software-contract-3" id="toc-software-contract-3" class="nav-link" data-scroll-target="#software-contract-3"><span class="header-section-number">4.4.1</span> Software contract</a></li>
+  <li><a href="#implementation-mapping-1" id="toc-implementation-mapping-1" class="nav-link" data-scroll-target="#implementation-mapping-1"><span class="header-section-number">4.4.2</span> Implementation mapping</a></li>
+  <li><a href="#exact-and-approximate-cases" id="toc-exact-and-approximate-cases" class="nav-link" data-scroll-target="#exact-and-approximate-cases"><span class="header-section-number">4.4.3</span> Exact and approximate cases</a></li>
+  <li><a href="#invariants-and-required-tests-2" id="toc-invariants-and-required-tests-2" class="nav-link" data-scroll-target="#invariants-and-required-tests-2"><span class="header-section-number">4.4.4</span> Invariants and required tests</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -448,9 +456,9 @@ window.Quarto = {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Part I - Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./04_kinematics_and_numerical_integration_implementation.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./04_kinematics_and_numerical_integration_implementation.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></h1>
+<h1 class="title"><span id="sec-kinematics-integration-implementation" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span></h1>
 </div>
 
 
@@ -467,12 +475,12 @@ window.Quarto = {
 </header>
 
 
-<section id="purpose-and-scope" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="purpose-and-scope"><span class="header-section-number">6.1</span> Purpose and scope</h2>
+<section id="purpose-and-scope" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="purpose-and-scope">Purpose and scope</h2>
 <p>This companion translates the differential-drive mathematics derived in <a href="./03_kinematics_and_numerical_integration.html">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</a> into reusable software contracts, invariants, validation rules, and tests. It records how those equations map into dependable software without repeating the derivations.</p>
 </section>
-<section id="wheel-to-body-velocity-mapping" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="wheel-to-body-velocity-mapping"><span class="header-section-number">6.2</span> 1. Wheel-to-body velocity mapping</h2>
+<section id="wheel-to-body-velocity-mapping" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="wheel-to-body-velocity-mapping"><span class="header-section-number">4.1</span> Wheel-to-body velocity mapping</h2>
 <p>Let <span class="math inline">\(r&gt;0\)</span> be the common effective wheel radius in metres and let <span class="math inline">\(L&gt;0\)</span> be the track width in metres. Let <span class="math inline">\(\dot\phi_L\)</span> and <span class="math inline">\(\dot\phi_R\)</span> be the signed left and right wheel angular speeds in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>, where positive angular speed rolls the corresponding wheel forward.</p>
 <p>The software implements</p>
 <p><span class="math display">\[
@@ -487,13 +495,13 @@ v
 \left(\dot\phi_R-\dot\phi_L\right),
 \]</span></p>
 <p>where <span class="math inline">\(v\)</span> is signed body-forward speed in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span> and <span class="math inline">\(\omega\)</span> is signed counter-clockwise yaw rate in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>.</p>
-<section id="software-contract" class="level3" data-number="6.2.1">
-<h3 data-number="6.2.1" class="anchored" data-anchor-id="software-contract"><span class="header-section-number">6.2.1</span> Software contract</h3>
+<section id="software-contract" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="software-contract"><span class="header-section-number">4.1.1</span> Software contract</h3>
 <p>The <code>wheel_to_body</code> operation accepts four finite scalar inputs: left wheel angular speed, right wheel angular speed, wheel radius, and track width. The wheel radius and track width must be strictly positive. Invalid inputs raise <code>ValueError</code>; the operation does not clamp values or substitute default geometry.</p>
 <p>The operation returns an immutable <code>BodyVelocity</code> value containing <code>forward_speed_m_s</code> and <code>yaw_rate_rad_s</code>. It is deterministic, does not mutate its inputs, and does not depend on ROS state, timestamps, configuration files, or hidden global state.</p>
 </section>
-<section id="simplified-reference-snippet" class="level3" data-number="6.2.2">
-<h3 data-number="6.2.2" class="anchored" data-anchor-id="simplified-reference-snippet"><span class="header-section-number">6.2.2</span> Simplified reference snippet</h3>
+<section id="simplified-reference-snippet" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="simplified-reference-snippet"><span class="header-section-number">4.1.2</span> Simplified reference snippet</h3>
 <p>The following equation-focused snippet shows how the mathematical factors map to Python expressions. It assumes that all inputs are finite and that <code>wheel_radius_m</code> and <code>track_width_m</code> are strictly positive; the production operation enforces those preconditions before performing the calculation.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span>(frozen<span class="op">=</span><span class="va">True</span>, slots<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BodyVelocity:</span>
@@ -525,8 +533,8 @@ v
 <span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        yaw_rate_rad_s<span class="op">=</span>yaw_rate_rad_s,</span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="invariants" class="level3" data-number="6.2.3">
-<h3 data-number="6.2.3" class="anchored" data-anchor-id="invariants"><span class="header-section-number">6.2.3</span> Invariants</h3>
+<section id="invariants" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="invariants"><span class="header-section-number">4.1.3</span> Invariants</h3>
 <ul>
 <li>Equal wheel speeds produce zero yaw rate.</li>
 <li>Equal and opposite wheel speeds produce zero forward speed.</li>
@@ -536,8 +544,8 @@ v
 </ul>
 </section>
 </section>
-<section id="body-to-wheel-velocity-mapping" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="body-to-wheel-velocity-mapping"><span class="header-section-number">6.3</span> 2. Body-to-wheel velocity mapping</h2>
+<section id="body-to-wheel-velocity-mapping" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="body-to-wheel-velocity-mapping"><span class="header-section-number">4.2</span> Body-to-wheel velocity mapping</h2>
 <p>The <code>body_to_wheel</code> operation implements the inverse of the wheel-to-body mapping. Its inputs are signed body-forward speed <span class="math inline">\(v\)</span> in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>, signed counter-clockwise yaw rate <span class="math inline">\(\omega\)</span> in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>, wheel radius <span class="math inline">\(r&gt;0\)</span> in metres, and track width <span class="math inline">\(L&gt;0\)</span> in metres.</p>
 <p>The required wheel angular speeds are</p>
 <p><span class="math display">\[
@@ -554,13 +562,13 @@ v
 \frac{L\omega}{2r},
 \]</span></p>
 <p>where <span class="math inline">\(\dot\phi_L\)</span> and <span class="math inline">\(\dot\phi_R\)</span> are the signed left and right wheel angular speeds in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>.</p>
-<section id="software-contract-1" class="level3" data-number="6.3.1">
-<h3 data-number="6.3.1" class="anchored" data-anchor-id="software-contract-1"><span class="header-section-number">6.3.1</span> Software contract</h3>
+<section id="software-contract-1" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="software-contract-1"><span class="header-section-number">4.2.1</span> Software contract</h3>
 <p>The operation accepts four finite scalar inputs. The wheel radius and track width must be strictly positive. Invalid inputs raise <code>ValueError</code>; the operation does not clamp values or substitute geometry.</p>
 <p>The result is an immutable <code>WheelAngularSpeeds</code> value containing <code>left_angular_speed_rad_s</code> and <code>right_angular_speed_rad_s</code>.</p>
 </section>
-<section id="implementation-mapping" class="level3" data-number="6.3.2">
-<h3 data-number="6.3.2" class="anchored" data-anchor-id="implementation-mapping"><span class="header-section-number">6.3.2</span> Implementation mapping</h3>
+<section id="implementation-mapping" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="implementation-mapping"><span class="header-section-number">4.2.2</span> Implementation mapping</h3>
 <p>The calculation separates forward and turning contributions:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span>(frozen<span class="op">=</span><span class="va">True</span>, slots<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> WheelAngularSpeeds:</span>
@@ -595,8 +603,8 @@ v
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The forward component contributes equally to both wheels. The turning component is subtracted from the left wheel and added to the right wheel. Therefore, a positive yaw rate makes the right wheel turn faster than the left wheel.</p>
 </section>
-<section id="invariants-and-required-tests" class="level3" data-number="6.3.3">
-<h3 data-number="6.3.3" class="anchored" data-anchor-id="invariants-and-required-tests"><span class="header-section-number">6.3.3</span> Invariants and required tests</h3>
+<section id="invariants-and-required-tests" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="invariants-and-required-tests"><span class="header-section-number">4.2.3</span> Invariants and required tests</h3>
 <ul>
 <li>Zero yaw rate produces equal wheel speeds of <span class="math inline">\(v/r\)</span>.</li>
 <li>Zero forward speed produces equal-and-opposite wheel speeds.</li>
@@ -606,8 +614,8 @@ v
 </ul>
 </section>
 </section>
-<section id="exact-constant-input-pose-integration" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="exact-constant-input-pose-integration"><span class="header-section-number">6.4</span> 3. Exact constant-input pose integration</h2>
+<section id="exact-constant-input-pose-integration" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="exact-constant-input-pose-integration"><span class="header-section-number">4.3</span> Exact constant-input pose integration</h2>
 <p>Let the initial planar pose be <span class="math inline">\((x_k,y_k,\theta_k)\)</span>, where <span class="math inline">\(x_k\)</span> and <span class="math inline">\(y_k\)</span> are the world-frame coordinates of the axle midpoint in metres and <span class="math inline">\(\theta_k\)</span> is the unwrapped counter-clockwise heading in radians.</p>
 <p>Assume that forward speed <span class="math inline">\(v\)</span> in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span> and yaw rate <span class="math inline">\(\omega\)</span> in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span> remain constant over a time step <span class="math inline">\(\Delta t&gt;0\)</span> in seconds. Define the heading change</p>
 <p><span class="math display">\[
@@ -645,13 +653,13 @@ v\Delta t\,
 \end{cases}
 \]</span></p>
 <p>The update is exact for the ideal continuous kinematic model only when <span class="math inline">\(v\)</span> and <span class="math inline">\(\omega\)</span> remain constant during the time step. It does not account for wheel slip, changing commands, actuator dynamics, or model error.</p>
-<section id="software-contract-2" class="level3" data-number="6.4.1">
-<h3 data-number="6.4.1" class="anchored" data-anchor-id="software-contract-2"><span class="header-section-number">6.4.1</span> Software contract</h3>
+<section id="software-contract-2" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="software-contract-2"><span class="header-section-number">4.3.1</span> Software contract</h3>
 <p>The <code>integrate_exact</code> operation accepts an immutable <code>PlanarPose</code>, finite forward speed, finite yaw rate, and a finite positive time step. A non-finite input or non-positive time step raises <code>ValueError</code>.</p>
 <p>The operation returns a new <code>PlanarPose</code>. It does not mutate the initial pose or wrap the resulting heading into a fixed angular interval.</p>
 </section>
-<section id="numerically-stable-implementation-mapping" class="level3" data-number="6.4.2">
-<h3 data-number="6.4.2" class="anchored" data-anchor-id="numerically-stable-implementation-mapping"><span class="header-section-number">6.4.2</span> Numerically stable implementation mapping</h3>
+<section id="numerically-stable-implementation-mapping" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="numerically-stable-implementation-mapping"><span class="header-section-number">4.3.2</span> Numerically stable implementation mapping</h3>
 <p>The implementation avoids evaluating <span class="math inline">\(v/\omega\)</span>, which would be undefined when <span class="math inline">\(\omega=0\)</span>. Instead, it uses the sinc form:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="at">@dataclass</span>(frozen<span class="op">=</span><span class="va">True</span>, slots<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PlanarPose:</span>
@@ -700,8 +708,8 @@ v\Delta t\,
 <span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>When <span class="math inline">\(\omega=0\)</span>, we have <span class="math inline">\(\Delta\theta=0\)</span> and <span class="math inline">\(\operatorname{sinc}(0)=1\)</span>. The same implementation therefore reduces smoothly to straight motion without a separate division by zero.</p>
 </section>
-<section id="invariants-and-required-tests-1" class="level3" data-number="6.4.3">
-<h3 data-number="6.4.3" class="anchored" data-anchor-id="invariants-and-required-tests-1"><span class="header-section-number">6.4.3</span> Invariants and required tests</h3>
+<section id="invariants-and-required-tests-1" class="level3" data-number="4.3.3">
+<h3 data-number="4.3.3" class="anchored" data-anchor-id="invariants-and-required-tests-1"><span class="header-section-number">4.3.3</span> Invariants and required tests</h3>
 <ul>
 <li>Zero yaw rate produces the exact straight-motion update.</li>
 <li>Zero forward speed changes only the heading.</li>
@@ -713,8 +721,8 @@ v\Delta t\,
 </ul>
 </section>
 </section>
-<section id="forward-euler-pose-integration" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="forward-euler-pose-integration"><span class="header-section-number">6.5</span> 4. Forward Euler pose integration</h2>
+<section id="forward-euler-pose-integration" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="forward-euler-pose-integration"><span class="header-section-number">4.4</span> Forward Euler pose integration</h2>
 <p>Forward Euler approximates motion over a time step <span class="math inline">\(\Delta t&gt;0\)</span> by evaluating the pose derivative at the beginning of the step. For initial pose <span class="math inline">\((x_k,y_k,\theta_k)\)</span>, constant forward speed <span class="math inline">\(v\)</span>, and constant yaw rate <span class="math inline">\(\omega\)</span>, the update is</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -730,13 +738,13 @@ y_k+\Delta t\,v\sin\theta_k,\\
 \end{aligned}
 \]</span></p>
 <p>The superscript <span class="math inline">\(\mathrm E\)</span> identifies a Forward Euler approximation. Position is calculated entirely from the beginning-of-step heading <span class="math inline">\(\theta_k\)</span>; the changing heading within the step does not affect that step’s position increment.</p>
-<section id="software-contract-3" class="level3" data-number="6.5.1">
-<h3 data-number="6.5.1" class="anchored" data-anchor-id="software-contract-3"><span class="header-section-number">6.5.1</span> Software contract</h3>
+<section id="software-contract-3" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="software-contract-3"><span class="header-section-number">4.4.1</span> Software contract</h3>
 <p>The <code>integrate_forward_euler</code> operation accepts the same inputs and validation rules as <code>integrate_exact</code>: an immutable <code>PlanarPose</code>, finite forward speed, finite yaw rate, and a finite positive time step.</p>
 <p>The operation returns a new <code>PlanarPose</code>, does not mutate the input pose, and leaves the heading unwrapped. Invalid inputs raise <code>ValueError</code>.</p>
 </section>
-<section id="implementation-mapping-1" class="level3" data-number="6.5.2">
-<h3 data-number="6.5.2" class="anchored" data-anchor-id="implementation-mapping-1"><span class="header-section-number">6.5.2</span> Implementation mapping</h3>
+<section id="implementation-mapping-1" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="implementation-mapping-1"><span class="header-section-number">4.4.2</span> Implementation mapping</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>next_pose <span class="op">=</span> PlanarPose(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    position_x_m<span class="op">=</span>(</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        pose.position_x_m</span>
@@ -751,15 +759,15 @@ y_k+\Delta t\,v\sin\theta_k,\\
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    ),</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="exact-and-approximate-cases" class="level3" data-number="6.5.3">
-<h3 data-number="6.5.3" class="anchored" data-anchor-id="exact-and-approximate-cases"><span class="header-section-number">6.5.3</span> Exact and approximate cases</h3>
+<section id="exact-and-approximate-cases" class="level3" data-number="4.4.3">
+<h3 data-number="4.4.3" class="anchored" data-anchor-id="exact-and-approximate-cases"><span class="header-section-number">4.4.3</span> Exact and approximate cases</h3>
 <p>When <span class="math inline">\(\omega=0\)</span>, the heading remains constant. The world-frame velocity is therefore constant, so one Forward Euler step produces the exact straight-motion position.</p>
 <p>When <span class="math inline">\(v=0\)</span>, position remains unchanged and the heading update is exact because <span class="math inline">\(\dot\theta=\omega\)</span> is constant.</p>
 <p>When both <span class="math inline">\(v\neq0\)</span> and <span class="math inline">\(\omega\neq0\)</span>, the true path curves during the time step. Forward Euler instead follows the tangent defined by <span class="math inline">\(\theta_k\)</span>, so its one-step position is generally approximate.</p>
 <p>For repeated integration over a fixed duration, Forward Euler has global error <span class="math inline">\(O(\Delta t)\)</span>. In this regime, halving <span class="math inline">\(\Delta t\)</span> should approximately halve the accumulated error.</p>
 </section>
-<section id="invariants-and-required-tests-2" class="level3" data-number="6.5.4">
-<h3 data-number="6.5.4" class="anchored" data-anchor-id="invariants-and-required-tests-2"><span class="header-section-number">6.5.4</span> Invariants and required tests</h3>
+<section id="invariants-and-required-tests-2" class="level3" data-number="4.4.4">
+<h3 data-number="4.4.4" class="anchored" data-anchor-id="invariants-and-required-tests-2"><span class="header-section-number">4.4.4</span> Invariants and required tests</h3>
 <ul>
 <li>Straight constant-speed motion agrees with the exact update.</li>
 <li>Pure rotation changes only the heading.</li>
@@ -1190,12 +1198,12 @@ y_k+\Delta t\,v\sin\theta_k,\\
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./03_kinematics_and_numerical_integration.html" class="pagination-link" aria-label="Differential-Drive Kinematics and Numerical Integration: Model and Derivation">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./05_ros2_packages_and_development_workflow.html" class="pagination-link" aria-label="ROS 2 Package Development Workflow">
-        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

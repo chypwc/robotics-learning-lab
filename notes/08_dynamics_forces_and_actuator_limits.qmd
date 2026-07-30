@@ -1,20 +1,20 @@
-# Dynamics, Forces, Torque, Friction, and Actuator Limits
+# Dynamics, Forces, Torque, Friction, and Actuator Limits {#sec-dynamics-actuator-limits}
 
-## Why this chapter matters
+## Why this chapter matters {.unnumbered}
 
 Kinematics predicts how a robot's pose changes when its velocity is known, but it does not explain how that velocity is produced or how quickly it can change. Dynamics connects motion to mass, rotational inertia, external forces, and external torques. This connection is necessary for physically meaningful simulation, actuator selection, acceleration limits, braking analysis, and feedback control.
 
 This chapter begins with straight-line motion because it exposes the central force-acceleration relation without rotational notation. Later sections extend the same reasoning to wheel torque, planar rotation, traction, friction, and actuator limits.
 
-## Prerequisites and assumptions
+## Prerequisites and assumptions {.unnumbered}
 
-The reader should understand vectors and units from the [linear algebra foundations chapter](01_linear_algebra_foundations.qmd), coordinate frames from the [geometry chapter](02_geometry_and_coordinate_frames.qmd), and derivatives and numerical integration from the [kinematics and numerical integration chapter](03_kinematics_and_numerical_integration.qmd).
+The reader should understand vectors and units from @sec-linear-algebra-foundations, coordinate frames from @sec-geometry-coordinate-frames, and derivatives and numerical integration from @sec-differential-drive-model.
 
 The first model treats the robot as a rigid body constrained to translate along a fixed straight line on level ground. The line is fixed in the world frame, so it is an inertial reference for the speeds considered here. The robot's mass is constant, vertical motion is absent, and all forces are represented by their signed components along the line. Rotational motion, wheel inertia, slip, and changing actuator force are excluded from this first model.
 
-## 1. From kinematics to dynamics
+## From kinematics to dynamics {#sec-dynamics-force-acceleration}
 
-### 1.1 Position, velocity, and acceleration
+### Position, velocity, and acceleration
 
 Let $t\in\mathbb R_{\geq0}$ denote continuous time in seconds. Let $s(t)\in\mathbb R$ be the robot's signed position along the fixed line, measured in metres. Increasing $s$ defines the positive direction.
 
@@ -44,7 +44,7 @@ where $a(t)$ is measured in $\mathrm{m\,s^{-2}}$. Positive acceleration means th
 
 Kinematics relates the quantities through $\dot s=v$. A dynamic model adds an equation that determines $\dot v=a$ from physical causes.
 
-### 1.2 Net external force
+### Net external force
 
 A force is an interaction that can change an object's translational motion. Let $n\in\mathbb N$ be the number of external forces acting on the chosen robot system, and let $F_j(t)\in\mathbb R$ be the signed component of external force $j\in\{1,\ldots,n\}$ along the positive line direction. Each $F_j$ is measured in newtons, abbreviated $\mathrm N$.
 
@@ -60,7 +60,7 @@ where $F_{\mathrm{net}}(t)\in\mathbb R$ is also measured in newtons. Forces poin
 
 For a driven ground robot, the forward force on the robot is the traction force exerted by the ground at the wheel contacts. Motor torque helps create this contact force, but motor torque and longitudinal force are different physical quantities and have different units.
 
-### 1.3 Newton's second law and the forward-dynamics equation
+### Newton's second law and the forward-dynamics equation
 
 Let $m\in\mathbb R_{>0}$ be the robot's constant mass in kilograms. Newton's second law for translation along the line is
 
@@ -120,7 +120,7 @@ $$
 
 This equation shows why a velocity command cannot change the physical velocity instantaneously: finite forces acting on positive mass produce finite acceleration.
 
-### 1.4 Constant-force motion over one interval
+### Constant-force motion over one interval
 
 Suppose $F_{\mathrm{net}}$ and $m$ remain constant during the interval from sample time $t_k$ to $t_{k+1}=t_k+\Delta t$, where $\Delta t>0$ is measured in seconds. Define $s_k\mathrel{:=}s(t_k)$ and $v_k\mathrel{:=}v(t_k)$. The acceleration is constant and equals
 
@@ -162,7 +162,7 @@ $$
 
 These updates are exact only under the stated one-dimensional, constant-mass, and constant-net-force assumptions.
 
-### 1.5 Worked example
+### Worked example
 
 Consider a robot with mass $m=20\,\mathrm{kg}$, forward traction magnitude $F_{\mathrm{drive}}=30\,\mathrm N$, and backward resistance magnitude $F_{\mathrm{resist}}=10\,\mathrm N$. Its net force and acceleration are
 
@@ -204,7 +204,7 @@ $$
 
 The example predicts motion only along the fixed line. It does not yet explain how motor torque becomes traction, how much traction the ground can support, or how wheel and chassis rotation affect the result.
 
-### Quick test A
+### Quick test A {.unnumbered}
 
 1. In one sentence each, distinguish kinematics from dynamics.
 2. Define $s$, $v$, $a$, $m$, and $F_{\mathrm{net}}$, including units.
@@ -213,7 +213,7 @@ The example predicts motion only along the fixed line. It does not yet explain h
 5. With the same net force, what happens to acceleration if mass doubles?
 6. Name two assumptions that must hold for the constant-force position update to be exact.
 
-### Quick test A answers and hints
+### Quick test A answers and hints {.unnumbered}
 
 1. Kinematics relates motion variables without modelling their physical causes; dynamics relates forces and torques to acceleration and motion.
 2. $s$ is signed position in metres, $v=\dot s$ is signed velocity in $\mathrm{m\,s^{-1}}$, $a=\dot v$ is signed acceleration in $\mathrm{m\,s^{-2}}$, $m>0$ is mass in kilograms, and $F_{\mathrm{net}}$ is the signed sum of external force components in newtons.
@@ -222,9 +222,9 @@ The example predicts motion only along the fixed line. It does not yet explain h
 5. Acceleration halves because $a=F_{\mathrm{net}}/m$.
 6. Examples include one-dimensional translation, constant mass, constant net force during the interval, and validity of the rigid-body model in an inertial frame.
 
-## 2. From motor torque to wheel traction
+## From motor torque to wheel traction
 
-### 2.1 Torque and its units
+### Torque and its units
 
 Torque, also called the moment of a force, is a vector quantity that represents the tendency of a force to rotate a body about a chosen point or axis. Torque is not a separate kind of force: it depends on the applied force and where that force acts.
 
@@ -321,7 +321,7 @@ Positive or negative $\tau_a$ indicates which rotational direction the torque ac
 
 For a wheel of radius $r$, the position vector from the axle to the ground contact is perpendicular to the longitudinal traction force, so $L=r$ and the contact-torque magnitude is $rF$. This geometry is the origin of the commonly used wheel relation $F=\tau/r$, but applying it to a driven wheel requires the signed rotational balance derived next.
 
-### 2.2 The wheel rotational balance
+### The wheel rotational balance
 
 Let $i\in\{L,R\}$ identify the left or right drive wheel. Use the same sign convention as the kinematics chapter: $\dot\phi_i>0$ means that wheel $i$ rotates in the direction that rolls the robot forward. Its angular acceleration is $\ddot\phi_i=d\dot\phi_i/dt$, measured in $\mathrm{rad\,s^{-2}}$.
 
@@ -375,7 +375,7 @@ $$
 
 which matches the unit of traction force.
 
-### 2.3 Combining the two drive wheels
+### Combining the two drive wheels
 
 The motor torques are internal interactions when the robot, motors, and wheels are treated as one system. The longitudinal forces exerted by the ground are external forces, so they accelerate the whole robot. During straight forward driving, assume $F_L\geq0$ and $F_R\geq0$. Their total nonnegative drive-force magnitude is
 
@@ -393,7 +393,7 @@ F_{\mathrm{drive}}
 \frac{\tau_L+\tau_R}{r}.
 $$
 
-If $F_{\mathrm{resist}}\geq0$ is the magnitude of all backward longitudinal resistance included in the model, the chassis acceleration from Section 1 becomes
+If $F_{\mathrm{resist}}\geq0$ is the magnitude of all backward longitudinal resistance included in the model, the chassis acceleration from @sec-dynamics-force-acceleration becomes
 
 $$
 a
@@ -407,7 +407,7 @@ $$
 
 This equation assumes straight motion and does not describe yaw acceleration caused by unequal wheel torques. It also assumes that the wheel-ground contacts can supply the calculated traction without slipping.
 
-### 2.4 Ideal gearing
+### Ideal gearing
 
 An electric motor often rotates faster and produces less torque than the wheel requires, so a reduction gearbox is placed between the motor and wheel. Let $G>1$ be the dimensionless reduction ratio, let $\dot\phi_m$ and $\tau_m$ be the motor-shaft angular speed and torque, and let $\dot\phi_w$ and $\tau_w$ be the wheel-side angular speed and torque. Choose the positive motor and wheel shaft directions so that positive motor rotation produces positive wheel rotation through the transmission.
 
@@ -449,7 +449,7 @@ $$
 
 This expression is a demanded traction force, not a guarantee that the ground contact can produce it. Gear losses, bearing friction, motor-current limits, wheel inertia, and the wheel-ground friction limit can all reduce the realised motion.
 
-### 2.5 Worked example
+### Worked example
 
 Consider two identical drive wheels with radius $r=0.10\,\mathrm m$. Suppose each wheel receives axle torque $\tau_L=\tau_R=1.2\,\mathrm{N\,m}$, and neglect wheel rotational inertia and drivetrain losses. Each wheel's predicted traction is
 
@@ -483,7 +483,7 @@ $$
 
 This result remains valid only while the assumed torques are available and both wheel contacts roll without longitudinal slip.
 
-### Quick test B
+### Quick test B {.unnumbered}
 
 1. Define torque, moment arm, mass moment of inertia, and traction force, including units.
 2. Starting from $\tau_i-rF_i=I_i\ddot\phi_i$, solve for $F_i$.
@@ -492,7 +492,7 @@ This result remains valid only while the assumed torques are available and both 
 5. An ideal gearbox has $G=20$, motor torque $\tau_m=0.15\,\mathrm{N\,m}$, and wheel radius $r=0.06\,\mathrm m$. Neglecting inertia and losses, calculate the wheel torque and demanded traction force.
 6. Why can the demanded force $\tau_w/r$ differ from the traction force realised on the ground?
 
-### Quick test B answers and hints
+### Quick test B answers and hints {.unnumbered}
 
 1. Torque is a rotational action about an axis in $\mathrm{N\,m}$; the moment arm is the perpendicular axis-to-line-of-action distance in metres; mass moment of inertia measures resistance to angular acceleration about an axis in $\mathrm{kg\,m^2}$; and traction is the longitudinal ground-contact force on the wheel in newtons.
 2. Move $I_i\ddot\phi_i$ to the other side and divide by $r>0$ to obtain $F_i=(\tau_i-I_i\ddot\phi_i)/r$.
@@ -501,7 +501,7 @@ This result remains valid only while the assumed torques are available and both 
 5. $\tau_w=G\tau_m=(20)(0.15)=3.0\,\mathrm{N\,m}$ and $F=\tau_w/r=3.0/0.06=50\,\mathrm N$.
 6. The wheel may need torque to accelerate its own inertia, the drivetrain has losses and limits, and the contact may slip when the demanded traction exceeds the available friction.
 
-## References
+## References {.unnumbered}
 
 - Kevin M. Lynch and Frank C. Park, *Modern Robotics: Mechanics, Planning, and Control*, Chapter 8, especially Sections 8.1, 8.2, and 8.9.
 - Karl J. Åström and Richard M. Murray, *Feedback Systems: An Introduction for Scientists and Engineers*, Chapter 3.

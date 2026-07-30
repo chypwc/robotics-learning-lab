@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; ROS 2 Package Development Workflow – Foundations of Autonomous Robotics</title>
+<title>5&nbsp; ROS 2 Package Development Workflow – Foundations of Autonomous Robotics</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1b9b2d75225f2ddb203017a594491b92.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-9bd9da8a43abe092e8fe8e55ae6bd24f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-1b9b2d75225f2ddb203017a594491b92.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a1d20fa37053390459103e27c0ac45a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-bff5d7cd845da349ee67ccc3e95b2326.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-a1d20fa37053390459103e27c0ac45a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -142,6 +142,7 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -318,6 +319,7 @@ window.Quarto = {
     </a>
   </div>
         <div class="quarto-navbar-tools tools-end">
+    <a href="./Foundations-of-Autonomous-Robotics.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
           <div id="quarto-search" class="" title="Search"></div>
@@ -328,7 +330,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Part I - Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./05_ros2_packages_and_development_workflow.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./05_ros2_packages_and_development_workflow.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -343,19 +345,19 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Foundations of Autonomous Robotics</span></span></a>
+ <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./notation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Unified Notation and Conventions</span></span></a>
+ <span class="menu-text">Unified Notation and Conventions</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Part I - Motion, Mechanics, and Control</span></a>
+ <span class="menu-text">Motion, Mechanics, and Control</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -364,43 +366,49 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_linear_algebra_foundations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Linear Algebra Foundations</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Linear Algebra Foundations</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02_geometry_and_coordinate_frames.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03_kinematics_and_numerical_integration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04_kinematics_and_numerical_integration_implementation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05_ros2_packages_and_development_workflow.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./06_planar_rigid_body_motion_se2_and_twists.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_degrees_of_freedom_and_spatial_motion_so3_se3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08_dynamics_forces_and_actuator_limits.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></a>
   </div>
 </li>
       </ul>
@@ -415,22 +423,22 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#goal" id="toc-goal" class="nav-link active" data-scroll-target="#goal"><span class="header-section-number">7.1</span> Goal</a></li>
-  <li><a href="#step-1-source-the-ros-2-underlay" id="toc-step-1-source-the-ros-2-underlay" class="nav-link" data-scroll-target="#step-1-source-the-ros-2-underlay"><span class="header-section-number">7.2</span> Step 1 — Source the ROS 2 underlay</a></li>
-  <li><a href="#step-2-create-a-workspace" id="toc-step-2-create-a-workspace" class="nav-link" data-scroll-target="#step-2-create-a-workspace"><span class="header-section-number">7.3</span> Step 2 — Create a workspace</a></li>
-  <li><a href="#step-3-create-a-python-package" id="toc-step-3-create-a-python-package" class="nav-link" data-scroll-target="#step-3-create-a-python-package"><span class="header-section-number">7.4</span> Step 3 — Create a Python package</a></li>
-  <li><a href="#step-4-inspect-the-generated-package" id="toc-step-4-inspect-the-generated-package" class="nav-link" data-scroll-target="#step-4-inspect-the-generated-package"><span class="header-section-number">7.5</span> Step 4 — Inspect the generated package</a></li>
-  <li><a href="#step-5-complete-the-package-metadata" id="toc-step-5-complete-the-package-metadata" class="nav-link" data-scroll-target="#step-5-complete-the-package-metadata"><span class="header-section-number">7.6</span> Step 5 — Complete the package metadata</a></li>
-  <li><a href="#step-6-resolve-dependencies-and-run-fast-tests" id="toc-step-6-resolve-dependencies-and-run-fast-tests" class="nav-link" data-scroll-target="#step-6-resolve-dependencies-and-run-fast-tests"><span class="header-section-number">7.7</span> Step 6 — Resolve dependencies and run fast tests</a></li>
-  <li><a href="#step-7-build-and-install-the-package" id="toc-step-7-build-and-install-the-package" class="nav-link" data-scroll-target="#step-7-build-and-install-the-package"><span class="header-section-number">7.8</span> Step 7 — Build and install the package</a>
+  <li><a href="#goal" id="toc-goal" class="nav-link active" data-scroll-target="#goal">Goal</a></li>
+  <li><a href="#source-the-ros-2-underlay" id="toc-source-the-ros-2-underlay" class="nav-link" data-scroll-target="#source-the-ros-2-underlay"><span class="header-section-number">5.1</span> Source the ROS 2 underlay</a></li>
+  <li><a href="#create-a-workspace" id="toc-create-a-workspace" class="nav-link" data-scroll-target="#create-a-workspace"><span class="header-section-number">5.2</span> Create a workspace</a></li>
+  <li><a href="#create-a-python-package" id="toc-create-a-python-package" class="nav-link" data-scroll-target="#create-a-python-package"><span class="header-section-number">5.3</span> Create a Python package</a></li>
+  <li><a href="#inspect-the-generated-package" id="toc-inspect-the-generated-package" class="nav-link" data-scroll-target="#inspect-the-generated-package"><span class="header-section-number">5.4</span> Inspect the generated package</a></li>
+  <li><a href="#complete-the-package-metadata" id="toc-complete-the-package-metadata" class="nav-link" data-scroll-target="#complete-the-package-metadata"><span class="header-section-number">5.5</span> Complete the package metadata</a></li>
+  <li><a href="#resolve-dependencies-and-run-fast-tests" id="toc-resolve-dependencies-and-run-fast-tests" class="nav-link" data-scroll-target="#resolve-dependencies-and-run-fast-tests"><span class="header-section-number">5.6</span> Resolve dependencies and run fast tests</a></li>
+  <li><a href="#build-and-install-the-package" id="toc-build-and-install-the-package" class="nav-link" data-scroll-target="#build-and-install-the-package"><span class="header-section-number">5.7</span> Build and install the package</a>
   <ul class="collapse">
-  <li><a href="#what---symlink-install-changes" id="toc-what---symlink-install-changes" class="nav-link" data-scroll-target="#what---symlink-install-changes"><span class="header-section-number">7.8.1</span> What <code>--symlink-install</code> changes</a></li>
+  <li><a href="#what---symlink-install-changes" id="toc-what---symlink-install-changes" class="nav-link" data-scroll-target="#what---symlink-install-changes"><span class="header-section-number">5.7.1</span> What <code>--symlink-install</code> changes</a></li>
   </ul></li>
-  <li><a href="#step-8-source-the-overlay-and-run-the-package" id="toc-step-8-source-the-overlay-and-run-the-package" class="nav-link" data-scroll-target="#step-8-source-the-overlay-and-run-the-package"><span class="header-section-number">7.9</span> Step 8 — Source the overlay and run the package</a></li>
-  <li><a href="#step-9-run-tests-through-colcon" id="toc-step-9-run-tests-through-colcon" class="nav-link" data-scroll-target="#step-9-run-tests-through-colcon"><span class="header-section-number">7.10</span> Step 9 — Run tests through <code>colcon</code></a></li>
-  <li><a href="#step-10-repeat-the-daily-development-loop" id="toc-step-10-repeat-the-daily-development-loop" class="nav-link" data-scroll-target="#step-10-repeat-the-daily-development-loop"><span class="header-section-number">7.11</span> Step 10 — Repeat the daily development loop</a></li>
-  <li><a href="#common-failure-checks" id="toc-common-failure-checks" class="nav-link" data-scroll-target="#common-failure-checks"><span class="header-section-number">7.12</span> Common failure checks</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">7.13</span> References</a></li>
+  <li><a href="#source-the-overlay-and-run-the-package" id="toc-source-the-overlay-and-run-the-package" class="nav-link" data-scroll-target="#source-the-overlay-and-run-the-package"><span class="header-section-number">5.8</span> Source the overlay and run the package</a></li>
+  <li><a href="#run-tests-through-colcon" id="toc-run-tests-through-colcon" class="nav-link" data-scroll-target="#run-tests-through-colcon"><span class="header-section-number">5.9</span> Run tests through <code>colcon</code></a></li>
+  <li><a href="#repeat-the-daily-development-loop" id="toc-repeat-the-daily-development-loop" class="nav-link" data-scroll-target="#repeat-the-daily-development-loop"><span class="header-section-number">5.10</span> Repeat the daily development loop</a></li>
+  <li><a href="#common-failure-checks" id="toc-common-failure-checks" class="nav-link" data-scroll-target="#common-failure-checks">Common failure checks</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -438,9 +446,9 @@ window.Quarto = {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Part I - Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./05_ros2_packages_and_development_workflow.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./05_ros2_packages_and_development_workflow.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></h1>
+<h1 class="title"><span id="sec-ros2-package-development-workflow" class="quarto-section-identifier"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span></h1>
 </div>
 
 
@@ -457,14 +465,14 @@ window.Quarto = {
 </header>
 
 
-<section id="goal" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="goal"><span class="header-section-number">7.1</span> Goal</h2>
+<section id="goal" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="goal">Goal</h2>
 <p>This workflow creates, builds, runs, and tests a small ROS 2 Python package from scratch. It uses <code>my_robot_package</code> as an example package name and <code>my_node</code> as an example executable name; replace them in a real project.</p>
 <p>A <strong>workspace</strong> holds packages developed and built together. A <strong>ROS 2 package</strong> combines source code with the metadata needed for building, installing, and discovery. An <strong>executable</strong> is a program installed by a package and started with <code>ros2 run</code>.</p>
 <p>The generated <code>my_node</code> executable only prints a message. It demonstrates the package workflow but does not yet communicate with other ROS 2 nodes.</p>
 </section>
-<section id="step-1-source-the-ros-2-underlay" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="step-1-source-the-ros-2-underlay"><span class="header-section-number">7.2</span> Step 1 — Source the ROS 2 underlay</h2>
+<section id="source-the-ros-2-underlay" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="source-the-ros-2-underlay"><span class="header-section-number">5.1</span> Source the ROS 2 underlay</h2>
 <p>For Zsh, run:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode zsh code-with-copy"><code class="sourceCode zsh"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> /opt/ros/jazzy/setup.zsh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>For Bash, run:</p>
@@ -478,8 +486,8 @@ window.Quarto = {
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">command</span> <span class="at">-v</span> colcon</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The expected observations are <code>jazzy</code> and executable paths for <code>ros2</code> and <code>colcon</code>.</p>
 </section>
-<section id="step-2-create-a-workspace" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="step-2-create-a-workspace"><span class="header-section-number">7.3</span> Step 2 — Create a workspace</h2>
+<section id="create-a-workspace" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="create-a-workspace"><span class="header-section-number">5.2</span> Create a workspace</h2>
 <p>For a new standalone workspace, run:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode zsh code-with-copy"><code class="sourceCode zsh"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> ~/ros_ws/src</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/ros_ws</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -491,8 +499,8 @@ window.Quarto = {
 └── log/       # Generated build and test records</code></pre>
 <p>Only <code>src/</code> exists initially. <code>colcon</code> creates the other directories. Edit <code>src/</code>, not the generated files in <code>build/</code>, <code>install/</code>, or <code>log/</code>.</p>
 </section>
-<section id="step-3-create-a-python-package" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="step-3-create-a-python-package"><span class="header-section-number">7.4</span> Step 3 — Create a Python package</h2>
+<section id="create-a-python-package" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="create-a-python-package"><span class="header-section-number">5.3</span> Create a Python package</h2>
 <p>From the workspace root, run:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode zsh code-with-copy"><code class="sourceCode zsh"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> src</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ros2</span> pkg create <span class="dt">\</span></span>
@@ -516,8 +524,8 @@ window.Quarto = {
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  robot_controller</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>The common build types are <code>ament_python</code> for Python with <code>setuptools</code> and <code>ament_cmake</code> for C++ with CMake.</p>
 </section>
-<section id="step-4-inspect-the-generated-package" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="step-4-inspect-the-generated-package"><span class="header-section-number">7.5</span> Step 4 — Inspect the generated package</h2>
+<section id="inspect-the-generated-package" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="inspect-the-generated-package"><span class="header-section-number">5.4</span> Inspect the generated package</h2>
 <pre class="text"><code>src/my_robot_package/
 ├── LICENSE
 ├── package.xml
@@ -573,8 +581,8 @@ window.Quarto = {
 </table>
 <p>The resource marker is intentionally empty. Its filename identifies the package.</p>
 </section>
-<section id="step-5-complete-the-package-metadata" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="step-5-complete-the-package-metadata"><span class="header-section-number">7.6</span> Step 5 — Complete the package metadata</h2>
+<section id="complete-the-package-metadata" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="complete-the-package-metadata"><span class="header-section-number">5.5</span> Complete the package metadata</h2>
 <p>Replace placeholder descriptions and maintainer details in <code>package.xml</code> and <code>setup.py</code>. Keep their package name, version, and licence consistent. The <code>package.xml</code> export tells <code>colcon</code> which build integration to use:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">export</span>&gt;</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">build_type</span>&gt;ament_python&lt;/<span class="kw">build_type</span>&gt;</span>
@@ -622,8 +630,8 @@ window.Quarto = {
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="dt">install_scripts</span><span class="ot">=</span><span class="st">$base/lib/my_robot_package</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Here, <code>$base</code> is the package installation prefix. <code>setup.cfg</code> specifies that executable scripts belong under <code>lib/my_robot_package</code>, where <code>ros2 run</code> looks for them. It does not create an executable by itself; the <code>console_scripts</code> entry does that.</p>
 </section>
-<section id="step-6-resolve-dependencies-and-run-fast-tests" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="step-6-resolve-dependencies-and-run-fast-tests"><span class="header-section-number">7.7</span> Step 6 — Resolve dependencies and run fast tests</h2>
+<section id="resolve-dependencies-and-run-fast-tests" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="resolve-dependencies-and-run-fast-tests"><span class="header-section-number">5.6</span> Resolve dependencies and run fast tests</h2>
 <p>Resolve dependencies declared by packages under <code>src/</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode zsh code-with-copy"><code class="sourceCode zsh"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rosdep</span> install <span class="dt">\</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--from-paths</span> src <span class="dt">\</span></span>
@@ -637,8 +645,8 @@ window.Quarto = {
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  src/my_robot_package/test <span class="at">-q</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Source-level tests provide fast feedback but do not verify ROS metadata or the installed layout. Continue only when they pass; the count and duration depend on the package.</p>
 </section>
-<section id="step-7-build-and-install-the-package" class="level2" data-number="7.8">
-<h2 data-number="7.8" class="anchored" data-anchor-id="step-7-build-and-install-the-package"><span class="header-section-number">7.8</span> Step 7 — Build and install the package</h2>
+<section id="build-and-install-the-package" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="build-and-install-the-package"><span class="header-section-number">5.7</span> Build and install the package</h2>
 <p>From the workspace root, run:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode zsh code-with-copy"><code class="sourceCode zsh"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">colcon</span> build <span class="dt">\</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--packages-select</span> my_robot_package <span class="dt">\</span></span>
@@ -669,8 +677,8 @@ window.Quarto = {
 <li>The installed <code>package.xml</code> supplies package metadata.</li>
 </ul>
 <p>ROS 2 needs this standard runtime layout to locate packages, executables, metadata, launch files, configuration, Python imports, and dependency environment hooks.</p>
-<section id="what---symlink-install-changes" class="level3" data-number="7.8.1">
-<h3 data-number="7.8.1" class="anchored" data-anchor-id="what---symlink-install-changes"><span class="header-section-number">7.8.1</span> What <code>--symlink-install</code> changes</h3>
+<section id="what---symlink-install-changes" class="level3" data-number="5.7.1">
+<h3 data-number="5.7.1" class="anchored" data-anchor-id="what---symlink-install-changes"><span class="header-section-number">5.7.1</span> What <code>--symlink-install</code> changes</h3>
 <p>Supported files are linked back to editable source rather than copied:</p>
 <pre class="text"><code>install/.../my_node.py
         ↓ symbolic link
@@ -679,8 +687,8 @@ src/my_robot_package/my_robot_package/my_node.py</code></pre>
 <p>Rebuild after changing <code>setup.py</code>, <code>setup.cfg</code>, <code>console_scripts</code>, installed data, dependencies, CMake configuration, or compiled C++ code. Rebuild after structural changes and before formal verification to avoid stale state.</p>
 </section>
 </section>
-<section id="step-8-source-the-overlay-and-run-the-package" class="level2" data-number="7.9">
-<h2 data-number="7.9" class="anchored" data-anchor-id="step-8-source-the-overlay-and-run-the-package"><span class="header-section-number">7.9</span> Step 8 — Source the overlay and run the package</h2>
+<section id="source-the-overlay-and-run-the-package" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="source-the-overlay-and-run-the-package"><span class="header-section-number">5.8</span> Source the overlay and run the package</h2>
 <p>After a successful build, source the script matching the current shell.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode zsh code-with-copy"><code class="sourceCode zsh"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> install/setup.zsh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> install/setup.bash</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -694,14 +702,14 @@ src/my_robot_package/my_robot_package/my_node.py</code></pre>
 <pre class="text"><code>Hi from my_robot_package.</code></pre>
 <p><code>ros2 pkg prefix</code> queries the ament resource index. <code>ros2 run</code> uses the first argument as the package name and the second as the executable name, then starts <code>lib/my_robot_package/my_node</code>.</p>
 </section>
-<section id="step-9-run-tests-through-colcon" class="level2" data-number="7.10">
-<h2 data-number="7.10" class="anchored" data-anchor-id="step-9-run-tests-through-colcon"><span class="header-section-number">7.10</span> Step 9 — Run tests through <code>colcon</code></h2>
+<section id="run-tests-through-colcon" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="run-tests-through-colcon"><span class="header-section-number">5.9</span> Run tests through <code>colcon</code></h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode zsh code-with-copy"><code class="sourceCode zsh"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">colcon</span> test <span class="at">--packages-select</span> my_robot_package</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">colcon</span> test-result <span class="at">--verbose</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>colcon test</code> runs the package’s configured tests and stores structured results under the build tree. <code>colcon test-result</code> aggregates them. A completed command is not necessarily successful; verification passes only when the summary reports no errors or failures.</p>
 </section>
-<section id="step-10-repeat-the-daily-development-loop" class="level2" data-number="7.11">
-<h2 data-number="7.11" class="anchored" data-anchor-id="step-10-repeat-the-daily-development-loop"><span class="header-section-number">7.11</span> Step 10 — Repeat the daily development loop</h2>
+<section id="repeat-the-daily-development-loop" class="level2" data-number="5.10">
+<h2 data-number="5.10" class="anchored" data-anchor-id="repeat-the-daily-development-loop"><span class="header-section-number">5.10</span> Repeat the daily development loop</h2>
 <p>From the workspace root, repeat:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode zsh code-with-copy"><code class="sourceCode zsh"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Edit source.</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vim</span> src/my_robot_package/my_robot_package/my_node.py</span>
@@ -725,8 +733,8 @@ src/my_robot_package/my_robot_package/my_node.py</code></pre>
 <span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="ex">colcon</span> test-result <span class="at">--verbose</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Use <code>source install/setup.bash</code> in Bash.</p>
 </section>
-<section id="common-failure-checks" class="level2" data-number="7.12">
-<h2 data-number="7.12" class="anchored" data-anchor-id="common-failure-checks"><span class="header-section-number">7.12</span> Common failure checks</h2>
+<section id="common-failure-checks" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="common-failure-checks">Common failure checks</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -766,8 +774,8 @@ src/my_robot_package/my_robot_package/my_node.py</code></pre>
 </tbody>
 </table>
 </section>
-<section id="references" class="level2" data-number="7.13">
-<h2 data-number="7.13" class="anchored" data-anchor-id="references"><span class="header-section-number">7.13</span> References</h2>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
 <ul>
 <li>Open Robotics, <a href="https://docs.ros.org/en/jazzy/How-To-Guides/Developing-a-ROS-2-Package.html">“Developing a ROS 2 package,”</a> <em>ROS 2 Jazzy Documentation</em>.</li>
 <li>Open Robotics, <a href="https://docs.ros.org/en/jazzy/How-To-Guides/Using-Python-Packages.html">“Using Python Packages with ROS 2,”</a> <em>ROS 2 Jazzy Documentation</em>.</li>
@@ -1194,12 +1202,12 @@ src/my_robot_package/my_robot_package/my_node.py</code></pre>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./04_kinematics_and_numerical_integration_implementation.html" class="pagination-link" aria-label="Differential-Drive Kinematics and Numerical Integration: Implementation">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./06_planar_rigid_body_motion_se2_and_twists.html" class="pagination-link" aria-label="Planar Rigid-Body Motion: $SE(2)$ and Twists">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

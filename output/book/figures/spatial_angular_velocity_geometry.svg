@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 410" role="img" aria-labelledby="title desc">
+  <title id="title">Angular velocity and the columns of a spatial orientation matrix</title>
+  <desc id="desc">The three columns of the orientation matrix meet at O. The highlighted first column r one runs from O to P one, while columns r two and r three are dashed. The projection of r one reaches C one on the angular-velocity direction. Radius rho one is perpendicular to angular velocity. The derivative of r one starts at P one and is tilted slightly left so that its projected direction is distinguishable from angular velocity. A right-angle marker remains at P one.</desc>
+  <defs>
+    <marker id="arrow-omega" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#2f8f6b"/></marker>
+    <marker id="arrow-column" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#7a7f84"/></marker>
+    <marker id="arrow-r1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#377fe5"/></marker>
+    <marker id="arrow-radius" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#d98218"/></marker>
+    <marker id="arrow-tangent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#d35f9f"/></marker>
+  </defs>
+
+  <rect width="720" height="410" fill="#fbfaf7"/>
+  <path class="other-column" d="M145 310L275 375" marker-end="url(#arrow-column)"/>
+  <path class="other-column" d="M145 310L65 365" marker-end="url(#arrow-column)"/>
+  <ellipse class="orbit" cx="275" cy="120" rx="230" ry="62" transform="rotate(34.4 275 120)"/>
+  <path class="omega-guide" d="M84 399L339 26"/>
+  <path class="omega" d="M145 310L328 42" marker-end="url(#arrow-omega)"/>
+  <path class="parallel" d="M145 310L275 120"/>
+  <path class="radius" d="M275 120L465 250" marker-end="url(#arrow-radius)"/>
+  <path class="r1" d="M145 310L465 250" marker-end="url(#arrow-r1)"/>
+  <path class="tangent-guide" d="M443 300L518 128"/>
+  <path class="tangent" d="M465 250L510 147" marker-end="url(#arrow-tangent)"/>
+
+  <path class="angle" d="M175 266A53 53 0 0 1 197 300"/>
+  <path class="right-angle" d="M264 136L280 147L291 131"/>
+  <path class="right-angle" d="M453 242L461 231L473 238"/>
+
+  <circle class="origin" cx="145" cy="310" r="5"/>
+  <circle class="projection" cx="275" cy="120" r="5"/>
+  <circle class="point" cx="465" cy="250" r="6"/>
+
+  <text x="119" y="337">O</text>
+  <text x="248" y="101">C<tspan baseline-shift="sub">1</tspan></text>
+  <text x="476" y="270">P<tspan baseline-shift="sub">1</tspan>(t)</text>
+  <text class="column-label" x="282" y="390"><tspan class="vector-symbol">r</tspan><tspan baseline-shift="sub">2</tspan>(t)</text>
+  <text class="column-label" x="30" y="383"><tspan class="vector-symbol">r</tspan><tspan baseline-shift="sub">3</tspan>(t)</text>
+  <text class="omega-label" x="343" y="50"><tspan class="vector-symbol">ω</tspan><tspan baseline-shift="sub">w</tspan></text>
+  <text class="parallel-label" x="179" y="197"><tspan class="vector-symbol">r</tspan><tspan baseline-shift="sub">1,∥</tspan></text>
+  <text class="radius-label" x="360" y="153">ρ<tspan baseline-shift="sub">1</tspan> = ‖<tspan class="vector-symbol">r</tspan><tspan baseline-shift="sub">1</tspan>‖ sin φ<tspan baseline-shift="sub">1</tspan></text>
+  <text class="r1-label" x="305" y="299"><tspan class="vector-symbol">r</tspan><tspan baseline-shift="sub">1</tspan>(t)</text>
+  <text class="tangent-label" x="520" y="151"><tspan class="vector-symbol">ṙ</tspan><tspan baseline-shift="sub">1</tspan> = <tspan class="vector-symbol">ω</tspan><tspan baseline-shift="sub">w</tspan> × <tspan class="vector-symbol">r</tspan><tspan baseline-shift="sub">1</tspan></text>
+  <text class="angle-label" x="203" y="264">φ<tspan baseline-shift="sub">1</tspan></text>
+  <text class="orbit-label" x="82" y="88">path of the tip of <tspan class="vector-symbol">r</tspan><tspan baseline-shift="sub">1</tspan></text>
+
+  <style>
+    text{fill:#222;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:400}
+    .other-column{fill:none;stroke:#7a7f84;stroke-width:2;stroke-dasharray:6 6}
+    .orbit{fill:none;stroke:#aeb3b7;stroke-width:1.6;stroke-dasharray:7 7}
+    .omega-guide{fill:none;stroke:#aeb3b7;stroke-width:1.5;stroke-dasharray:6 6}
+    .omega{fill:none;stroke:#2f8f6b;stroke-width:3.4}
+    .parallel{fill:none;stroke:#7a7f84;stroke-width:2;stroke-dasharray:6 6}
+    .radius{fill:none;stroke:#d98218;stroke-width:3.4}
+    .r1{fill:none;stroke:#377fe5;stroke-width:3.8}
+    .tangent-guide{fill:none;stroke:#d35f9f;stroke-width:1.6;stroke-dasharray:6 6;opacity:.75}
+    .tangent{fill:none;stroke:#d35f9f;stroke-width:3.8}
+    .angle,.right-angle{fill:none;stroke:#444;stroke-width:1.6}
+    .origin,.projection{fill:#333}.point{fill:#377fe5}
+    .vector-symbol{font-weight:700;font-style:italic}
+    .column-label,.parallel-label,.orbit-label{fill:#666}
+    .omega-label{fill:#236e53}.radius-label{fill:#a95f10}.r1-label{fill:#2868bd}.tangent-label{fill:#a83e7b}
+    .omega-label,.radius-label,.r1-label,.tangent-label,.angle-label,.column-label,.parallel-label{font-style:italic;paint-order:stroke;stroke:#fbfaf7;stroke-width:4;stroke-linejoin:round}
+    .orbit-label{font-size:15px}
+  </style>
+</svg>

@@ -6,6 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Chien-Hsiang Yeh">
+<meta name="dcterms.date" content="2026-07-30">
 
 <title>Foundations of Autonomous Robotics</title>
 <style>
@@ -45,9 +47,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1b9b2d75225f2ddb203017a594491b92.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-9bd9da8a43abe092e8fe8e55ae6bd24f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-1b9b2d75225f2ddb203017a594491b92.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a1d20fa37053390459103e27c0ac45a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-bff5d7cd845da349ee67ccc3e95b2326.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-a1d20fa37053390459103e27c0ac45a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -106,6 +108,7 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -282,6 +285,7 @@ window.Quarto = {
     </a>
   </div>
         <div class="quarto-navbar-tools tools-end">
+    <a href="./Foundations-of-Autonomous-Robotics.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
           <div id="quarto-search" class="" title="Search"></div>
@@ -292,7 +296,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Foundations of Autonomous Robotics</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -307,19 +311,19 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Foundations of Autonomous Robotics</span></span></a>
+ <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./notation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Unified Notation and Conventions</span></span></a>
+ <span class="menu-text">Unified Notation and Conventions</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Part I - Motion, Mechanics, and Control</span></a>
+ <span class="menu-text">Motion, Mechanics, and Control</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -328,43 +332,49 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_linear_algebra_foundations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Linear Algebra Foundations</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Linear Algebra Foundations</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02_geometry_and_coordinate_frames.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03_kinematics_and_numerical_integration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04_kinematics_and_numerical_integration_implementation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05_ros2_packages_and_development_workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./06_planar_rigid_body_motion_se2_and_twists.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_degrees_of_freedom_and_spatial_motion_so3_se3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08_dynamics_forces_and_actuator_limits.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></a>
   </div>
 </li>
       </ul>
@@ -379,10 +389,7 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#foundations-of-autonomous-robotics" id="toc-foundations-of-autonomous-robotics" class="nav-link active" data-scroll-target="#foundations-of-autonomous-robotics"><span class="header-section-number">1</span> Foundations of Autonomous Robotics</a>
-  <ul class="collapse">
-  <li><a href="#how-to-use-this-book" id="toc-how-to-use-this-book" class="nav-link" data-scroll-target="#how-to-use-this-book"><span class="header-section-number">1.1</span> How to use this book</a></li>
-  </ul></li>
+  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a></li>
   </ul>
 </nav>
     </div>
@@ -400,7 +407,19 @@ window.Quarto = {
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Chien-Hsiang Yeh </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">30 July 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -410,17 +429,12 @@ window.Quarto = {
 </header>
 
 
-<section id="foundations-of-autonomous-robotics" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Foundations of Autonomous Robotics</h1>
-<p>An autonomous robot must connect mathematical reasoning to physical action. Geometry describes where the robot and its surroundings are; mechanics explains how forces and motion interact; control turns desired behaviour into stable action; estimation and perception interpret uncertain measurements; planning compares possible futures; and software engineering joins these ideas into a dependable system.</p>
-<p>This book develops those foundations from first principles. Each topic begins with its physical or mathematical meaning, introduces notation when it is needed, derives the central relationships step by step, and connects the theory to autonomous-robot behaviour.</p>
-<section id="how-to-use-this-book" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="how-to-use-this-book"><span class="header-section-number">1.1</span> How to use this book</h2>
-<p>Read the chapters in order when a topic depends on earlier mathematics. Work through each derivation with pencil and paper, check the units at every step, and complete the retrieval questions before consulting the answers. Treat code as a tool for testing a model rather than a substitute for understanding it.</p>
-<p>The notation and conventions chapter defines the shared mathematical language used throughout the book. The linear algebra foundations chapter then develops the vector and matrix tools required by geometry, kinematics, estimation, optimisation, and control. When another source uses different symbols, translate them into the project conventions before combining results.</p>
+<section id="preface" class="level1 unnumbered">
+<h1 class="unnumbered">Preface</h1>
+<p>This book is my collection of learning notes for understanding intelligence, especially intelligence embodied in agents that perceive their environment, predict what may happen, choose actions, and act in the physical world. Writing the notes is part of the learning process: the aim is to make each idea precise enough that I can explain it, derive it, implement it, and test it.</p>
+<p>My main algorithmic interests are <strong>reinforcement learning</strong> and <strong>world models</strong>. Reinforcement learning studies how an agent can improve its decisions through interaction and feedback. A world model is an internal model that predicts how the environment or system may evolve, allowing an agent to evaluate possible actions before or while taking them. These algorithms depend on more fundamental ideas from mathematics, dynamics, control, estimation, planning, perception, and software engineering, so the notes build those foundations first.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -842,7 +856,7 @@ window.Quarto = {
   </div>
   <div class="nav-page nav-page-next">
       <a href="./notation.html" class="pagination-link" aria-label="Unified Notation and Conventions">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Unified Notation and Conventions</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text">Unified Notation and Conventions</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

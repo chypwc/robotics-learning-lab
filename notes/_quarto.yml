@@ -4,14 +4,21 @@ project:
 
 book:
   title: "Foundations of Autonomous Robotics"
+  subtitle: "Mathematics, Physics, Algorithms, and Engineering"
+  author: "Chien-Hsiang Yeh"
+  date: today
+  date-format: "D MMMM YYYY"
+
+  downloads:
+    - pdf
+
   navbar:
     search: true
     respect-user-color-scheme: true
-  subtitle: "Mathematics, Physics, Algorithms, and Engineering"
   chapters:
     - index.qmd
     - notation.qmd
-    - part: "Part I - Motion, Mechanics, and Control"
+    - part: "Motion, Mechanics, and Control"
       chapters:
         - 01_linear_algebra_foundations.qmd
         - 02_geometry_and_coordinate_frames.qmd
@@ -19,7 +26,8 @@ book:
         - 04_kinematics_and_numerical_integration_implementation.qmd
         - 05_ros2_packages_and_development_workflow.qmd
         - 06_planar_rigid_body_motion_se2_and_twists.qmd
-        - 08_dynamics_forces_and_actuator_limits.qmd
+        - 07_degrees_of_freedom_and_spatial_motion_so3_se3.qmd
+        
 
 lang: en-AU
 
@@ -28,11 +36,42 @@ format:
     theme:
       light: yeti
       dark: solar
+    css: styles.css
+    mainfont: "Roboto"
     toc: true
     code-copy: true
   pdf:
     documentclass: scrreprt
-    pdf-engine: lualatex
+    classoption:
+    - twoside
+    pdf-engine: pdflatex
+    fontsize: 12pt
+    fontenc: OT1
+    fontfamily: fix-cm
+    include-in-header:
+      text: |
+        \usepackage{pmboxdraw}
+        \usepackage[scaled=0.90]{roboto-mono}
+
+        % Roman-numbered page numbering
+        \AtBeginDocument{\pagenumbering{roman}}
+
+        % Headers
+        \usepackage[automark,headsepline]{scrlayer-scrpage}
+        \clearpairofpagestyles
+
+        \automark[section]{chapter}
+
+        % Left/even page: chapter
+        \lehead{\leftmark}
+
+        % Right/odd page: section
+        \rohead{\rightmark}
+
+        % Page number on every page, including chapter-opening pages
+        \cfoot*{\pagemark}
+
+        \setkomafont{pageheadfoot}{\small\sffamily}
     toc: true
     geometry:
       - top=22mm
@@ -41,3 +80,4 @@ format:
       - right=25mm
 
 number-sections: true
+number-depth: 3

@@ -1,6 +1,6 @@
-# ROS 2 Package Development Workflow
+# ROS 2 Package Development Workflow {#sec-ros2-package-development-workflow}
 
-## Goal
+## Goal {.unnumbered}
 
 This workflow creates, builds, runs, and tests a small ROS 2 Python package from scratch. It uses `my_robot_package` as an example package name and `my_node` as an example executable name; replace them in a real project.
 
@@ -8,7 +8,7 @@ A **workspace** holds packages developed and built together. A **ROS 2 package**
 
 The generated `my_node` executable only prints a message. It demonstrates the package workflow but does not yet communicate with other ROS 2 nodes.
 
-## Step 1 — Source the ROS 2 underlay
+## Source the ROS 2 underlay
 
 For Zsh, run:
 
@@ -38,7 +38,7 @@ command -v colcon
 
 The expected observations are `jazzy` and executable paths for `ros2` and `colcon`.
 
-## Step 2 — Create a workspace
+## Create a workspace
 
 For a new standalone workspace, run:
 
@@ -59,7 +59,7 @@ ros_ws/
 
 Only `src/` exists initially. `colcon` creates the other directories. Edit `src/`, not the generated files in `build/`, `install/`, or `log/`.
 
-## Step 3 — Create a Python package
+## Create a Python package
 
 From the workspace root, run:
 
@@ -95,7 +95,7 @@ ros2 pkg create \
 
 The common build types are `ament_python` for Python with `setuptools` and `ament_cmake` for C++ with CMake.
 
-## Step 4 — Inspect the generated package
+## Inspect the generated package
 
 ```text
 src/my_robot_package/
@@ -127,7 +127,7 @@ The outer `my_robot_package/` is the ROS package root. The inner directory is th
 
 The resource marker is intentionally empty. Its filename identifies the package.
 
-## Step 5 — Complete the package metadata
+## Complete the package metadata
 
 Replace placeholder descriptions and maintainer details in `package.xml` and `setup.py`. Keep their package name, version, and licence consistent. The `package.xml` export tells `colcon` which build integration to use:
 
@@ -189,7 +189,7 @@ install_scripts=$base/lib/my_robot_package
 
 Here, `$base` is the package installation prefix. `setup.cfg` specifies that executable scripts belong under `lib/my_robot_package`, where `ros2 run` looks for them. It does not create an executable by itself; the `console_scripts` entry does that.
 
-## Step 6 — Resolve dependencies and run fast tests
+## Resolve dependencies and run fast tests
 
 Resolve dependencies declared by packages under `src/`:
 
@@ -213,7 +213,7 @@ python3 -m pytest \
 
 Source-level tests provide fast feedback but do not verify ROS metadata or the installed layout. Continue only when they pass; the count and duration depend on the package.
 
-## Step 7 — Build and install the package
+## Build and install the package
 
 From the workspace root, run:
 
@@ -269,7 +269,7 @@ Python packages may use an `.egg-link` instead of the copied directory shown in 
 
 Rebuild after changing `setup.py`, `setup.cfg`, `console_scripts`, installed data, dependencies, CMake configuration, or compiled C++ code. Rebuild after structural changes and before formal verification to avoid stale state.
 
-## Step 8 — Source the overlay and run the package
+## Source the overlay and run the package
 
 After a successful build, source the script matching the current shell.
 
@@ -301,7 +301,7 @@ Hi from my_robot_package.
 
 `ros2 pkg prefix` queries the ament resource index. `ros2 run` uses the first argument as the package name and the second as the executable name, then starts `lib/my_robot_package/my_node`.
 
-## Step 9 — Run tests through `colcon`
+## Run tests through `colcon`
 
 ```zsh
 colcon test --packages-select my_robot_package
@@ -310,7 +310,7 @@ colcon test-result --verbose
 
 `colcon test` runs the package's configured tests and stores structured results under the build tree. `colcon test-result` aggregates them. A completed command is not necessarily successful; verification passes only when the summary reports no errors or failures.
 
-## Step 10 — Repeat the daily development loop
+## Repeat the daily development loop
 
 From the workspace root, repeat:
 
@@ -339,7 +339,7 @@ colcon test-result --verbose
 
 Use `source install/setup.bash` in Bash.
 
-## Common failure checks
+## Common failure checks {.unnumbered}
 
 | Symptom | Check |
 |---|---|
@@ -350,7 +350,7 @@ Use `source install/setup.bash` in Bash.
 | `ros2 run` cannot find the executable | Check `console_scripts` and `setup.cfg`, then rebuild and source |
 | Test status is unclear | Run `colcon test-result --verbose` |
 
-## References
+## References {.unnumbered}
 
 - Open Robotics, [“Developing a ROS 2 package,”](https://docs.ros.org/en/jazzy/How-To-Guides/Developing-a-ROS-2-Package.html) *ROS 2 Jazzy Documentation*.
 - Open Robotics, [“Using Python Packages with ROS 2,”](https://docs.ros.org/en/jazzy/How-To-Guides/Using-Python-Packages.html) *ROS 2 Jazzy Documentation*.

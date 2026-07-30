@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>9&nbsp; Dynamics, Forces, Torque, Friction, and Actuator Limits – Foundations of Autonomous Robotics</title>
+<title>8&nbsp; Dynamics, Forces, Torque, Friction, and Actuator Limits – Foundations of Autonomous Robotics</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -33,7 +33,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./06_planar_rigid_body_motion_se2_and_twists.html" rel="prev">
+<link href="./07_degrees_of_freedom_and_spatial_motion_so3_se3.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -45,9 +45,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1b9b2d75225f2ddb203017a594491b92.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-9bd9da8a43abe092e8fe8e55ae6bd24f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-1b9b2d75225f2ddb203017a594491b92.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a1d20fa37053390459103e27c0ac45a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-bff5d7cd845da349ee67ccc3e95b2326.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-a1d20fa37053390459103e27c0ac45a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -106,6 +106,7 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
@@ -282,6 +283,7 @@ window.Quarto = {
     </a>
   </div>
         <div class="quarto-navbar-tools tools-end">
+    <a href="./Foundations-of-Autonomous-Robotics.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
           <div id="quarto-search" class="" title="Search"></div>
@@ -292,7 +294,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Part I - Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./08_dynamics_forces_and_actuator_limits.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./08_dynamics_forces_and_actuator_limits.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -307,19 +309,19 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Foundations of Autonomous Robotics</span></span></a>
+ <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./notation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Unified Notation and Conventions</span></span></a>
+ <span class="menu-text">Unified Notation and Conventions</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Part I - Motion, Mechanics, and Control</span></a>
+ <span class="menu-text">Motion, Mechanics, and Control</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -328,43 +330,49 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01_linear_algebra_foundations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Linear Algebra Foundations</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Linear Algebra Foundations</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./02_geometry_and_coordinate_frames.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./03_kinematics_and_numerical_integration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./04_kinematics_and_numerical_integration_implementation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./05_ros2_packages_and_development_workflow.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./06_planar_rigid_body_motion_se2_and_twists.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span></a>
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_degrees_of_freedom_and_spatial_motion_so3_se3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./08_dynamics_forces_and_actuator_limits.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></a>
   </div>
 </li>
       </ul>
@@ -379,29 +387,29 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#why-this-chapter-matters" id="toc-why-this-chapter-matters" class="nav-link active" data-scroll-target="#why-this-chapter-matters"><span class="header-section-number">9.1</span> Why this chapter matters</a></li>
-  <li><a href="#prerequisites-and-assumptions" id="toc-prerequisites-and-assumptions" class="nav-link" data-scroll-target="#prerequisites-and-assumptions"><span class="header-section-number">9.2</span> Prerequisites and assumptions</a></li>
-  <li><a href="#from-kinematics-to-dynamics" id="toc-from-kinematics-to-dynamics" class="nav-link" data-scroll-target="#from-kinematics-to-dynamics"><span class="header-section-number">9.3</span> 1. From kinematics to dynamics</a>
+  <li><a href="#why-this-chapter-matters" id="toc-why-this-chapter-matters" class="nav-link active" data-scroll-target="#why-this-chapter-matters">Why this chapter matters</a></li>
+  <li><a href="#prerequisites-and-assumptions" id="toc-prerequisites-and-assumptions" class="nav-link" data-scroll-target="#prerequisites-and-assumptions">Prerequisites and assumptions</a></li>
+  <li><a href="#sec-dynamics-force-acceleration" id="toc-sec-dynamics-force-acceleration" class="nav-link" data-scroll-target="#sec-dynamics-force-acceleration"><span class="header-section-number">8.1</span> From kinematics to dynamics</a>
   <ul class="collapse">
-  <li><a href="#position-velocity-and-acceleration" id="toc-position-velocity-and-acceleration" class="nav-link" data-scroll-target="#position-velocity-and-acceleration"><span class="header-section-number">9.3.1</span> 1.1 Position, velocity, and acceleration</a></li>
-  <li><a href="#net-external-force" id="toc-net-external-force" class="nav-link" data-scroll-target="#net-external-force"><span class="header-section-number">9.3.2</span> 1.2 Net external force</a></li>
-  <li><a href="#newtons-second-law-and-the-forward-dynamics-equation" id="toc-newtons-second-law-and-the-forward-dynamics-equation" class="nav-link" data-scroll-target="#newtons-second-law-and-the-forward-dynamics-equation"><span class="header-section-number">9.3.3</span> 1.3 Newton’s second law and the forward-dynamics equation</a></li>
-  <li><a href="#constant-force-motion-over-one-interval" id="toc-constant-force-motion-over-one-interval" class="nav-link" data-scroll-target="#constant-force-motion-over-one-interval"><span class="header-section-number">9.3.4</span> 1.4 Constant-force motion over one interval</a></li>
-  <li><a href="#worked-example" id="toc-worked-example" class="nav-link" data-scroll-target="#worked-example"><span class="header-section-number">9.3.5</span> 1.5 Worked example</a></li>
-  <li><a href="#quick-test-a" id="toc-quick-test-a" class="nav-link" data-scroll-target="#quick-test-a"><span class="header-section-number">9.3.6</span> Quick test A</a></li>
-  <li><a href="#quick-test-a-answers-and-hints" id="toc-quick-test-a-answers-and-hints" class="nav-link" data-scroll-target="#quick-test-a-answers-and-hints"><span class="header-section-number">9.3.7</span> Quick test A answers and hints</a></li>
+  <li><a href="#position-velocity-and-acceleration" id="toc-position-velocity-and-acceleration" class="nav-link" data-scroll-target="#position-velocity-and-acceleration"><span class="header-section-number">8.1.1</span> Position, velocity, and acceleration</a></li>
+  <li><a href="#net-external-force" id="toc-net-external-force" class="nav-link" data-scroll-target="#net-external-force"><span class="header-section-number">8.1.2</span> Net external force</a></li>
+  <li><a href="#newtons-second-law-and-the-forward-dynamics-equation" id="toc-newtons-second-law-and-the-forward-dynamics-equation" class="nav-link" data-scroll-target="#newtons-second-law-and-the-forward-dynamics-equation"><span class="header-section-number">8.1.3</span> Newton’s second law and the forward-dynamics equation</a></li>
+  <li><a href="#constant-force-motion-over-one-interval" id="toc-constant-force-motion-over-one-interval" class="nav-link" data-scroll-target="#constant-force-motion-over-one-interval"><span class="header-section-number">8.1.4</span> Constant-force motion over one interval</a></li>
+  <li><a href="#worked-example" id="toc-worked-example" class="nav-link" data-scroll-target="#worked-example"><span class="header-section-number">8.1.5</span> Worked example</a></li>
+  <li><a href="#quick-test-a" id="toc-quick-test-a" class="nav-link" data-scroll-target="#quick-test-a">Quick test A</a></li>
+  <li><a href="#quick-test-a-answers-and-hints" id="toc-quick-test-a-answers-and-hints" class="nav-link" data-scroll-target="#quick-test-a-answers-and-hints">Quick test A answers and hints</a></li>
   </ul></li>
-  <li><a href="#from-motor-torque-to-wheel-traction" id="toc-from-motor-torque-to-wheel-traction" class="nav-link" data-scroll-target="#from-motor-torque-to-wheel-traction"><span class="header-section-number">9.4</span> 2. From motor torque to wheel traction</a>
+  <li><a href="#from-motor-torque-to-wheel-traction" id="toc-from-motor-torque-to-wheel-traction" class="nav-link" data-scroll-target="#from-motor-torque-to-wheel-traction"><span class="header-section-number">8.2</span> From motor torque to wheel traction</a>
   <ul class="collapse">
-  <li><a href="#torque-and-its-units" id="toc-torque-and-its-units" class="nav-link" data-scroll-target="#torque-and-its-units"><span class="header-section-number">9.4.1</span> 2.1 Torque and its units</a></li>
-  <li><a href="#the-wheel-rotational-balance" id="toc-the-wheel-rotational-balance" class="nav-link" data-scroll-target="#the-wheel-rotational-balance"><span class="header-section-number">9.4.2</span> 2.2 The wheel rotational balance</a></li>
-  <li><a href="#combining-the-two-drive-wheels" id="toc-combining-the-two-drive-wheels" class="nav-link" data-scroll-target="#combining-the-two-drive-wheels"><span class="header-section-number">9.4.3</span> 2.3 Combining the two drive wheels</a></li>
-  <li><a href="#ideal-gearing" id="toc-ideal-gearing" class="nav-link" data-scroll-target="#ideal-gearing"><span class="header-section-number">9.4.4</span> 2.4 Ideal gearing</a></li>
-  <li><a href="#worked-example-1" id="toc-worked-example-1" class="nav-link" data-scroll-target="#worked-example-1"><span class="header-section-number">9.4.5</span> 2.5 Worked example</a></li>
-  <li><a href="#quick-test-b" id="toc-quick-test-b" class="nav-link" data-scroll-target="#quick-test-b"><span class="header-section-number">9.4.6</span> Quick test B</a></li>
-  <li><a href="#quick-test-b-answers-and-hints" id="toc-quick-test-b-answers-and-hints" class="nav-link" data-scroll-target="#quick-test-b-answers-and-hints"><span class="header-section-number">9.4.7</span> Quick test B answers and hints</a></li>
+  <li><a href="#torque-and-its-units" id="toc-torque-and-its-units" class="nav-link" data-scroll-target="#torque-and-its-units"><span class="header-section-number">8.2.1</span> Torque and its units</a></li>
+  <li><a href="#the-wheel-rotational-balance" id="toc-the-wheel-rotational-balance" class="nav-link" data-scroll-target="#the-wheel-rotational-balance"><span class="header-section-number">8.2.2</span> The wheel rotational balance</a></li>
+  <li><a href="#combining-the-two-drive-wheels" id="toc-combining-the-two-drive-wheels" class="nav-link" data-scroll-target="#combining-the-two-drive-wheels"><span class="header-section-number">8.2.3</span> Combining the two drive wheels</a></li>
+  <li><a href="#ideal-gearing" id="toc-ideal-gearing" class="nav-link" data-scroll-target="#ideal-gearing"><span class="header-section-number">8.2.4</span> Ideal gearing</a></li>
+  <li><a href="#worked-example-1" id="toc-worked-example-1" class="nav-link" data-scroll-target="#worked-example-1"><span class="header-section-number">8.2.5</span> Worked example</a></li>
+  <li><a href="#quick-test-b" id="toc-quick-test-b" class="nav-link" data-scroll-target="#quick-test-b">Quick test B</a></li>
+  <li><a href="#quick-test-b-answers-and-hints" id="toc-quick-test-b-answers-and-hints" class="nav-link" data-scroll-target="#quick-test-b-answers-and-hints">Quick test B answers and hints</a></li>
   </ul></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9.5</span> References</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
     </div>
@@ -409,9 +417,9 @@ window.Quarto = {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Part I - Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./08_dynamics_forces_and_actuator_limits.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./08_dynamics_forces_and_actuator_limits.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></h1>
+<h1 class="title"><span id="sec-dynamics-actuator-limits" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></h1>
 </div>
 
 
@@ -428,20 +436,20 @@ window.Quarto = {
 </header>
 
 
-<section id="why-this-chapter-matters" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="why-this-chapter-matters"><span class="header-section-number">9.1</span> Why this chapter matters</h2>
+<section id="why-this-chapter-matters" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="why-this-chapter-matters">Why this chapter matters</h2>
 <p>Kinematics predicts how a robot’s pose changes when its velocity is known, but it does not explain how that velocity is produced or how quickly it can change. Dynamics connects motion to mass, rotational inertia, external forces, and external torques. This connection is necessary for physically meaningful simulation, actuator selection, acceleration limits, braking analysis, and feedback control.</p>
 <p>This chapter begins with straight-line motion because it exposes the central force-acceleration relation without rotational notation. Later sections extend the same reasoning to wheel torque, planar rotation, traction, friction, and actuator limits.</p>
 </section>
-<section id="prerequisites-and-assumptions" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="prerequisites-and-assumptions"><span class="header-section-number">9.2</span> Prerequisites and assumptions</h2>
-<p>The reader should understand vectors and units from the <a href="./01_linear_algebra_foundations.html">linear algebra foundations chapter</a>, coordinate frames from the <a href="./02_geometry_and_coordinate_frames.html">geometry chapter</a>, and derivatives and numerical integration from the <a href="./03_kinematics_and_numerical_integration.html">kinematics and numerical integration chapter</a>.</p>
+<section id="prerequisites-and-assumptions" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="prerequisites-and-assumptions">Prerequisites and assumptions</h2>
+<p>The reader should understand vectors and units from <a href="01_linear_algebra_foundations.html" class="quarto-xref"><span>Chapter 1</span></a>, coordinate frames from <a href="02_geometry_and_coordinate_frames.html" class="quarto-xref"><span>Chapter 2</span></a>, and derivatives and numerical integration from <a href="03_kinematics_and_numerical_integration.html" class="quarto-xref"><span>Chapter 3</span></a>.</p>
 <p>The first model treats the robot as a rigid body constrained to translate along a fixed straight line on level ground. The line is fixed in the world frame, so it is an inertial reference for the speeds considered here. The robot’s mass is constant, vertical motion is absent, and all forces are represented by their signed components along the line. Rotational motion, wheel inertia, slip, and changing actuator force are excluded from this first model.</p>
 </section>
-<section id="from-kinematics-to-dynamics" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="from-kinematics-to-dynamics"><span class="header-section-number">9.3</span> 1. From kinematics to dynamics</h2>
-<section id="position-velocity-and-acceleration" class="level3" data-number="9.3.1">
-<h3 data-number="9.3.1" class="anchored" data-anchor-id="position-velocity-and-acceleration"><span class="header-section-number">9.3.1</span> 1.1 Position, velocity, and acceleration</h3>
+<section id="sec-dynamics-force-acceleration" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="sec-dynamics-force-acceleration"><span class="header-section-number">8.1</span> From kinematics to dynamics</h2>
+<section id="position-velocity-and-acceleration" class="level3" data-number="8.1.1">
+<h3 data-number="8.1.1" class="anchored" data-anchor-id="position-velocity-and-acceleration"><span class="header-section-number">8.1.1</span> Position, velocity, and acceleration</h3>
 <p>Let <span class="math inline">\(t\in\mathbb R_{\geq0}\)</span> denote continuous time in seconds. Let <span class="math inline">\(s(t)\in\mathbb R\)</span> be the robot’s signed position along the fixed line, measured in metres. Increasing <span class="math inline">\(s\)</span> defines the positive direction.</p>
 <p>The signed longitudinal velocity is</p>
 <p><span class="math display">\[
@@ -464,8 +472,8 @@ a(t)
 <p>where <span class="math inline">\(a(t)\)</span> is measured in <span class="math inline">\(\mathrm{m\,s^{-2}}\)</span>. Positive acceleration means that velocity changes in the positive direction; it does not necessarily mean that the robot is moving forward. For example, a robot with <span class="math inline">\(v&lt;0\)</span> and <span class="math inline">\(a&gt;0\)</span> is moving in the negative direction while its speed decreases.</p>
 <p>Kinematics relates the quantities through <span class="math inline">\(\dot s=v\)</span>. A dynamic model adds an equation that determines <span class="math inline">\(\dot v=a\)</span> from physical causes.</p>
 </section>
-<section id="net-external-force" class="level3" data-number="9.3.2">
-<h3 data-number="9.3.2" class="anchored" data-anchor-id="net-external-force"><span class="header-section-number">9.3.2</span> 1.2 Net external force</h3>
+<section id="net-external-force" class="level3" data-number="8.1.2">
+<h3 data-number="8.1.2" class="anchored" data-anchor-id="net-external-force"><span class="header-section-number">8.1.2</span> Net external force</h3>
 <p>A force is an interaction that can change an object’s translational motion. Let <span class="math inline">\(n\in\mathbb N\)</span> be the number of external forces acting on the chosen robot system, and let <span class="math inline">\(F_j(t)\in\mathbb R\)</span> be the signed component of external force <span class="math inline">\(j\in\{1,\ldots,n\}\)</span> along the positive line direction. Each <span class="math inline">\(F_j\)</span> is measured in newtons, abbreviated <span class="math inline">\(\mathrm N\)</span>.</p>
 <p>The net external force is the algebraic sum</p>
 <p><span class="math display">\[
@@ -476,8 +484,8 @@ F_{\mathrm{net}}(t)
 <p>where <span class="math inline">\(F_{\mathrm{net}}(t)\in\mathbb R\)</span> is also measured in newtons. Forces pointing in the positive direction have positive components, while forces pointing in the negative direction have negative components. Internal forces between parts included inside the chosen robot system do not appear separately in this whole-system balance because they occur in equal-and-opposite pairs.</p>
 <p>For a driven ground robot, the forward force on the robot is the traction force exerted by the ground at the wheel contacts. Motor torque helps create this contact force, but motor torque and longitudinal force are different physical quantities and have different units.</p>
 </section>
-<section id="newtons-second-law-and-the-forward-dynamics-equation" class="level3" data-number="9.3.3">
-<h3 data-number="9.3.3" class="anchored" data-anchor-id="newtons-second-law-and-the-forward-dynamics-equation"><span class="header-section-number">9.3.3</span> 1.3 Newton’s second law and the forward-dynamics equation</h3>
+<section id="newtons-second-law-and-the-forward-dynamics-equation" class="level3" data-number="8.1.3">
+<h3 data-number="8.1.3" class="anchored" data-anchor-id="newtons-second-law-and-the-forward-dynamics-equation"><span class="header-section-number">8.1.3</span> Newton’s second law and the forward-dynamics equation</h3>
 <p>Let <span class="math inline">\(m\in\mathbb R_{&gt;0}\)</span> be the robot’s constant mass in kilograms. Newton’s second law for translation along the line is</p>
 <p><span class="math display">\[
 F_{\mathrm{net}}(t)=m a(t).
@@ -523,8 +531,8 @@ a
 \]</span></p>
 <p>This equation shows why a velocity command cannot change the physical velocity instantaneously: finite forces acting on positive mass produce finite acceleration.</p>
 </section>
-<section id="constant-force-motion-over-one-interval" class="level3" data-number="9.3.4">
-<h3 data-number="9.3.4" class="anchored" data-anchor-id="constant-force-motion-over-one-interval"><span class="header-section-number">9.3.4</span> 1.4 Constant-force motion over one interval</h3>
+<section id="constant-force-motion-over-one-interval" class="level3" data-number="8.1.4">
+<h3 data-number="8.1.4" class="anchored" data-anchor-id="constant-force-motion-over-one-interval"><span class="header-section-number">8.1.4</span> Constant-force motion over one interval</h3>
 <p>Suppose <span class="math inline">\(F_{\mathrm{net}}\)</span> and <span class="math inline">\(m\)</span> remain constant during the interval from sample time <span class="math inline">\(t_k\)</span> to <span class="math inline">\(t_{k+1}=t_k+\Delta t\)</span>, where <span class="math inline">\(\Delta t&gt;0\)</span> is measured in seconds. Define <span class="math inline">\(s_k\mathrel{:=}s(t_k)\)</span> and <span class="math inline">\(v_k\mathrel{:=}v(t_k)\)</span>. The acceleration is constant and equals</p>
 <p><span class="math display">\[
 a=\frac{F_{\mathrm{net}}}{m}.
@@ -557,8 +565,8 @@ s_k+v_k\Delta t+
 \]</span></p>
 <p>These updates are exact only under the stated one-dimensional, constant-mass, and constant-net-force assumptions.</p>
 </section>
-<section id="worked-example" class="level3" data-number="9.3.5">
-<h3 data-number="9.3.5" class="anchored" data-anchor-id="worked-example"><span class="header-section-number">9.3.5</span> 1.5 Worked example</h3>
+<section id="worked-example" class="level3" data-number="8.1.5">
+<h3 data-number="8.1.5" class="anchored" data-anchor-id="worked-example"><span class="header-section-number">8.1.5</span> Worked example</h3>
 <p>Consider a robot with mass <span class="math inline">\(m=20\,\mathrm{kg}\)</span>, forward traction magnitude <span class="math inline">\(F_{\mathrm{drive}}=30\,\mathrm N\)</span>, and backward resistance magnitude <span class="math inline">\(F_{\mathrm{resist}}=10\,\mathrm N\)</span>. Its net force and acceleration are</p>
 <p><span class="math display">\[
 F_{\mathrm{net}}
@@ -592,8 +600,8 @@ s_{k+1}
 \]</span></p>
 <p>The example predicts motion only along the fixed line. It does not yet explain how motor torque becomes traction, how much traction the ground can support, or how wheel and chassis rotation affect the result.</p>
 </section>
-<section id="quick-test-a" class="level3" data-number="9.3.6">
-<h3 data-number="9.3.6" class="anchored" data-anchor-id="quick-test-a"><span class="header-section-number">9.3.6</span> Quick test A</h3>
+<section id="quick-test-a" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="quick-test-a">Quick test A</h3>
 <ol type="1">
 <li>In one sentence each, distinguish kinematics from dynamics.</li>
 <li>Define <span class="math inline">\(s\)</span>, <span class="math inline">\(v\)</span>, <span class="math inline">\(a\)</span>, <span class="math inline">\(m\)</span>, and <span class="math inline">\(F_{\mathrm{net}}\)</span>, including units.</li>
@@ -603,8 +611,8 @@ s_{k+1}
 <li>Name two assumptions that must hold for the constant-force position update to be exact.</li>
 </ol>
 </section>
-<section id="quick-test-a-answers-and-hints" class="level3" data-number="9.3.7">
-<h3 data-number="9.3.7" class="anchored" data-anchor-id="quick-test-a-answers-and-hints"><span class="header-section-number">9.3.7</span> Quick test A answers and hints</h3>
+<section id="quick-test-a-answers-and-hints" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="quick-test-a-answers-and-hints">Quick test A answers and hints</h3>
 <ol type="1">
 <li>Kinematics relates motion variables without modelling their physical causes; dynamics relates forces and torques to acceleration and motion.</li>
 <li><span class="math inline">\(s\)</span> is signed position in metres, <span class="math inline">\(v=\dot s\)</span> is signed velocity in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>, <span class="math inline">\(a=\dot v\)</span> is signed acceleration in <span class="math inline">\(\mathrm{m\,s^{-2}}\)</span>, <span class="math inline">\(m&gt;0\)</span> is mass in kilograms, and <span class="math inline">\(F_{\mathrm{net}}\)</span> is the signed sum of external force components in newtons.</li>
@@ -615,10 +623,10 @@ s_{k+1}
 </ol>
 </section>
 </section>
-<section id="from-motor-torque-to-wheel-traction" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="from-motor-torque-to-wheel-traction"><span class="header-section-number">9.4</span> 2. From motor torque to wheel traction</h2>
-<section id="torque-and-its-units" class="level3" data-number="9.4.1">
-<h3 data-number="9.4.1" class="anchored" data-anchor-id="torque-and-its-units"><span class="header-section-number">9.4.1</span> 2.1 Torque and its units</h3>
+<section id="from-motor-torque-to-wheel-traction" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="from-motor-torque-to-wheel-traction"><span class="header-section-number">8.2</span> From motor torque to wheel traction</h2>
+<section id="torque-and-its-units" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="torque-and-its-units"><span class="header-section-number">8.2.1</span> Torque and its units</h3>
 <p>Torque, also called the moment of a force, is a vector quantity that represents the tendency of a force to rotate a body about a chosen point or axis. Torque is not a separate kind of force: it depends on the applied force and where that force acts.</p>
 <p>Choose a point <span class="math inline">\(O\)</span> on the rotation axis. Let <span class="math inline">\(\boldsymbol\rho\in\mathbb R^3\)</span> be the position vector from <span class="math inline">\(O\)</span> to the point where the force is applied, measured in metres, and let <span class="math inline">\(\mathbf F\in\mathbb R^3\)</span> be the applied force expressed in the same coordinate frame, measured in newtons. The torque about <span class="math inline">\(O\)</span> is</p>
 <p><span class="math display">\[
@@ -640,14 +648,14 @@ s_{k+1}
 \]</span></p>
 <p>The order of the cross product matters: <span class="math inline">\(\mathbf F\times\boldsymbol\rho=-\boldsymbol\tau_O\)</span>.</p>
 <p>The torque vector is perpendicular to the plane containing <span class="math inline">\(\boldsymbol\rho\)</span> and <span class="math inline">\(\mathbf F\)</span>. Its direction follows the right-hand rule: curl the fingers of the right hand from <span class="math inline">\(\boldsymbol\rho\)</span> toward <span class="math inline">\(\mathbf F\)</span> through the smaller angle, and the thumb points in the direction of <span class="math inline">\(\boldsymbol\tau_O\)</span>.</p>
-<p>Figure <a href="#fig-torque-vector-geometry" class="quarto-xref">Figure&nbsp;<span>9.1</span></a> shows the position vector, applied force, angle, perpendicular moment arm, and out-of-page torque direction in one geometric construction.</p>
+<p>Figure <a href="#fig-torque-vector-geometry" class="quarto-xref">Figure&nbsp;<span>8.1</span></a> shows the position vector, applied force, angle, perpendicular moment arm, and out-of-page torque direction in one geometric construction.</p>
 <div id="fig-torque-vector-geometry" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-torque-vector-geometry-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/torque_vector_geometry.svg" class="img-fluid figure-img" style="width:88.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-torque-vector-geometry-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.1: Vector geometry of torque about point <span class="math inline">\(O\)</span>.
+Figure&nbsp;8.1: Vector geometry of torque about point <span class="math inline">\(O\)</span>.
 </figcaption>
 </figure>
 </div>
@@ -689,14 +697,14 @@ L
 }.
 \]</span></p>
 <p>Thus <span class="math inline">\(\tau=FL\)</span> is not a different torque law; it is the magnitude of the cross-product law written using the perpendicular moment arm. If <span class="math inline">\(\boldsymbol\rho\)</span> and <span class="math inline">\(\mathbf F\)</span> are perpendicular, then <span class="math inline">\(\theta=\pi/2\)</span>, <span class="math inline">\(L=\rho\)</span>, and <span class="math inline">\(\tau=\rho F\)</span>. If they are parallel or antiparallel, then <span class="math inline">\(\sin\theta=0\)</span> and the torque is zero.</p>
-<p>Figure <a href="#fig-torque-angle-examples" class="quarto-xref">Figure&nbsp;<span>9.2</span></a> holds radius and force magnitude constant while changing only <span class="math inline">\(\theta\)</span>. The angled force produces less torque because only its component perpendicular to the radius contributes.</p>
+<p>Figure <a href="#fig-torque-angle-examples" class="quarto-xref">Figure&nbsp;<span>8.2</span></a> holds radius and force magnitude constant while changing only <span class="math inline">\(\theta\)</span>. The angled force produces less torque because only its component perpendicular to the radius contributes.</p>
 <div id="fig-torque-angle-examples" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-torque-angle-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="figures/torque_angle_examples.svg" class="img-fluid figure-img" style="width:100.0%">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-torque-angle-examples-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9.2: Torque magnitude for equal forces applied at <span class="math inline">\(90^\circ\)</span> and <span class="math inline">\(60^\circ\)</span>.
+Figure&nbsp;8.2: Torque magnitude for equal forces applied at <span class="math inline">\(90^\circ\)</span> and <span class="math inline">\(60^\circ\)</span>.
 </figcaption>
 </figure>
 </div>
@@ -709,8 +717,8 @@ Figure&nbsp;9.2: Torque magnitude for equal forces applied at <span class="math 
 <p>Positive or negative <span class="math inline">\(\tau_a\)</span> indicates which rotational direction the torque acts about the selected axis. Although torque and energy both have dimensions of force times distance, torque is a vector rotational action, whereas energy is a scalar quantity.</p>
 <p>For a wheel of radius <span class="math inline">\(r\)</span>, the position vector from the axle to the ground contact is perpendicular to the longitudinal traction force, so <span class="math inline">\(L=r\)</span> and the contact-torque magnitude is <span class="math inline">\(rF\)</span>. This geometry is the origin of the commonly used wheel relation <span class="math inline">\(F=\tau/r\)</span>, but applying it to a driven wheel requires the signed rotational balance derived next.</p>
 </section>
-<section id="the-wheel-rotational-balance" class="level3" data-number="9.4.2">
-<h3 data-number="9.4.2" class="anchored" data-anchor-id="the-wheel-rotational-balance"><span class="header-section-number">9.4.2</span> 2.2 The wheel rotational balance</h3>
+<section id="the-wheel-rotational-balance" class="level3" data-number="8.2.2">
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="the-wheel-rotational-balance"><span class="header-section-number">8.2.2</span> The wheel rotational balance</h3>
 <p>Let <span class="math inline">\(i\in\{L,R\}\)</span> identify the left or right drive wheel. Use the same sign convention as the kinematics chapter: <span class="math inline">\(\dot\phi_i&gt;0\)</span> means that wheel <span class="math inline">\(i\)</span> rotates in the direction that rolls the robot forward. Its angular acceleration is <span class="math inline">\(\ddot\phi_i=d\dot\phi_i/dt\)</span>, measured in <span class="math inline">\(\mathrm{rad\,s^{-2}}\)</span>.</p>
 <p>Let <span class="math inline">\(\tau_i\in\mathbb R\)</span> be the signed drive torque applied at the axle of wheel <span class="math inline">\(i\)</span>, measured in <span class="math inline">\(\mathrm{N\,m}\)</span>, with positive torque acting in the positive wheel-rotation direction. Let <span class="math inline">\(F_i\in\mathbb R\)</span> be the signed longitudinal force exerted by the ground on wheel <span class="math inline">\(i\)</span>, measured in newtons, with <span class="math inline">\(F_i&gt;0\)</span> pointing forward. This ground-contact force is called the wheel’s traction force.</p>
 <p>Let <span class="math inline">\(I_i\in\mathbb R_{&gt;0}\)</span> be the wheel’s mass moment of inertia about its axle, measured in <span class="math inline">\(\mathrm{kg\,m^2}\)</span>. A mass moment of inertia quantifies resistance to angular acceleration about a specified axis; it is the rotational counterpart of mass in translational dynamics.</p>
@@ -750,8 +758,8 @@ F_i\approx\frac{\tau_i}{r}
 \]</span></p>
 <p>which matches the unit of traction force.</p>
 </section>
-<section id="combining-the-two-drive-wheels" class="level3" data-number="9.4.3">
-<h3 data-number="9.4.3" class="anchored" data-anchor-id="combining-the-two-drive-wheels"><span class="header-section-number">9.4.3</span> 2.3 Combining the two drive wheels</h3>
+<section id="combining-the-two-drive-wheels" class="level3" data-number="8.2.3">
+<h3 data-number="8.2.3" class="anchored" data-anchor-id="combining-the-two-drive-wheels"><span class="header-section-number">8.2.3</span> Combining the two drive wheels</h3>
 <p>The motor torques are internal interactions when the robot, motors, and wheels are treated as one system. The longitudinal forces exerted by the ground are external forces, so they accelerate the whole robot. During straight forward driving, assume <span class="math inline">\(F_L\geq0\)</span> and <span class="math inline">\(F_R\geq0\)</span>. Their total nonnegative drive-force magnitude is</p>
 <p><span class="math display">\[
 F_{\mathrm{drive}}
@@ -764,7 +772,7 @@ F_{\mathrm{drive}}
 \approx
 \frac{\tau_L+\tau_R}{r}.
 \]</span></p>
-<p>If <span class="math inline">\(F_{\mathrm{resist}}\geq0\)</span> is the magnitude of all backward longitudinal resistance included in the model, the chassis acceleration from Section 1 becomes</p>
+<p>If <span class="math inline">\(F_{\mathrm{resist}}\geq0\)</span> is the magnitude of all backward longitudinal resistance included in the model, the chassis acceleration from <a href="#sec-dynamics-force-acceleration" class="quarto-xref"><span>Section 8.1</span></a> becomes</p>
 <p><span class="math display">\[
 a
 \approx
@@ -776,8 +784,8 @@ a
 \]</span></p>
 <p>This equation assumes straight motion and does not describe yaw acceleration caused by unequal wheel torques. It also assumes that the wheel-ground contacts can supply the calculated traction without slipping.</p>
 </section>
-<section id="ideal-gearing" class="level3" data-number="9.4.4">
-<h3 data-number="9.4.4" class="anchored" data-anchor-id="ideal-gearing"><span class="header-section-number">9.4.4</span> 2.4 Ideal gearing</h3>
+<section id="ideal-gearing" class="level3" data-number="8.2.4">
+<h3 data-number="8.2.4" class="anchored" data-anchor-id="ideal-gearing"><span class="header-section-number">8.2.4</span> Ideal gearing</h3>
 <p>An electric motor often rotates faster and produces less torque than the wheel requires, so a reduction gearbox is placed between the motor and wheel. Let <span class="math inline">\(G&gt;1\)</span> be the dimensionless reduction ratio, let <span class="math inline">\(\dot\phi_m\)</span> and <span class="math inline">\(\tau_m\)</span> be the motor-shaft angular speed and torque, and let <span class="math inline">\(\dot\phi_w\)</span> and <span class="math inline">\(\tau_w\)</span> be the wheel-side angular speed and torque. Choose the positive motor and wheel shaft directions so that positive motor rotation produces positive wheel rotation through the transmission.</p>
 <p>For an ideal lossless gearbox,</p>
 <p><span class="math display">\[
@@ -807,8 +815,8 @@ F
 \]</span></p>
 <p>This expression is a demanded traction force, not a guarantee that the ground contact can produce it. Gear losses, bearing friction, motor-current limits, wheel inertia, and the wheel-ground friction limit can all reduce the realised motion.</p>
 </section>
-<section id="worked-example-1" class="level3" data-number="9.4.5">
-<h3 data-number="9.4.5" class="anchored" data-anchor-id="worked-example-1"><span class="header-section-number">9.4.5</span> 2.5 Worked example</h3>
+<section id="worked-example-1" class="level3" data-number="8.2.5">
+<h3 data-number="8.2.5" class="anchored" data-anchor-id="worked-example-1"><span class="header-section-number">8.2.5</span> Worked example</h3>
 <p>Consider two identical drive wheels with radius <span class="math inline">\(r=0.10\,\mathrm m\)</span>. Suppose each wheel receives axle torque <span class="math inline">\(\tau_L=\tau_R=1.2\,\mathrm{N\,m}\)</span>, and neglect wheel rotational inertia and drivetrain losses. Each wheel’s predicted traction is</p>
 <p><span class="math display">\[
 F_L=F_R
@@ -835,8 +843,8 @@ a
 \]</span></p>
 <p>This result remains valid only while the assumed torques are available and both wheel contacts roll without longitudinal slip.</p>
 </section>
-<section id="quick-test-b" class="level3" data-number="9.4.6">
-<h3 data-number="9.4.6" class="anchored" data-anchor-id="quick-test-b"><span class="header-section-number">9.4.6</span> Quick test B</h3>
+<section id="quick-test-b" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="quick-test-b">Quick test B</h3>
 <ol type="1">
 <li>Define torque, moment arm, mass moment of inertia, and traction force, including units.</li>
 <li>Starting from <span class="math inline">\(\tau_i-rF_i=I_i\ddot\phi_i\)</span>, solve for <span class="math inline">\(F_i\)</span>.</li>
@@ -846,8 +854,8 @@ a
 <li>Why can the demanded force <span class="math inline">\(\tau_w/r\)</span> differ from the traction force realised on the ground?</li>
 </ol>
 </section>
-<section id="quick-test-b-answers-and-hints" class="level3" data-number="9.4.7">
-<h3 data-number="9.4.7" class="anchored" data-anchor-id="quick-test-b-answers-and-hints"><span class="header-section-number">9.4.7</span> Quick test B answers and hints</h3>
+<section id="quick-test-b-answers-and-hints" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="quick-test-b-answers-and-hints">Quick test B answers and hints</h3>
 <ol type="1">
 <li>Torque is a rotational action about an axis in <span class="math inline">\(\mathrm{N\,m}\)</span>; the moment arm is the perpendicular axis-to-line-of-action distance in metres; mass moment of inertia measures resistance to angular acceleration about an axis in <span class="math inline">\(\mathrm{kg\,m^2}\)</span>; and traction is the longitudinal ground-contact force on the wheel in newtons.</li>
 <li>Move <span class="math inline">\(I_i\ddot\phi_i\)</span> to the other side and divide by <span class="math inline">\(r&gt;0\)</span> to obtain <span class="math inline">\(F_i=(\tau_i-I_i\ddot\phi_i)/r\)</span>.</li>
@@ -858,8 +866,8 @@ a
 </ol>
 </section>
 </section>
-<section id="references" class="level2" data-number="9.5">
-<h2 data-number="9.5" class="anchored" data-anchor-id="references"><span class="header-section-number">9.5</span> References</h2>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
 <ul>
 <li>Kevin M. Lynch and Frank C. Park, <em>Modern Robotics: Mechanics, Planning, and Control</em>, Chapter 8, especially Sections 8.1, 8.2, and 8.9.</li>
 <li>Karl J. Åström and Richard M. Murray, <em>Feedback Systems: An Introduction for Scientists and Engineers</em>, Chapter 3.</li>
@@ -1284,8 +1292,8 @@ a
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./06_planar_rigid_body_motion_se2_and_twists.html" class="pagination-link" aria-label="Planar Rigid-Body Motion: $SE(2)$ and Twists">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span>
+      <a href="./07_degrees_of_freedom_and_spatial_motion_so3_se3.html" class="pagination-link" aria-label="Degrees of Freedom and Spatial Motion: $SO(3)$ and $SE(3)$">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

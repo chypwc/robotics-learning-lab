@@ -1,14 +1,14 @@
-# Differential-Drive Kinematics and Numerical Integration: Model and Derivation
+# Differential-Drive Kinematics and Numerical Integration: Model and Derivation {#sec-differential-drive-model}
 
-## Why this chapter matters
+## Why this chapter matters {.unnumbered}
 
 Kinematics describes motion without asking which forces or torques produce it. For a differential-drive robot, kinematics connects wheel angular speeds to the time evolution of position and heading. Numerical integration converts this continuous-time model into sampled updates used by simulation, odometry, planning, and control.
 
 This chapter develops that chain in four steps: define planar pose and its derivative, derive the no-sideways-motion model, derive body velocity from wheel speeds, and compare exact constant-input motion with Forward Euler integration.
 
-## Prerequisites and assumptions
+## Prerequisites and assumptions {.unnumbered}
 
-The reader should understand vectors and matrices from the [linear algebra foundations chapter](01_linear_algebra_foundations.qmd), coordinate frames and rotations from the [geometry chapter](02_geometry_and_coordinate_frames.qmd), and elementary derivatives, integrals, sine, and cosine.
+The reader should understand vectors and matrices from @sec-linear-algebra-foundations, coordinate frames and rotations from @sec-geometry-coordinate-frames, and elementary derivatives, integrals, sine, and cosine.
 
 The system considered here is a differential-drive ground robot: a rigid chassis propelled by left and right drive wheels that are mounted on a common axle and can be driven independently. The robot operates on a stationary, level, rigid floor, and the model describes its motion as viewed from above. Any additional support hardware does not affect the ideal kinematic model.
 
@@ -31,9 +31,9 @@ Figure @fig-differential-drive-geometry summarizes the frames, wheel dimensions,
 
 ![Differential-drive robot geometry and ideal rolling constraints.](figures/differential_drive_geometry.svg){#fig-differential-drive-geometry width=95%}
 
-As a preview of the pure-rolling relation, $v_i=r\dot\phi_i$ for $i\in\{L,R\}$, where $v_i$ is the signed longitudinal ground speed of wheel $i$ and $\dot\phi_i$ is its signed angular speed. Section [2.1](#sec-wheel-speeds-body-motion) derives how the individual wheel speeds determine the body-forward speed $v$ and yaw rate $\omega$.
+As a preview of the pure-rolling relation, $v_i=r\dot\phi_i$ for $i\in\{L,R\}$, where $v_i$ is the signed longitudinal ground speed of wheel $i$ and $\dot\phi_i$ is its signed angular speed. @sec-wheel-speeds-body-motion derives how the individual wheel speeds determine the body-forward speed $v$ and yaw rate $\omega$.
 
-## 1. Planar pose and its derivative
+## Planar pose and its derivative
 
 Let $t\in\mathbb R_{\geq0}$ denote continuous time, measured in seconds. Define the planar robot pose by
 
@@ -78,7 +78,7 @@ $$
 
 where $v(t)\in\mathbb R$ is signed forward speed along $+x_b$, measured in $\mathrm{m\,s^{-1}}$, and $\omega(t)\in\mathbb R$ is signed yaw rate about $+z_b$, measured in $\mathrm{rad\,s^{-1}}$. Positive $\omega$ produces counter-clockwise rotation when viewed from above.
 
-### 1.1 Deriving the planar model
+### Deriving the planar model
 
 Because the ideal robot has no body-frame lateral velocity, its translational velocity expressed in frame $\{b\}$ is
 
@@ -145,7 +145,7 @@ $$
 
 Here, $\mathbf f$ is the kinematic state-derivative function: it maps current pose $\mathbf q$ and input $\mathbf u$ to instantaneous pose derivative $\dot{\mathbf q}$. The position rates depend on $\theta$ because the body forward direction changes relative to the world frame.
 
-### 1.2 The no-sideways-motion constraint
+### The no-sideways-motion constraint
 
 Define the axle-midpoint linear velocity expressed in the world frame by
 
@@ -280,7 +280,7 @@ This equation is a nonholonomic velocity constraint. It restricts the directions
 
 The distinction concerns instantaneous motion versus accumulated motion. At every instant, the axle midpoint translates only along the robot's current $x_b$-axis, but turning changes the direction of $x_b$ relative to the world. For example, a robot initially aligned with $+x_w$ can rotate by $\pi/2$, drive forward a distance $d>0$, and rotate back by $-\pi/2$. Its final heading equals its initial heading, yet it has acquired a world-frame $+y_w$ displacement of $d$. It never moved along its instantaneous $y_b$-axis; the net sideways displacement resulted from a sequence of allowed rotations and forward motions.
 
-### Quick test A: planar kinematics
+### Quick test A: planar kinematics {.unnumbered}
 
 1. Define every component of $\mathbf q=[x\;y\;\theta]^\mathsf T$, including its frame and units.
 2. Why do $\dot x$ and $\dot y$ depend on $\theta$, while $v$ does not?
@@ -288,7 +288,7 @@ The distinction concerns instantaneous motion versus accumulated motion. At ever
 4. If $v=1\,\mathrm{m\,s^{-1}}$ and $\theta=\pi/2\,\mathrm{rad}$, find $\dot x$ and $\dot y$.
 5. Does the no-sideways-motion constraint prevent a net sideways displacement? Explain.
 
-#### Answers and hints
+#### Answers and hints {.unnumbered}
 
 1. $x$ and $y$ are the world-frame position coordinates of $O_b$ in metres; $\theta$ is counter-clockwise body heading relative to the world frame in radians.
 2. $v$ is defined along the moving $x_b$-axis. Its world-frame components depend on the orientation of that axis.
@@ -296,7 +296,7 @@ The distinction concerns instantaneous motion versus accumulated motion. At ever
 4. $\dot x=0\,\mathrm{m\,s^{-1}}$ and $\dot y=1\,\mathrm{m\,s^{-1}}$.
 5. No. The constraint forbids instantaneous sideways velocity, but combined forward and turning motions can produce a sideways displacement.
 
-## 2. Differential-drive wheel kinematics
+## Differential-drive wheel kinematics
 
 Let $\phi_L(t),\phi_R(t)\in\mathbb R$ be the rotational positions of the left and right wheels about their axles at time $t$, measured in radians. The subscripts $L$ and $R$ identify the left and right wheels. These are rolling angles, not steering angles: the wheel planes remain fixed relative to the chassis.
 
@@ -354,7 +354,7 @@ $$
 
 The symbol $\mathrm{rad}$ is retained to communicate that $\phi$ is an angle, even though it contributes no independent physical dimension in the unit calculation.
 
-### 2.1 Relating wheel speeds to body motion {#sec-wheel-speeds-body-motion}
+### Relating wheel speeds to body motion {#sec-wheel-speeds-body-motion}
 
 The rigid-body point-velocity relation derived in the [geometry and coordinate-frames chapter](02_geometry_and_coordinate_frames.qmd) is
 
@@ -528,14 +528,14 @@ $$
 
 This opposite input-output direction is called the **body-to-wheel velocity mapping**, or the **inverse differential-drive velocity kinematics**. Its inputs are a desired body-forward speed $v$ and yaw rate $\omega$, and its outputs are the ideal left and right wheel angular speeds $\dot\phi_L$ and $\dot\phi_R$ required by the no-slip model. The word *inverse* means that this calculation reverses the wheel-to-body mapping; it does not mean that the robot is commanded to drive backwards. In a controller, the body-to-wheel mapping converts a desired chassis motion into wheel-speed commands, whereas the wheel-to-body mapping can convert measured wheel speeds into an estimate of chassis motion.
 
-### 2.2 Characteristic motions
+### Characteristic motions
 
 - If $\dot\phi_L=\dot\phi_R$, then $\omega=0$ and the robot moves straight.
 - If $\dot\phi_L=-\dot\phi_R$, then $v=0$ and the robot rotates about $O_b$.
 - If one wheel is stationary, the ideal robot follows a circle about that wheel contact point.
 - If the wheel speeds are unequal and not opposite, the robot follows an arc about an instantaneous centre; the signed turning radius is derived next.
 
-#### 2.2.1 Instantaneous centre of curvature and signed turning radius
+#### Instantaneous centre of curvature and signed turning radius
 
 Assume $\omega\neq0$ at time $t$. At that instant, the planar rigid-body motion can be regarded as rotation about a point $C$ in the plane whose instantaneous linear velocity is zero. This point is called the instantaneous centre of curvature (ICC). The body origin $O_b$ therefore moves instantaneously along a circular arc centred at $C$.
 
@@ -636,7 +636,7 @@ The quotient has units of metres because radians are dimensionless in dimensiona
 
 The symbol $R$ in this subsection is a scalar signed turning radius, not a rotation matrix.
 
-### Quick test B: wheel-to-body mapping
+### Quick test B: wheel-to-body mapping {.unnumbered}
 
 1. Define $\phi_L$, $\phi_R$, $\dot\phi_L$, $\dot\phi_R$, $r$, and $L$, including their units, and distinguish wheel angle from angular speed.
 2. Why is a radian dimensionless in an SI unit calculation, and why does $r\dot\phi$ have units of metres per second?
@@ -647,7 +647,7 @@ The symbol $R$ in this subsection is a scalar signed turning radius, not a rotat
 7. Define the ICC $C$, ordinary radius $\rho$, signed radius $R$, signed distance $\Delta\ell$, and heading change $\Delta\theta$. Starting from $\Delta\ell=R\Delta\theta$, derive $R=v/\omega$ and explain the signs for left and right turns.
 8. Name two physical effects that can make predicted and real motion disagree.
 
-#### Answers and hints
+#### Answers and hints {.unnumbered}
 
 1. $\phi_L$ and $\phi_R$ are unwrapped left and right wheel rotational positions in radians; $\dot\phi_L$ and $\dot\phi_R$ are their angular speeds in $\mathrm{rad\,s^{-1}}$; $r$ is effective wheel radius in metres; and $L$ is track width in metres.
 2. Radian measure is an arc-length-to-radius ratio, so its metre units cancel. Therefore, $r\dot\phi$ has units $\mathrm m\cdot\mathrm{rad\,s^{-1}}=\mathrm{m\,s^{-1}}$.
@@ -658,7 +658,7 @@ The symbol $R$ in this subsection is a scalar signed turning radius, not a rotat
 7. The ICC $C$ is the point about which the robot is instantaneously rotating. The radius $\rho=\operatorname{distance}(O_b,C)\geq0$ is an ordinary distance, while $R=+\rho$ for an ICC on the left and $R=-\rho$ for one on the right. The quantity $\Delta\ell$ is signed forward distance and $\Delta\theta$ is signed heading change. Dividing $\Delta\ell=R\Delta\theta$ by $\Delta t$ and taking the limit gives $v=R\omega$, hence $R=v/\omega$ for $\omega\neq0$. A forward left turn has $R>0$ and $\omega>0$; a forward right turn has $R<0$ and $\omega<0$.
 8. Examples include wheel slip, unequal wheel radii, tyre deformation, backlash, encoder error, an incorrect track width, and uneven ground.
 
-## 3. From velocity to a finite pose change
+## From velocity to a finite pose change
 
 The differential equation $\dot{\mathbf q}=\mathbf f(\mathbf q,\mathbf u)$ specifies instantaneous motion. A simulator or odometry system needs the pose after a finite interval.
 
@@ -672,7 +672,7 @@ $$
 
 The sampling interval $\Delta t$ is measured in seconds. Define $\mathbf q_k\mathrel{:=}\mathbf q(t_k)$ and assume that $v$ and $\omega$ remain constant on $[t_k,t_{k+1}]$. This is a zero-order-hold input assumption.
 
-### 3.1 Exact straight motion
+### Exact straight motion
 
 If $\omega=0$, the heading remains constant. Recall that 
 
@@ -702,7 +702,7 @@ y_{k+1}&=y_k+v\Delta t\sin\theta_k,\\
 }
 $$
 
-### 3.2 Exact constant-curvature motion
+### Exact constant-curvature motion
 
 If $\omega\neq0$, let $\tau\in[0,\Delta t]$ denote elapsed time within the interval. Then
 
@@ -816,7 +816,7 @@ $$
 
 Software may use an explicit straight-motion case when $|\omega|$ is below a declared tolerance or a sinc implementation designed to remain numerically stable near zero. Directly computing $\sin z/z$ at $z=0$ would still divide by zero despite the function's well-defined limiting value.
 
-### Quick test C: exact finite motion
+### Quick test C: exact finite motion {.unnumbered}
 
 1. What does the zero-order-hold assumption say about $v$ and $\omega$?
 2. Why is $\theta(t_k+\tau)=\theta_k+\omega\tau$ when $\omega$ is constant?
@@ -825,7 +825,7 @@ Software may use an explicit straight-motion case when $|\omega|$ is below a dec
 5. Define the unnormalised sinc function and explain how it exposes the straight-motion limit.
 6. Why should software not directly evaluate either $v/\omega$ at $\omega=0$ or $\sin z/z$ at $z=0$?
 
-#### Answers and hints
+#### Answers and hints {.unnumbered}
 
 1. Both inputs remain constant throughout the sample interval.
 2. Integrating $\dot\theta=\omega$ for elapsed time $\tau$ gives heading change $\omega\tau$.
@@ -834,7 +834,7 @@ Software may use an explicit straight-motion case when $|\omega|$ is below a dec
 5. The unnormalised function is $\operatorname{sinc}(z)=\sin z/z$ for $z\neq0$ and $\operatorname{sinc}(0)=1$. Rewriting the update with $\operatorname{sinc}(\Delta\theta/2)$ makes the limit visible: as $\omega\to0$, $\Delta\theta\to0$, the sinc factor tends to $1$, and the midpoint heading tends to $\theta_k$.
 6. Both direct expressions would divide by zero even though their mathematical limits are well defined. Software must select the straight case or evaluate sinc with a numerically stable near-zero implementation.
 
-## 4. Numerical integration with Forward Euler
+## Numerical integration with Forward Euler
 
 For a general time-varying input, the exact solution may not have a convenient closed form. The integral form of the state equation over one interval is
 
@@ -849,7 +849,7 @@ $$
 
 Numerical integration approximates this integral using a finite number of evaluations of $\mathbf f$.
 
-### 4.1 Derivation from a Taylor expansion
+### Derivation from a Taylor expansion
 
 Assume $\mathbf q(t)$ is sufficiently differentiable near $t_k$. Its Taylor expansion is
 
@@ -888,7 +888,7 @@ $$
 
 Here, $v_k$ and $\omega_k$ are the body-forward speed and yaw rate used for sample $k$.
 
-### 4.2 Local and accumulated error
+### Local and accumulated error
 
 Let $E(\Delta t)\geq0$ denote a chosen error magnitude produced using step size $\Delta t>0$. For an exponent $p>0$, the statement
 
@@ -911,7 +911,7 @@ The exponent $p$ is the convergence order. The big-$O$ statement is a bound on h
 
 The local truncation error is the error introduced in one step when that step begins from the exact state. Forward Euler has local truncation error $O(\Delta t^2)$. Over a fixed total time interval, reducing $\Delta t$ creates more steps, and their errors accumulate. The resulting global error of Forward Euler is generally $O(\Delta t)$. In the sufficiently-small-step regime where the leading first-order term dominates, halving $\Delta t$ therefore approximately halves the global error; it does not usually quarter it.
 
-### 4.3 Worked comparison with the exact update
+### Worked comparison with the exact update
 
 Use the initial pose and constant input
 
@@ -970,7 +970,7 @@ $$
 
 For this example, $e_p\approx0.4863\,\mathrm m$. Smaller steps allow Euler to update the direction more often. When constant-input differential-drive motion is assumed, however, the exact arc update is available and more accurate.
 
-### 4.4 Choosing and checking an integration method
+### Choosing and checking an integration method
 
 - Use the exact straight-or-arc update when $v$ and $\omega$ are held constant and the ideal planar model is appropriate.
 - Use a numerical method when the input or model varies within the interval and no convenient exact solution is available.
@@ -978,7 +978,7 @@ For this example, $e_p\approx0.4863\,\mathrm m$. Smaller steps allow Euler to up
 - Compare a numerical trajectory with a known exact case before trusting it on a harder case.
 - Compute $\Delta t$ from the intended time source; do not silently assume perfectly periodic execution.
 
-### Quick test D: Forward Euler
+### Quick test D: Forward Euler {.unnumbered}
 
 1. State the Forward Euler update and define every symbol in it.
 2. In plain language, what approximation does Forward Euler make during one step?
@@ -986,7 +986,7 @@ For this example, $e_p\approx0.4863\,\mathrm m$. Smaller steps allow Euler to up
 4. What does the global-error statement $E(\Delta t)=O(\Delta t)$ mean, and what approximate change in global error should occur when a sufficiently small $\Delta t$ is halved over the same fixed total time interval?
 5. Give one exact verification case and one physical limitation for an odometry integrator.
 
-#### Answers and hints
+#### Answers and hints {.unnumbered}
 
 1. $\mathbf q_{k+1}^{\mathrm E}=\mathbf q_k^{\mathrm E}+\Delta t\,\mathbf f(\mathbf q_k^{\mathrm E},\mathbf u_k)$. The terms are the next approximate state, current approximate state, step duration, state-derivative function, and sampled input.
 2. It uses the derivative at the start as if that derivative remained constant across the interval.
@@ -994,37 +994,23 @@ For this example, $e_p\approx0.4863\,\mathrm m$. Smaller steps allow Euler to up
 4. The statement $E(\Delta t)=O(\Delta t)$ means that constants $C>0$ and $\Delta t_0>0$ exist such that $E(\Delta t)\leq C\Delta t$ whenever $0<\Delta t\leq\Delta t_0$. It describes first-order scaling as $\Delta t\to0$, not exact equality. In the regime where the leading first-order error dominates, $E(\Delta t)\approx K\Delta t$, so replacing $\Delta t$ by $\Delta t/2$ approximately halves the global error over the same fixed total time interval.
 5. Exact cases include constant straight motion, pure rotation, and constant-curvature motion. Physical limitations include slip, parameter error, encoder quantisation, and timing error.
 
-## 5. Engineering implications and failure modes
+## Engineering implications and failure modes
 
-### Frame inconsistency
+1. **Frame inconsistency:** The scalar $v$ is a body-frame forward speed, but $\dot x$ and $\dot y$ are world-frame components. Assigning $\dot x=v$ is valid only when $\theta=0$ modulo $2\pi$.
 
-The scalar $v$ is a body-frame forward speed, but $\dot x$ and $\dot y$ are world-frame components. Assigning $\dot x=v$ is valid only when $\theta=0$ modulo $2\pi$.
+2. **Sign-convention mismatch:** Swapping left and right wheels or using a clockwise-positive yaw convention reverses the predicted turn. Under this chapter convention, $\dot\phi_L<\dot\phi_R$ must produce positive counter-clockwise yaw.
 
-### Sign-convention mismatch
+3. **Unit mismatch:** Wheel speed may arrive in revolutions per minute while the model expects radians per second. Heading may arrive in degrees while trigonometric functions expect radians. Convert units at explicit interface boundaries.
 
-Swapping left and right wheels or using a clockwise-positive yaw convention reverses the predicted turn. Under this chapter convention, $\dot\phi_L<\dot\phi_R$ must produce positive counter-clockwise yaw.
+4. **Incorrect or variable sampling time:** Using an assumed $\Delta t$ when measurements arrive irregularly causes distance and angle errors. An update should validate timestamp differences and define behaviour for zero, negative, missing, or unreasonably large intervals.
 
-### Unit mismatch
+5. **Angle representation:** The equations allow $\theta$ to grow without bound, but an interface may require $\theta\in(-\pi,\pi]$. Wrapping changes the numerical representative, not the physical orientation. Heading differences require a wrap-aware calculation.
 
-Wheel speed may arrive in revolutions per minute while the model expects radians per second. Heading may arrive in degrees while trigonometric functions expect radians. Convert units at explicit interface boundaries.
+6. **Model error versus integration error:** Reducing $\Delta t$ reduces integration error but cannot correct an inaccurate physical model. If a wheel slips, even exact integration of the ideal no-slip equations gives the wrong physical trajectory.
 
-### Incorrect or variable sampling time
+7. **Encoder integration and drift:** Wheel encoders measure incremental rotation rather than global position. Integrating these increments estimates pose relative to an initial condition. Small systematic and random errors accumulate, so wheel odometry alone generally drifts and requires external sensing for long-term correction.
 
-Using an assumed $\Delta t$ when measurements arrive irregularly causes distance and angle errors. An update should validate timestamp differences and define behaviour for zero, negative, missing, or unreasonably large intervals.
-
-### Angle representation
-
-The equations allow $\theta$ to grow without bound, but an interface may require $\theta\in(-\pi,\pi]$. Wrapping changes the numerical representative, not the physical orientation. Heading differences require a wrap-aware calculation.
-
-### Model error versus integration error
-
-Reducing $\Delta t$ reduces integration error but cannot correct an inaccurate physical model. If a wheel slips, even exact integration of the ideal no-slip equations gives the wrong physical trajectory.
-
-### Encoder integration and drift
-
-Wheel encoders measure incremental rotation rather than global position. Integrating these increments estimates pose relative to an initial condition. Small systematic and random errors accumulate, so wheel odometry alone generally drifts and requires external sensing for long-term correction.
-
-## Cumulative chapter test
+## Cumulative chapter test {.unnumbered}
 
 1. Define $\mathbf q$, $\mathbf u$, $\mathbf f$, $r$, $L$, $\dot\phi_L$, $\dot\phi_R$, $t_k$, and $\Delta t$, including dimensions or units.
 2. Starting with ${}^{b}\mathbf v=[v\;0]^\mathsf T$, derive $\dot x=v\cos\theta$ and $\dot y=v\sin\theta$.
@@ -1036,7 +1022,7 @@ Wheel encoders measure incremental rotation rather than global position. Integra
 8. Explain why exact mathematical integration can still produce inaccurate physical odometry.
 9. Design three verification cases that separately reveal a wheel-order error, a yaw-sign error, and excessive integration error.
 
-### Cumulative answers and hints
+### Cumulative answers and hints {.unnumbered}
 
 1. $\mathbf q=[x\;y\;\theta]^\mathsf T$ is planar pose with units $\mathrm m,\mathrm m,\mathrm{rad}$; $\mathbf u=[v\;\omega]^\mathsf T$ contains forward speed and yaw rate in $\mathrm{m\,s^{-1}}$ and $\mathrm{rad\,s^{-1}}$; $\mathbf f$ maps pose and input to pose derivative; $r$ is wheel radius in metres; $L$ is track width in metres; $\dot\phi_L$ and $\dot\phi_R$ are wheel angular speeds in radians per second; $t_k$ is sample time in seconds; and $\Delta t=t_{k+1}-t_k$ is the positive integration interval in seconds.
 2. Premultiply ${}^{b}\mathbf v$ by $\mathbf R_{wb}(\theta)$ and read the two components.
@@ -1048,7 +1034,7 @@ Wheel encoders measure incremental rotation rather than global position. Integra
 8. Exact integration eliminates approximation for the stated model and input assumption; it cannot eliminate slip, parameter error, encoder error, timing error, or other model violations.
 9. For wheel order, command unequal known wheel speeds and check the turn direction. For yaw sign, command pure positive rotation and check that heading increases counter-clockwise. For integration error, compare with the exact constant-curvature solution at decreasing values of $\Delta t$ and verify convergence.
 
-## References
+## References {.unnumbered}
 
 - Kevin M. Lynch and Frank C. Park, *Modern Robotics: Mechanics, Planning, and Control*, Chapter 13, especially the wheeled-mobile-robot kinematic models and odometry discussion.
 - Steven M. LaValle, *Planning Algorithms*, Chapter 13, especially continuous-time differential models, velocity constraints, and wheeled-vehicle models.

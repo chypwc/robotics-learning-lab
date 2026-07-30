@@ -1,0 +1,2811 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-AU" xml:lang="en-AU"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>7&nbsp; Degrees of Freedom and Spatial Motion: SO(3) and SE(3) – Foundations of Autonomous Robotics</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./08_dynamics_forces_and_actuator_limits.html" rel="next">
+<link href="./06_planar_rigid_body_motion_se2_and_twists.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-a1d20fa37053390459103e27c0ac45a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-bff5d7cd845da349ee67ccc3e95b2326.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-a1d20fa37053390459103e27c0ac45a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Foundations of Autonomous Robotics</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+    <a href="./Foundations-of-Autonomous-Robotics.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./07_degrees_of_freedom_and_spatial_motion_so3_se3.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unified Notation and Conventions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Motion, Mechanics, and Control</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_linear_algebra_foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Linear Algebra Foundations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_geometry_and_coordinate_frames.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_kinematics_and_numerical_integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_kinematics_and_numerical_integration_implementation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_ros2_packages_and_development_workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_planar_rigid_body_motion_se2_and_twists.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_degrees_of_freedom_and_spatial_motion_so3_se3.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_dynamics_forces_and_actuator_limits.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#why-this-chapter-matters" id="toc-why-this-chapter-matters" class="nav-link active" data-scroll-target="#why-this-chapter-matters">Why this chapter matters</a></li>
+  <li><a href="#prerequisites-and-assumptions" id="toc-prerequisites-and-assumptions" class="nav-link" data-scroll-target="#prerequisites-and-assumptions">Prerequisites and assumptions</a></li>
+  <li><a href="#degrees-of-freedom-and-configuration-space" id="toc-degrees-of-freedom-and-configuration-space" class="nav-link" data-scroll-target="#degrees-of-freedom-and-configuration-space"><span class="header-section-number">7.1</span> Degrees of freedom and configuration space</a>
+  <ul class="collapse">
+  <li><a href="#configuration-is-a-complete-geometric-description" id="toc-configuration-is-a-complete-geometric-description" class="nav-link" data-scroll-target="#configuration-is-a-complete-geometric-description"><span class="header-section-number">7.1.1</span> Configuration is a complete geometric description</a></li>
+  <li><a href="#definition-of-degree-of-freedom" id="toc-definition-of-degree-of-freedom" class="nav-link" data-scroll-target="#definition-of-degree-of-freedom"><span class="header-section-number">7.1.2</span> Definition of degree of freedom</a></li>
+  <li><a href="#why-a-free-planar-rigid-body-has-three-degrees-of-freedom" id="toc-why-a-free-planar-rigid-body-has-three-degrees-of-freedom" class="nav-link" data-scroll-target="#why-a-free-planar-rigid-body-has-three-degrees-of-freedom"><span class="header-section-number">7.1.3</span> Why a free planar rigid body has three degrees of freedom</a></li>
+  <li><a href="#why-a-free-spatial-rigid-body-has-six-degrees-of-freedom" id="toc-why-a-free-spatial-rigid-body-has-six-degrees-of-freedom" class="nav-link" data-scroll-target="#why-a-free-spatial-rigid-body-has-six-degrees-of-freedom"><span class="header-section-number">7.1.4</span> Why a free spatial rigid body has six degrees of freedom</a></li>
+  <li><a href="#constraints-actuators-state-variables-and-degrees-of-freedom" id="toc-constraints-actuators-state-variables-and-degrees-of-freedom" class="nav-link" data-scroll-target="#constraints-actuators-state-variables-and-degrees-of-freedom"><span class="header-section-number">7.1.5</span> Constraints, actuators, state variables, and degrees of freedom</a></li>
+  <li><a href="#worked-examples" id="toc-worked-examples" class="nav-link" data-scroll-target="#worked-examples"><span class="header-section-number">7.1.6</span> Worked examples</a></li>
+  <li><a href="#assumptions-limitations-and-checks" id="toc-assumptions-limitations-and-checks" class="nav-link" data-scroll-target="#assumptions-limitations-and-checks"><span class="header-section-number">7.1.7</span> Assumptions, limitations, and checks</a></li>
+  </ul></li>
+  <li><a href="#quick-test-a-configuration-and-degrees-of-freedom" id="toc-quick-test-a-configuration-and-degrees-of-freedom" class="nav-link" data-scroll-target="#quick-test-a-configuration-and-degrees-of-freedom">Quick test A: configuration and degrees of freedom</a>
+  <ul class="collapse">
+  <li><a href="#answers-and-hints" id="toc-answers-and-hints" class="nav-link" data-scroll-target="#answers-and-hints">Answers and hints</a></li>
+  </ul></li>
+  <li><a href="#sec-so3-spatial-orientation" id="toc-sec-so3-spatial-orientation" class="nav-link" data-scroll-target="#sec-so3-spatial-orientation"><span class="header-section-number">7.2</span> Spatial orientation and <span class="math inline">\(SO(3)\)</span></a>
+  <ul class="collapse">
+  <li><a href="#sec-so3-rotation-construction" id="toc-sec-so3-rotation-construction" class="nav-link" data-scroll-target="#sec-so3-rotation-construction"><span class="header-section-number">7.2.1</span> Constructing a spatial rotation matrix</a></li>
+  <li><a href="#sec-so3-definition" id="toc-sec-so3-definition" class="nav-link" data-scroll-target="#sec-so3-definition"><span class="header-section-number">7.2.2</span> Rotation constraints and the definition of <span class="math inline">\(SO(3)\)</span></a></li>
+  <li><a href="#example-a-positive-quarter-turn-about-the-world-z_w-axis" id="toc-example-a-positive-quarter-turn-about-the-world-z_w-axis" class="nav-link" data-scroll-target="#example-a-positive-quarter-turn-about-the-world-z_w-axis"><span class="header-section-number">7.2.3</span> Example: a positive quarter-turn about the world <span class="math inline">\(z_w\)</span>-axis</a></li>
+  </ul></li>
+  <li><a href="#quick-test-b-spatial-orientation-and-so3" id="toc-quick-test-b-spatial-orientation-and-so3" class="nav-link" data-scroll-target="#quick-test-b-spatial-orientation-and-so3">Quick test B: spatial orientation and <span class="math inline">\(SO(3)\)</span></a>
+  <ul class="collapse">
+  <li><a href="#answers-and-hints-1" id="toc-answers-and-hints-1" class="nav-link" data-scroll-target="#answers-and-hints-1">Answers and hints</a></li>
+  </ul></li>
+  <li><a href="#sec-so3-axis-rotations-composition" id="toc-sec-so3-axis-rotations-composition" class="nav-link" data-scroll-target="#sec-so3-axis-rotations-composition"><span class="header-section-number">7.3</span> Coordinate-axis rotations and composition</a>
+  <ul class="collapse">
+  <li><a href="#sec-so3-active-axis-rotations" id="toc-sec-so3-active-axis-rotations" class="nav-link" data-scroll-target="#sec-so3-active-axis-rotations"><span class="header-section-number">7.3.1</span> Constructing coordinate-axis rotation matrices</a></li>
+  <li><a href="#sec-so3-composition-order" id="toc-sec-so3-composition-order" class="nav-link" data-scroll-target="#sec-so3-composition-order"><span class="header-section-number">7.3.2</span> Composition order: the rightmost rotation acts first</a></li>
+  <li><a href="#sec-so3-fixed-body-increments" id="toc-sec-so3-fixed-body-increments" class="nav-link" data-scroll-target="#sec-so3-fixed-body-increments"><span class="header-section-number">7.3.3</span> Fixed-frame and body-frame increments</a></li>
+  </ul></li>
+  <li><a href="#quick-test-c-coordinate-axis-rotations-and-composition" id="toc-quick-test-c-coordinate-axis-rotations-and-composition" class="nav-link" data-scroll-target="#quick-test-c-coordinate-axis-rotations-and-composition">Quick test C: coordinate-axis rotations and composition</a>
+  <ul class="collapse">
+  <li><a href="#answers-and-hints-2" id="toc-answers-and-hints-2" class="nav-link" data-scroll-target="#answers-and-hints-2">Answers and hints</a></li>
+  </ul></li>
+  <li><a href="#sec-so3-angular-velocity" id="toc-sec-so3-angular-velocity" class="nav-link" data-scroll-target="#sec-so3-angular-velocity"><span class="header-section-number">7.4</span> Angular velocity as the rate of orientation change</a>
+  <ul class="collapse">
+  <li><a href="#sec-so3-angular-velocity-definition" id="toc-sec-so3-angular-velocity-definition" class="nav-link" data-scroll-target="#sec-so3-angular-velocity-definition"><span class="header-section-number">7.4.1</span> From a finite turn to an instantaneous rate</a></li>
+  <li><a href="#sec-so3-cross-product-matrix" id="toc-sec-so3-cross-product-matrix" class="nav-link" data-scroll-target="#sec-so3-cross-product-matrix"><span class="header-section-number">7.4.2</span> Cross-product matrices and the orientation derivative</a></li>
+  </ul></li>
+  <li><a href="#quick-test-d-angular-velocity" id="toc-quick-test-d-angular-velocity" class="nav-link" data-scroll-target="#quick-test-d-angular-velocity">Quick test D: angular velocity</a>
+  <ul class="collapse">
+  <li><a href="#answers-and-hints-3" id="toc-answers-and-hints-3" class="nav-link" data-scroll-target="#answers-and-hints-3">Answers and hints</a></li>
+  </ul></li>
+  <li><a href="#sec-so3-axis-angle-exponential" id="toc-sec-so3-axis-angle-exponential" class="nav-link" data-scroll-target="#sec-so3-axis-angle-exponential"><span class="header-section-number">7.5</span> Finite rotations from axis–angle coordinates</a>
+  <ul class="collapse">
+  <li><a href="#the-problem-converting-a-rotation-rate-into-a-finite-turn" id="toc-the-problem-converting-a-rotation-rate-into-a-finite-turn" class="nav-link" data-scroll-target="#the-problem-converting-a-rotation-rate-into-a-finite-turn"><span class="header-section-number">7.5.1</span> The problem: converting a rotation rate into a finite turn</a></li>
+  <li><a href="#the-matrix-exponential" id="toc-the-matrix-exponential" class="nav-link" data-scroll-target="#the-matrix-exponential"><span class="header-section-number">7.5.2</span> The matrix exponential</a></li>
+  <li><a href="#deriving-rodrigues-rotation-formula" id="toc-deriving-rodrigues-rotation-formula" class="nav-link" data-scroll-target="#deriving-rodrigues-rotation-formula"><span class="header-section-number">7.5.3</span> Deriving Rodrigues’ rotation formula</a></li>
+  <li><a href="#check-rotation-about-the-world-z_w-axis" id="toc-check-rotation-about-the-world-z_w-axis" class="nav-link" data-scroll-target="#check-rotation-about-the-world-z_w-axis"><span class="header-section-number">7.5.4</span> Check: rotation about the world <span class="math inline">\(z_w\)</span>-axis</a></li>
+  <li><a href="#applying-a-constant-angular-velocity-over-a-time-interval" id="toc-applying-a-constant-angular-velocity-over-a-time-interval" class="nav-link" data-scroll-target="#applying-a-constant-angular-velocity-over-a-time-interval"><span class="header-section-number">7.5.5</span> Applying a constant angular velocity over a time interval</a></li>
+  </ul></li>
+  <li><a href="#quick-test-e-axisangle-coordinates-and-the-exponential-map" id="toc-quick-test-e-axisangle-coordinates-and-the-exponential-map" class="nav-link" data-scroll-target="#quick-test-e-axisangle-coordinates-and-the-exponential-map">Quick test E: axis–angle coordinates and the exponential map</a>
+  <ul class="collapse">
+  <li><a href="#answers-and-hints-4" id="toc-answers-and-hints-4" class="nav-link" data-scroll-target="#answers-and-hints-4">Answers and hints</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html">Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./07_degrees_of_freedom_and_spatial_motion_so3_se3.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-spatial-rigid-body-motion" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="why-this-chapter-matters" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="why-this-chapter-matters">Why this chapter matters</h2>
+<p>The preceding chapter described a rigid body constrained to a plane by three pose coordinates and represented its configuration by an element of <span class="math inline">\(SE(2)\)</span>. A robot operating freely in three-dimensional physical space can translate in three independent directions and rotate about three independent directions. This chapter develops the corresponding six-degree-of-freedom model, represents spatial orientation with <span class="math inline">\(SO(3)\)</span>, combines orientation and position with <span class="math inline">\(SE(3)\)</span>, and extends planar angular velocity and twists to three dimensions.</p>
+<p>These ideas are required for robot arms, aerial vehicles, underwater vehicles, cameras, lidar sensors, and any system whose orientation cannot be represented by one planar heading angle.</p>
+</section>
+<section id="prerequisites-and-assumptions" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="prerequisites-and-assumptions">Prerequisites and assumptions</h2>
+<p>The reader should understand vectors, matrices, rank, and constraints from <a href="01_linear_algebra_foundations.html" class="quarto-xref"><span>Chapter 1</span></a>; coordinate frames, cross products, and three-dimensional point transformations from <a href="02_geometry_and_coordinate_frames.html" class="quarto-xref"><span>Chapter 2</span></a>; and planar rigid transformations, tangent spaces, and twists from <a href="06_planar_rigid_body_motion_se2_and_twists.html" class="quarto-xref"><span>Chapter 6</span></a>.</p>
+<p>Physical space is modelled as three-dimensional Euclidean space. Every body considered here is rigid, so the distance between any two body-fixed points remains constant. Frames are right-handed and orthonormal. Position is measured in metres, time in seconds, and angles in radians.</p>
+</section>
+<section id="degrees-of-freedom-and-configuration-space" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="degrees-of-freedom-and-configuration-space"><span class="header-section-number">7.1</span> Degrees of freedom and configuration space</h2>
+<section id="configuration-is-a-complete-geometric-description" class="level3" data-number="7.1.1">
+<h3 data-number="7.1.1" class="anchored" data-anchor-id="configuration-is-a-complete-geometric-description"><span class="header-section-number">7.1.1</span> Configuration is a complete geometric description</h3>
+<p>A system’s <strong>configuration</strong> is a complete geometric specification of the position of every labelled material point of the system at one instant. A <em>material point</em> is a particular point fixed in the physical material of the body; its identity does not change as the body moves. Configuration describes where the system is, not how fast it is moving or what forces act on it.</p>
+<p>This definition can be written as a map. Let <span class="math inline">\(\mathcal B\)</span> denote the set of labelled material points belonging to one planar rigid body. After attaching frame <span class="math inline">\(\{b\}\)</span> to the body, each point <span class="math inline">\(P\in\mathcal B\)</span> has a constant body-frame coordinate <span class="math inline">\({}^{b}\mathbf p_P\in\mathbb R^2\)</span>. A configuration is a <strong>placement map</strong> <span class="math inline">\(\chi\)</span> that assigns a world-frame position to every material point:</p>
+<p><span class="math display">\[
+\chi:\mathcal B\rightarrow\mathbb R^2,
+\qquad
+P\longmapsto\chi(P)={}^{w}\mathbf p_P.
+\]</span></p>
+<p>The symbol <span class="math inline">\(\chi\)</span> is the Greek lowercase letter <em>chi</em>. Because the body is rigid, a valid placement must preserve the distance between every pair of material points:</p>
+<p><span class="math display">\[
+\left\|\chi(P)-\chi(Q)\right\|_2
+=
+\left\|{}^{b}\mathbf p_P-{}^{b}\mathbf p_Q\right\|_2
+\qquad
+\text{for every }P,Q\in\mathcal B.
+\]</span></p>
+<p>The set of all placement maps allowed by the system’s physical constraints is its <strong>configuration space</strong>, abbreviated <strong>C-space</strong> and denoted here by <span class="math inline">\(\mathcal C\)</span>. One configuration is therefore one element <span class="math inline">\(\chi\in\mathcal C\)</span>. Calling a configuration a <em>point in C-space</em> means one abstract element of this set; it does not mean one physical point of the rigid body or one point in the world.</p>
+<section id="why-one-transformation-represents-the-whole-rigid-body" class="level4">
+<h4 class="anchored" data-anchor-id="why-one-transformation-represents-the-whole-rigid-body">Why one transformation represents the whole rigid body</h4>
+<p>Listing <span class="math inline">\(\chi(P)\)</span> separately for every <span class="math inline">\(P\in\mathcal B\)</span> would be highly redundant. All body-frame point coordinates are fixed by rigidity, so a planar rotation <span class="math inline">\(\mathbf R_{wb}\in SO(2)\)</span> and the world position <span class="math inline">\({}^{w}\mathbf p_b\in\mathbb R^2\)</span> of the body-frame origin determine every value of the placement map:</p>
+<p><span class="math display">\[
+\boxed{
+\chi(P)
+=
+{}^{w}\mathbf p_P
+=
+\mathbf R_{wb}{}^{b}\mathbf p_P
++
+{}^{w}\mathbf p_b
+\qquad
+\text{for every }P\in\mathcal B
+}.
+\]</span></p>
+<p>The homogeneous transformation</p>
+<p><span class="math display">\[
+\mathbf T_{wb}
+=
+\begin{bmatrix}
+\mathbf R_{wb}&amp;{}^{w}\mathbf p_b\\
+\mathbf 0_2^\mathsf T&amp;1
+\end{bmatrix}
+\in SE(2)
+\]</span></p>
+<p>packages the same rotation and translation. For one selected point <span class="math inline">\(P\)</span>, the multiplication</p>
+<p><span class="math display">\[
+{}^{w}\overline{\mathbf p}_P
+=
+\mathbf T_{wb}{}^{b}\overline{\mathbf p}_P
+\]</span></p>
+<p>evaluates the placement map only at that point and returns its world-frame homogeneous coordinate. Applying the same <span class="math inline">\(\mathbf T_{wb}\)</span> to every <span class="math inline">\(P\in\mathcal B\)</span> produces the world positions of all the body’s material points and therefore specifies the complete configuration. The transformation is not itself the world coordinate of one point; it is the single rule that locates the entire rigid body.</p>
+<p>Every configuration uses the same fixed world frame <span class="math inline">\(\{w\}\)</span>. Two configurations <span class="math inline">\(\chi_1\)</span> and <span class="math inline">\(\chi_2\)</span> differ when their body-origin positions <span class="math inline">\({}^{w}\mathbf p_b^{(1)}\)</span> and <span class="math inline">\({}^{w}\mathbf p_b^{(2)}\)</span> differ, their rotations <span class="math inline">\(\mathbf R_{wb}^{(1)}\)</span> and <span class="math inline">\(\mathbf R_{wb}^{(2)}\)</span> differ, or both differ. They are the same configuration only when both the translation and rotation agree, equivalently when <span class="math inline">\(\mathbf T_{wb}^{(1)}=\mathbf T_{wb}^{(2)}\)</span>.</p>
+<p>Once the body frame has been fixed relative to the body, each orientation-preserving planar placement determines exactly one <span class="math inline">\(\mathbf T_{wb}\in SE(2)\)</span>, and each <span class="math inline">\(\mathbf T_{wb}\in SE(2)\)</span> determines exactly one such placement. The two sets are therefore in one-to-one correspondence, written</p>
+<p><span class="math display">\[
+\boxed{
+\mathcal C\cong SE(2)
+},
+\]</span></p>
+<p>where <span class="math inline">\(\cong\)</span> means that the two sets carry the same configuration information through this correspondence. Robotics texts consequently often identify the configuration space of a free planar rigid body with <span class="math inline">\(SE(2)\)</span> and write <span class="math inline">\(\mathcal C=SE(2)\)</span>. Here, an element of <span class="math inline">\(SE(2)\)</span> is being used as a representation of a complete body placement, even though the same matrix can also act as an operator that transforms point coordinates.</p>
+</section>
+<section id="configuration-coordinates-are-not-the-configuration-itself" class="level4">
+<h4 class="anchored" data-anchor-id="configuration-coordinates-are-not-the-configuration-itself">Configuration coordinates are not the configuration itself</h4>
+<p>For the planar rigid body, one convenient coordinate column is</p>
+<p><span class="math display">\[
+\mathbf q
+=
+\begin{bmatrix}
+x\\y\\\theta
+\end{bmatrix},
+\]</span></p>
+<p>where <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are the entries of <span class="math inline">\({}^{w}\mathbf p_b=[x\;y]^\mathsf T\)</span> and <span class="math inline">\(\theta\)</span> is the orientation of frame <span class="math inline">\(\{b\}\)</span> relative to frame <span class="math inline">\(\{w\}\)</span>. These three <strong>generalised coordinates</strong> construct the transformation representing the configuration:</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf q
+\longmapsto
+\mathbf T_{wb}(\mathbf q)
+=
+\begin{bmatrix}
+\cos\theta&amp;-\sin\theta&amp;x\\
+\sin\theta&amp;\cos\theta&amp;y\\
+0&amp;0&amp;1
+\end{bmatrix}
+\in SE(2)
+}.
+\]</span></p>
+<p>Thus, <span class="math inline">\(\chi\)</span> denotes the complete physical placement, <span class="math inline">\(\mathbf T_{wb}\)</span> represents that placement as a rigid transformation, and <span class="math inline">\(\mathbf q\)</span> is a coordinate description used to construct the transformation. These objects contain equivalent placement information once the world and body frames, axis directions, units, positive rotation direction, and transformation direction have been defined, but they have different mathematical types. In particular, <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\theta+2\pi n\)</span> for any integer <span class="math inline">\(n\)</span> construct the same rotation, so an unrestricted real-valued angle does not give a unique global coordinate for each configuration.</p>
+<p>A configuration space is different from a physical <strong>workspace</strong>. A workspace is a region of physical space that a robot or end-effector can reach. A C-space contains complete robot configurations. Different joint arrangements can place an end-effector at the same workspace point while representing different points in C-space.</p>
+</section>
+</section>
+<section id="definition-of-degree-of-freedom" class="level3" data-number="7.1.2">
+<h3 data-number="7.1.2" class="anchored" data-anchor-id="definition-of-degree-of-freedom"><span class="header-section-number">7.1.2</span> Definition of degree of freedom</h3>
+<p>A <strong>degree of freedom</strong>, abbreviated <strong>DOF</strong>, is one independent local direction in which a configuration can change while continuing to satisfy all configuration constraints. The number of degrees of freedom counts these independent allowable directions.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 41%">
+<col style="width: 55%">
+<col style="width: 3%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>System</th>
+<th>Independently chosen coordinates</th>
+<th style="text-align: right;">DOF</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Point constrained to a straight rail</td>
+<td>Distance <span class="math inline">\(s\)</span> along the rail</td>
+<td style="text-align: right;"><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td>Point free in a plane</td>
+<td>Position <span class="math inline">\((x,y)\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(2\)</span></td>
+</tr>
+<tr class="odd">
+<td>Door attached by an ideal hinge</td>
+<td>Hinge angle <span class="math inline">\(\theta\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td>Free planar rigid body</td>
+<td>Position and heading <span class="math inline">\((x,y,\theta)\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(3\)</span></td>
+</tr>
+<tr class="odd">
+<td>Free spatial rigid body</td>
+<td>Three position and three orientation coordinates</td>
+<td style="text-align: right;"><span class="math inline">\(6\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The door illustrates independence. Once its hinge angle is chosen, the positions of all its material points are determined. Recording the world coordinates of its corners would store many scalar values, but the hinge and rigidity constraints prevent those values from being varied independently.</p>
+<section id="mathematical-definition-from-allowable-small-changes" class="level4">
+<h4 class="anchored" data-anchor-id="mathematical-definition-from-allowable-small-changes">Mathematical definition from allowable small changes</h4>
+<p>Suppose a candidate configuration is represented by a variable column</p>
+<p><span class="math display">\[
+\mathbf z
+=
+\begin{bmatrix}
+z_1&amp;\cdots&amp;z_{n_v}
+\end{bmatrix}^{\mathsf T}
+\in\mathbb R^{n_v},
+\]</span></p>
+<p>where <span class="math inline">\(n_v\in\mathbb N_0\)</span> is the number of stored scalar variables. Valid configurations must satisfy <span class="math inline">\(n_c\in\mathbb N_0\)</span> scalar equality constraints collected in the mapping</p>
+<p><span class="math display">\[
+\mathbf g:\mathbb R^{n_v}\rightarrow\mathbb R^{n_c},
+\qquad
+\mathbf g(\mathbf z)=\mathbf 0_{n_c}.
+\]</span></p>
+<p>The <strong>constraint Jacobian</strong>, or constraint-derivative matrix, is <span class="math inline">\(\mathbf J_{\mathbf g}(\mathbf z)\in\mathbb R^{n_c\times n_v}\)</span> with entry</p>
+<p><span class="math display">\[
+\left[\mathbf J_{\mathbf g}(\mathbf z)\right]_{ij}
+\mathrel{:=}
+\frac{\partial g_i}{\partial z_j}.
+\]</span></p>
+<p>To describe an allowable local direction at a selected valid configuration <span class="math inline">\(\mathbf z_0\in\mathbb R^{n_v}\)</span>, let <span class="math inline">\(\mathbf z(s)\)</span> be any differentiable curve of valid configurations, where <span class="math inline">\(s\in\mathbb R\)</span> is a dimensionless curve parameter, <span class="math inline">\(\mathbf z(0)=\mathbf z_0\)</span>, and <span class="math inline">\(\mathbf g(\mathbf z(s))=\mathbf 0_{n_c}\)</span> for every <span class="math inline">\(s\)</span> near zero. Define the curve’s direction at <span class="math inline">\(\mathbf z_0\)</span> by <span class="math inline">\(\delta\mathbf z\mathrel{:=}\mathbf z'(0)\in\mathbb R^{n_v}\)</span>. Differentiating the constraint equation with respect to <span class="math inline">\(s\)</span> and applying the multivariable chain rule gives</p>
+<p><span class="math display">\[
+\boxed{
+\left.
+\frac{d}{ds}\mathbf g(\mathbf z(s))
+\right|_{s=0}
+=
+\mathbf J_{\mathbf g}(\mathbf z_0)\,\delta\mathbf z
+=
+\mathbf 0_{n_c}
+}.
+\]</span></p>
+<p>The set of all vectors satisfying this linear equation is the null space of the Jacobian evaluated at <span class="math inline">\(\mathbf z_0\)</span>:</p>
+<p><span class="math display">\[
+\boxed{
+\mathcal N\!\left(\mathbf J_{\mathbf g}(\mathbf z_0)\right)
+=
+\left\{
+\delta\mathbf z\in\mathbb R^{n_v}
+\;\middle|\;
+\mathbf J_{\mathbf g}(\mathbf z_0)\delta\mathbf z
+=
+\mathbf 0_{n_c}
+\right\}
+}.
+\]</span></p>
+<p>This is not the same set as the configuration constraint set <span class="math inline">\(\{\mathbf z\in\mathbb R^{n_v}\mid\mathbf g(\mathbf z)=\mathbf0_{n_c}\}\)</span>. The constraint set contains valid configurations and may be curved; the null space contains allowable infinitesimal changes at the one selected configuration <span class="math inline">\(\mathbf z_0\)</span> and is a linear space.</p>
+<p>At a <strong>regular configuration</strong>, meaning that the rank of the constraint Jacobian remains constant in a neighbourhood of <span class="math inline">\(\mathbf z_0\)</span>, these null-space vectors are exactly the allowable infinitesimal directions. Each independent null-space direction is one independent way to change the configuration locally, so</p>
+<p><span class="math display">\[
+\boxed{
+n_{\mathrm{dof}}(\mathbf z_0)
+\mathrel{:=}
+\dim\mathcal N\!\left(\mathbf J_{\mathbf g}(\mathbf z_0)\right)
+}.
+\]</span></p>
+<p>Applying the rank-nullity theorem from <a href="01_linear_algebra_foundations.html#sec-linear-algebra-rank-nullity" class="quarto-xref"><span>Section 1.2.2.1</span></a> gives</p>
+<p><span class="math display">\[
+\boxed{
+n_{\mathrm{dof}}(\mathbf z_0)
+=
+n_v-\operatorname{rank}\!\left(\mathbf J_{\mathbf g}(\mathbf z_0)\right)
+}.
+\]</span></p>
+<p>If the <span class="math inline">\(n_c\)</span> constraints are independent near <span class="math inline">\(\mathbf z_0\)</span>, then <span class="math inline">\(\operatorname{rank}(\mathbf J_{\mathbf g}(\mathbf z_0))=n_c\)</span>, and the familiar counting rule follows:</p>
+<p><span class="math display">\[
+\boxed{
+n_{\mathrm{dof}}
+=
+n_v-n_c
+}.
+\]</span></p>
+</section>
+<section id="example-a-point-constrained-to-a-circle" class="level4">
+<h4 class="anchored" data-anchor-id="example-a-point-constrained-to-a-circle">Example: a point constrained to a circle</h4>
+<p>Consider a point with Cartesian coordinate column <span class="math inline">\(\mathbf p=[x\;y]^\mathsf T\in\mathbb R^2\)</span> constrained to a circle of fixed radius <span class="math inline">\(r_c&gt;0\)</span> metres centred at the world origin. Its two stored variables satisfy</p>
+<p><span class="math display">\[
+g(\mathbf p)
+\mathrel{:=}
+x^2+y^2-r_c^2
+=
+0.
+\]</span></p>
+<p>Here, <span class="math inline">\(n_v=2\)</span> and there is one scalar constraint. Its constraint Jacobian is</p>
+<p><span class="math display">\[
+\mathbf J_g(\mathbf p)
+=
+\begin{bmatrix}
+2x&amp;2y
+\end{bmatrix}
+\in\mathbb R^{1\times2}.
+\]</span></p>
+<p>An allowable change <span class="math inline">\(\delta\mathbf p=[\delta x\;\delta y]^\mathsf T\)</span> must satisfy</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+2x&amp;2y
+\end{bmatrix}
+\begin{bmatrix}
+\delta x\\
+\delta y
+\end{bmatrix}
+=
+2x\,\delta x+2y\,\delta y
+=
+0.
+\]</span></p>
+<p>For this local calculation, <span class="math inline">\(\mathbf p=[x\;y]^\mathsf T\)</span> is one selected, fixed configuration on the circle. Thus, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are given constants, while the allowable change <span class="math inline">\(\delta\mathbf p\)</span> is the variable being determined. Because <span class="math inline">\(r_c&gt;0\)</span>, the selected point is not <span class="math inline">\(\mathbf0_2\)</span>, so the row <span class="math inline">\(\mathbf J_g(\mathbf p)=[2x\;2y]\)</span> is nonzero and has rank one. The rank-nullity formula therefore gives</p>
+<p><span class="math display">\[
+\boxed{
+n_{\mathrm{dof}}
+=
+\dim\mathcal N\!\left(\mathbf J_g(\mathbf p)\right)
+=
+2-1
+=
+1
+}.
+\]</span></p>
+<p>The equation <span class="math inline">\(x\,\delta x+y\,\delta y=0\)</span> also shows the actual allowable direction: <span class="math inline">\(\delta\mathbf p\)</span> must be perpendicular to the fixed radial vector <span class="math inline">\(\mathbf p\)</span>. Every vector perpendicular to <span class="math inline">\([x\;y]^\mathsf T\)</span> in <span class="math inline">\(\mathbb R^2\)</span> is a scalar multiple of <span class="math inline">\([-y\;x]^\mathsf T\)</span>, so</p>
+<p><span class="math display">\[
+\mathcal N\!\left(\mathbf J_g(\mathbf p)\right)
+=
+\left\{
+\alpha
+\begin{bmatrix}
+-y\\x
+\end{bmatrix}
+\;\middle|\;
+\alpha\in\mathbb R
+\right\},
+\]</span></p>
+<p>Here, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> remain fixed and only the dimensionless scalar <span class="math inline">\(\alpha\in\mathbb R\)</span> varies. Choosing <span class="math inline">\(\alpha\)</span> determines both components through <span class="math inline">\(\delta x=-\alpha y\)</span> and <span class="math inline">\(\delta y=\alpha x\)</span>. Substitution confirms that every such change satisfies the linearised constraint:</p>
+<p><span class="math display">\[
+\mathbf J_g(\mathbf p)\,\delta\mathbf p
+=
+\begin{bmatrix}
+2x&amp;2y
+\end{bmatrix}
+\alpha
+\begin{bmatrix}
+-y\\x
+\end{bmatrix}
+=
+\alpha(-2xy+2yx)
+=
+0.
+\]</span></p>
+<p>The single varying coefficient <span class="math inline">\(\alpha\)</span> explicitly represents the one local degree of freedom. At a different point on the circle, the fixed values of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> produce a different tangent direction, but the null space still has dimension one.</p>
+<p>The number of stored values is consequently not necessarily the number of degrees of freedom. For example, a spatial rotation matrix stores nine scalar entries, but its constraints leave only three independent rotational directions. Likewise, the circle uses two Cartesian entries even though its allowable-change space is one-dimensional.</p>
+<p>This counting rule applies directly to geometric, or <strong>holonomic</strong>, equality constraints that restrict configuration. Constraints imposed only on velocity require separate analysis and do not necessarily reduce the dimension of the configuration space.</p>
+</section>
+</section>
+<section id="why-a-free-planar-rigid-body-has-three-degrees-of-freedom" class="level3" data-number="7.1.3">
+<h3 data-number="7.1.3" class="anchored" data-anchor-id="why-a-free-planar-rigid-body-has-three-degrees-of-freedom"><span class="header-section-number">7.1.3</span> Why a free planar rigid body has three degrees of freedom</h3>
+<p>Select three non-collinear points <span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, and <span class="math inline">\(C\)</span> fixed to a planar rigid body. <em>Non-collinear</em> means that the points do not all lie on one line, so they form a non-degenerate triangle that visibly represents a two-dimensional rigid shape.</p>
+<p>Three points are convenient but not minimal: two distinct labelled points already determine planar position and orientation, whereas one point cannot reveal rotation about itself. The triangle is used here because its fixed pairwise distances make the rigidity constraints especially clear.</p>
+<p>If the three points could move independently, their planar coordinates would provide six scalar variables:</p>
+<p><span class="math display">\[
+(x_A,y_A,x_B,y_B,x_C,y_C)
+\in
+\mathbb R^6.
+\]</span></p>
+<p>Rigidity fixes the three pairwise distances</p>
+<p><span class="math display">\[
+\left\|\mathbf p_A-\mathbf p_B\right\|_2=d_{AB},
+\qquad
+\left\|\mathbf p_B-\mathbf p_C\right\|_2=d_{BC},
+\qquad
+\left\|\mathbf p_A-\mathbf p_C\right\|_2=d_{AC},
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf p_A,\mathbf p_B,\mathbf p_C\in\mathbb R^2\)</span> are the point-coordinate columns and the positive constants <span class="math inline">\(d_{AB}\)</span>, <span class="math inline">\(d_{BC}\)</span>, and <span class="math inline">\(d_{AC}\)</span> are the fixed distances measured in metres. For a non-degenerate triangle, these are three independent scalar constraints. Therefore,</p>
+<p><span class="math display">\[
+n_{\mathrm{dof}}
+=
+6-3
+=
+3.
+\]</span></p>
+<p>These three freedoms can be represented more conveniently by two translations and one rotation:</p>
+<p><span class="math display">\[
+\boxed{
+\text{free planar rigid body:}
+\qquad
+(x,y,\theta)
+\qquad
+\Longrightarrow
+\qquad
+3\ \mathrm{DOF}
+}.
+\]</span></p>
+<p>The fixed distances preserve the body’s shape; they do not prevent the complete triangle from translating or rotating as one rigid object.</p>
+</section>
+<section id="why-a-free-spatial-rigid-body-has-six-degrees-of-freedom" class="level3" data-number="7.1.4">
+<h3 data-number="7.1.4" class="anchored" data-anchor-id="why-a-free-spatial-rigid-body-has-six-degrees-of-freedom"><span class="header-section-number">7.1.4</span> Why a free spatial rigid body has six degrees of freedom</h3>
+<p>Allow the same three non-collinear body-fixed points to move in three-dimensional space. Each point has three Cartesian coordinates, so the three points provide nine scalar variables. Rigidity preserves the three pairwise distances <span class="math inline">\(d_{AB}\)</span>, <span class="math inline">\(d_{BC}\)</span>, and <span class="math inline">\(d_{AC}\)</span>, which are three independent constraints for a non-degenerate triangle. Therefore,</p>
+<p><span class="math display">\[
+n_{\mathrm{dof}}
+=
+9-3
+=
+6.
+\]</span></p>
+<p>The six freedoms are interpreted as three translational and three rotational freedoms:</p>
+<p><span class="math display">\[
+\boxed{
+\text{free spatial rigid body:}
+\quad
+\underbrace{(x,y,z)}_{3\text{ translations}}
+\quad+
+\underbrace{\text{spatial orientation}}_{3\text{ rotational DOF}}
+\quad
+\Longrightarrow
+\quad
+6\ \mathrm{DOF}
+}.
+\]</span></p>
+<p>The phrase <em>three rotational degrees of freedom</em> does not yet prescribe three particular angles. Euler angles, rotation vectors, rotation matrices, and unit quaternions are different representations of the same three-dimensional orientation freedom, each with different coordinate properties and limitations. The next learning block develops the rotation-matrix representation <span class="math inline">\(SO(3)\)</span> before introducing any minimal angle convention.</p>
+</section>
+<section id="constraints-actuators-state-variables-and-degrees-of-freedom" class="level3" data-number="7.1.5">
+<h3 data-number="7.1.5" class="anchored" data-anchor-id="constraints-actuators-state-variables-and-degrees-of-freedom"><span class="header-section-number">7.1.5</span> Constraints, actuators, state variables, and degrees of freedom</h3>
+<p>Degrees of freedom are often confused with other counts in a robot model. The following quantities answer different questions:</p>
+<ul>
+<li><strong>Configuration DOF:</strong> How many independent real coordinates are needed locally to specify where the system is?</li>
+<li><strong>Actuator count:</strong> How many independently commanded physical inputs does the system have?</li>
+<li><strong>Instantaneous mobility:</strong> How many independent velocity directions are allowed at one configuration?</li>
+<li><strong>State dimension:</strong> How many variables are required by a chosen dynamic model to predict future behaviour?</li>
+<li><strong>Representation size:</strong> How many numbers are stored by a particular coordinate representation?</li>
+</ul>
+<p>These counts need not be equal. A free spatial rigid body has six configuration degrees of freedom. A dynamic state that stores both its pose and velocity may require twelve local scalar coordinates. A rotation matrix stores nine numbers even though spatial orientation has only three degrees of freedom, because its entries satisfy orthonormality and determinant constraints.</p>
+<p>A differential-drive robot provides another important distinction. Its configuration is represented by <span class="math inline">\(\mathbf T_{wb}\in SE(2)\)</span>, its configuration space is modelled by <span class="math inline">\(SE(2)\)</span>, and it has three degrees of freedom described locally by <span class="math inline">\((x,y,\theta)\)</span>. Under ideal rolling, however, its instantaneous body velocity has only two independently commanded components, <span class="math inline">\(v\)</span> and <span class="math inline">\(\omega\)</span>, because sideways velocity is constrained to zero. The robot cannot move sideways instantaneously, but it can change all three pose coordinates through a sequence of forward and turning motions. Therefore, its two instantaneous control directions do not reduce its configuration space to two dimensions.</p>
+</section>
+<section id="worked-examples" class="level3" data-number="7.1.6">
+<h3 data-number="7.1.6" class="anchored" data-anchor-id="worked-examples"><span class="header-section-number">7.1.6</span> Worked examples</h3>
+<section id="a-hinged-door" class="level4">
+<h4 class="anchored" data-anchor-id="a-hinged-door">A hinged door</h4>
+<p>A free spatial door panel would have six degrees of freedom. An ideal revolute hinge permits only rotation about its hinge axis and prevents the other five independent motions. The constrained door therefore has</p>
+<p><span class="math display">\[
+n_{\mathrm{dof}}
+=
+6-5
+=
+1,
+\]</span></p>
+<p>which can be represented by one hinge angle <span class="math inline">\(\theta\in\mathbb R\)</span> measured in radians over the mechanically allowed interval.</p>
+</section>
+<section id="a-free-aerial-vehicle" class="level4">
+<h4 class="anchored" data-anchor-id="a-free-aerial-vehicle">A free aerial vehicle</h4>
+<p>Treat the vehicle as one rigid body with no geometric connection to the environment. Its configuration has six degrees of freedom: three position freedoms and three orientation freedoms. This statement does not imply that the vehicle can independently accelerate in all six directions at one instant. Its actuator arrangement and dynamics determine which accelerations can actually be produced.</p>
+</section>
+</section>
+<section id="assumptions-limitations-and-checks" class="level3" data-number="7.1.7">
+<h3 data-number="7.1.7" class="anchored" data-anchor-id="assumptions-limitations-and-checks"><span class="header-section-number">7.1.7</span> Assumptions, limitations, and checks</h3>
+<ul>
+<li><strong>Counting redundant constraints:</strong> Several equations may express the same geometric restriction. Check the rank of the constraint derivatives rather than counting written equations blindly.</li>
+<li><strong>Confusing coordinates with physical freedom:</strong> A rotation matrix has nine entries but only three rotational degrees of freedom. Identify the independent constraints imposed on a representation.</li>
+<li><strong>Confusing actuator count with DOF:</strong> A robot may be underactuated or may have redundant actuators. State whether a count refers to configuration, velocity, inputs, or state.</li>
+<li><strong>Applying <span class="math inline">\(n_v-n_c\)</span> at a singular configuration:</strong> Constraint rank can change at singularities. Verify that the constraints are regular in the region being analysed.</li>
+<li><strong>Treating a velocity constraint as a configuration constraint:</strong> Under ideal rolling, a wheel moves without sliding sideways at its ground contact. This condition is <strong>nonholonomic</strong> when it restricts the allowable velocities but cannot be replaced by an equivalent equation involving only the configuration. For example, a differential-drive robot cannot move sideways instantaneously, but turning and driving can still change all three coordinates <span class="math inline">\((x,y,\theta)\)</span>. The rolling constraint therefore reduces instantaneous mobility without reducing the dimension of its C-space; analyse valid configurations and valid velocities separately.</li>
+</ul>
+</section>
+</section>
+<section id="quick-test-a-configuration-and-degrees-of-freedom" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="quick-test-a-configuration-and-degrees-of-freedom">Quick test A: configuration and degrees of freedom</h2>
+<ol type="1">
+<li>Define configuration and configuration space using the placement map <span class="math inline">\(\chi\)</span>.</li>
+<li>For a planar rigid body, distinguish the placement map <span class="math inline">\(\chi\)</span>, the transformation <span class="math inline">\(\mathbf T_{wb}\)</span>, and the generalised-coordinate column <span class="math inline">\(\mathbf q\)</span>.</li>
+<li>Why does applying <span class="math inline">\(\mathbf T_{wb}\)</span> to one body-fixed point return only that point’s world coordinate, while the same transformation still represents the body’s complete configuration?</li>
+<li>Express the number of degrees of freedom using the null space and rank of a constraint Jacobian. Apply the definition to a point constrained to a circle.</li>
+<li>Use three non-collinear body-fixed points to explain why a free planar rigid body has three degrees of freedom.</li>
+<li>Why does an ideal hinged door have one degree of freedom rather than six?</li>
+<li>Distinguish configuration DOF, instantaneous mobility, actuator count, and state dimension.</li>
+<li>Why does a differential-drive robot have three configuration degrees of freedom even though its ideal body velocity is specified by only <span class="math inline">\(v\)</span> and <span class="math inline">\(\omega\)</span>?</li>
+<li>Under what condition is the counting rule <span class="math inline">\(n_{\mathrm{dof}}=n_v-n_c\)</span> locally valid?</li>
+</ol>
+<section id="answers-and-hints" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="answers-and-hints">Answers and hints</h3>
+<ol type="1">
+<li>A configuration is a placement map <span class="math inline">\(\chi\)</span> assigning a world position <span class="math inline">\(\chi(P)={}^{w}\mathbf p_P\)</span> to every labelled material point <span class="math inline">\(P\)</span> while satisfying the system’s geometric constraints. The configuration space <span class="math inline">\(\mathcal C\)</span> is the set of all allowed placement maps.</li>
+<li>The map <span class="math inline">\(\chi\)</span> is the complete placement of all body points. The matrix <span class="math inline">\(\mathbf T_{wb}\in SE(2)\)</span> represents that placement through one rotation and translation. The column <span class="math inline">\(\mathbf q=[x\;y\;\theta]^\mathsf T\)</span> is a set of generalised coordinates used to construct <span class="math inline">\(\mathbf T_{wb}\)</span>.</li>
+<li>Multiplication by one point coordinate evaluates the placement rule at that one point. Because every material point has a fixed body-frame coordinate, applying the same transformation to all such coordinates reconstructs the complete placement map; one transformation therefore represents the whole rigid body.</li>
+<li>At a selected valid configuration <span class="math inline">\(\mathbf z_0\)</span>, allowable small changes satisfy <span class="math inline">\(\mathbf J_{\mathbf g}(\mathbf z_0)\delta\mathbf z=\mathbf 0_{n_c}\)</span>, so <span class="math inline">\(n_{\mathrm{dof}}(\mathbf z_0)=\dim\mathcal N(\mathbf J_{\mathbf g}(\mathbf z_0))=n_v-\operatorname{rank}(\mathbf J_{\mathbf g}(\mathbf z_0))\)</span>. For <span class="math inline">\(g(x,y)=x^2+y^2-r_c^2\)</span>, the Jacobian <span class="math inline">\([2x\;\;2y]\)</span> has rank one on a circle with <span class="math inline">\(r_c&gt;0\)</span>, and its null space is spanned by <span class="math inline">\([-y\;x]^\mathsf T\)</span>, so <span class="math inline">\(n_{\mathrm{dof}}=2-1=1\)</span>.</li>
+<li>Three planar points provide six scalar coordinates. Rigidity fixes their three pairwise distances, giving three independent constraints for a non-degenerate triangle. Thus, <span class="math inline">\(6-3=3\)</span> freedoms remain: two translations and one rotation.</li>
+<li>The hinge imposes five independent constraints on a free spatial body and leaves only rotation about the hinge axis, so <span class="math inline">\(6-5=1\)</span>.</li>
+<li>Configuration DOF counts independent pose coordinates; instantaneous mobility counts allowed velocity directions at one configuration; actuator count counts independent command inputs; and state dimension counts the variables retained by a dynamic model.</li>
+<li>Its configuration still requires <span class="math inline">\((x,y,\theta)\)</span>, but the rolling constraint removes instantaneous sideways velocity. Sequences of allowed forward and turning motions can nevertheless change all three configuration coordinates.</li>
+<li>The rule applies locally when the equality constraints are independent and regular, meaning that their derivative has constant rank in the neighbourhood being considered.</li>
+</ol>
+</section>
+</section>
+<section id="sec-so3-spatial-orientation" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="sec-so3-spatial-orientation"><span class="header-section-number">7.2</span> Spatial orientation and <span class="math inline">\(SO(3)\)</span></h2>
+<section id="sec-so3-rotation-construction" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="sec-so3-rotation-construction"><span class="header-section-number">7.2.1</span> Constructing a spatial rotation matrix</h3>
+<p>The <strong>spatial orientation</strong> of body frame <span class="math inline">\(\{b\}\)</span> relative to world frame <span class="math inline">\(\{w\}\)</span> specifies how the three body axes point when expressed using world-frame coordinates; the locations of the frame origins are irrelevant to orientation. As established in <a href="02_geometry_and_coordinate_frames.html" class="quarto-xref"><span>Chapter 2</span></a>, let <span class="math inline">\(\mathbf e_{x,b}\)</span>, <span class="math inline">\(\mathbf e_{y,b}\)</span>, and <span class="math inline">\(\mathbf e_{z,b}\)</span> be the geometric unit vectors along the body axes. Their world-frame coordinate columns are</p>
+<p><span class="math display">\[
+{}^{w}\mathbf e_{x,b},
+\quad
+{}^{w}\mathbf e_{y,b},
+\quad
+{}^{w}\mathbf e_{z,b}
+\in\mathbb R^3.
+\]</span></p>
+<p>Each column is dimensionless because it describes a unit direction. Placing the columns side by side defines</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R_{wb}
+\mathrel{:=}
+\begin{bmatrix}
+{}^{w}\mathbf e_{x,b}&amp;
+{}^{w}\mathbf e_{y,b}&amp;
+{}^{w}\mathbf e_{z,b}
+\end{bmatrix}
+\in\mathbb R^{3\times3}
+}.
+\]</span></p>
+<p>The first column states where the positive <span class="math inline">\(x_b\)</span>-axis points in world coordinates, and the other columns do the same for the positive <span class="math inline">\(y_b\)</span>- and <span class="math inline">\(z_b\)</span>-axes. The subscript order <span class="math inline">\(wb\)</span> means that <span class="math inline">\(\mathbf R_{wb}\)</span> maps coordinate columns from frame <span class="math inline">\(\{b\}\)</span> to frame <span class="math inline">\(\{w\}\)</span>.</p>
+<p>To derive this mapping, let the geometric vector <span class="math inline">\(\mathbf v\)</span> have body-frame coordinate column</p>
+<p><span class="math display">\[
+{}^{b}\mathbf v
+=
+\begin{bmatrix}
+v_{x_b}\\
+v_{y_b}\\
+v_{z_b}
+\end{bmatrix}
+\in\mathbb R^3,
+\]</span></p>
+<p>where the entries are its scalar components along the body axes and carry the physical units of <span class="math inline">\(\mathbf v\)</span>. Expanding the vector in the body basis and then expressing the result in world coordinates gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+{}^{w}\mathbf v
+&amp;=
+v_{x_b}\,{}^{w}\mathbf e_{x,b}
++
+v_{y_b}\,{}^{w}\mathbf e_{y,b}
++
+v_{z_b}\,{}^{w}\mathbf e_{z,b}\\
+&amp;=
+\begin{bmatrix}
+{}^{w}\mathbf e_{x,b}&amp;
+{}^{w}\mathbf e_{y,b}&amp;
+{}^{w}\mathbf e_{z,b}
+\end{bmatrix}
+\begin{bmatrix}
+v_{x_b}\\
+v_{y_b}\\
+v_{z_b}
+\end{bmatrix}.
+\end{aligned}
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\boxed{
+{}^{w}\mathbf v
+=
+\mathbf R_{wb}\,{}^{b}\mathbf v
+}.
+\]</span></p>
+<p>This multiplication changes the coordinate description of <span class="math inline">\(\mathbf v\)</span>; it does not change the geometric vector itself.</p>
+</section>
+<section id="sec-so3-definition" class="level3" data-number="7.2.2">
+<h3 data-number="7.2.2" class="anchored" data-anchor-id="sec-so3-definition"><span class="header-section-number">7.2.2</span> Rotation constraints and the definition of <span class="math inline">\(SO(3)\)</span></h3>
+<p>Write the columns of <span class="math inline">\(\mathbf R_{wb}\)</span> as <span class="math inline">\(\mathbf r_1,\mathbf r_2,\mathbf r_3\in\mathbb R^3\)</span>. Because they represent the axes of an orthonormal frame, each column has unit length and each distinct pair is perpendicular:</p>
+<p><span class="math display">\[
+\mathbf r_i^\mathsf T\mathbf r_i=1,
+\qquad
+\mathbf r_i^\mathsf T\mathbf r_j=0
+\quad\text{for }i\ne j,
+\qquad
+i,j\in\{1,2,3\}.
+\]</span></p>
+<p>Matrix multiplication collects these pairwise dot products:</p>
+<p><span class="math display">\[
+\mathbf R_{wb}^\mathsf T\mathbf R_{wb}
+=
+\begin{bmatrix}
+\mathbf r_1^\mathsf T\mathbf r_1&amp;
+\mathbf r_1^\mathsf T\mathbf r_2&amp;
+\mathbf r_1^\mathsf T\mathbf r_3\\
+\mathbf r_2^\mathsf T\mathbf r_1&amp;
+\mathbf r_2^\mathsf T\mathbf r_2&amp;
+\mathbf r_2^\mathsf T\mathbf r_3\\
+\mathbf r_3^\mathsf T\mathbf r_1&amp;
+\mathbf r_3^\mathsf T\mathbf r_2&amp;
+\mathbf r_3^\mathsf T\mathbf r_3
+\end{bmatrix}
+=
+\mathbf I_3.
+\]</span></p>
+<p>A real square matrix satisfying <span class="math inline">\(\mathbf R^\mathsf T\mathbf R=\mathbf I_3\)</span> is <strong>orthogonal</strong>. This condition permits both right-handed orientations and reflections. For a right-handed body frame, <span class="math inline">\(\mathbf r_1\times\mathbf r_2=\mathbf r_3\)</span>, so the scalar-triple-product formula gives</p>
+<p><span class="math display">\[
+\det(\mathbf R_{wb})
+=
+\mathbf r_3^\mathsf T
+\left(
+\mathbf r_1\times\mathbf r_2
+\right)
+=
+\mathbf r_3^\mathsf T\mathbf r_3
+=
+1.
+\]</span></p>
+<p>The <strong>special orthogonal group in three dimensions</strong>, read “S O three,” is</p>
+<p><span class="math display">\[
+\boxed{
+SO(3)
+\mathrel{:=}
+\left\{
+\mathbf R\in\mathbb R^{3\times3}
+\;\middle|\;
+\mathbf R^\mathsf T\mathbf R=\mathbf I_3,
+\quad
+\det(\mathbf R)=1
+\right\}
+}.
+\]</span></p>
+<p>The word <em>orthogonal</em> refers to the orthonormal columns, while <em>special</em> selects determinant <span class="math inline">\(+1\)</span> and excludes determinant-<span class="math inline">\(-1\)</span> reflections. The group operation is matrix multiplication. For any <span class="math inline">\(\mathbf R_1,\mathbf R_2\in SO(3)\)</span>,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\left(\mathbf R_1\mathbf R_2\right)^\mathsf T
+\left(\mathbf R_1\mathbf R_2\right)
+&amp;=
+\mathbf R_2^\mathsf T
+\mathbf R_1^\mathsf T
+\mathbf R_1
+\mathbf R_2
+=
+\mathbf I_3,\\
+\det\left(\mathbf R_1\mathbf R_2\right)
+&amp;=
+\det(\mathbf R_1)\det(\mathbf R_2)
+=
+1.
+\end{aligned}
+\]</span></p>
+<p>Thus, <span class="math inline">\(\mathbf R_1\mathbf R_2\in SO(3)\)</span>, which is the <strong>closure</strong> property. Matrix multiplication is associative, <span class="math inline">\(\mathbf I_3\)</span> is the identity orientation, and every element has an inverse in the set. From <span class="math inline">\(\mathbf R^\mathsf T\mathbf R=\mathbf I_3\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R^{-1}
+=
+\mathbf R^\mathsf T
+}.
+\]</span></p>
+<p>A rotation matrix stores nine scalar entries, but the symmetric equation <span class="math inline">\(\mathbf R^\mathsf T\mathbf R=\mathbf I_3\)</span> supplies six independent scalar constraints: three unit-length equations and three pairwise-orthogonality equations. The determinant requirement selects the right-handed component rather than removing another continuous direction. Consequently,</p>
+<p><span class="math display">\[
+\boxed{
+\dim SO(3)
+=
+9-6
+=
+3
+}.
+\]</span></p>
+<p>Here, <span class="math inline">\(\dim SO(3)=3\)</span> means that three independent continuous coordinates are required near any selected orientation. This is the same local meaning of dimension used in the earlier DOF definition.</p>
+</section>
+<section id="example-a-positive-quarter-turn-about-the-world-z_w-axis" class="level3" data-number="7.2.3">
+<h3 data-number="7.2.3" class="anchored" data-anchor-id="example-a-positive-quarter-turn-about-the-world-z_w-axis"><span class="header-section-number">7.2.3</span> Example: a positive quarter-turn about the world <span class="math inline">\(z_w\)</span>-axis</h3>
+<p>Suppose frame <span class="math inline">\(\{b\}\)</span> starts aligned with frame <span class="math inline">\(\{w\}\)</span> and is rotated through <span class="math inline">\(\pi/2\,\mathrm{rad}\)</span> about the positive <span class="math inline">\(z_w\)</span>-axis according to the right-hand rule. Its body axes, expressed in world coordinates, become</p>
+<p><span class="math display">\[
+{}^{w}\mathbf e_{x,b}
+=
+\begin{bmatrix}
+0\\1\\0
+\end{bmatrix},
+\qquad
+{}^{w}\mathbf e_{y,b}
+=
+\begin{bmatrix}
+-1\\0\\0
+\end{bmatrix},
+\qquad
+{}^{w}\mathbf e_{z,b}
+=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}.
+\]</span></p>
+<p>Placing these axes into the columns gives</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R_{wb}
+=
+\begin{bmatrix}
+0&amp;-1&amp;0\\
+1&amp;0&amp;0\\
+0&amp;0&amp;1
+\end{bmatrix}
+\in SO(3)
+}.
+\]</span></p>
+<p>Direct calculation gives <span class="math inline">\(\mathbf R_{wb}^\mathsf T\mathbf R_{wb}=\mathbf I_3\)</span> and <span class="math inline">\(\det(\mathbf R_{wb})=1\)</span>. A vector pointing along the positive body <span class="math inline">\(x_b\)</span>-axis has <span class="math inline">\({}^{b}\mathbf v=[1\;0\;0]^\mathsf T\)</span> in arbitrary vector units, so</p>
+<p><span class="math display">\[
+{}^{w}\mathbf v
+=
+\mathbf R_{wb}{}^{b}\mathbf v
+=
+\begin{bmatrix}
+0\\1\\0
+\end{bmatrix}.
+\]</span></p>
+<p>The result agrees with the first column of <span class="math inline">\(\mathbf R_{wb}\)</span>: the positive body <span class="math inline">\(x_b\)</span>-axis points along the positive world <span class="math inline">\(y_w\)</span>-axis.</p>
+</section>
+</section>
+<section id="quick-test-b-spatial-orientation-and-so3" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="quick-test-b-spatial-orientation-and-so3">Quick test B: spatial orientation and <span class="math inline">\(SO(3)\)</span></h2>
+<ol type="1">
+<li>What does column <span class="math inline">\(j\)</span> of <span class="math inline">\(\mathbf R_{wb}\)</span> represent?</li>
+<li>Starting from orthonormal body axes, derive <span class="math inline">\(\mathbf R_{wb}^\mathsf T\mathbf R_{wb}=\mathbf I_3\)</span>.</li>
+<li>Why is <span class="math inline">\(\det(\mathbf R)=1\)</span> required in addition to <span class="math inline">\(\mathbf R^\mathsf T\mathbf R=\mathbf I_3\)</span>?</li>
+<li>Why does a rotation matrix store nine entries but represent only three rotational degrees of freedom?</li>
+<li>For the quarter-turn matrix above, calculate <span class="math inline">\(\mathbf R_{bw}\)</span> and use it to express <span class="math inline">\({}^{w}\mathbf v=[0\;1\;0]^\mathsf T\)</span> in body coordinates.</li>
+</ol>
+<section id="answers-and-hints-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="answers-and-hints-1">Answers and hints</h3>
+<ol type="1">
+<li>Columns <span class="math inline">\(1\)</span>, <span class="math inline">\(2\)</span>, and <span class="math inline">\(3\)</span> are respectively the world-frame coordinate columns of the body <span class="math inline">\(x_b\)</span>-, <span class="math inline">\(y_b\)</span>-, and <span class="math inline">\(z_b\)</span>-axes.</li>
+<li>Entry <span class="math inline">\((i,j)\)</span> of <span class="math inline">\(\mathbf R_{wb}^\mathsf T\mathbf R_{wb}\)</span> is <span class="math inline">\(\mathbf r_i^\mathsf T\mathbf r_j\)</span>. It equals <span class="math inline">\(1\)</span> when <span class="math inline">\(i=j\)</span> and <span class="math inline">\(0\)</span> otherwise, producing <span class="math inline">\(\mathbf I_3\)</span>.</li>
+<li>Orthogonality alone permits determinant <span class="math inline">\(-1\)</span> reflections. The determinant-<span class="math inline">\(1\)</span> condition selects right-handed rigid-body orientations.</li>
+<li>Orthonormality imposes six independent scalar constraints on the nine entries: three unit-length constraints and three pairwise-orthogonality constraints. Thus, <span class="math inline">\(9-6=3\)</span> independent continuous values remain.</li>
+<li><span class="math inline">\(\mathbf R_{bw}=\mathbf R_{wb}^{-1}=\mathbf R_{wb}^\mathsf T\)</span>. Therefore, <span class="math inline">\({}^{b}\mathbf v=\mathbf R_{bw}{}^{w}\mathbf v=[1\;0\;0]^\mathsf T\)</span>.</li>
+</ol>
+</section>
+</section>
+<section id="sec-so3-axis-rotations-composition" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="sec-so3-axis-rotations-composition"><span class="header-section-number">7.3</span> Coordinate-axis rotations and composition</h2>
+<section id="sec-so3-active-axis-rotations" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="sec-so3-active-axis-rotations"><span class="header-section-number">7.3.1</span> Constructing coordinate-axis rotation matrices</h3>
+<p>Begin with the coordinate-change equation derived in <a href="#sec-so3-rotation-construction" class="quarto-xref"><span>Section 7.2.1</span></a>:</p>
+<p><span class="math display">\[
+\boxed{
+{}^{w}\mathbf v
+=
+\mathbf R_{wb}\,{}^{b}\mathbf v
+}.
+\]</span></p>
+<p>Here, <span class="math inline">\(\mathbf v\)</span> is one unchanged geometric vector, while the two columns are its coordinates in body frame <span class="math inline">\(\{b\}\)</span> and world frame <span class="math inline">\(\{w\}\)</span>. The same rotation matrix was defined from the world-frame coordinate columns of the body axes:</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R_{wb}
+=
+\begin{bmatrix}
+{}^{w}\mathbf e_{x,b}&amp;
+{}^{w}\mathbf e_{y,b}&amp;
+{}^{w}\mathbf e_{z,b}
+\end{bmatrix}
+}.
+\]</span></p>
+<p>The task is therefore to calculate these three coordinate columns from the geometry and place them into the matrix. Multiplication by standard basis columns is not needed for this construction.</p>
+<p>Suppose frames <span class="math inline">\(\{b\}\)</span> and <span class="math inline">\(\{w\}\)</span> are initially aligned, and then frame <span class="math inline">\(\{b\}\)</span> is rotated through <span class="math inline">\(\theta\in\mathbb R\)</span> radians about the positive world <span class="math inline">\(x_w\)</span>-axis. A positive rotation follows the right-hand rule. Define</p>
+<p><span class="math display">\[
+c_\theta\mathrel{:=}\cos\theta,
+\qquad
+s_\theta\mathrel{:=}\sin\theta.
+\]</span></p>
+<p>The <span class="math inline">\(x_b\)</span>-axis remains aligned with <span class="math inline">\(x_w\)</span>, so its world coordinates are <span class="math inline">\([1\;0\;0]^\mathsf T\)</span>. The <span class="math inline">\(y_b\)</span>- and <span class="math inline">\(z_b\)</span>-axes rotate in the world <span class="math inline">\(y_wz_w\)</span>-plane. Their projections onto the world axes give</p>
+<p><span class="math display">\[
+\begin{aligned}
+{}^{w}\mathbf e_{x,b}
+=
+\begin{bmatrix}
+1\\0\\0
+\end{bmatrix}, \quad
+{}^{w}\mathbf e_{y,b}
+=
+\begin{bmatrix}
+0\\c_\theta\\s_\theta
+\end{bmatrix}, \quad
+{}^{w}\mathbf e_{z,b}
+=
+\begin{bmatrix}
+0\\-s_\theta\\c_\theta
+\end{bmatrix}.
+\end{aligned}
+\]</span></p>
+<p>By definition, the first, second, and third columns of the orientation matrix are the world-frame coordinates of the <span class="math inline">\(x_b\)</span>-, <span class="math inline">\(y_b\)</span>-, and <span class="math inline">\(z_b\)</span>-axes, respectively. Substituting the three columns above gives</p>
+<p><span class="math display">\[
+\mathbf R_x(\theta)
+=
+\begin{bmatrix}
+{}^{w}\mathbf e_{x,b}&amp;
+{}^{w}\mathbf e_{y,b}&amp;
+{}^{w}\mathbf e_{z,b}
+\end{bmatrix}
+=
+\left[
+\begin{array}{c|c|c}
+1&amp;0&amp;0\\
+0&amp;c_\theta&amp;-s_\theta\\
+0&amp;s_\theta&amp;c_\theta
+\end{array}
+\right].
+\]</span></p>
+<p>Reading the array by columns shows the substitution directly: <span class="math inline">\([1\;0\;0]^\mathsf T\)</span> is column one, <span class="math inline">\([0\;c_\theta\;s_\theta]^\mathsf T\)</span> is column two, and <span class="math inline">\([0\;-s_\theta\;c_\theta]^\mathsf T\)</span> is column three. Therefore,</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R_x(\theta)
+=
+\begin{bmatrix}
+1&amp;0&amp;0\\
+0&amp;c_\theta&amp;-s_\theta\\
+0&amp;s_\theta&amp;c_\theta
+\end{bmatrix}
+}.
+\]</span></p>
+<p>The column placement can be verified by multiplying <span class="math inline">\(\mathbf R_x(\theta)\)</span> by each standard basis column:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\begin{bmatrix}
+1\\0\\0
+\end{bmatrix}
+&amp;=
+\mathbf R_x(\theta)
+\begin{bmatrix}
+1\\0\\0
+\end{bmatrix},\\[4pt]
+\begin{bmatrix}
+0\\c_\theta\\s_\theta
+\end{bmatrix}
+&amp;=
+\mathbf R_x(\theta)
+\begin{bmatrix}
+0\\1\\0
+\end{bmatrix},\\[4pt]
+\begin{bmatrix}
+0\\-s_\theta\\c_\theta
+\end{bmatrix}
+&amp;=
+\mathbf R_x(\theta)
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}.
+\end{aligned}
+\]</span></p>
+<p>The three input columns select columns one, two, and three of <span class="math inline">\(\mathbf R_x(\theta)\)</span>, respectively. These products verify the assembled matrix; the preceding geometric projection determined the column values.</p>
+<p>For a positive rotation about the world <span class="math inline">\(y_w\)</span>-axis, the <span class="math inline">\(y_b\)</span>-axis remains fixed. The right-hand rule sends the positive <span class="math inline">\(x_b\)</span>-axis toward negative <span class="math inline">\(z_w\)</span> and the positive <span class="math inline">\(z_b\)</span>-axis toward positive <span class="math inline">\(x_w\)</span>. Their world-frame coordinate columns are therefore</p>
+<p><span class="math display">\[
+\begin{aligned}
+{}^{w}\mathbf e_{x,b}
+=
+\begin{bmatrix}
+c_\theta\\0\\-s_\theta
+\end{bmatrix},\quad
+{}^{w}\mathbf e_{y,b}
+=
+\begin{bmatrix}
+0\\1\\0
+\end{bmatrix},\quad
+{}^{w}\mathbf e_{z,b}
+=
+\begin{bmatrix}
+s_\theta\\0\\c_\theta
+\end{bmatrix}.
+\end{aligned}
+\]</span></p>
+<p>For a positive rotation about the world <span class="math inline">\(z_w\)</span>-axis, the <span class="math inline">\(z_b\)</span>-axis remains fixed, the positive <span class="math inline">\(x_b\)</span>-axis rotates toward positive <span class="math inline">\(y_w\)</span>, and the positive <span class="math inline">\(y_b\)</span>-axis rotates toward negative <span class="math inline">\(x_w\)</span>. Hence,</p>
+<p><span class="math display">\[
+\begin{aligned}
+{}^{w}\mathbf e_{x,b}
+=
+\begin{bmatrix}
+c_\theta\\s_\theta\\0
+\end{bmatrix},\quad
+{}^{w}\mathbf e_{y,b}
+=
+\begin{bmatrix}
+-s_\theta\\c_\theta\\0
+\end{bmatrix},\quad
+{}^{w}\mathbf e_{z,b}
+=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}.
+\end{aligned}
+\]</span></p>
+<p>Placing each set of three world-frame body-axis coordinates into the corresponding matrix columns gives</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R_y(\theta)
+=
+\begin{bmatrix}
+c_\theta&amp;0&amp;s_\theta\\
+0&amp;1&amp;0\\
+-s_\theta&amp;0&amp;c_\theta
+\end{bmatrix},
+\qquad
+\mathbf R_z(\theta)
+=
+\begin{bmatrix}
+c_\theta&amp;-s_\theta&amp;0\\
+s_\theta&amp;c_\theta&amp;0\\
+0&amp;0&amp;1
+\end{bmatrix}
+}.
+\]</span></p>
+<p>Each matrix has right-handed orthonormal columns and therefore belongs to <span class="math inline">\(SO(3)\)</span>.</p>
+<section id="the-active-rotation-interpretation" class="level4">
+<h4 class="anchored" data-anchor-id="the-active-rotation-interpretation">The active-rotation interpretation</h4>
+<p>The same numerical matrices can also be used as <strong>active rotation operators</strong>. An active rotation changes a geometric vector while the frame used to describe it remains fixed. Let <span class="math inline">\(\mathbf v\)</span> denote the vector before rotation and <span class="math inline">\(\mathbf v'\)</span> the vector after rotation. Their world-frame coordinate columns satisfy</p>
+<p><span class="math display">\[
+\boxed{
+{}^{w}\mathbf v'
+=
+\mathbf R_i(\theta)\,{}^{w}\mathbf v,
+\qquad
+i\in\{x,y,z\}
+}.
+\]</span></p>
+<p>The prime labels the vector after rotation and does not denote a derivative. The coordinate-change equation describes one geometric vector in two frames; the active-rotation equation describes two geometric vectors in one fixed frame.</p>
+</section>
+</section>
+<section id="sec-so3-composition-order" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="sec-so3-composition-order"><span class="header-section-number">7.3.2</span> Composition order: the rightmost rotation acts first</h3>
+<p>Let <span class="math inline">\(\mathbf Q_1,\mathbf Q_2\in SO(3)\)</span> be two active rotation operators whose inputs and outputs are expressed in the same fixed frame. If <span class="math inline">\(\mathbf Q_1\)</span> acts first and <span class="math inline">\(\mathbf Q_2\)</span> acts second, then</p>
+<p><span class="math display">\[
+\mathbf v'
+=
+\mathbf Q_1\mathbf v,
+\qquad
+\mathbf v''
+=
+\mathbf Q_2\mathbf v'
+=
+\mathbf Q_2\mathbf Q_1\mathbf v.
+\]</span></p>
+<p>Thus, in the product <span class="math inline">\(\mathbf Q_2\mathbf Q_1\mathbf v\)</span>, the rightmost matrix <span class="math inline">\(\mathbf Q_1\)</span> acts first. This is a consequence of function composition, not a special convention invented for rotations.</p>
+<p>Spatial rotations generally do not commute. To demonstrate this, define</p>
+<p><span class="math display">\[
+\mathbf R_x
+\mathrel{:=}
+\mathbf R_x\!\left(\frac{\pi}{2}\right),
+\qquad
+\mathbf R_y
+\mathrel{:=}
+\mathbf R_y\!\left(\frac{\pi}{2}\right),
+\qquad
+\mathbf e_z
+=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}.
+\]</span></p>
+<p>Rotating first about <span class="math inline">\(x\)</span> and then about <span class="math inline">\(y\)</span> gives</p>
+<p><span class="math display">\[
+\mathbf R_y\mathbf R_x\mathbf e_z
+=
+\mathbf R_y
+\begin{bmatrix}
+0\\-1\\0
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\-1\\0
+\end{bmatrix}.
+\]</span></p>
+<p>Reversing the order gives</p>
+<p><span class="math display">\[
+\mathbf R_x\mathbf R_y\mathbf e_z
+=
+\mathbf R_x
+\begin{bmatrix}
+1\\0\\0
+\end{bmatrix}
+=
+\begin{bmatrix}
+1\\0\\0
+\end{bmatrix}.
+\]</span></p>
+<p>The outputs differ, so</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R_y\mathbf R_x
+\ne
+\mathbf R_x\mathbf R_y
+}.
+\]</span></p>
+<p>This calculation assumes that both rotations are active rotations about axes of the same fixed frame. Changing which frame supplies the rotation axes changes the meaning of the sequence.</p>
+</section>
+<section id="sec-so3-fixed-body-increments" class="level3" data-number="7.3.3">
+<h3 data-number="7.3.3" class="anchored" data-anchor-id="sec-so3-fixed-body-increments"><span class="header-section-number">7.3.3</span> Fixed-frame and body-frame increments</h3>
+<p>Consider a rigid body moving while the world frame <span class="math inline">\(\{w\}\)</span> remains fixed. Before the body turns, its three body-fixed axes point in particular world-frame directions. The body then turns, carrying all its body-fixed points and axes with it, and the axes point in new world-frame directions afterward.</p>
+<p>An <strong>orientation</strong> describes this rotational state at one instant; it answers how the body axes currently point relative to a reference frame. A <strong>turn</strong> is the physical rotational motion that changes one orientation into another over a time interval. Let frame <span class="math inline">\(\{b\}\)</span> denote the body axes before the turn and frame <span class="math inline">\(\{b'\}\)</span> denote the same body axes afterward. Then <span class="math inline">\(\mathbf R_{wb}\in SO(3)\)</span> is the orientation before the turn, whereas <span class="math inline">\(\mathbf R_{wb'}\in SO(3)\)</span> is the orientation afterward.</p>
+<p>A rotation matrix <span class="math inline">\(\mathbf Q\in SO(3)\)</span> that describes only the change from the old orientation to the new orientation is called an <strong>incremental rotation</strong>. The word <em>incremental</em> describes the matrix’s role as an orientation change; <span class="math inline">\(\mathbf Q\)</span> is still an ordinary rotation matrix, and the turn need not be infinitesimally small. Conceptually,</p>
+<p><span class="math display">\[
+\boxed{
+\text{new orientation}
+=
+\text{rotation change}
+\mathbin{\circ}
+\text{old orientation}
+},
+\]</span></p>
+<p>where <span class="math inline">\(\circ\)</span> denotes composition: apply the old orientation first and then apply the rotation change. Matrix multiplication will represent this composition, but the side on which <span class="math inline">\(\mathbf Q\)</span> multiplies depends on the coordinate frame used to describe the change.</p>
+<p>First describe the change using world-frame coordinates and denote it by <span class="math inline">\(\mathbf Q_w\in SO(3)\)</span>. The subscript <span class="math inline">\(w\)</span> means that <span class="math inline">\(\mathbf Q_w\)</span> acts on world-coordinate columns. For any direction fixed in the body, if <span class="math inline">\({}^{w}\mathbf v_{\mathrm{old}}\in\mathbb R^3\)</span> and <span class="math inline">\({}^{w}\mathbf v_{\mathrm{new}}\in\mathbb R^3\)</span> are its world-coordinate columns before and after the turn, respectively, then the definition of <span class="math inline">\(\mathbf Q_w\)</span> is</p>
+<p><span class="math display">\[
+{}^{w}\mathbf v_{\mathrm{new}}
+=
+\mathbf Q_w{}^{w}\mathbf v_{\mathrm{old}}.
+\]</span></p>
+<p>Write the current orientation as</p>
+<p><span class="math display">\[
+\mathbf R_{wb}
+=
+\begin{bmatrix}
+\mathbf r_1&amp;\mathbf r_2&amp;\mathbf r_3
+\end{bmatrix},
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf r_1,\mathbf r_2,\mathbf r_3\in\mathbb R^3\)</span> are the current world-frame coordinate columns of the body <span class="math inline">\(x_b\)</span>-, <span class="math inline">\(y_b\)</span>-, and <span class="math inline">\(z_b\)</span>-axes. Applying <span class="math inline">\(\mathbf Q_w\)</span> to the physical body rotates each of these three axes, so the updated body-axis columns are</p>
+<p><span class="math display">\[
+{}^{w}\mathbf e_{x,b'}
+=
+\mathbf Q_w\mathbf r_1,
+\qquad
+{}^{w}\mathbf e_{y,b'}
+=
+\mathbf Q_w\mathbf r_2,
+\qquad
+{}^{w}\mathbf e_{z,b'}
+=
+\mathbf Q_w\mathbf r_3.
+\]</span></p>
+<p>The updated orientation matrix is constructed by placing these new body-axis coordinates into its columns:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf R_{wb'}
+&amp;=
+\begin{bmatrix}
+{}^{w}\mathbf e_{x,b'}&amp;
+{}^{w}\mathbf e_{y,b'}&amp;
+{}^{w}\mathbf e_{z,b'}
+\end{bmatrix}\\
+&amp;=
+\begin{bmatrix}
+\mathbf Q_w\mathbf r_1&amp;
+\mathbf Q_w\mathbf r_2&amp;
+\mathbf Q_w\mathbf r_3
+\end{bmatrix}\\
+&amp;=
+\mathbf Q_w
+\begin{bmatrix}
+\mathbf r_1&amp;\mathbf r_2&amp;\mathbf r_3
+\end{bmatrix}\\
+&amp;=
+\boxed{\mathbf Q_w\mathbf R_{wb}}.
+\end{aligned}
+\]</span></p>
+<p>Thus, an increment described using world-frame axes <strong>premultiplies</strong> the current orientation, where <em>premultiply</em> means multiply on the left. This product answers the practical question posed at the start: given the old orientation and an additional world-described rotation, what is the new orientation?</p>
+<p>As an alternative, suppose the increment is described relative to the current body axes. Let <span class="math inline">\(\mathbf Q_b\mathrel{:=}\mathbf R_{bb'}\in SO(3)\)</span> describe the orientation of the new body frame <span class="math inline">\(\{b'\}\)</span> relative to the old body frame <span class="math inline">\(\{b\}\)</span>. Coordinate-frame composition gives</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R_{wb'}
+=
+\mathbf R_{wb}\mathbf R_{bb'}
+=
+\mathbf R_{wb}\mathbf Q_b
+}.
+\]</span></p>
+<p>The matrices in this composition have different roles:</p>
+<ul>
+<li><span class="math inline">\(\mathbf R_{wb'}\)</span> is the resulting orientation of the body relative to the world frame.</li>
+<li><span class="math inline">\(\mathbf R_{wb}\)</span> is the body’s orientation relative to the world frame before the turn.</li>
+<li><span class="math inline">\(\mathbf R_{bb'}=\mathbf Q_b\)</span> is the orientation of the new body frame <span class="math inline">\(\{b'\}\)</span> relative to the old body frame <span class="math inline">\(\{b\}\)</span>; it represents the incremental rotation expressed along the old body axes.</li>
+</ul>
+<p>Thus, composing the old world-relative orientation with the body-relative orientation change produces the new world-relative orientation.</p>
+<p>The body-frame increment therefore <strong>postmultiplies</strong> the current orientation, where <em>postmultiply</em> means multiply on the right. These rules can be remembered from their frame labels:</p>
+<p><span class="math display">\[
+\underbrace{\mathbf R_{wb}}_{b\rightarrow w}
+\underbrace{\mathbf R_{bb'}}_{b'\rightarrow b}
+=
+\underbrace{\mathbf R_{wb'}}_{b'\rightarrow w}.
+\]</span></p>
+<p>The two update formulas are not interchangeable. Premultiplication applies a rotation about an axis fixed in the world description; postmultiplication applies a rotation about an axis attached to the current body description.</p>
+</section>
+</section>
+<section id="quick-test-c-coordinate-axis-rotations-and-composition" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="quick-test-c-coordinate-axis-rotations-and-composition">Quick test C: coordinate-axis rotations and composition</h2>
+<ol type="1">
+<li>Starting from <span class="math inline">\({}^{w}\mathbf v=\mathbf R_{wb}{}^{b}\mathbf v\)</span>, derive the columns of <span class="math inline">\(\mathbf R_y(\theta)\)</span> from the body axes expressed in world coordinates.</li>
+<li>In <span class="math inline">\(\mathbf Q_3\mathbf Q_2\mathbf Q_1\mathbf v\)</span>, which rotation acts first?</li>
+<li>Use <span class="math inline">\(\mathbf e_z\)</span> to show that <span class="math inline">\(\mathbf R_y(\pi/2)\mathbf R_x(\pi/2)\ne\mathbf R_x(\pi/2)\mathbf R_y(\pi/2)\)</span>.</li>
+<li>If an orientation increment is expressed about world-frame axes, on which side of <span class="math inline">\(\mathbf R_{wb}\)</span> does it multiply?</li>
+<li>If <span class="math inline">\(\mathbf Q_b=\mathbf R_{bb'}\)</span> is an increment relative to the current body frame, derive the updated orientation <span class="math inline">\(\mathbf R_{wb'}\)</span> from the frame labels.</li>
+<li>Distinguish an active rotation from a coordinate change.</li>
+</ol>
+<section id="answers-and-hints-2" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="answers-and-hints-2">Answers and hints</h3>
+<ol type="1">
+<li>After a positive rotation about <span class="math inline">\(y_w\)</span>, the world-frame body-axis columns are <span class="math inline">\([c_\theta\;0\;-s_\theta]^\mathsf T\)</span>, <span class="math inline">\([0\;1\;0]^\mathsf T\)</span>, and <span class="math inline">\([s_\theta\;0\;c_\theta]^\mathsf T\)</span>. Placing them into the first, second, and third columns gives <span class="math inline">\(\mathbf R_y(\theta)\)</span>.</li>
+<li><span class="math inline">\(\mathbf Q_1\)</span> acts first, followed by <span class="math inline">\(\mathbf Q_2\)</span> and then <span class="math inline">\(\mathbf Q_3\)</span>.</li>
+<li>The first product maps <span class="math inline">\(\mathbf e_z\)</span> to <span class="math inline">\(-\mathbf e_y\)</span>, while the reversed product maps it to <span class="math inline">\(\mathbf e_x\)</span>; therefore, the operators are unequal.</li>
+<li>It premultiplies: <span class="math inline">\(\mathbf R_{wb}'=\mathbf Q_w\mathbf R_{wb}\)</span>.</li>
+<li>The labels compose as <span class="math inline">\((b\rightarrow w)(b'\rightarrow b)=(b'\rightarrow w)\)</span>, so <span class="math inline">\(\mathbf R_{wb'}=\mathbf R_{wb}\mathbf R_{bb'}=\mathbf R_{wb}\mathbf Q_b\)</span>.</li>
+<li>An active rotation changes a geometric vector while retaining one coordinate frame. A coordinate change keeps the geometric vector fixed and changes the frame used to express its coordinate column.</li>
+</ol>
+</section>
+</section>
+<section id="sec-so3-angular-velocity" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="sec-so3-angular-velocity"><span class="header-section-number">7.4</span> Angular velocity as the rate of orientation change</h2>
+<section id="sec-so3-angular-velocity-definition" class="level3" data-number="7.4.1">
+<h3 data-number="7.4.1" class="anchored" data-anchor-id="sec-so3-angular-velocity-definition"><span class="header-section-number">7.4.1</span> From a finite turn to an instantaneous rate</h3>
+<p>The preceding section compared the body’s orientation before and after a finite turn. Motion also requires a rate that describes how rapidly that orientation is changing at one instant. Consider a rigid body whose orientation relative to the fixed world frame is the differentiable function <span class="math inline">\(\mathbf R_{wb}(t)\in SO(3)\)</span>, where <span class="math inline">\(t\)</span> is time measured in seconds.</p>
+<p>Over a time interval from <span class="math inline">\(t\)</span> to <span class="math inline">\(t+\Delta t\)</span>, where <span class="math inline">\(\Delta t&gt;0\)</span> is measured in seconds, the body undergoes a relative rotation from <span class="math inline">\(\mathbf R_{wb}(t)\)</span> to <span class="math inline">\(\mathbf R_{wb}(t+\Delta t)\)</span>. <strong>Euler’s rotation theorem</strong>, used here as a stated geometric result, says that every relative orientation change in <span class="math inline">\(SO(3)\)</span> can be represented as one rotation through an angle about an axis direction. Accordingly, let <span class="math inline">\(\mathbf a_w(t,\Delta t)\in\mathbb R^3\)</span> be a unit rotation-axis column and let <span class="math inline">\(\Delta\theta(t,\Delta t)\in\mathbb R\)</span> be the signed rotation angle measured in radians. The subscript <span class="math inline">\(w\)</span> states that the axis components are expressed along the world axes, and</p>
+<p><span class="math display">\[
+\left\|\mathbf a_w(t,\Delta t)\right\|_2=1.
+\]</span></p>
+<p>The <strong>rotation axis</strong> in an orientation description specifies only a direction <span class="math inline">\(\mathbf a_w\)</span>. It does not identify a particular line in physical space. To specify a particular line, also choose the world position <span class="math inline">\(\mathbf q_w\in\mathbb R^3\)</span> of one point on it, measured in metres. The line is then</p>
+<p><span class="math display">\[
+\mathcal L
+\mathrel{:=}
+\left\{
+\mathbf q_w+\lambda\mathbf a_w
+\;\middle|\;
+\lambda\in\mathbb R
+\right\}
+\subset\mathbb R^3,
+\]</span></p>
+<p>where <span class="math inline">\(\mathcal L\)</span> denotes the axis line and <span class="math inline">\(\lambda\)</span> is a scalar distance measured in metres. Because <span class="math inline">\(\mathbf R_{wb}\)</span> describes orientation only, it contains the axis direction associated with the rotation but not the location of a physical pivot line.</p>
+<p>The sign of <span class="math inline">\(\Delta\theta\)</span> follows the right-hand rule about <span class="math inline">\(\mathbf a_w\)</span>. Replacing <span class="math inline">\(\mathbf a_w\)</span> by <span class="math inline">\(-\mathbf a_w\)</span> and <span class="math inline">\(\Delta\theta\)</span> by <span class="math inline">\(-\Delta\theta\)</span> describes the same turn, so their product is unchanged.</p>
+<p>The vector</p>
+<p><span class="math display">\[
+\mathbf a_w(t,\Delta t)
+\frac{\Delta\theta(t,\Delta t)}{\Delta t}
+\]</span></p>
+<p>describes the rotation-change rate over that interval: its direction gives the rotation axis and its signed magnitude gives the angle change per unit time. Taking the limit as the interval shrinks defines the body’s <strong>angular velocity relative to the world frame, expressed in world coordinates</strong>:</p>
+<p><span class="math display">\[
+\boxed{
+\boldsymbol\omega_w(t)
+\mathrel{:=}
+\lim_{\Delta t\to0^+}
+\mathbf a_w(t,\Delta t)
+\frac{\Delta\theta(t,\Delta t)}{\Delta t}
+\in\mathbb R^3
+}.
+\]</span></p>
+<p>The unit axis <span class="math inline">\(\mathbf a_w\)</span> is dimensionless, while <span class="math inline">\(\Delta\theta/\Delta t\)</span> has units of <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>. Therefore, <span class="math inline">\(\boldsymbol\omega_w\)</span> has units of <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>. The limit is assumed to exist because <span class="math inline">\(\mathbf R_{wb}(t)\)</span> is differentiable.</p>
+<p>Orientation and angular velocity describe different physical quantities. The matrix <span class="math inline">\(\mathbf R_{wb}(t)\)</span> is the rotational state at time <span class="math inline">\(t\)</span>, whereas <span class="math inline">\(\boldsymbol\omega_w(t)\)</span> is the instantaneous rate at which that state is changing. Knowing the orientation at one instant does not determine the angular velocity: a stationary body and a turning body can momentarily have the same orientation but different angular velocities.</p>
+<p>To connect angular velocity to the orientation matrix, write its three columns explicitly:</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R_{wb}(t)
+=
+\begin{bmatrix}
+\mathbf r_1(t)&amp;\mathbf r_2(t)&amp;\mathbf r_3(t)
+\end{bmatrix}
+}.
+\]</span></p>
+<p>For each <span class="math inline">\(i\in\{1,2,3\}\)</span>, the dimensionless column <span class="math inline">\(\mathbf r_i(t)\in\mathbb R^3\)</span> is the world-coordinate representation of one unit body axis fixed in the rigid body. Thus, <span class="math inline">\(\|\mathbf r_i(t)\|_2=1\)</span>. The geometric construction below selects one column <span class="math inline">\(\mathbf r_i\)</span>; <a href="#fig-so3-body-axis-angular-velocity" class="quarto-xref">Figure&nbsp;<span>7.1</span></a> illustrates the choice <span class="math inline">\(i=1\)</span> and draws the other two columns as dashed vectors.</p>
+<p>When <span class="math inline">\(\boldsymbol\omega_w\ne\mathbf 0_3\)</span>, define its unit direction by <span class="math inline">\(\mathbf a_w\mathrel{:=}\boldsymbol\omega_w/\|\boldsymbol\omega_w\|_2\)</span> and let <span class="math inline">\(\varphi_i\in[0,\pi]\)</span> be the angle between <span class="math inline">\(\mathbf a_w\)</span> and <span class="math inline">\(\mathbf r_i\)</span>. Decompose the selected column into components parallel and perpendicular to the angular-velocity direction:</p>
+<p><span class="math display">\[
+\mathbf r_{i,\parallel}
+\mathrel{:=}
+(\mathbf a_w^\mathsf T\mathbf r_i)\mathbf a_w,
+\qquad
+\mathbf r_{i,\perp}
+\mathrel{:=}
+\mathbf r_i-\mathbf r_{i,\parallel}.
+\]</span></p>
+<p>For the drawing, place the tail of these direction vectors at a common coordinate origin <span class="math inline">\(O\)</span> and call the tip of <span class="math inline">\(\mathbf r_i\)</span> point <span class="math inline">\(P_i\)</span>. The point <span class="math inline">\(P_i\)</span> is a graphical endpoint, not necessarily a material point on the body. Let <span class="math inline">\(C_i\)</span> be the tip of <span class="math inline">\(\mathbf r_{i,\parallel}\)</span>. The segment from <span class="math inline">\(C_i\)</span> to <span class="math inline">\(P_i\)</span> represents <span class="math inline">\(\mathbf r_{i,\perp}\)</span> and is perpendicular to the angular-velocity direction.</p>
+<div id="fig-so3-body-axis-angular-velocity" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-so3-body-axis-angular-velocity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="figures/spatial_angular_velocity_geometry.svg" class="img-fluid figure-img" style="width:88.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-so3-body-axis-angular-velocity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.1: Angular velocity and the motion of one orientation-matrix column. The solid vector <span class="math inline">\(\mathbf r_1\)</span> is the first column of <span class="math inline">\(\mathbf R_{wb}\)</span>; the dashed vectors <span class="math inline">\(\mathbf r_2\)</span> and <span class="math inline">\(\mathbf r_3\)</span> are its other columns.
+</figcaption>
+</figure>
+</div>
+<p>The figure is a two-dimensional projection of three-dimensional geometry. The orange radius vector <span class="math inline">\(\mathbf r_{1,\perp}\)</span>, whose length is <span class="math inline">\(\rho_1\)</span>, is perpendicular to <span class="math inline">\(\boldsymbol\omega_w\)</span>, and <span class="math inline">\(\dot{\mathbf r}_1\)</span> is perpendicular to <span class="math inline">\(\mathbf r_{1,\perp}\)</span> in three dimensions. The right-angle marker at <span class="math inline">\(P_1\)</span> therefore appears skewed in the projection even though it denotes a true three-dimensional right angle.</p>
+<p>At the selected instant, the tip <span class="math inline">\(P_i\)</span> has the same tangent direction as a point moving on a circle centred at <span class="math inline">\(C_i\)</span>. The circle radius is the length of the perpendicular component:</p>
+<p><span class="math display">\[
+\boxed{
+\rho_i
+=
+\|\mathbf r_{i,\perp}\|_2
+=
+\|\mathbf r_i\|_2\sin\varphi_i
+=
+\sin\varphi_i
+}.
+\]</span></p>
+<p>The last equality uses <span class="math inline">\(\|\mathbf r_i\|_2=1\)</span>. Multiplying the radius by the angular speed gives the speed of the tip:</p>
+<p><span class="math display">\[
+\|\dot{\mathbf r}_i\|_2
+=
+\|\boldsymbol\omega_w\|_2\rho_i
+=
+\|\boldsymbol\omega_w\|_2
+\|\mathbf r_i\|_2
+\sin\varphi_i.
+\]</span></p>
+<p>This is exactly the magnitude of <span class="math inline">\(\boldsymbol\omega_w\times\mathbf r_i\)</span>, and the cross product’s right-hand-rule direction is the tangent direction shown in the figure. When <span class="math inline">\(\boldsymbol\omega_w=\mathbf 0_3\)</span>, both the cross product and the column’s rate are zero. Therefore, for each of the three columns,</p>
+<p><span class="math display">\[
+\boxed{
+\dot{\mathbf r}_i(t)
+=
+\boldsymbol\omega_w(t)\times\mathbf r_i(t),
+\qquad
+i\in\{1,2,3\}
+}.
+\]</span></p>
+<p>These equations describe how the three columns of the orientation matrix change. To combine them into one equation for <span class="math inline">\(\dot{\mathbf R}_{wb}\)</span>, the cross product can be represented as a matrix multiplication.</p>
+</section>
+<section id="sec-so3-cross-product-matrix" class="level3" data-number="7.4.2">
+<h3 data-number="7.4.2" class="anchored" data-anchor-id="sec-so3-cross-product-matrix"><span class="header-section-number">7.4.2</span> Cross-product matrices and the orientation derivative</h3>
+<p>Let</p>
+<p><span class="math display">\[
+\mathbf x
+=
+\begin{bmatrix}
+x_1\\x_2\\x_3
+\end{bmatrix}
+\in\mathbb R^3.
+\]</span></p>
+<p>The <strong>cross-product matrix</strong> of <span class="math inline">\(\mathbf x\)</span> is defined by</p>
+<p><span class="math display">\[
+\boxed{
+[\mathbf x]_\times
+\mathrel{:=}
+\begin{bmatrix}
+0&amp;-x_3&amp;x_2\\
+x_3&amp;0&amp;-x_1\\
+-x_2&amp;x_1&amp;0
+\end{bmatrix}
+\in\mathbb R^{3\times3}
+}.
+\]</span></p>
+<p>The notation <span class="math inline">\([\,\cdot\,]_\times\)</span> means “form the matrix that performs a cross product with the enclosed vector.” For any <span class="math inline">\(\mathbf y=[y_1\;y_2\;y_3]^\mathsf T\in\mathbb R^3\)</span>, direct multiplication gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+\left[\mathbf x\right]_\times \mathbf y
+&amp;=
+\begin{bmatrix}
+-x_3y_2+x_2y_3\\
+x_3y_1-x_1y_3\\
+-x_2y_1+x_1y_2
+\end{bmatrix}\\
+&amp;=
+\boxed{
+\mathbf x\times\mathbf y
+}.
+\end{aligned}
+\]</span></p>
+<p>Thus, <span class="math inline">\([\mathbf x]_\times\)</span> is a linear mapping from an input vector <span class="math inline">\(\mathbf y\in\mathbb R^3\)</span> to the output vector <span class="math inline">\(\mathbf x\times\mathbf y\in\mathbb R^3\)</span>. Its entries have the same units as the components of <span class="math inline">\(\mathbf x\)</span>.</p>
+<p>Transposing the matrix changes the sign of every off-diagonal entry:</p>
+<p><span class="math display">\[
+[\mathbf x]_\times^\mathsf T
+=
+-[\mathbf x]_\times.
+\]</span></p>
+<p>A square matrix <span class="math inline">\(\mathbf A\)</span> satisfying <span class="math inline">\(\mathbf A^\mathsf T=-\mathbf A\)</span> is called <strong>skew-symmetric</strong>. The set of all real <span class="math inline">\(3\times3\)</span> skew-symmetric matrices is</p>
+<p><span class="math display">\[
+\boxed{
+\mathfrak{so}(3)
+\mathrel{:=}
+\left\{
+\mathbf A\in\mathbb R^{3\times3}
+\;\middle|\;
+\mathbf A^\mathsf T=-\mathbf A
+\right\}
+=
+\left\{
+[\mathbf x]_\times
+\;\middle|\;
+\mathbf x\in\mathbb R^3
+\right\}
+}.
+\]</span></p>
+<p>The second equality follows from the structure imposed by skew symmetry. The diagonal entries must be zero, and each entry below the diagonal must be the negative of the corresponding entry above it. Hence, every <span class="math inline">\(\mathbf A\in\mathfrak{so}(3)\)</span> is determined by three scalars and can be written uniquely as</p>
+<p><span class="math display">\[
+\mathbf A
+=
+\begin{bmatrix}
+0&amp;-x_3&amp;x_2\\
+x_3&amp;0&amp;-x_1\\
+-x_2&amp;x_1&amp;0
+\end{bmatrix}
+=
+[\mathbf x]_\times.
+\]</span></p>
+<p>As in the planar case developed in <a href="06_planar_rigid_body_motion_se2_and_twists.html#sec-se2-rotation-derivative-tangent" class="quarto-xref"><span>Section 6.3.3</span></a>, <span class="math inline">\(\mathfrak{so}(3)\)</span> is the <strong>Lie algebra</strong> of <span class="math inline">\(SO(3)\)</span>: it is the vector space of instantaneous rotation directions at the identity rotation <span class="math inline">\(\mathbf I_3\)</span>. A finite rotation matrix belongs to <span class="math inline">\(SO(3)\)</span>, whereas an angular-velocity matrix belongs to <span class="math inline">\(\mathfrak{so}(3)\)</span> and describes a rate rather than an orientation.</p>
+<p>Apply the cross-product matrix to the three column-rate equations from <a href="#sec-so3-angular-velocity-definition" class="quarto-xref"><span>Section 7.4.1</span></a>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\dot{\mathbf R}_{wb}
+&amp;=
+\begin{bmatrix}
+\dot{\mathbf r}_1&amp;\dot{\mathbf r}_2&amp;\dot{\mathbf r}_3
+\end{bmatrix}\\
+&amp;=
+\begin{bmatrix}
+[\boldsymbol\omega_w]_\times\mathbf r_1&amp;
+[\boldsymbol\omega_w]_\times\mathbf r_2&amp;
+[\boldsymbol\omega_w]_\times\mathbf r_3
+\end{bmatrix}\\
+&amp;=
+[\boldsymbol\omega_w]_\times
+\begin{bmatrix}
+\mathbf r_1&amp;\mathbf r_2&amp;\mathbf r_3
+\end{bmatrix}.
+\end{aligned}
+\]</span></p>
+<p>Because the final matrix of columns is <span class="math inline">\(\mathbf R_{wb}\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+\dot{\mathbf R}_{wb}
+=
+[\boldsymbol\omega_w]_\times\mathbf R_{wb}
+}.
+\]</span></p>
+<p>Here, <span class="math inline">\(\mathbf R_{wb}\in SO(3)\)</span> is dimensionless, <span class="math inline">\(\boldsymbol\omega_w\in\mathbb R^3\)</span> has units of <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>, and both <span class="math inline">\([\boldsymbol\omega_w]_\times\)</span> and <span class="math inline">\(\dot{\mathbf R}_{wb}\)</span> have units of <span class="math inline">\(\mathrm{s^{-1}}\)</span> because radians are dimensionless in SI. This equation says that the world-coordinate rate of every body-axis column is produced by the same world-expressed angular velocity.</p>
+<p>Right-multiplying by <span class="math inline">\(\mathbf R_{wb}^\mathsf T=\mathbf R_{wb}^{-1}\)</span> isolates the angular-velocity matrix:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\dot{\mathbf R}_{wb}\mathbf R_{wb}^\mathsf T
+&amp;=
+[\boldsymbol\omega_w]_\times
+\mathbf R_{wb}\mathbf R_{wb}^\mathsf T\\
+&amp;=
+[\boldsymbol\omega_w]_\times\mathbf I_3.
+\end{aligned}
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\boxed{
+[\boldsymbol\omega_w]_\times
+=
+\dot{\mathbf R}_{wb}\mathbf R_{wb}^\mathsf T
+}.
+\]</span></p>
+<p>This formula recovers the angular velocity expressed along the world axes from the orientation and its derivative.</p>
+<p>The same physical angular velocity can instead be expressed along the moving body axes. Define</p>
+<p><span class="math display">\[
+\boxed{
+\boldsymbol\omega_b
+\mathrel{:=}
+\mathbf R_{wb}^\mathsf T\boldsymbol\omega_w
+\in\mathbb R^3
+}.
+\]</span></p>
+<p>The subscript <span class="math inline">\(b\)</span> does not mean that the body rotates relative to itself. It means that the body’s angular velocity relative to the world is resolved into components along <span class="math inline">\(x_b\)</span>, <span class="math inline">\(y_b\)</span>, and <span class="math inline">\(z_b\)</span>.</p>
+<p>A proper rotation preserves cross products. Insert the identity <span class="math inline">\(\mathbf I_3=\mathbf R_{wb}^\mathsf T\mathbf R_{wb}\)</span> before <span class="math inline">\(\mathbf y\)</span>, and then use <span class="math inline">\((\mathbf R^\mathsf T\mathbf a)\times(\mathbf R^\mathsf T\mathbf b)=\mathbf R^\mathsf T(\mathbf a\times\mathbf b)\)</span> for <span class="math inline">\(\mathbf R\in SO(3)\)</span>. Consequently, for every <span class="math inline">\(\mathbf y\in\mathbb R^3\)</span>,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\left[\boldsymbol\omega_b\right]_\times\mathbf y
+&amp;=
+(\mathbf R_{wb}^\mathsf T\boldsymbol\omega_w)\times\mathbf y\\
+&amp;=
+(\mathbf R_{wb}^\mathsf T\boldsymbol\omega_w)
+\times
+(\mathbf R_{wb}^\mathsf T\mathbf R_{wb}\mathbf y)\\
+&amp;=
+\mathbf R_{wb}^\mathsf T
+\left(
+\boldsymbol\omega_w\times(\mathbf R_{wb}\mathbf y)
+\right)\\
+&amp;=
+\mathbf R_{wb}^\mathsf T
+[\boldsymbol\omega_w]_\times
+\mathbf R_{wb}\mathbf y.
+\end{aligned}
+\]</span></p>
+<p>Because the two matrix expressions produce the same output for every <span class="math inline">\(\mathbf y\)</span>, their matrices are equal:</p>
+<p><span class="math display">\[
+[\boldsymbol\omega_b]_\times
+=
+\mathbf R_{wb}^\mathsf T
+[\boldsymbol\omega_w]_\times
+\mathbf R_{wb}.
+\]</span></p>
+<p>Substituting <span class="math inline">\([\boldsymbol\omega_w]_\times=\dot{\mathbf R}_{wb}\mathbf R_{wb}^\mathsf T\)</span> then gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+[\boldsymbol\omega_b]_\times
+&amp;=
+\mathbf R_{wb}^\mathsf T
+\dot{\mathbf R}_{wb}
+\mathbf R_{wb}^\mathsf T
+\mathbf R_{wb}\\
+&amp;=
+\mathbf R_{wb}^\mathsf T\dot{\mathbf R}_{wb}.
+\end{aligned}
+\]</span></p>
+<p>The two coordinate descriptions and the corresponding orientation-rate equations are therefore</p>
+<p><span class="math display">\[
+\boxed{
+\begin{aligned}
+\left[\boldsymbol\omega_w\right]_\times
+&amp;=
+\dot{\mathbf R}_{wb}\mathbf R_{wb}^\mathsf T,
+&amp;
+\dot{\mathbf R}_{wb}
+&amp;=
+[\boldsymbol\omega_w]_\times\mathbf R_{wb},\\
+[\boldsymbol\omega_b]_\times
+&amp;=
+\mathbf R_{wb}^\mathsf T\dot{\mathbf R}_{wb},
+&amp;
+\dot{\mathbf R}_{wb}
+&amp;=
+\mathbf R_{wb}[\boldsymbol\omega_b]_\times.
+\end{aligned}
+}.
+\]</span></p>
+<section id="connection-to-finite-fixed-frame-and-body-frame-increments" class="level4">
+<h4 class="anchored" data-anchor-id="connection-to-finite-fixed-frame-and-body-frame-increments">Connection to finite fixed-frame and body-frame increments</h4>
+<p>The multiplication sides follow directly from the finite composition rules in <a href="#sec-so3-fixed-body-increments" class="quarto-xref"><span>Section 7.3.3</span></a>. To see this, let</p>
+<p><span class="math display">\[
+\mathbf R
+\mathrel{:=}
+\mathbf R_{wb}(t),
+\qquad
+\mathbf R^+
+\mathrel{:=}
+\mathbf R_{wb}(t+\Delta t),
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf R\)</span> is the orientation at time <span class="math inline">\(t\)</span>, <span class="math inline">\(\mathbf R^+\)</span> is the orientation after a short interval <span class="math inline">\(\Delta t&gt;0\)</span>, and both matrices belong to <span class="math inline">\(SO(3)\)</span>.</p>
+<p>First express the orientation change using the fixed world axes. The finite composition rule is</p>
+<p><span class="math display">\[
+\mathbf R^+
+=
+\mathbf Q_w\mathbf R,
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf Q_w\in SO(3)\)</span> is the incremental rotation expressed using world coordinates. At <span class="math inline">\(\Delta t=0\)</span>, there is no orientation change, so <span class="math inline">\(\mathbf Q_w(t,0)=\mathbf I_3\)</span>. Its derivative with respect to the interval length at zero is the world-expressed angular-velocity matrix <span class="math inline">\([\boldsymbol\omega_w(t)]_\times\)</span>. The first-order Taylor expansion is therefore</p>
+<p><span class="math display">\[
+\mathbf Q_w
+=
+\mathbf I_3
++
+\Delta t[\boldsymbol\omega_w]_\times
++
+O(\Delta t^2).
+\]</span></p>
+<p>Substituting this expansion into the finite composition rule gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf R^+
+&amp;=
+\left(
+\mathbf I_3
++
+\Delta t[\boldsymbol\omega_w]_\times
++
+O(\Delta t^2)
+\right)\mathbf R\\
+&amp;=
+\mathbf R
++
+\Delta t[\boldsymbol\omega_w]_\times\mathbf R
++
+O(\Delta t^2).
+\end{aligned}
+\]</span></p>
+<p>Subtract <span class="math inline">\(\mathbf R\)</span>, divide by <span class="math inline">\(\Delta t\)</span>, and take the limit <span class="math inline">\(\Delta t\to0\)</span>:</p>
+<p><span class="math display">\[
+\boxed{
+\dot{\mathbf R}_{wb}
+=
+[\boldsymbol\omega_w]_\times\mathbf R_{wb}
+}.
+\]</span></p>
+<p>Thus, a rotation change expressed using the fixed world axes premultiplies the finite orientation, and its world-expressed angular-velocity matrix likewise multiplies the orientation on the left.</p>
+<p>Now express the same orientation change using the old body axes. The finite composition rule is</p>
+<p><span class="math display">\[
+\mathbf R^+
+=
+\mathbf R\mathbf Q_b,
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf Q_b\in SO(3)\)</span> is the incremental rotation expressed using body coordinates. Similarly, <span class="math inline">\(\mathbf Q_b(t,0)=\mathbf I_3\)</span>, and its derivative with respect to the interval length at zero is <span class="math inline">\([\boldsymbol\omega_b(t)]_\times\)</span>. Its first-order Taylor expansion is</p>
+<p><span class="math display">\[
+\mathbf Q_b
+=
+\mathbf I_3
++
+\Delta t[\boldsymbol\omega_b]_\times
++
+O(\Delta t^2).
+\]</span></p>
+<p>Substitution gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf R^+
+&amp;=
+\mathbf R
+\left(
+\mathbf I_3
++
+\Delta t[\boldsymbol\omega_b]_\times
++
+O(\Delta t^2)
+\right)\\
+&amp;=
+\mathbf R
++
+\Delta t\mathbf R[\boldsymbol\omega_b]_\times
++
+O(\Delta t^2).
+\end{aligned}
+\]</span></p>
+<p>Taking the same difference-quotient limit gives</p>
+<p><span class="math display">\[
+\boxed{
+\dot{\mathbf R}_{wb}
+=
+\mathbf R_{wb}[\boldsymbol\omega_b]_\times
+}.
+\]</span></p>
+<p>Thus, a rotation change expressed using the moving body axes postmultiplies the finite orientation, and its body-expressed angular-velocity matrix likewise multiplies the orientation on the right. Both equations describe the same physical turn; only the axes used to express that turn differ.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Coordinates used for the change</th>
+<th>Finite composition</th>
+<th>Instantaneous orientation rate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fixed world axes</td>
+<td><span class="math inline">\(\mathbf R^+=\mathbf Q_w\mathbf R\)</span></td>
+<td><span class="math inline">\(\dot{\mathbf R}=[\boldsymbol\omega_w]_\times\mathbf R\)</span></td>
+</tr>
+<tr class="even">
+<td>Moving body axes</td>
+<td><span class="math inline">\(\mathbf R^+=\mathbf R\mathbf Q_b\)</span></td>
+<td><span class="math inline">\(\dot{\mathbf R}=\mathbf R[\boldsymbol\omega_b]_\times\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Finally, these rate matrices are necessarily skew-symmetric. Differentiating the rotation constraint <span class="math inline">\(\mathbf R_{wb}^\mathsf T\mathbf R_{wb}=\mathbf I_3\)</span> gives</p>
+<p><span class="math display">\[
+\dot{\mathbf R}_{wb}^\mathsf T\mathbf R_{wb}
++
+\mathbf R_{wb}^\mathsf T\dot{\mathbf R}_{wb}
+=
+\mathbf 0_{3\times3}.
+\]</span></p>
+<p>Therefore, <span class="math inline">\((\mathbf R_{wb}^\mathsf T\dot{\mathbf R}_{wb})^\mathsf T=-\mathbf R_{wb}^\mathsf T\dot{\mathbf R}_{wb}\)</span>, confirming that <span class="math inline">\([\boldsymbol\omega_b]_\times\in\mathfrak{so}(3)\)</span>. Differentiating <span class="math inline">\(\mathbf R_{wb}\mathbf R_{wb}^\mathsf T=\mathbf I_3\)</span> similarly confirms that <span class="math inline">\([\boldsymbol\omega_w]_\times=\dot{\mathbf R}_{wb}\mathbf R_{wb}^\mathsf T\in\mathfrak{so}(3)\)</span>. These products remove the current finite orientation and express its instantaneous change at the identity rotation.</p>
+</section>
+</section>
+</section>
+<section id="quick-test-d-angular-velocity" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="quick-test-d-angular-velocity">Quick test D: angular velocity</h2>
+<ol type="1">
+<li>What physical information is contained in the direction and magnitude of <span class="math inline">\(\boldsymbol\omega_w\)</span>?</li>
+<li>Why does knowing <span class="math inline">\(\mathbf R_{wb}(t)\)</span> at one instant not determine <span class="math inline">\(\boldsymbol\omega_w(t)\)</span>?</li>
+<li>Explain geometrically why a body-axis column satisfies <span class="math inline">\(\dot{\mathbf r}_i=\boldsymbol\omega_w\times\mathbf r_i\)</span>.</li>
+<li>Suppose <span class="math inline">\(\boldsymbol\omega_w=[0\;0\;2]^\mathsf T\,\mathrm{rad\,s^{-1}}\)</span> and <span class="math inline">\(\mathbf r_i=[1\;0\;0]^\mathsf T\)</span>. Calculate <span class="math inline">\(\dot{\mathbf r}_i\)</span> and interpret its direction.</li>
+<li>Construct <span class="math inline">\([\mathbf x]_\times\)</span> for <span class="math inline">\(\mathbf x=[1\;2\;3]^\mathsf T\)</span> and verify that it is skew-symmetric.</li>
+<li>Starting from <span class="math inline">\(\dot{\mathbf R}_{wb}=[\boldsymbol\omega_w]_\times\mathbf R_{wb}\)</span>, isolate <span class="math inline">\([\boldsymbol\omega_w]_\times\)</span>.</li>
+<li>Do <span class="math inline">\(\boldsymbol\omega_w\)</span> and <span class="math inline">\(\boldsymbol\omega_b\)</span> describe different physical turns? Explain their relationship.</li>
+<li>Why is <span class="math inline">\(\mathbf R_{wb}^\mathsf T\dot{\mathbf R}_{wb}\)</span> skew-symmetric rather than a rotation matrix?</li>
+</ol>
+<section id="answers-and-hints-3" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="answers-and-hints-3">Answers and hints</h3>
+<ol type="1">
+<li>Its direction gives the instantaneous rotation axis according to the right-hand rule, and its magnitude gives the angular speed in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>.</li>
+<li>Orientation is a state, whereas angular velocity is its rate of change. Different orientation trajectories can pass through the same <span class="math inline">\(\mathbf R_{wb}(t)\)</span> with different derivatives.</li>
+<li>The tip of <span class="math inline">\(\mathbf r_i\)</span> has a tangent velocity about the instantaneous rotation-axis direction. The cross product has that tangent direction and magnitude <span class="math inline">\(\|\boldsymbol\omega_w\|_2\|\mathbf r_i\|_2\sin\varphi_i\)</span>.</li>
+<li><span class="math inline">\(\dot{\mathbf r}_i=\boldsymbol\omega_w\times\mathbf r_i=[0\;2\;0]^\mathsf T\,\mathrm{s^{-1}}\)</span>. The direction initially points toward positive <span class="math inline">\(y_w\)</span>, as expected for a positive turn about <span class="math inline">\(z_w\)</span>.</li>
+<li><span class="math inline">\([\mathbf x]_\times=\begin{bmatrix}0&amp;-3&amp;2\\3&amp;0&amp;-1\\-2&amp;1&amp;0\end{bmatrix}\)</span>, and direct transposition gives <span class="math inline">\([\mathbf x]_\times^\mathsf T=-[\mathbf x]_\times\)</span>.</li>
+<li>Right-multiply by <span class="math inline">\(\mathbf R_{wb}^\mathsf T\)</span> and use <span class="math inline">\(\mathbf R_{wb}\mathbf R_{wb}^\mathsf T=\mathbf I_3\)</span> to obtain <span class="math inline">\([\boldsymbol\omega_w]_\times=\dot{\mathbf R}_{wb}\mathbf R_{wb}^\mathsf T\)</span>.</li>
+<li>No.&nbsp;They describe the same angular velocity relative to the world but resolve it along different axes: <span class="math inline">\(\boldsymbol\omega_b=\mathbf R_{wb}^\mathsf T\boldsymbol\omega_w\)</span>.</li>
+<li>Differentiating <span class="math inline">\(\mathbf R_{wb}^\mathsf T\mathbf R_{wb}=\mathbf I_3\)</span> shows that <span class="math inline">\((\mathbf R_{wb}^\mathsf T\dot{\mathbf R}_{wb})^\mathsf T=-\mathbf R_{wb}^\mathsf T\dot{\mathbf R}_{wb}\)</span>. It represents an instantaneous rotation rate in <span class="math inline">\(\mathfrak{so}(3)\)</span>, not a finite orientation in <span class="math inline">\(SO(3)\)</span>.</li>
+</ol>
+</section>
+</section>
+<section id="sec-so3-axis-angle-exponential" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="sec-so3-axis-angle-exponential"><span class="header-section-number">7.5</span> Finite rotations from axis–angle coordinates</h2>
+<section id="the-problem-converting-a-rotation-rate-into-a-finite-turn" class="level3" data-number="7.5.1">
+<h3 data-number="7.5.1" class="anchored" data-anchor-id="the-problem-converting-a-rotation-rate-into-a-finite-turn"><span class="header-section-number">7.5.1</span> The problem: converting a rotation rate into a finite turn</h3>
+<p>The angular-velocity equations in <a href="#sec-so3-angular-velocity" class="quarto-xref"><span>Section 7.4</span></a> describe an instantaneous orientation rate. A simulation, estimator, or controller also needs a finite orientation change over a nonzero interval. This section solves the forward problem: given a rotation-axis direction and a signed rotation angle, construct the corresponding matrix in <span class="math inline">\(SO(3)\)</span>.</p>
+<p>Let <span class="math inline">\(\mathbf a_w\in\mathbb R^3\)</span> be a unit vector expressed in world coordinates,</p>
+<p><span class="math display">\[
+\|\mathbf a_w\|_2=1,
+\]</span></p>
+<p>and let <span class="math inline">\(\alpha\in\mathbb R\)</span> be a signed rotation angle measured in radians. The pair <span class="math inline">\((\mathbf a_w,\alpha)\)</span> is an <strong>axis–angle representation</strong> of the intended orientation change: <span class="math inline">\(\mathbf a_w\)</span> gives the positive axis direction, and the sign of <span class="math inline">\(\alpha\)</span> selects the direction of rotation by the right-hand rule. This orientation-only description specifies an axis direction through the coordinate origin; locating a physical pivot line would additionally require a point, as explained in <a href="#sec-so3-angular-velocity-definition" class="quarto-xref"><span>Section 7.4.1</span></a>.</p>
+<p>The three-component column</p>
+<p><span class="math display">\[
+\boxed{
+\boldsymbol\varphi_w
+\mathrel{:=}
+\alpha\mathbf a_w
+\in\mathbb R^3
+}
+\]</span></p>
+<p>is called the <strong>rotation vector</strong>, or the <strong>exponential coordinates of the rotation</strong>. Its direction gives the rotation axis and its norm gives the angle magnitude:</p>
+<p><span class="math display">\[
+\|\boldsymbol\varphi_w\|_2
+=
+|\alpha|.
+\]</span></p>
+<p>The vector is dimensionless in SI because radians are dimensionless, although its entries are labelled in radians to preserve their physical meaning. It represents a finite orientation change, not angular velocity; angular velocity has units of <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>.</p>
+</section>
+<section id="the-matrix-exponential" class="level3" data-number="7.5.2">
+<h3 data-number="7.5.2" class="anchored" data-anchor-id="the-matrix-exponential"><span class="header-section-number">7.5.2</span> The matrix exponential</h3>
+<p>To construct the finite rotation, first consider a differentiable world-coordinate vector <span class="math inline">\(\mathbf p(s)\in\mathbb R^3\)</span> rotating about <span class="math inline">\(\mathbf a_w\)</span>, where <span class="math inline">\(s\in\mathbb R\)</span> is a dimensionless angle parameter measured in radians. The angular rate with respect to <span class="math inline">\(s\)</span> has unit magnitude, so the vector-rate equation from <a href="#sec-so3-angular-velocity-definition" class="quarto-xref"><span>Section 7.4.1</span></a> becomes</p>
+<p><span class="math display">\[
+\frac{d\mathbf p}{ds}
+=
+\mathbf a_w\times\mathbf p(s)
+=
+[\mathbf a_w]_\times\mathbf p(s).
+\]</span></p>
+<p>The initial condition is <span class="math inline">\(\mathbf p(0)=\mathbf p_0\)</span>, where <span class="math inline">\(\mathbf p_0\in\mathbb R^3\)</span> is the vector before the turn. The coefficient matrix <span class="math inline">\([\mathbf a_w]_\times\in\mathfrak{so}(3)\)</span> is constant because the axis is fixed in world coordinates.</p>
+<p>For any square matrix <span class="math inline">\(\mathbf A\in\mathbb R^{n\times n}\)</span>, the <strong>matrix exponential</strong> is defined by the convergent power series</p>
+<p><span class="math display">\[
+\boxed{
+\exp(\mathbf A)
+\mathrel{:=}
+\mathbf I_n
++
+\mathbf A
++
+\frac{\mathbf A^2}{2!}
++
+\frac{\mathbf A^3}{3!}
++
+\cdots
+}.
+\]</span></p>
+<p>This definition extends the ordinary scalar exponential to square matrices. For a constant matrix <span class="math inline">\(\mathbf A\)</span>, term-by-term differentiation of the series gives</p>
+<p><span class="math display">\[
+\frac{d}{ds}\exp(s\mathbf A)
+=
+\mathbf A\exp(s\mathbf A).
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\mathbf p(s)
+=
+\exp\!\left(s[\mathbf a_w]_\times\right)\mathbf p_0
+\]</span></p>
+<p>solves the vector-rate equation because</p>
+<p><span class="math display">\[
+\begin{aligned}
+\frac{d\mathbf p}{ds}
+&amp;=
+\frac{d}{ds}
+\left[
+\exp\!\left(s[\mathbf a_w]_\times\right)
+\right]
+\mathbf p_0\\
+&amp;=
+[\mathbf a_w]_\times
+\exp\!\left(s[\mathbf a_w]_\times\right)
+\mathbf p_0\\
+&amp;=
+[\mathbf a_w]_\times\mathbf p(s),
+\end{aligned}
+\]</span></p>
+<p>and <span class="math inline">\(\mathbf p(0)=\exp(\mathbf 0_{3\times3})\mathbf p_0=\mathbf I_3\mathbf p_0=\mathbf p_0\)</span>. The cross-product-matrix construction is linear, so <span class="math inline">\([\boldsymbol\varphi_w]_\times=[\alpha\mathbf a_w]_\times=\alpha[\mathbf a_w]_\times\)</span>. Setting <span class="math inline">\(s=\alpha\)</span> therefore defines the finite rotation</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf Q_w(\mathbf a_w,\alpha)
+\mathrel{:=}
+\exp\!\left(\alpha[\mathbf a_w]_\times\right)
+=
+\exp\!\left([\boldsymbol\varphi_w]_\times\right)
+}.
+\]</span></p>
+<p>The mapping</p>
+<p><span class="math display">\[
+\exp:\mathfrak{so}(3)\to SO(3)
+\]</span></p>
+<p>is called the <strong>exponential map</strong> for rotations. It converts the linear, infinitesimal representation <span class="math inline">\([\boldsymbol\varphi_w]_\times\in\mathfrak{so}(3)\)</span> into a finite rotation matrix <span class="math inline">\(\mathbf Q_w\in SO(3)\)</span>.</p>
+<p>To verify that the result is a rotation matrix, set <span class="math inline">\(\boldsymbol\Omega\mathrel{:=}[\mathbf a_w]_\times\)</span>. Because <span class="math inline">\(\boldsymbol\Omega^\mathsf T=-\boldsymbol\Omega\)</span>, transposing the exponential series gives</p>
+<p><span class="math display">\[
+\mathbf Q_w^\mathsf T
+=
+\exp(-\alpha\boldsymbol\Omega).
+\]</span></p>
+<p>The two exponent matrices <span class="math inline">\(-\alpha\boldsymbol\Omega\)</span> and <span class="math inline">\(\alpha\boldsymbol\Omega\)</span> commute because each is a scalar multiple of the same matrix. Hence,</p>
+<p><span class="math display">\[
+\mathbf Q_w^\mathsf T\mathbf Q_w
+=
+\exp(-\alpha\boldsymbol\Omega)
+\exp(\alpha\boldsymbol\Omega)
+=
+\exp(\mathbf 0_{3\times3})
+=
+\mathbf I_3.
+\]</span></p>
+<p>Thus, <span class="math inline">\(\mathbf Q_w\)</span> is orthogonal. At <span class="math inline">\(\alpha=0\)</span>, <span class="math inline">\(\mathbf Q_w=\mathbf I_3\)</span> and <span class="math inline">\(\det(\mathbf Q_w)=1\)</span>. The determinant varies continuously with <span class="math inline">\(\alpha\)</span>, while an orthogonal matrix can have determinant only <span class="math inline">\(+1\)</span> or <span class="math inline">\(-1\)</span>, so it cannot change sign without leaving the orthogonal set. Therefore, <span class="math inline">\(\det(\mathbf Q_w)=1\)</span> for every <span class="math inline">\(\alpha\)</span>, proving <span class="math inline">\(\mathbf Q_w\in SO(3)\)</span>.</p>
+</section>
+<section id="deriving-rodrigues-rotation-formula" class="level3" data-number="7.5.3">
+<h3 data-number="7.5.3" class="anchored" data-anchor-id="deriving-rodrigues-rotation-formula"><span class="header-section-number">7.5.3</span> Deriving Rodrigues’ rotation formula</h3>
+<p>The infinite series has a finite closed form because powers of <span class="math inline">\(\boldsymbol\Omega=[\mathbf a_w]_\times\)</span> repeat in a simple pattern. For every <span class="math inline">\(\mathbf y\in\mathbb R^3\)</span>, the vector triple-product identity gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+\boldsymbol\Omega^2\mathbf y
+&amp;=
+\mathbf a_w\times(\mathbf a_w\times\mathbf y)\\
+&amp;=
+\mathbf a_w(\mathbf a_w^\mathsf T\mathbf y)
+-
+(\mathbf a_w^\mathsf T\mathbf a_w)\mathbf y\\
+&amp;=
+\left(
+\mathbf a_w\mathbf a_w^\mathsf T
+-
+\mathbf I_3
+\right)\mathbf y.
+\end{aligned}
+\]</span></p>
+<p>The last equality uses <span class="math inline">\(\mathbf a_w^\mathsf T\mathbf a_w=1\)</span>. Because the equation holds for every <span class="math inline">\(\mathbf y\)</span>,</p>
+<p><span class="math display">\[
+\boxed{
+\boldsymbol\Omega^2
+=
+\mathbf a_w\mathbf a_w^\mathsf T
+-
+\mathbf I_3
+}.
+\]</span></p>
+<p>Furthermore, <span class="math inline">\(\boldsymbol\Omega\mathbf a_w=\mathbf a_w\times\mathbf a_w=\mathbf 0_3\)</span>, so</p>
+<p><span class="math display">\[
+\begin{aligned}
+\boldsymbol\Omega^3
+&amp;=
+\boldsymbol\Omega
+\left(
+\mathbf a_w\mathbf a_w^\mathsf T-
+\mathbf I_3
+\right)\\
+&amp;=
+(\boldsymbol\Omega\mathbf a_w)\mathbf a_w^\mathsf T
+-
+\boldsymbol\Omega\\
+&amp;=
+-\boldsymbol\Omega.
+\end{aligned}
+\]</span></p>
+<p>Consequently, the odd powers alternate between <span class="math inline">\(\boldsymbol\Omega\)</span> and <span class="math inline">\(-\boldsymbol\Omega\)</span>, while the positive even powers alternate between <span class="math inline">\(\boldsymbol\Omega^2\)</span> and <span class="math inline">\(-\boldsymbol\Omega^2\)</span>. Expand the matrix exponential and group those two power sequences:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\exp(\alpha\boldsymbol\Omega)
+&amp;=
+\mathbf I_3
++
+\alpha\boldsymbol\Omega
++
+\frac{\alpha^2}{2!}\boldsymbol\Omega^2
++
+\frac{\alpha^3}{3!}\boldsymbol\Omega^3
++
+\cdots\\
+&amp;=
+\mathbf I_3
++
+\left(
+\alpha-
+\frac{\alpha^3}{3!}
++
+\frac{\alpha^5}{5!}
+-
+\cdots
+\right)\boldsymbol\Omega\\
+&amp;\quad+
+\left(
+\frac{\alpha^2}{2!}
+-
+\frac{\alpha^4}{4!}
++
+\frac{\alpha^6}{6!}
+-
+\cdots
+\right)\boldsymbol\Omega^2.
+\end{aligned}
+\]</span></p>
+<p>The first scalar series is <span class="math inline">\(\sin\alpha\)</span>, and the second is <span class="math inline">\(1-\cos\alpha\)</span>. Therefore,</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf Q_w(\mathbf a_w,\alpha)
+=
+\exp\!\left(\alpha[\mathbf a_w]_\times\right)
+=
+\mathbf I_3
++
+\sin\alpha[\mathbf a_w]_\times
++
+(1-\cos\alpha)[\mathbf a_w]_\times^2
+}.
+\]</span></p>
+<p>This closed form is <strong>Rodrigues’ rotation formula</strong>. Its geometric meaning becomes clear by decomposing any vector <span class="math inline">\(\mathbf y\in\mathbb R^3\)</span> into a component parallel to the axis and a component perpendicular to it:</p>
+<p><span class="math display">\[
+\mathbf y_{\parallel}
+\mathrel{:=}
+(\mathbf a_w^\mathsf T\mathbf y)\mathbf a_w,
+\qquad
+\mathbf y_{\perp}
+\mathrel{:=}
+\mathbf y-
+\mathbf y_{\parallel}.
+\]</span></p>
+<p>Because <span class="math inline">\(\boldsymbol\Omega\mathbf y=\mathbf a_w\times\mathbf y_{\perp}\)</span> and <span class="math inline">\(\boldsymbol\Omega^2\mathbf y=-\mathbf y_{\perp}\)</span>, Rodrigues’ formula gives</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf Q_w\mathbf y
+=
+\mathbf y_{\parallel}
++
+\cos\alpha\,\mathbf y_{\perp}
++
+\sin\alpha
+(\mathbf a_w\times\mathbf y_{\perp})
+}.
+\]</span></p>
+<p>The parallel component remains unchanged, while the perpendicular component rotates through angle <span class="math inline">\(\alpha\)</span> in its plane according to the right-hand rule.</p>
+</section>
+<section id="check-rotation-about-the-world-z_w-axis" class="level3" data-number="7.5.4">
+<h3 data-number="7.5.4" class="anchored" data-anchor-id="check-rotation-about-the-world-z_w-axis"><span class="header-section-number">7.5.4</span> Check: rotation about the world <span class="math inline">\(z_w\)</span>-axis</h3>
+<p>Choose</p>
+<p><span class="math display">\[
+\mathbf a_w
+=
+\mathbf e_z
+=
+\begin{bmatrix}0\\0\\1\end{bmatrix},
+\qquad
+[\mathbf a_w]_\times
+=
+\begin{bmatrix}
+0&amp;-1&amp;0\\
+1&amp;0&amp;0\\
+0&amp;0&amp;0
+\end{bmatrix}.
+\]</span></p>
+<p>Squaring the cross-product matrix gives</p>
+<p><span class="math display">\[
+[\mathbf a_w]_\times^2
+=
+\begin{bmatrix}
+-1&amp;0&amp;0\\
+0&amp;-1&amp;0\\
+0&amp;0&amp;0
+\end{bmatrix}.
+\]</span></p>
+<p>Substitution into Rodrigues’ formula produces</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf Q_w(\mathbf e_z,\alpha)
+&amp;=
+\mathbf I_3
++
+\sin\alpha
+\begin{bmatrix}
+0&amp;-1&amp;0\\
+1&amp;0&amp;0\\
+0&amp;0&amp;0
+\end{bmatrix}
++
+(1-\cos\alpha)
+\begin{bmatrix}
+-1&amp;0&amp;0\\
+0&amp;-1&amp;0\\
+0&amp;0&amp;0
+\end{bmatrix}\\
+&amp;=
+\boxed{
+\begin{bmatrix}
+\cos\alpha&amp;-\sin\alpha&amp;0\\
+\sin\alpha&amp;\cos\alpha&amp;0\\
+0&amp;0&amp;1
+\end{bmatrix}
+}.
+\end{aligned}
+\]</span></p>
+<p>This is exactly the coordinate-axis rotation <span class="math inline">\(\mathbf R_z(\alpha)\)</span> derived in <a href="#sec-so3-active-axis-rotations" class="quarto-xref"><span>Section 7.3.1</span></a>.</p>
+</section>
+<section id="applying-a-constant-angular-velocity-over-a-time-interval" class="level3" data-number="7.5.5">
+<h3 data-number="7.5.5" class="anchored" data-anchor-id="applying-a-constant-angular-velocity-over-a-time-interval"><span class="header-section-number">7.5.5</span> Applying a constant angular velocity over a time interval</h3>
+<p>Suppose the world-expressed angular velocity <span class="math inline">\(\boldsymbol\omega_w\in\mathbb R^3\)</span> remains constant during a time interval <span class="math inline">\(\Delta t&gt;0\)</span>. If <span class="math inline">\(\boldsymbol\omega_w\ne\mathbf 0_3\)</span>, define</p>
+<p><span class="math display">\[
+\mathbf a_w
+\mathrel{:=}
+\frac{\boldsymbol\omega_w}{\|\boldsymbol\omega_w\|_2},
+\qquad
+\alpha
+\mathrel{:=}
+\|\boldsymbol\omega_w\|_2\Delta t.
+\]</span></p>
+<p>The rotation vector over the interval is then</p>
+<p><span class="math display">\[
+\boldsymbol\varphi_w
+=
+\alpha\mathbf a_w
+=
+\Delta t\,\boldsymbol\omega_w.
+\]</span></p>
+<p>Because the angular velocity is expressed using the fixed world axes, the finite update premultiplies the current orientation:</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R_{wb}(t+\Delta t)
+=
+\exp\!\left(
+\Delta t[\boldsymbol\omega_w]_\times
+\right)
+\mathbf R_{wb}(t)
+}.
+\]</span></p>
+<p>If the constant angular velocity is instead expressed using the body axes, the update postmultiplies:</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R_{wb}(t+\Delta t)
+=
+\mathbf R_{wb}(t)
+\exp\!\left(
+\Delta t[\boldsymbol\omega_b]_\times
+\right)
+}.
+\]</span></p>
+<p>When the angular velocity is zero, define the finite increment as <span class="math inline">\(\mathbf I_3\)</span>; the orientation then remains unchanged. These finite updates are exact only when the corresponding world- or body-expressed angular velocity remains constant throughout the interval.</p>
+<p>Axis–angle coordinates are not globally unique. The pairs <span class="math inline">\((\mathbf a_w,\alpha)\)</span> and <span class="math inline">\((-\mathbf a_w,-\alpha)\)</span> describe the same turn, adding <span class="math inline">\(2\pi k\)</span> to the angle for any <span class="math inline">\(k\in\mathbb Z\)</span> produces the same rotation, and when <span class="math inline">\(\alpha=0\)</span> the axis direction is arbitrary. These facts matter when recovering axis–angle coordinates from a rotation matrix or comparing two numerical orientation representations.</p>
+</section>
+</section>
+<section id="quick-test-e-axisangle-coordinates-and-the-exponential-map" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="quick-test-e-axisangle-coordinates-and-the-exponential-map">Quick test E: axis–angle coordinates and the exponential map</h2>
+<ol type="1">
+<li>What information is stored in the axis–angle pair <span class="math inline">\((\mathbf a_w,\alpha)\)</span>, and how does the rotation vector <span class="math inline">\(\boldsymbol\varphi_w\)</span> combine it?</li>
+<li>State the matrix-exponential definition and explain why <span class="math inline">\(\mathbf p(s)=\exp(s[\mathbf a_w]_\times)\mathbf p_0\)</span> solves <span class="math inline">\(d\mathbf p/ds=[\mathbf a_w]_\times\mathbf p\)</span>.</li>
+<li>Use the vector triple-product identity to derive <span class="math inline">\([\mathbf a_w]_\times^2=\mathbf a_w\mathbf a_w^\mathsf T-\mathbf I_3\)</span> for a unit axis.</li>
+<li>Starting from the matrix-exponential series and <span class="math inline">\([\mathbf a_w]_\times^3=-[\mathbf a_w]_\times\)</span>, derive Rodrigues’ rotation formula.</li>
+<li>Why does Rodrigues’ formula leave the vector component parallel to <span class="math inline">\(\mathbf a_w\)</span> unchanged?</li>
+<li>A constant angular velocity <span class="math inline">\(\boldsymbol\omega_w=[0\;0\;2]^\mathsf T\,\mathrm{rad\,s^{-1}}\)</span> acts for <span class="math inline">\(\Delta t=0.25\,\mathrm s\)</span>. Find the axis, angle, rotation vector, and finite orientation increment.</li>
+<li>Why does a world-expressed constant angular velocity premultiply <span class="math inline">\(\mathbf R_{wb}\)</span>, while a body-expressed constant angular velocity postmultiplies it?</li>
+<li>Give two reasons why an axis–angle representation of a rotation is not unique.</li>
+</ol>
+<section id="answers-and-hints-4" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="answers-and-hints-4">Answers and hints</h3>
+<ol type="1">
+<li>The unit vector <span class="math inline">\(\mathbf a_w\)</span> gives the positive axis direction in world coordinates, and <span class="math inline">\(\alpha\)</span> gives the signed right-hand-rule angle. Their product <span class="math inline">\(\boldsymbol\varphi_w=\alpha\mathbf a_w\)</span> stores the same information in one three-component column.</li>
+<li><span class="math inline">\(\exp(\mathbf A)=\mathbf I+\mathbf A+\mathbf A^2/2!+\cdots\)</span>. Differentiating <span class="math inline">\(\exp(s\mathbf A)\)</span> term by term gives <span class="math inline">\(\mathbf A\exp(s\mathbf A)\)</span>; setting <span class="math inline">\(\mathbf A=[\mathbf a_w]_\times\)</span> produces the required differential equation and the identity exponential satisfies the initial condition.</li>
+<li>For every <span class="math inline">\(\mathbf y\)</span>, <span class="math inline">\(\mathbf a_w\times(\mathbf a_w\times\mathbf y)=\mathbf a_w(\mathbf a_w^\mathsf T\mathbf y)-(\mathbf a_w^\mathsf T\mathbf a_w)\mathbf y=(\mathbf a_w\mathbf a_w^\mathsf T-\mathbf I_3)\mathbf y\)</span>. Equality for every <span class="math inline">\(\mathbf y\)</span> proves the matrix identity.</li>
+<li>Replace successive odd powers by alternating <span class="math inline">\([\mathbf a_w]_\times\)</span> and <span class="math inline">\(-[\mathbf a_w]_\times\)</span>, and successive positive even powers by alternating <span class="math inline">\([\mathbf a_w]_\times^2\)</span> and <span class="math inline">\(-[\mathbf a_w]_\times^2\)</span>. Their scalar coefficients sum to <span class="math inline">\(\sin\alpha\)</span> and <span class="math inline">\(1-\cos\alpha\)</span>, respectively.</li>
+<li>The cross product of the axis with a parallel vector is zero, so both <span class="math inline">\([\mathbf a_w]_\times\mathbf y_{\parallel}\)</span> and <span class="math inline">\([\mathbf a_w]_\times^2\mathbf y_{\parallel}\)</span> vanish.</li>
+<li><span class="math inline">\(\mathbf a_w=[0\;0\;1]^\mathsf T\)</span>, <span class="math inline">\(\alpha=2(0.25)=0.5\,\mathrm{rad}\)</span>, and <span class="math inline">\(\boldsymbol\varphi_w=[0\;0\;0.5]^\mathsf T\,\mathrm{rad}\)</span>. The increment is <span class="math inline">\(\mathbf Q_w=\mathbf R_z(0.5)=\begin{bmatrix}\cos0.5&amp;-\sin0.5&amp;0\\\sin0.5&amp;\cos0.5&amp;0\\0&amp;0&amp;1\end{bmatrix}\)</span>.</li>
+<li>A finite increment expressed using world axes acts on the world-coordinate columns and therefore premultiplies. An increment expressed using the old body axes composes after the body-to-world mapping and therefore postmultiplies.</li>
+<li>Examples are <span class="math inline">\((\mathbf a_w,\alpha)\sim(-\mathbf a_w,-\alpha)\)</span>, angles differing by <span class="math inline">\(2\pi k\)</span> give the same rotation, and the axis is arbitrary for zero rotation.</li>
+</ol>
+</section>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<ul>
+<li>Kevin M. Lynch and Frank C. Park, <em>Modern Robotics: Mechanics, Planning, and Control</em>, Chapter 2 for configuration space and degrees of freedom, and Chapter 3, especially Sections 3.2.1-3.2.3 on spatial rotation matrices, angular velocity, exponential coordinates, and Rodrigues’ formula.</li>
+<li>John J. Craig, <em>Introduction to Robotics: Mechanics and Control</em>, 4th ed., Chapters 1-2, especially degrees of freedom, body-attached frames, proper orthonormal rotation matrices, spatial orientation, and the equivalent angle–axis representation.</li>
+<li>Peter Corke, <em>Robotics, Vision and Control: Fundamental Algorithms in Python</em>, 3rd ed., Chapters 2-3, especially rotation matrices, the matrix exponential, Rodrigues’ formula, rotational velocity, and body- and world-frame expressions of spatial motion.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./06_planar_rigid_body_motion_se2_and_twists.html" class="pagination-link" aria-label="Planar Rigid-Body Motion: $SE(2)$ and Twists">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./08_dynamics_forces_and_actuator_limits.html" class="pagination-link" aria-label="Dynamics, Forces, Torque, Friction, and Actuator Limits">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

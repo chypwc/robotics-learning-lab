@@ -1,0 +1,388 @@
+# Glossary and Concept Index {#sec-glossary .unnumbered}
+
+This glossary is the project's alphabetical registry of technical concepts. Each entry gives a concise reminder and links to the chapter or section that first develops the concept; it does not replace the complete definition, derivation, assumptions, or examples in that source. Mathematical symbols and conventions are recorded separately in the [notation registry](notation.qmd).
+
+Add terminology from a chapter only after that chapter has been completed and reviewed. This keeps the glossary a record of established definitions rather than a preview of unfinished material.
+
+## A {.unnumbered}
+
+**Active rigid motion**
+: A physical motion that changes a geometric point or rigid body while the reference frame remains fixed. See @sec-planar-rigid-body-motion.
+
+**Adjoint representation**
+: The coordinate mapping that converts a twist between body and spatial conventions while accounting for both rotation and the change of reference origin. See @sec-se2-spatial-twist.
+
+**Ament build type**
+: The ROS 2 package build integration declared in `package.xml`; common choices are `ament_python` for Python packages and `ament_cmake` for C++ packages. See @sec-ros2-package-development-workflow.
+
+**Angular velocity**
+: The instantaneous rate and axis of rotation of a rigid body relative to a reference frame, expressed in declared coordinates and measured in $\mathrm{rad\,s^{-1}}$. See @sec-geometry-coordinate-frames.
+
+**Associativity**
+: The property that regrouping operations does not change their result; for matrix multiplication, $(\mathbf A\mathbf B)\mathbf C=\mathbf A(\mathbf B\mathbf C)$. See @sec-linear-algebra-foundations and @sec-se2-planar-rotations.
+
+## B {.unnumbered}
+
+**Basis**
+: A linearly independent set of vectors that spans a vector space, so every vector in that space has a unique coordinate expansion in the basis. See @sec-linear-algebra-foundations.
+
+**Big-$O$ notation**
+: A bound describing how rapidly a quantity such as numerical error can scale as an argument approaches a limit. See @sec-differential-drive-model.
+
+**Body-to-wheel velocity mapping**
+: The inverse differential-drive velocity-kinematics calculation that maps desired body-forward speed and yaw rate to ideal left and right wheel angular speeds. See @sec-wheel-speeds-body-motion.
+
+**Body twist**
+: The instantaneous motion of a rigid body relative to the world, with its components expressed along the moving body axes and referenced to the body origin. See @sec-se2-body-twist.
+
+**Build type**
+: The declared mechanism that tells ROS 2 and `colcon` how a package is built and installed. See @sec-ros2-package-development-workflow.
+
+## C {.unnumbered}
+
+**Child process**
+: A process started by another process; changes made to the child's environment do not propagate back to its parent shell. See @sec-ros2-package-development-workflow.
+
+**Closure**
+: The group property that combining any two elements using the group operation produces another element of the same set. See @sec-se2-planar-rotations.
+
+**Colcon**
+: A command-line build and test orchestrator that discovers packages in a workspace, orders them by dependencies, and invokes their declared build integrations. See @sec-ros2-package-development-workflow.
+
+**Column space**
+: The set of all linear combinations of a matrix's columns; equivalently, the set of outputs reachable through multiplication by that matrix. See @sec-linear-algebra-foundations.
+
+**Commutativity**
+: The property that exchanging operand order does not change the result. Matrix multiplication and rigid-transformation composition are generally not commutative. See @sec-linear-algebra-foundations and @sec-se2-noncommutative.
+
+**Conjugation**
+: The matrix operation $\mathbf T\mathbf A\mathbf T^{-1}$, used here to change the coordinate convention of a Lie-algebra element or twist matrix. See @sec-se2-spatial-twist.
+
+**Console script**
+: An executable wrapper generated from a Python package entry point, allowing a named function to be launched as a command or through `ros2 run`. See @sec-ros2-package-development-workflow.
+
+**Coordinate column**
+: An ordered column of scalar components that represents a geometric object relative to a declared basis or coordinate frame. See @sec-linear-algebra-foundations.
+
+**Coordinate frame**
+: An origin together with an ordered orthonormal basis used to assign coordinates to points and vectors. See @sec-geometry-coordinate-frames.
+
+**Cross product**
+: A three-dimensional vector operation whose output is perpendicular to both inputs, with direction given by the right-hand rule and magnitude equal to the product of their lengths and the sine of their included angle. See @sec-geometry-coordinate-frames.
+
+## D {.unnumbered}
+
+**Determinant**
+: A scalar associated with a square matrix whose magnitude gives oriented volume scaling and whose sign records whether orientation is preserved or reversed. See @sec-linear-algebra-foundations.
+
+**Differential-drive robot**
+: A wheeled robot whose planar forward and yaw motion are produced by independently driven left and right wheels separated by a track width. See @sec-differential-drive-model.
+
+**Dot product**
+: The Euclidean inner product of two coordinate columns, equal to the product of their lengths and the cosine of their included angle. See @sec-linear-algebra-foundations.
+
+**Drift**
+: Accumulated estimation error that grows as imperfect incremental measurements are repeatedly integrated without an absolute correction. See @sec-differential-drive-model.
+
+## E {.unnumbered}
+
+**Exact integration**
+: A finite-time state update that evaluates the solution of the stated continuous model exactly under its declared assumptions, rather than approximating the trajectory numerically. See @sec-differential-drive-model and @sec-kinematics-integration-implementation.
+
+**Executable**
+: An installed program that can be launched directly; in a ROS 2 package, `ros2 run` locates it under the package's runtime layout. See @sec-ros2-package-development-workflow.
+
+## F {.unnumbered}
+
+**Forward differential-drive velocity kinematics**
+: Another name for the wheel-to-body velocity mapping; *forward* identifies the direction from wheel velocities to body velocity, not the robot's travel direction. See @sec-wheel-speeds-body-motion.
+
+**Forward Euler method**
+: A first-order numerical-integration method that advances the state using the derivative evaluated at the beginning of each time step. See @sec-differential-drive-model.
+
+**Free vector**
+: A vector with magnitude and direction but no fixed origin, so a coordinate-frame change rotates its components without adding a translation. See @sec-se2-transforming-point.
+
+**Full column rank**
+: The condition $\operatorname{rank}(\mathbf A)=n$ for $\mathbf A\in\mathbb R^{m\times n}$, meaning that all columns are linearly independent and the associated mapping is injective. See @sec-linear-algebra-foundations.
+
+## G {.unnumbered}
+
+**Geometric vector**
+: A basis-independent quantity with magnitude and direction; a coordinate column is its numerical representation in a chosen basis. See @sec-linear-algebra-foundations.
+
+**Global integration error**
+: The accumulated difference between a numerical trajectory and the exact trajectory over a fixed total interval after multiple integration steps. See @sec-differential-drive-model.
+
+**Group**
+: A set equipped with an operation satisfying closure, associativity, an identity element, and an inverse for every element. See @sec-se2-planar-rotations.
+
+## H {.unnumbered}
+
+**Handedness**
+: The orientation of an ordered coordinate basis; a right-handed frame follows the right-hand rule, whereas a reflection reverses handedness. See @sec-geometry-coordinate-frames.
+
+**Hat operator**
+: A mapping from a twist coordinate column to its structured Lie-algebra matrix representation. See @sec-se2-hat-operator.
+
+**Homogeneous coordinate**
+: An augmented coordinate column that appends $1$ to a point or $0$ to a free vector so rotation and translation can be represented by one matrix multiplication. See @sec-se2-transforming-point.
+
+**Homogeneous transformation**
+: A block matrix combining rotation and translation to map rigid-body point coordinates between frames or to represent an active rigid motion. See @sec-planar-rigid-body-motion.
+
+## I {.unnumbered}
+
+**Identity element**
+: A group element that leaves every other element unchanged when combined with it; identity matrices are the identity elements of matrix groups. See @sec-se2-planar-rotations.
+
+**Identity matrix**
+: A square matrix with ones on its diagonal and zeros elsewhere that leaves a compatible vector or matrix unchanged under multiplication. See @sec-linear-algebra-foundations.
+
+**Immutable value**
+: A software value whose stored fields cannot be changed after construction, helping prevent an operation from silently modifying an input state. See @sec-kinematics-integration-implementation.
+
+**Infinitesimal rigid motion**
+: A first-order direction or instantaneous rate from which nearby finite rigid transformations develop; it is not itself a finite transformation. See @sec-se2-hat-operator.
+
+**Injective mapping**
+: A one-to-one mapping in which distinct inputs cannot produce the same output; for a matrix map, this is equivalent to a null space containing only the zero vector. See @sec-linear-algebra-foundations.
+
+**Instantaneous centre of curvature**
+: The planar point about which a rigid body is rotating at one instant and whose instantaneous linear velocity is zero. See @sec-differential-drive-model.
+
+**Invariant**
+: A property that must remain true for every valid input or operation and can therefore be used as a design check or test oracle. See @sec-kinematics-integration-implementation.
+
+**Inverse differential-drive velocity kinematics**
+: Another name for the body-to-wheel velocity mapping; *inverse* identifies the reversed input-output mapping, not backward travel. See @sec-wheel-speeds-body-motion.
+
+**Inverse element**
+: A group element that reverses another element so their composition gives the identity. See @sec-se2-planar-rotations.
+
+**Inverse matrix**
+: For a nonsingular square matrix $\mathbf A$, the matrix $\mathbf A^{-1}$ satisfying $\mathbf A^{-1}\mathbf A=\mathbf A\mathbf A^{-1}=\mathbf I$. See @sec-linear-algebra-foundations.
+
+## K {.unnumbered}
+
+**Kinematics**
+: The mathematical description of motion without modelling the forces or torques that cause it. See @sec-differential-drive-model.
+
+## L {.unnumbered}
+
+**Lie algebra**
+: The linear space of instantaneous directions of a Lie group at its identity, together with a Lie-bracket operation. See @sec-se2-rotation-derivative-tangent and @sec-se2-hat-operator.
+
+**Lie bracket**
+: An operation on Lie-algebra elements; for matrices it is the commutator $[\mathbf A,\mathbf B]=\mathbf A\mathbf B-\mathbf B\mathbf A$. See @sec-se2-rotation-derivative-tangent.
+
+**Lie group**
+: A group whose elements vary smoothly and whose composition and inverse operations are differentiable. See @sec-se2-rotation-derivative-tangent.
+
+**Linear combination**
+: A sum of vectors multiplied by scalar coefficients. See @sec-linear-algebra-foundations.
+
+**Linear independence**
+: The property that a linear combination of vectors equals zero only when every coefficient is zero. See @sec-linear-algebra-foundations.
+
+**Linear map**
+: A mapping that preserves vector addition and scalar multiplication and can be represented by a matrix after bases are chosen. See @sec-linear-algebra-foundations.
+
+**Local truncation error**
+: The error introduced by one numerical-integration step when that step begins from the exact state. See @sec-differential-drive-model.
+
+## M {.unnumbered}
+
+**Matrix**
+: A rectangular array of scalars that represents a linear mapping between coordinate spaces once the input and output bases are fixed. See @sec-linear-algebra-foundations.
+
+**Matrix commutator**
+: The difference $\mathbf A\mathbf B-\mathbf B\mathbf A$, which measures the failure of two matrix operations to commute. See @sec-se2-rotation-derivative-tangent.
+
+**Matrix rank**
+: The dimension of a matrix's column space, equivalently the number of linearly independent columns. See @sec-linear-algebra-foundations.
+
+**Multilinearity**
+: Linearity of a function separately in each of several arguments; the determinant is linear in each column while the others are held fixed. See @sec-linear-algebra-foundations.
+
+## N {.unnumbered}
+
+**No-sideways-motion constraint**
+: The ideal differential-drive condition that the axle midpoint has zero instantaneous velocity along the body's lateral axis. See @sec-differential-drive-model.
+
+**Noncommutative operation**
+: An operation for which changing operand order can change the result; general matrix multiplication and rigid-motion composition have this property. See @sec-se2-noncommutative.
+
+**Nonsingular matrix**
+: A square matrix with an inverse, full rank, and a null space containing only the zero vector. See @sec-linear-algebra-foundations.
+
+**Null space**
+: The set of all input vectors mapped to the zero output by a matrix. See @sec-linear-algebra-foundations.
+
+**Nullity**
+: The dimension of a matrix's null space. See @sec-linear-algebra-rank-nullity.
+
+**Numerical integration**
+: Approximation of a continuous-time state evolution using finite time steps and a finite number of derivative evaluations. See @sec-differential-drive-model.
+
+**Numerically stable formulation**
+: An algebraically equivalent computational form chosen to avoid avoidable loss of accuracy, undefined intermediate expressions, or fragile special cases. See @sec-kinematics-integration-implementation.
+
+## O {.unnumbered}
+
+**Orthogonal group**
+: The group $O(n)$ of real square matrices satisfying $\mathbf Q^\mathsf T\mathbf Q=\mathbf I_n$. See @sec-linear-algebra-foundations.
+
+**Orthogonal matrix**
+: A square matrix whose columns form an orthonormal basis, equivalently $\mathbf Q^\mathsf T\mathbf Q=\mathbf I$. See @sec-linear-algebra-foundations.
+
+**Orthonormal basis**
+: A basis whose vectors have unit length and are mutually perpendicular. See @sec-linear-algebra-foundations and @sec-geometry-coordinate-frames.
+
+**Overlay**
+: A built workspace whose `install/` tree is added on top of an existing ROS environment so its packages, Python modules, and executables can be discovered. See @sec-ros2-package-development-workflow.
+
+## P {.unnumbered}
+
+**Package manifest**
+: The `package.xml` file declaring a ROS 2 package's identity, licence, dependencies, and build type. See @sec-ros2-package-development-workflow.
+
+**Passive coordinate change**
+: A change in the coordinate frame used to describe an unchanged geometric object; nothing physically moves. See @sec-planar-rigid-body-motion.
+
+**Planar pose**
+: The position and orientation of a planar rigid body relative to a reference frame, commonly represented by two position coordinates and one heading angle. See @sec-differential-drive-model and @sec-planar-rigid-body-motion.
+
+**Planar twist**
+: A three-component representation combining two linear-velocity components and one angular-velocity component for an instantaneous planar rigid-body motion. See @sec-se2-hat-operator.
+
+**Pose**
+: The position and orientation of a rigid body relative to a chosen reference frame. See @sec-planar-rigid-body-motion.
+
+**Position coordinate**
+: The coordinates of a geometric point relative to a frame origin, expressed along that frame's basis axes. See @sec-geometry-coordinate-frames.
+
+**Pure rolling**
+: The ideal wheel-ground condition in which wheel rim motion and longitudinal ground displacement agree without slip, giving $v_i=r\dot\phi_i$. See @sec-differential-drive-model.
+
+## R {.unnumbered}
+
+**Radian**
+: The dimensionless SI angle measure defined as arc length divided by radius; the label $\mathrm{rad}$ is retained to communicate angular meaning. See @sec-differential-drive-model.
+
+**Rank-nullity theorem**
+: For $\mathbf A\in\mathbb R^{m\times n}$, the identity $\operatorname{rank}(\mathbf A)+\operatorname{nullity}(\mathbf A)=n$. See @sec-linear-algebra-rank-nullity.
+
+**Relative-position vector**
+: A vector directed from one declared point to another, expressed in a declared coordinate frame. See @sec-geometry-coordinate-frames.
+
+**Resource index**
+: The installed ament registry that ROS 2 queries to discover package resources and installation prefixes. See @sec-ros2-package-development-workflow.
+
+**Resource marker**
+: A file installed in the ament resource index whose filename registers a ROS 2 package. See @sec-ros2-package-development-workflow.
+
+**Rigid-body point-velocity relation**
+: The equation stating that a body-fixed point's velocity equals a reference point's translational velocity plus the rotational contribution from angular velocity and relative position. See @sec-geometry-coordinate-frames and @sec-se2-body-point-velocity.
+
+**ROS 2 package**
+: A unit combining source code with the metadata required for building, installing, dependency resolution, and discovery by ROS 2 tools. See @sec-ros2-package-development-workflow.
+
+**ROS 2 workspace**
+: A directory structure that holds packages developed and built together, conventionally separated into editable source, build state, installed runtime layout, and logs. See @sec-ros2-package-development-workflow.
+
+**Rotation matrix**
+: An orthogonal matrix with determinant $+1$ that maps vector coordinates between right-handed orthonormal frames while preserving lengths, angles, and orientation. See @sec-geometry-coordinate-frames.
+
+## S {.unnumbered}
+
+**Scalar multiplication**
+: Multiplication of a vector by a real number, scaling its magnitude and reversing its direction when the scalar is negative. See @sec-linear-algebra-foundations.
+
+**Signed turning radius**
+: The instantaneous distance from the body origin to the centre of curvature with a sign indicating which side of the robot contains that centre. See @sec-differential-drive-model.
+
+**Singular matrix**
+: A square matrix that has no inverse and maps at least one nonzero input direction to zero. See @sec-linear-algebra-foundations.
+
+**Sinc function**
+: The unnormalised function $\operatorname{sinc}(z)=\sin z/z$ for $z\ne0$, extended continuously by $\operatorname{sinc}(0)=1$. See @sec-differential-drive-model.
+
+**Skew-symmetric matrix**
+: A square matrix satisfying $\mathbf A^\mathsf T=-\mathbf A$; planar angular-velocity matrices have this structure. See @sec-se2-rotation-derivative-tangent.
+
+**Software contract**
+: A precise statement of an operation's accepted inputs, returned outputs, assumptions, validation, failure behaviour, and observable side effects. See @sec-kinematics-integration-implementation.
+
+**Source a shell script**
+: Execute a script in the current shell so its environment-variable changes persist after the script finishes. See @sec-ros2-package-development-workflow.
+
+**Span**
+: The set of every linear combination that can be formed from a given collection of vectors. See @sec-linear-algebra-foundations.
+
+**Spatial twist expressed in the world frame**
+: A twist representation whose velocity field is expressed using fixed world coordinates and referenced to the world origin. See @sec-se2-spatial-twist.
+
+**Special Euclidean group $SE(2)$**
+: The group of finite planar rigid transformations that combine a rotation in $SO(2)$ with a planar translation. See @sec-planar-rigid-body-motion.
+
+**Special orthogonal group**
+: The group $SO(n)$ of orthogonal matrices with determinant $+1$, representing proper rotations in $n$ dimensions. See @sec-linear-algebra-foundations and @sec-se2-planar-rotations.
+
+**Standard basis**
+: The coordinate basis whose $i$th vector has entry $1$ in position $i$ and zero in every other position. See @sec-linear-algebra-foundations.
+
+**Symbolic link**
+: A filesystem reference that points to another path; `colcon build --symlink-install` uses links for supported files so edits to existing source may appear in the installed layout without copying. See @sec-ros2-package-development-workflow.
+
+## T {.unnumbered}
+
+**Tangent direction**
+: The derivative of a differentiable curve through a selected point, equivalently the limiting direction of secant lines approaching that point. See @sec-se2-rotation-derivative-tangent.
+
+**Tangent space**
+: The vector space containing all tangent directions of admissible differentiable curves through a selected point of a smooth set. See @sec-se2-rotation-derivative-tangent and @sec-se2-hat-operator.
+
+**Track width**
+: The lateral distance between the effective left and right wheel contact lines of a differential-drive robot. See @sec-wheel-speeds-body-motion.
+
+**Transformation composition**
+: Combining successive coordinate changes or rigid motions by matrix multiplication; with column vectors, the rightmost transformation acts first. See @sec-planar-rigid-body-motion.
+
+**Translation**
+: A displacement that changes point positions without changing vector directions or rigid-body orientation. See @sec-geometry-coordinate-frames and @sec-se2-transforming-point.
+
+**Transpose**
+: The operation that exchanges a matrix's rows and columns. See @sec-linear-algebra-foundations.
+
+**Twist**
+: A coordinate representation of a rigid body's instantaneous motion combining linear and angular velocity; it is a rate, not a finite pose. See @sec-se2-body-twist.
+
+## U {.unnumbered}
+
+**Underlay**
+: An existing sourced ROS installation or workspace on which another workspace depends. See @sec-ros2-package-development-workflow.
+
+**Unit vector**
+: A nonzero vector divided by its Euclidean norm so that its resulting norm is one. See @sec-linear-algebra-vector-norm.
+
+## V {.unnumbered}
+
+**Vee operator**
+: The inverse of a declared hat operator, recovering a twist coordinate column from its structured Lie-algebra matrix. See @sec-se2-hat-operator.
+
+**Velocity kinematics**
+: An algebraic relationship among instantaneous velocities that does not integrate pose or model the forces producing the motion. See @sec-wheel-speeds-body-motion.
+
+## W {.unnumbered}
+
+**Wheel-to-body velocity mapping**
+: The differential-drive calculation that maps left and right wheel angular speeds to body-forward speed and yaw rate. See @sec-wheel-speeds-body-motion.
+
+**Workspace**
+: See **ROS 2 workspace**.
+
+## Z {.unnumbered}
+
+**Zero-order hold**
+: The assumption that an input remains constant throughout one sampling or integration interval. See @sec-differential-drive-model.

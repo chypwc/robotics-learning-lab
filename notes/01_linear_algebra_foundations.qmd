@@ -1,14 +1,14 @@
-# Linear Algebra Foundations
+# Linear Algebra Foundations {#sec-linear-algebra-foundations}
 
-## Why linear algebra matters
+## Why linear algebra matters {.unnumbered}
 
 Autonomous robots represent directions, velocities, forces, sensor measurements, model parameters, and control commands with vectors. Matrices transform those vectors, combine coordinate descriptions, solve systems of equations, and expose whether information has been preserved or lost. Linear algebra provides the language needed to reason about these operations before they are used in geometry, kinematics, estimation, optimisation, and control.
 
 This chapter develops that language from first principles. It distinguishes geometric vectors from coordinate columns, explains matrices as linear maps, connects null spaces and rank to invertibility, defines determinants as signed volume scaling, and derives the properties of orthogonal matrices used later for rotations.
 
-## Prerequisites and assumptions
+## Prerequisites and assumptions {.unnumbered}
 
-### Prerequisites
+### Prerequisites {.unnumbered}
 
 The reader should be comfortable with:
 
@@ -18,7 +18,7 @@ The reader should be comfortable with:
 - sine and cosine; and
 - the project notation conventions.
 
-### Assumptions
+### Assumptions {.unnumbered}
 
 - Scalars are real numbers unless stated otherwise.
 - Vectors are written as columns.
@@ -26,7 +26,7 @@ The reader should be comfortable with:
 - Coordinate bases used for Euclidean lengths and angles are orthonormal.
 - Physical units are carried by the represented quantity; abstract basis and transformation matrices are dimensionless unless stated otherwise.
 
-## Dependency map
+## Dependency map {.unnumbered}
 
 ```text
 Vectors and linear combinations
@@ -47,9 +47,9 @@ Determinants and orthogonal matrices
 Coordinate frames, rotations, kinematics, estimation, and control
 ```
 
-## 1. Vectors: quantities with magnitude and direction
+## Vectors: quantities with magnitude and direction
 
-### 1.1 Geometric vector versus coordinate column
+### Geometric vector versus coordinate column
 
 A geometric vector is independent of any coordinate frame. A coordinate column is the numerical description of that vector in a chosen basis.
 
@@ -77,7 +77,7 @@ $$
 
 The vector $\mathbf{v}$ is the physical or geometric object, whereas the column ${}^{a}\mathbf{v}$ depends on frame $\{a\}$. Omitting the frame label is safe only when the surrounding context makes the frame unambiguous.
 
-### 1.2 Addition and scalar multiplication
+### Addition and scalar multiplication
 
 For vectors expressed in the same frame,
 
@@ -106,7 +106,7 @@ $$
 
 The algebra is valid only when the quantities are physically compatible. For example, adding two positions expressed in different frames is not meaningful until one has been transformed. Adding a velocity in metres per second to a position in metres is dimensionally invalid even if both are three-element columns.
 
-### 1.3 Length and unit direction
+### Length and unit direction {#sec-linear-algebra-vector-norm}
 
 The Euclidean norm is
 
@@ -127,7 +127,7 @@ $$
 
 The norm has the same physical units as the vector, while the unit vector is dimensionless because the units cancel.
 
-### 1.4 Dot product and angle
+### Dot product and angle
 
 Let two vectors be expressed as coordinate columns in the same orthonormal frame:
 
@@ -189,7 +189,7 @@ $$
 {}^{a}\mathbf{u}^\mathsf{T}\,{}^{a}\mathbf{v}.
 $$
 
-The norm introduced in Section 1.3 can equivalently be defined from the dot
+The norm introduced in @sec-linear-algebra-vector-norm can equivalently be defined from the dot
 product of a vector with itself:
 
 $$
@@ -316,7 +316,7 @@ $$
 
 then nonzero $\mathbf{u}$ and $\mathbf{v}$ are perpendicular.
 
-### 1.5 Linear combinations, span, and basis
+### Linear combinations, span, and basis
 
 Let $\mathbf v_1,\ldots,\mathbf v_k\in\mathbb R^n$ and let $\alpha_1,\ldots,\alpha_k\in\mathbb R$. A **linear combination** of these vectors is any vector of the form
 
@@ -363,7 +363,7 @@ x_1&\cdots&x_n
 $$
 
 
-## Quick test A: vectors and bases
+## Quick test A: vectors and bases {.unnumbered}
 
 Complete this test without looking back at the section.
 
@@ -374,7 +374,7 @@ Complete this test without looking back at the section.
 5. **Limitations:** Why is the angle formula undefined when either vector is zero?
 6. **Basis:** Explain why two parallel nonzero vectors cannot form a basis of $\mathbb R^2$.
 
-### Answers and hints
+### Answers and hints {.unnumbered}
 
 1. $\mathbf v$ is the coordinate-independent geometric object; ${}^{a}\mathbf v$ is its numerical representation in basis or frame $\{a\}$.
 2. The entries are coefficients multiplying particular basis vectors. Without the basis, the numbers do not determine physical or geometric directions.
@@ -384,9 +384,9 @@ Complete this test without looking back at the section.
 6. One vector is a scalar multiple of the other, so their span is only a line and their coefficient representation is not unique.
 
 
-## 2. Matrices: linear maps and basis changes
+## Matrices: linear maps and basis changes
 
-### 2.1 Matrix dimensions
+### Matrix dimensions
 
 A matrix $\mathbf{A}\in\mathbb{R}^{m\times n}$ maps an $n$-element coordinate vector to an $m$-element coordinate vector:
 
@@ -431,7 +431,7 @@ $$
 
 This column interpretation is central to rotation matrices: their columns are the axes of one frame expressed in another frame.
 
-### 2.2 Identity, transpose, null space, rank, and inverse
+### Identity, transpose, null space, rank, and inverse
 
 Let $\mathbf{I}_n$ denote the $n\times n$ identity matrix. It leaves compatible coordinates unchanged:
 
@@ -456,6 +456,149 @@ $$
 $$
 
 where $\mathbf 0_m\in\mathbb R^m$ is the zero vector. The null space contains all input directions that the mapping sends to zero.
+
+#### Rank-nullity theorem {#sec-linear-algebra-rank-nullity}
+
+The **nullity** of $\mathbf A$ is the dimension of its null space:
+
+$$
+\operatorname{nullity}(\mathbf A)
+\mathrel{:=}
+\dim\mathcal N(\mathbf A).
+$$
+
+For every matrix $\mathbf A\in\mathbb R^{m\times n}$, the **rank-nullity theorem** states
+
+$$
+\boxed{
+\operatorname{rank}(\mathbf A)
++
+\operatorname{nullity}(\mathbf A)
+=
+n
+}.
+$$
+
+The number $n$ is the dimension of the input space $\mathbb R^n$. The theorem says that its independent input directions divide into two counts: $\operatorname{nullity}(\mathbf A)$ directions that the mapping sends to zero and $\operatorname{rank}(\mathbf A)$ directions that produce independent output directions.
+
+To prove the theorem, let
+
+$$
+k
+\mathrel{:=}
+\operatorname{nullity}(\mathbf A),
+$$
+
+and choose a basis $\mathbf n_1,\ldots,\mathbf n_k\in\mathbb R^n$ for $\mathcal N(\mathbf A)$. Because these vectors are linearly independent, they can be extended to a basis of the whole input space by repeatedly adding vectors outside their current span. Write the resulting basis as
+
+$$
+\mathbf n_1,\ldots,\mathbf n_k,
+\mathbf v_1,\ldots,\mathbf v_{n-k}.
+$$
+
+The output vectors
+
+$$
+\mathbf A\mathbf v_1,\ldots,\mathbf A\mathbf v_{n-k}
+$$
+
+span $\operatorname{Col}(\mathbf A)$. To see this, express any input $\mathbf x\in\mathbb R^n$ in the chosen input basis:
+
+$$
+\mathbf x
+=
+\sum_{i=1}^{k}a_i\mathbf n_i
++
+\sum_{j=1}^{n-k}b_j\mathbf v_j.
+$$
+
+Because every $\mathbf n_i$ belongs to the null space, $\mathbf A\mathbf n_i=\mathbf0_m$. Applying $\mathbf A$ therefore gives
+
+$$
+\mathbf A\mathbf x
+=
+\sum_{j=1}^{n-k}b_j\mathbf A\mathbf v_j,
+$$
+
+so every possible output is a linear combination of the listed output vectors.
+
+These output vectors are also linearly independent. If
+
+$$
+\sum_{j=1}^{n-k}c_j\mathbf A\mathbf v_j
+=
+\mathbf0_m,
+$$
+
+then
+
+$$
+\mathbf A
+\left(
+\sum_{j=1}^{n-k}c_j\mathbf v_j
+\right)
+=
+\mathbf0_m.
+$$
+
+Thus, $\sum_j c_j\mathbf v_j$ belongs to $\mathcal N(\mathbf A)$ and can also be written as a linear combination of $\mathbf n_1,\ldots,\mathbf n_k$. The complete list $\mathbf n_1,\ldots,\mathbf n_k,\mathbf v_1,\ldots,\mathbf v_{n-k}$ is a basis and is therefore linearly independent, so this is possible only when every $c_j=0$. Hence, the $n-k$ vectors $\mathbf A\mathbf v_j$ form a basis of $\operatorname{Col}(\mathbf A)$, and
+
+$$
+\operatorname{rank}(\mathbf A)
+=
+n-k.
+$$
+
+Since $k=\operatorname{nullity}(\mathbf A)$,
+
+$$
+\operatorname{rank}(\mathbf A)
++
+\operatorname{nullity}(\mathbf A)
+=
+(n-k)+k
+=
+n,
+$$
+
+which proves the theorem.
+
+For example, let
+
+$$
+\mathbf A
+=
+\begin{bmatrix}
+1&0&1\\
+0&1&1
+\end{bmatrix}
+\in\mathbb R^{2\times3}.
+$$
+
+The first two columns are independent and the third is their sum, so $\operatorname{rank}(\mathbf A)=2$. Solving $\mathbf A\mathbf x=\mathbf0_2$ gives
+
+$$
+\mathcal N(\mathbf A)
+=
+\left\{
+\alpha
+\begin{bmatrix}
+-1\\-1\\1
+\end{bmatrix}
+\;\middle|\;
+\alpha\in\mathbb R
+\right\},
+$$
+
+so $\operatorname{nullity}(\mathbf A)=1$. The input dimension is therefore partitioned as
+
+$$
+\underbrace{3}_{\text{input dimension}}
+=
+\underbrace{2}_{\text{rank}}
++
+\underbrace{1}_{\text{nullity}}.
+$$
 
 #### Injective mappings and unique recovery
 
@@ -569,7 +712,7 @@ $$
 \mathbf{A}^{-1}\mathbf{A}=\mathbf{A}\mathbf{A}^{-1}=\mathbf{I}_n.
 $$
 
-### 2.3 Multiplication order
+### Multiplication order
 
 Let $n$ be a positive integer. Let $\mathbf A,\mathbf B,\mathbf C\in\mathbb R^{n\times n}$ be three matrices, and let $\mathbf x,\mathbf y,\mathbf z\in\mathbb R^n$ be coordinate vectors. Define the intermediate vector $\mathbf z$ and output vector $\mathbf y$ by
 
@@ -605,7 +748,7 @@ $$
 
 This order becomes critical when several coordinate transformations are composed.
 
-## Quick test B: matrices, rank, and inverses
+## Quick test B: matrices, rank, and inverses {.unnumbered}
 
 1. **Recall:** For $\mathbf A\in\mathbb R^{m\times n}$, what are the dimensions of an input $\mathbf x$ and output $\mathbf y=\mathbf A\mathbf x$?
 2. **Explanation:** What does column $j$ of $\mathbf A$ tell us about the mapping?
@@ -614,8 +757,9 @@ This order becomes critical when several coordinate transformations are composed
 5. **Limitations:** Why can a nonsquare matrix not have a two-sided inverse of the same kind as a nonsingular square matrix?
 6. **Composition:** If $\mathbf z=\mathbf B\mathbf x$ and $\mathbf y=\mathbf A\mathbf z$, which matrix acts first in $\mathbf y=\mathbf A\mathbf B\mathbf x$?
 7. **Injectivity:** Define an injective matrix mapping and explain why it is equivalent to $\mathcal N(\mathbf A)=\{\mathbf0\}$.
+8. **Rank-nullity:** State the rank-nullity theorem for $\mathbf A\in\mathbb R^{m\times n}$ and verify it for the matrix in Question 4.
 
-### Answers and hints
+### Answers and hints {.unnumbered}
 
 1. $\mathbf x\in\mathbb R^n$ and $\mathbf y\in\mathbb R^m$.
 2. It is the output produced by applying $\mathbf A$ to the corresponding standard basis input; general outputs are linear combinations of the columns.
@@ -624,11 +768,12 @@ This order becomes critical when several coordinate transformations are composed
 5. A two-sided inverse would have to undo mappings in both domain and codomain, which requires equal dimensions and no lost directions.
 6. $\mathbf B$ acts first, followed by $\mathbf A$.
 7. A map is injective if $\mathbf A\mathbf x^{(1)}=\mathbf A\mathbf x^{(2)}$ implies $\mathbf x^{(1)}=\mathbf x^{(2)}$. If $\mathcal N(\mathbf A)=\{\mathbf0\}$, subtracting equal outputs gives $\mathbf A(\mathbf x^{(1)}-\mathbf x^{(2)})=\mathbf0$, so $\mathbf x^{(1)}-\mathbf x^{(2)}=\mathbf0$. Conversely, a nonzero null vector $\mathbf z$ makes $\mathbf x$ and $\mathbf x+\mathbf z$ distinct inputs with the same output.
+8. The theorem is $\operatorname{rank}(\mathbf A)+\operatorname{nullity}(\mathbf A)=n$. The matrix in Question 4 has two input columns, rank one, and a one-dimensional null space, so $1+1=2$.
 
 
-## 3. Determinants and signed volume
+## Determinants and signed volume
 
-### 3.1 What the determinant measures
+### What the determinant measures
 
 The determinant is defined for a square matrix $\mathbf A\in\mathbb R^{n\times n}$ and returns a scalar:
 
@@ -702,7 +847,7 @@ whereas its third basis vector is $+\mathbf e_3$. Thus, the negative determinant
 
 A matrix with negative determinant need not be a pure reflection: it may also stretch, scale, or shear. The negative sign means that its total action contains an orientation-reversing, or reflection-like, component. By contrast, a proper rotation preserves right-handedness and has determinant $+1$.
 
-### 3.2 Algebraic definition
+### Algebraic definition
 
 The determinant is the unique scalar-valued function of the columns of a square matrix with three defining properties:
 
@@ -914,7 +1059,7 @@ $$
 }
 $$
 
-### 3.3 Why determinants multiply
+### Why determinants multiply
 
 Let $\mathbf A,\mathbf B\in\mathbb R^{n\times n}$. The product $\mathbf A\mathbf B$ represents the composition
 
@@ -1249,7 +1394,7 @@ $$
 }.
 $$
 
-## Quick test C: determinants
+## Quick test C: determinants {.unnumbered}
 
 1. **Recall:** What does $|\det(\mathbf A)|$ measure geometrically?
 2. **Explanation:** What does the sign of a determinant record?
@@ -1259,7 +1404,7 @@ $$
 6. **Composition:** Explain geometrically why $\det(\mathbf A\mathbf B)=\det(\mathbf A)\det(\mathbf B)$.
 7. **Reindexing:** If $\sigma(1)=2$, $\sigma(2)=3$, and $\sigma(3)=1$, find $\tau=\sigma^{-1}$ and verify $\prod_{j=1}^{3}a_{j,\sigma(j)}=\prod_{k=1}^{3}a_{\tau(k),k}$.
 
-### Answers and hints
+### Answers and hints {.unnumbered}
 
 1. The factor by which the associated linear map scales $n$-dimensional volume.
 2. A positive determinant preserves the ordered right-handed orientation; a negative determinant reverses it to a left-handed orientation and therefore indicates a reflection component; a zero determinant collapses the volume, so no full-dimensional orientation remains.
@@ -1270,7 +1415,7 @@ $$
 7. The inverse is $\tau(1)=3$, $\tau(2)=1$, and $\tau(3)=2$. The left product is $a_{1,2}a_{2,3}a_{3,1}$, while the reindexed product is $a_{3,1}a_{1,2}a_{2,3}$; these are equal because scalar factors commute.
 
 
-## 4. Orthogonal matrices
+## Orthogonal matrices
 
 Let $\mathbf Q\in\mathbb R^{n\times n}$. The matrix $\mathbf Q$ is **orthogonal** if
 
@@ -1330,7 +1475,7 @@ $$
 
 Matrices in $SO(n)$ preserve lengths, angles, and orientation. Orthogonal matrices with determinant $-1$ preserve lengths and angles but reverse orientation through a reflection. Rotation matrices used for right-handed coordinate frames belong to $SO(2)$ or $SO(3)$.
 
-## Quick test D: orthogonal matrices
+## Quick test D: orthogonal matrices {.unnumbered}
 
 1. **Recall:** What equation defines an orthogonal matrix?
 2. **Explanation:** Why is the inverse of an orthogonal matrix its transpose?
@@ -1338,7 +1483,7 @@ Matrices in $SO(n)$ preserve lengths, angles, and orientation. Orthogonal matric
 4. **Application:** Determine whether $\begin{bmatrix}0&1\\1&0\end{bmatrix}$ belongs to $SO(2)$.
 5. **Limitations:** Why is $\mathbf Q^{\mathsf T}\mathbf Q=\mathbf I_n$ insufficient by itself to identify a proper rotation?
 
-### Answers and hints
+### Answers and hints {.unnumbered}
 
 1. $\mathbf Q^{\mathsf T}\mathbf Q=\mathbf I_n$.
 2. The transpose already satisfies the defining inverse equation.
@@ -1347,7 +1492,7 @@ Matrices in $SO(n)$ preserve lengths, angles, and orientation. Orthogonal matric
 5. Orthogonality permits determinant $-1$ reflections as well as determinant $+1$ rotations.
 
 
-## Cumulative chapter test
+## Cumulative chapter test {.unnumbered}
 
 1. Define a basis and explain why coordinate columns are unique in a basis.
 2. Given $\mathbf A\in\mathbb R^{3\times2}$ and $\mathbf x\in\mathbb R^2$, state the dimension of $\mathbf A\mathbf x$ and interpret it using the columns of $\mathbf A$.
@@ -1357,8 +1502,9 @@ Matrices in $SO(n)$ preserve lengths, angles, and orientation. Orthogonal matric
 6. Explain why $\det(\mathbf A)=0$ indicates lost information.
 7. Derive $\det(\mathbf A^{-1})=1/\det(\mathbf A)$.
 8. Distinguish $O(3)$ from $SO(3)$ and explain which set contains rigid-body rotation matrices.
+9. State the rank-nullity theorem and explain what its two terms count.
 
-### Cumulative answers and hints
+### Cumulative answers and hints {.unnumbered}
 
 1. A basis is a linearly independent spanning set. Independence prevents multiple coefficient descriptions, while spanning guarantees that a description exists.
 2. $\mathbf A\mathbf x\in\mathbb R^3$ and equals $x_1\mathbf a_1+x_2\mathbf a_2$.
@@ -1376,9 +1522,9 @@ Matrices in $SO(n)$ preserve lengths, angles, and orientation. Orthogonal matric
    Therefore, the distinct inputs $\mathbf x$ and $\mathbf x+\mathbf z$ produce the same output. The output cannot reveal the input component in the null-space direction $\mathbf z$, so the input cannot be uniquely recovered. This is the meaning of **lost information** here: an independent input direction or degree of freedom has disappeared, not that Shannon information has been calculated. Geometrically, the map collapses $n$-dimensional volume into a lower-dimensional set, which is why its volume-scaling factor is zero.
 7. Take determinants of $\mathbf A^{-1}\mathbf A=\mathbf I_n$ and use multiplicativity.
 8. $O(3)$ contains all orthogonal $3\times3$ matrices with determinant $\pm1$; $SO(3)$ contains the determinant-$1$ members and therefore the proper rigid-body rotations.
+9. For $\mathbf A\in\mathbb R^{m\times n}$, $\operatorname{rank}(\mathbf A)+\operatorname{nullity}(\mathbf A)=n$. Rank counts independent output directions produced by the map, while nullity counts independent input directions sent to zero.
 
-## References
+## References {.unnumbered}
 
 - Richard Szeliski, *Computer Vision: Algorithms and Applications*, 2nd ed., Appendix A, especially the discussion of orthonormal matrices, rank, singular values, and matrix factorisations.
 - Kevin M. Lynch and Frank C. Park, *Modern Robotics*, Chapter 3, especially Section 3.2.1 on rotation matrices and the distinction between orthogonality and right-handed orientation.
-

@@ -1,11 +1,5 @@
-# Foundations of Autonomous Robotics
+# Preface {.unnumbered}
 
-An autonomous robot must connect mathematical reasoning to physical action. Geometry describes where the robot and its surroundings are; mechanics explains how forces and motion interact; control turns desired behaviour into stable action; estimation and perception interpret uncertain measurements; planning compares possible futures; and software engineering joins these ideas into a dependable system.
+This book is my collection of learning notes for understanding intelligence, especially intelligence embodied in agents that perceive their environment, predict what may happen, choose actions, and act in the physical world. Writing the notes is part of the learning process: the aim is to make each idea precise enough that I can explain it, derive it, implement it, and test it.
 
-This book develops those foundations from first principles. Each topic begins with its physical or mathematical meaning, introduces notation when it is needed, derives the central relationships step by step, and connects the theory to autonomous-robot behaviour.
-
-## How to use this book
-
-Read the chapters in order when a topic depends on earlier mathematics. Work through each derivation with pencil and paper, check the units at every step, and complete the retrieval questions before consulting the answers. Treat code as a tool for testing a model rather than a substitute for understanding it.
-
-The notation and conventions chapter defines the shared mathematical language used throughout the book. The linear algebra foundations chapter then develops the vector and matrix tools required by geometry, kinematics, estimation, optimisation, and control. When another source uses different symbols, translate them into the project conventions before combining results.
+My main algorithmic interests are **reinforcement learning** and **world models**. Reinforcement learning studies how an agent can improve its decisions through interaction and feedback. A world model is an internal model that predicts how the environment or system may evolve, allowing an agent to evaluate possible actions before or while taking them. These algorithms depend on more fundamental ideas from mathematics, dynamics, control, estimation, planning, perception, and software engineering, so the notes build those foundations first.
