@@ -250,7 +250,7 @@
 \makeatother
 \subtitle{Mathematics, Physics, Algorithms, and Engineering}
 \author{Chien-Hsiang Yeh}
-\date{30 July 2026}
+\date{31 July 2026}
 \begin{document}
 \maketitle
 
@@ -386,6 +386,9 @@ vectors \\
 \(\operatorname{Col}(\mathbf A),\mathcal N(\mathbf A)\) & Column space
 and null space of \(\mathbf A\) & Subspaces of the output and input
 spaces \\
+\(\mathbf u\times\mathbf v\) & Three-dimensional cross product of
+vectors expressed in the same right-handed orthonormal frame & Product
+of the input units \\
 \(O(n),SO(n)\) & Orthogonal group and special orthogonal group of real
 \(n\times n\) matrices & \(\mathbf Q^\mathsf T\mathbf Q=\mathbf I_n\);
 \(SO(n)\) additionally requires \(\det\mathbf Q=1\) \\
@@ -426,9 +429,6 @@ point \(P\), expressed in frame \(\{a\}\) & \(\mathrm{m}\) \\
 to frame \(\{a\}\) & \(\mathbf{R}_{ab}\in SO(2)\) or \(SO(3)\) \\
 \({}^{a}\mathbf{p}_b\) & Position of origin \(O_b\) relative to \(O_a\),
 expressed in frame \(\{a\}\) & \(\mathrm{m}\) \\
-\(\mathbf u\times\mathbf v\) & Three-dimensional cross product of
-vectors expressed in the same right-handed orthonormal frame & Product
-of the input units \\
 \(\boldsymbol\omega\) & Three-dimensional angular-velocity vector &
 \(\mathrm{rad\,s^{-1}}\) \\
 \end{longtable}
@@ -610,7 +610,7 @@ units as \(\mathbf{v}\) \\
 }
 
 \subsection*{\texorpdfstring{Notation introduced in
-Chapter~\ref{sec-dynamics-actuator-limits}}{Notation introduced in Chapter~}}\label{notation-introduced-in-sec-dynamics-actuator-limits}
+\textbf{?@sec-dynamics-actuator-limits}}{Notation introduced in ?@sec-dynamics-actuator-limits}}\label{notation-introduced-in-sec-dynamics-actuator-limits}
 
 {\def\LTcaptype{none} % do not increment counter
 \begin{longtable}[]{@{}
@@ -659,13 +659,13 @@ Dimensionless, \(0<\eta\leq1\) \\
 \end{longtable}
 }
 
+\cleardoublepage
+\pagenumbering{arabic}
+
 \part{Motion, Mechanics, and Control}
 
 \chapter{Linear Algebra
 Foundations}\label{sec-linear-algebra-foundations}
-
-\cleardoublepage
-\pagenumbering{arabic}
 
 \section*{Why linear algebra matters}\label{why-linear-algebra-matters}
 \addcontentsline{toc}{section}{Why linear algebra matters}
@@ -1057,6 +1057,153 @@ orthogonality. If
 
 then nonzero \(\mathbf{u}\) and \(\mathbf{v}\) are perpendicular.
 
+\subsection{Cross product and useful
+identities}\label{sec-linear-algebra-cross-product}
+
+The dot product returns a scalar that measures alignment.
+Three-dimensional geometry also needs an operation that constructs a
+vector perpendicular to two given directions. Let
+\(\mathbf u=[u_1\;u_2\;u_3]^\mathsf T\in\mathbb R^3\) and
+\(\mathbf v=[v_1\;v_2\;v_3]^\mathsf T\in\mathbb R^3\) be coordinate
+columns expressed in the same right-handed orthonormal frame. Their
+\textbf{cross product} is the coordinate column
+
+\[
+\boxed{
+\mathbf u\times\mathbf v
+\mathrel{:=}
+\begin{bmatrix}
+u_2v_3-u_3v_2\\
+u_3v_1-u_1v_3\\
+u_1v_2-u_2v_1
+\end{bmatrix}
+\in\mathbb R^3
+}.
+\]
+
+The output is perpendicular to both inputs because direct substitution
+gives
+
+\[
+\mathbf u^\mathsf T(\mathbf u\times\mathbf v)
+=
+0,
+\qquad
+\mathbf v^\mathsf T(\mathbf u\times\mathbf v)
+=
+0.
+\]
+
+Its direction follows the right-hand rule. Expanding its squared norm
+gives
+
+\[
+\begin{aligned}
+\|\mathbf u\times\mathbf v\|_2^2
+&=
+(u_2v_3-u_3v_2)^2
++
+(u_3v_1-u_1v_3)^2
++
+(u_1v_2-u_2v_1)^2\\
+&=
+\|\mathbf u\|_2^2\|\mathbf v\|_2^2
+-
+(\mathbf u^\mathsf T\mathbf v)^2\\
+&=
+\|\mathbf u\|_2^2\|\mathbf v\|_2^2\sin^2\theta,
+\end{aligned}
+\]
+
+where \(\theta\in[0,\pi]\) is the angle between the nonzero inputs and
+the last equality uses
+\(\mathbf u^\mathsf T\mathbf v=\|\mathbf u\|_2\|\mathbf v\|_2\cos\theta\).
+Taking the nonnegative square root gives
+
+\[
+\boxed{
+\|\mathbf u\times\mathbf v\|_2
+=
+\|\mathbf u\|_2\|\mathbf v\|_2\sin\theta
+}.
+\]
+
+If the input components have physical units, the cross-product
+components have the product of those units. The coordinate definition
+also gives the useful identities
+
+\[
+\boxed{
+\mathbf u\times\mathbf v
+=
+-\mathbf v\times\mathbf u,
+\qquad
+\mathbf u\times\mathbf u
+=
+\mathbf 0_3
+}.
+\]
+
+Cross products are not associative:
+\(\mathbf a\times(\mathbf b\times\mathbf c)\) and
+\((\mathbf a\times\mathbf b)\times\mathbf c\) are generally different.
+For \(\mathbf a,\mathbf b,\mathbf c\in\mathbb R^3\) expressed in the
+same right-handed orthonormal frame, the \textbf{vector triple-product
+identity} is
+
+\[
+\boxed{
+\mathbf a\times(\mathbf b\times\mathbf c)
+=
+\mathbf b(\mathbf a^\mathsf T\mathbf c)
+-
+\mathbf c(\mathbf a^\mathsf T\mathbf b)
+}.
+\]
+
+To verify the identity from the cross-product definition, set
+\(\mathbf d\mathrel{:=}\mathbf b\times\mathbf c\). Substituting the
+components of \(\mathbf d\) into \(\mathbf a\times\mathbf d\) and
+regrouping by the components of \(\mathbf b\) and \(\mathbf c\) gives
+
+\[
+\begin{aligned}
+\mathbf a\times\mathbf d
+&=
+\begin{bmatrix}
+a_2(b_1c_2-b_2c_1)-a_3(b_3c_1-b_1c_3)\\
+a_3(b_2c_3-b_3c_2)-a_1(b_1c_2-b_2c_1)\\
+a_1(b_3c_1-b_1c_3)-a_2(b_2c_3-b_3c_2)
+\end{bmatrix}\\
+&=
+\begin{bmatrix}
+b_1(\mathbf a^\mathsf T\mathbf c)-c_1(\mathbf a^\mathsf T\mathbf b)\\
+b_2(\mathbf a^\mathsf T\mathbf c)-c_2(\mathbf a^\mathsf T\mathbf b)\\
+b_3(\mathbf a^\mathsf T\mathbf c)-c_3(\mathbf a^\mathsf T\mathbf b)
+\end{bmatrix}\\
+&=
+\mathbf b(\mathbf a^\mathsf T\mathbf c)
+-
+\mathbf c(\mathbf a^\mathsf T\mathbf b).
+\end{aligned}
+\]
+
+A case used later for rotations sets \(\mathbf b=\mathbf a\) and
+\(\mathbf c=\mathbf y\):
+
+\[
+\boxed{
+\mathbf a\times(\mathbf a\times\mathbf y)
+=
+\mathbf a(\mathbf a^\mathsf T\mathbf y)
+-
+(\mathbf a^\mathsf T\mathbf a)\mathbf y
+}.
+\]
+
+If \(\mathbf a\) is a unit vector, then
+\(\mathbf a^\mathsf T\mathbf a=1\).
+
 \subsection{Linear combinations, span, and
 basis}\label{linear-combinations-span-and-basis}
 
@@ -1149,6 +1296,10 @@ Complete this test without looking back at the section.
 \item
   \textbf{Basis:} Explain why two parallel nonzero vectors cannot form a
   basis of \(\mathbb R^2\).
+\item
+  \textbf{Cross product:} For a unit vector \(\mathbf a\in\mathbb R^3\),
+  use the vector triple-product identity to simplify
+  \(\mathbf a\times(\mathbf a\times\mathbf y)\).
 \end{enumerate}
 
 \subsection*{Answers and hints}\label{answers-and-hints}
@@ -1178,6 +1329,9 @@ Complete this test without looking back at the section.
 \item
   One vector is a scalar multiple of the other, so their span is only a
   line and their coefficient representation is not unique.
+\item
+  \(\mathbf a\times(\mathbf a\times\mathbf y)=\mathbf a(\mathbf a^\mathsf T\mathbf y)-\mathbf y\)
+  because \(\mathbf a^\mathsf T\mathbf a=1\).
 \end{enumerate}
 
 \section{Matrices: linear maps and basis
@@ -2709,6 +2863,9 @@ matrices}\label{quick-test-d-orthogonal-matrices}
   rigid-body rotation matrices.
 \item
   State the rank-nullity theorem and explain what its two terms count.
+\item
+  State the vector triple-product identity and explain why the order and
+  parentheses in a nested cross product matter.
 \end{enumerate}
 
 \subsection*{Cumulative answers and
@@ -2770,6 +2927,10 @@ hints}\label{cumulative-answers-and-hints}
   \(\operatorname{rank}(\mathbf A)+\operatorname{nullity}(\mathbf A)=n\).
   Rank counts independent output directions produced by the map, while
   nullity counts independent input directions sent to zero.
+\item
+  \(\mathbf a\times(\mathbf b\times\mathbf c)=\mathbf b(\mathbf a^\mathsf T\mathbf c)-\mathbf c(\mathbf a^\mathsf T\mathbf b)\).
+  The cross product is not associative, so changing the parentheses
+  generally changes the result.
 \end{enumerate}
 
 \section*{References}\label{references}
@@ -13132,19 +13293,98 @@ its norm gives the angle magnitude:
 |\alpha|.
 \]
 
-The vector is dimensionless in SI because radians are dimensionless,
-although its entries are labelled in radians to preserve their physical
-meaning. It represents a finite orientation change, not angular
-velocity; angular velocity has units of \(\mathrm{rad\,s^{-1}}\).
+The word \emph{exponential} does not refer to the definition
+\(\boldsymbol\varphi_w=\alpha\mathbf a_w\) itself. It anticipates the
+construction derived below: the skew-symmetric matrix
+\([\boldsymbol\varphi_w]_\times\) is supplied to the matrix exponential
+to recover the finite rotation
+\(\mathbf Q_w=\exp([\boldsymbol\varphi_w]_\times)\).
+
+If the same rotation is produced during a time interval \([t_0,t_1]\)
+about the fixed axis \(\mathbf a_w\), let \(\alpha(t_0)=0\) and
+\(\alpha(t_1)=\alpha\). The world-expressed angular velocity and
+accumulated angle then satisfy
+
+\[
+\boxed{
+\boldsymbol\omega_w(t)
+=
+\dot\alpha(t)\mathbf a_w
+},
+\qquad
+\alpha
+=
+\int_{t_0}^{t_1}\dot\alpha(t)\,dt.
+\]
+
+Because \(\mathbf a_w\) is constant over this interval,
+
+\[
+\boxed{
+\boldsymbol\varphi_w
+=
+\alpha\mathbf a_w
+=
+\int_{t_0}^{t_1}\boldsymbol\omega_w(t)\,dt
+}.
+\]
+
+The complete fixed-axis relationship is therefore
+
+\[
+\underbrace{
+\boldsymbol\omega_w(t)
+}_{\text{angular velocity}}
+\xrightarrow{\;\text{integrate over }[t_0,t_1]\;}
+\underbrace{
+\boldsymbol\varphi_w=\alpha\mathbf a_w
+}_{\text{accumulated rotation coordinates}}
+\xrightarrow{\;\exp([\,\cdot\,]_\times)\;}
+\underbrace{
+\mathbf Q_w
+}_{\text{finite rotation}}.
+\]
+
+The vector \(\boldsymbol\varphi_w\) is dimensionless in SI because
+radians are dimensionless, although its entries are labelled in radians
+to preserve their physical meaning. It represents accumulated finite
+rotation coordinates, not angular velocity; angular velocity has units
+of \(\mathrm{rad\,s^{-1}}\).
 
 \subsection{The matrix exponential}\label{the-matrix-exponential}
 
 To construct the finite rotation, first consider a differentiable
 world-coordinate vector \(\mathbf p(s)\in\mathbb R^3\) rotating about
-\(\mathbf a_w\), where \(s\in\mathbb R\) is a dimensionless angle
-parameter measured in radians. The angular rate with respect to \(s\)
-has unit magnitude, so the vector-rate equation from
-Section~\ref{sec-so3-angular-velocity-definition} becomes
+\(\mathbf a_w\), where \(s\in\mathbb R\) is the accumulated signed
+rotation angle, measured in radians and dimensionless in SI. Section
+Section~\ref{sec-so3-angular-velocity-definition} derived
+\(\dot{\mathbf r}_i=\boldsymbol\omega_w\times\mathbf r_i\) for each
+body-axis column; the same vector-rate equation applies to any vector
+rotating with the body:
+
+\[
+\frac{d\mathbf p}{dt}
+=
+\boldsymbol\omega_w\times\mathbf p.
+\]
+
+If \(s=s(t)\), then \(\boldsymbol\omega_w=\mathbf a_w\,ds/dt\). Applying
+the chain rule gives
+
+\[
+\frac{d\mathbf p}{dt}
+=
+\frac{d\mathbf p}{ds}\frac{ds}{dt}
+=
+\left(
+\mathbf a_w\times\mathbf p
+\right)
+\frac{ds}{dt}.
+\]
+
+Cancelling \(ds/dt\) when it is nonzero, with the stationary case
+obtained by continuity, gives the vector-rate equation with angle rather
+than time as the independent variable:
 
 \[
 \frac{d\mathbf p}{ds}
@@ -13188,15 +13428,59 @@ differentiation of the series gives
 \mathbf A\exp(s\mathbf A).
 \]
 
-Therefore,
+The scalar separation step \(d p/p\) cannot be used here because
+division by a vector and the ordinary logarithm of a vector are not
+defined. Its matrix counterpart is an \textbf{integrating factor},
+meaning a matrix chosen so that the differential equation becomes the
+derivative of one product. Set
+\(\mathbf A\mathrel{:=}[\mathbf a_w]_\times\in\mathbb R^{3\times3}\) and
+left-multiply \(d\mathbf p/ds=\mathbf A\mathbf p\) by
+\(\exp(-s\mathbf A)\). The product rule gives
 
 \[
+\begin{aligned}
+\frac{d}{ds}
+\left[
+\exp(-s\mathbf A)\mathbf p(s)
+\right]
+&=
+-\mathbf A\exp(-s\mathbf A)\mathbf p(s)
++
+\exp(-s\mathbf A)\frac{d\mathbf p}{ds}\\
+&=
+-\mathbf A\exp(-s\mathbf A)\mathbf p(s)
++
+\exp(-s\mathbf A)\mathbf A\mathbf p(s)\\
+&=
+\mathbf 0_3.
+\end{aligned}
+\]
+
+The last equality uses
+\(\mathbf A\exp(-s\mathbf A)=\exp(-s\mathbf A)\mathbf A\), which holds
+because the exponential series contains only powers of \(\mathbf A\).
+The product is therefore constant. Evaluating it at \(s=0\) and using
+\(\exp(\mathbf 0_{3\times3})=\mathbf I_3\) gives
+
+\[
+\exp(-s\mathbf A)\mathbf p(s)
+=
+\mathbf p_0.
+\]
+
+Left-multiplying by \(\exp(s\mathbf A)\) and using
+\(\exp(s\mathbf A)^{-1}=\exp(-s\mathbf A)\) yields
+
+\[
+\boxed{
 \mathbf p(s)
 =
 \exp\!\left(s[\mathbf a_w]_\times\right)\mathbf p_0
+}.
 \]
 
-solves the vector-rate equation because
+This integrating-factor argument derives the solution. Differentiating
+the result provides a separate verification:
 
 \[
 \begin{aligned}
@@ -13238,10 +13522,39 @@ The mapping
 \exp:\mathfrak{so}(3)\to SO(3)
 \]
 
-is called the \textbf{exponential map} for rotations. It converts the
-linear, infinitesimal representation
-\([\boldsymbol\varphi_w]_\times\in\mathfrak{so}(3)\) into a finite
-rotation matrix \(\mathbf Q_w\in SO(3)\).
+is called the \textbf{exponential map} for rotations. The arrow states
+that the function accepts an element of \(\mathfrak{so}(3)\) and returns
+an element of \(SO(3)\). For the rotation vector introduced above,
+
+\[
+\underbrace{
+[\boldsymbol\varphi_w]_\times
+}_{\in\mathfrak{so}(3)}
+\quad\longmapsto\quad
+\underbrace{
+\exp\!\left([\boldsymbol\varphi_w]_\times\right)
+}_{\in SO(3)}.
+\]
+
+Thus, the exponential map converts the dimensionless skew-symmetric
+matrix form \([\boldsymbol\varphi_w]_\times\) of the exponential
+coordinates into a finite rotation matrix \(\mathbf Q_w\). Although
+\([\boldsymbol\varphi_w]_\times\) belongs to the tangent space
+\(\mathfrak{so}(3)\), it need not represent an infinitesimal change: its
+scale is set by the possibly finite angle \(\alpha\). During
+time-dependent motion, the genuinely infinitesimal rotation coordinate
+accumulated over an infinitesimal time interval \(dt\) is
+
+\[
+\boxed{
+[d\boldsymbol\varphi_w]_\times
+=
+[\boldsymbol\omega_w]_\times\,dt
+},
+\]
+
+where \(\boldsymbol\omega_w\in\mathbb R^3\) is the world-expressed
+angular velocity in \(\mathrm{rad\,s^{-1}}\).
 
 To verify that the result is a rotation matrix, set
 \(\boldsymbol\Omega\mathrel{:=}[\mathbf a_w]_\times\). Because
@@ -13254,9 +13567,9 @@ exponential series gives
 \exp(-\alpha\boldsymbol\Omega).
 \]
 
-The two exponent matrices \(-\alpha\boldsymbol\Omega\) and
-\(\alpha\boldsymbol\Omega\) commute because each is a scalar multiple of
-the same matrix. Hence,
+The inverse property of the matrix exponential gives
+\(\exp(-\alpha\boldsymbol\Omega)=\exp(\alpha\boldsymbol\Omega)^{-1}\).
+Hence,
 
 \[
 \mathbf Q_w^\mathsf T\mathbf Q_w
@@ -13264,25 +13577,87 @@ the same matrix. Hence,
 \exp(-\alpha\boldsymbol\Omega)
 \exp(\alpha\boldsymbol\Omega)
 =
-\exp(\mathbf 0_{3\times3})
+\exp(\alpha\boldsymbol\Omega)^{-1}
+\exp(\alpha\boldsymbol\Omega)
 =
 \mathbf I_3.
 \]
 
-Thus, \(\mathbf Q_w\) is orthogonal. At \(\alpha=0\),
-\(\mathbf Q_w=\mathbf I_3\) and \(\det(\mathbf Q_w)=1\). The determinant
-varies continuously with \(\alpha\), while an orthogonal matrix can have
-determinant only \(+1\) or \(-1\), so it cannot change sign without
-leaving the orthogonal set. Therefore, \(\det(\mathbf Q_w)=1\) for every
-\(\alpha\), proving \(\mathbf Q_w\in SO(3)\).
+Thus, \(\mathbf Q_w\) is orthogonal. Taking determinants of
+\(\mathbf Q_w^\mathsf T\mathbf Q_w=\mathbf I_3\) gives
+
+\[
+\det(\mathbf Q_w)^2
+=
+1,
+\]
+
+so an orthogonal matrix can have determinant only \(+1\) or \(-1\). At
+\(\alpha=0\),
+
+\[
+\mathbf Q_w(0)
+=
+\exp(\mathbf 0_{3\times3})
+=
+\mathbf I_3,
+\qquad
+\det(\mathbf Q_w(0))
+=
+1.
+\]
+
+As \(\alpha\) changes continuously, every entry of
+\(\mathbf Q_w(\alpha)=\exp(\alpha\boldsymbol\Omega)\) also changes
+continuously. The determinant is calculated from those entries using
+sums and products, so \(\det(\mathbf Q_w(\alpha))\) is continuous. To
+change from \(+1\) to \(-1\), it would have to pass through intermediate
+values, including zero. This is impossible while \(\mathbf Q_w\) remains
+orthogonal because an orthogonal matrix has determinant only \(+1\) or
+\(-1\) and is never singular. Therefore, \(\det(\mathbf Q_w)=1\) for
+every \(\alpha\), proving \(\mathbf Q_w\in SO(3)\).
 
 \subsection{Deriving Rodrigues' rotation
 formula}\label{deriving-rodrigues-rotation-formula}
 
-The infinite series has a finite closed form because powers of
-\(\boldsymbol\Omega=[\mathbf a_w]_\times\) repeat in a simple pattern.
-For every \(\mathbf y\in\mathbb R^3\), the vector triple-product
-identity gives
+Rodrigues' formula is a finite closed form of the matrix exponential
+derived above. Setting
+\(\boldsymbol\Omega\mathrel{:=}[\mathbf a_w]_\times\) in the
+exponential-series definition gives
+
+\[
+\mathbf Q_w
+=
+\exp(\alpha\boldsymbol\Omega)
+=
+\mathbf I_3
++
+\alpha\boldsymbol\Omega
++
+\frac{\alpha^2\boldsymbol\Omega^2}{2!}
++
+\frac{\alpha^3\boldsymbol\Omega^3}{3!}
++
+\cdots.
+\]
+
+This expression contains infinitely many powers of
+\(\boldsymbol\Omega\). The powers can be reduced to a repeating pattern
+involving only \(\mathbf I_3\), \(\boldsymbol\Omega\), and
+\(\boldsymbol\Omega^2\). To find that pattern, apply the vector
+triple-product identity from
+Section~\ref{sec-linear-algebra-cross-product},
+
+\[
+\mathbf a\times(\mathbf b\times\mathbf c)
+=
+\mathbf b(\mathbf a^\mathsf T\mathbf c)
+-
+\mathbf c(\mathbf a^\mathsf T\mathbf b),
+\]
+
+with \(\mathbf a=\mathbf b=\mathbf a_w\) and \(\mathbf c=\mathbf y\),
+where \(\mathbf y\in\mathbb R^3\). This substitution gives
 
 \[
 \begin{aligned}
@@ -13292,7 +13667,7 @@ identity gives
 &=
 \mathbf a_w(\mathbf a_w^\mathsf T\mathbf y)
 -
-(\mathbf a_w^\mathsf T\mathbf a_w)\mathbf y\\
+\mathbf y(\mathbf a_w^\mathsf T\mathbf a_w)\\
 &=
 \left(
 \mathbf a_w\mathbf a_w^\mathsf T
@@ -13302,8 +13677,15 @@ identity gives
 \end{aligned}
 \]
 
-The last equality uses \(\mathbf a_w^\mathsf T\mathbf a_w=1\). Because
-the equation holds for every \(\mathbf y\),
+The second equality is the triple-product identity after the stated
+substitution: \(\mathbf a_w^\mathsf T\mathbf y\) is the scalar
+projection factor in the first term, while
+\(\mathbf a_w^\mathsf T\mathbf a_w\) is the squared norm of the axis.
+The last equality uses \(\mathbf a_w^\mathsf T\mathbf a_w=1\), rewrites
+\(\mathbf a_w(\mathbf a_w^\mathsf T\mathbf y)\) as
+\((\mathbf a_w\mathbf a_w^\mathsf T)\mathbf y\), and rewrites
+\(\mathbf y\) as \(\mathbf I_3\mathbf y\). Because the equation holds
+for every \(\mathbf y\),
 
 \[
 \boxed{
@@ -13686,796 +14068,6 @@ map}
   Algorithms in Python}, 3rd ed., Chapters 2-3, especially rotation
   matrices, the matrix exponential, Rodrigues' formula, rotational
   velocity, and body- and world-frame expressions of spatial motion.
-\end{itemize}
-
-\chapter{Dynamics, Forces, Torque, Friction, and Actuator
-Limits}\label{sec-dynamics-actuator-limits}
-
-\section*{Why this chapter matters}\label{why-this-chapter-matters-3}
-\addcontentsline{toc}{section}{Why this chapter matters}
-
-\markright{Why this chapter matters}
-
-Kinematics predicts how a robot's pose changes when its velocity is
-known, but it does not explain how that velocity is produced or how
-quickly it can change. Dynamics connects motion to mass, rotational
-inertia, external forces, and external torques. This connection is
-necessary for physically meaningful simulation, actuator selection,
-acceleration limits, braking analysis, and feedback control.
-
-This chapter begins with straight-line motion because it exposes the
-central force-acceleration relation without rotational notation. Later
-sections extend the same reasoning to wheel torque, planar rotation,
-traction, friction, and actuator limits.
-
-\section*{Prerequisites and
-assumptions}\label{prerequisites-and-assumptions-5}
-\addcontentsline{toc}{section}{Prerequisites and assumptions}
-
-\markright{Prerequisites and assumptions}
-
-The reader should understand vectors and units from
-Chapter~\ref{sec-linear-algebra-foundations}, coordinate frames from
-Chapter~\ref{sec-geometry-coordinate-frames}, and derivatives and
-numerical integration from Chapter~\ref{sec-differential-drive-model}.
-
-The first model treats the robot as a rigid body constrained to
-translate along a fixed straight line on level ground. The line is fixed
-in the world frame, so it is an inertial reference for the speeds
-considered here. The robot's mass is constant, vertical motion is
-absent, and all forces are represented by their signed components along
-the line. Rotational motion, wheel inertia, slip, and changing actuator
-force are excluded from this first model.
-
-\section{From kinematics to
-dynamics}\label{sec-dynamics-force-acceleration}
-
-\subsection{Position, velocity, and
-acceleration}\label{position-velocity-and-acceleration}
-
-Let \(t\in\mathbb R_{\geq0}\) denote continuous time in seconds. Let
-\(s(t)\in\mathbb R\) be the robot's signed position along the fixed
-line, measured in metres. Increasing \(s\) defines the positive
-direction.
-
-The signed longitudinal velocity is
-
-\[
-v(t)
-\mathrel{:=}
-\dot s(t)
-=
-\frac{ds(t)}{dt},
-\]
-
-where \(v(t)\) is measured in \(\mathrm{m\,s^{-1}}\). The signed
-longitudinal acceleration is
-
-\[
-a(t)
-\mathrel{:=}
-\dot v(t)
-=
-\ddot s(t)
-=
-\frac{d^2s(t)}{dt^2},
-\]
-
-where \(a(t)\) is measured in \(\mathrm{m\,s^{-2}}\). Positive
-acceleration means that velocity changes in the positive direction; it
-does not necessarily mean that the robot is moving forward. For example,
-a robot with \(v<0\) and \(a>0\) is moving in the negative direction
-while its speed decreases.
-
-Kinematics relates the quantities through \(\dot s=v\). A dynamic model
-adds an equation that determines \(\dot v=a\) from physical causes.
-
-\subsection{Net external force}\label{net-external-force}
-
-A force is an interaction that can change an object's translational
-motion. Let \(n\in\mathbb N\) be the number of external forces acting on
-the chosen robot system, and let \(F_j(t)\in\mathbb R\) be the signed
-component of external force \(j\in\{1,\ldots,n\}\) along the positive
-line direction. Each \(F_j\) is measured in newtons, abbreviated
-\(\mathrm N\).
-
-The net external force is the algebraic sum
-
-\[
-F_{\mathrm{net}}(t)
-\mathrel{:=}
-\sum_{j=1}^{n}F_j(t),
-\]
-
-where \(F_{\mathrm{net}}(t)\in\mathbb R\) is also measured in newtons.
-Forces pointing in the positive direction have positive components,
-while forces pointing in the negative direction have negative
-components. Internal forces between parts included inside the chosen
-robot system do not appear separately in this whole-system balance
-because they occur in equal-and-opposite pairs.
-
-For a driven ground robot, the forward force on the robot is the
-traction force exerted by the ground at the wheel contacts. Motor torque
-helps create this contact force, but motor torque and longitudinal force
-are different physical quantities and have different units.
-
-\subsection{Newton's second law and the forward-dynamics
-equation}\label{newtons-second-law-and-the-forward-dynamics-equation}
-
-Let \(m\in\mathbb R_{>0}\) be the robot's constant mass in kilograms.
-Newton's second law for translation along the line is
-
-\[
-F_{\mathrm{net}}(t)=m a(t).
-\]
-
-Substituting \(a=\dot v=\ddot s\) gives
-
-\[
-F_{\mathrm{net}}(t)
-=
-m\dot v(t)
-=
-m\ddot s(t).
-\]
-
-Because \(m>0\), division by mass gives the forward-dynamics equation
-
-\[
-\boxed{
-a(t)
-=
-\dot v(t)
-=
-\frac{F_{\mathrm{net}}(t)}{m}
-}.
-\]
-
-Here, \emph{forward dynamics} means calculating acceleration from the
-current physical model and the applied forces. In this simple
-constant-mass model, the acceleration depends only on net force and
-mass. The dimensional check is
-
-\[
-\frac{\mathrm N}{\mathrm{kg}}
-=
-\frac{\mathrm{kg\,m\,s^{-2}}}{\mathrm{kg}}
-=
-\mathrm{m\,s^{-2}},
-\]
-
-which matches the unit of acceleration.
-
-If a nonnegative drive-force magnitude \(F_{\mathrm{drive}}\) acts
-forward and a nonnegative resistance-force magnitude
-\(F_{\mathrm{resist}}\) acts backward, then their signed sum is
-
-\[
-F_{\mathrm{net}}
-=
-F_{\mathrm{drive}}-F_{\mathrm{resist}},
-\]
-
-so
-
-\[
-a
-=
-\frac{F_{\mathrm{drive}}-F_{\mathrm{resist}}}{m}.
-\]
-
-This equation shows why a velocity command cannot change the physical
-velocity instantaneously: finite forces acting on positive mass produce
-finite acceleration.
-
-\subsection{Constant-force motion over one
-interval}\label{constant-force-motion-over-one-interval}
-
-Suppose \(F_{\mathrm{net}}\) and \(m\) remain constant during the
-interval from sample time \(t_k\) to \(t_{k+1}=t_k+\Delta t\), where
-\(\Delta t>0\) is measured in seconds. Define \(s_k\mathrel{:=}s(t_k)\)
-and \(v_k\mathrel{:=}v(t_k)\). The acceleration is constant and equals
-
-\[
-a=\frac{F_{\mathrm{net}}}{m}.
-\]
-
-For elapsed time \(\tau\in[0,\Delta t]\), integrating \(\dot v=a\) from
-\(0\) to \(\tau\) gives
-
-\[
-v(t_k+\tau)=v_k+a\tau.
-\]
-
-Setting \(\tau=\Delta t\) gives the exact constant-force velocity update
-
-\[
-v_{k+1}
-=
-v_k
-+
-\frac{F_{\mathrm{net}}}{m}\Delta t.
-\]
-
-Integrating \(\dot s(t_k+\tau)=v_k+a\tau\) over the same interval gives
-
-\[
-\begin{aligned}
-s_{k+1}
-&=
-s_k+
-\int_0^{\Delta t}(v_k+a\tau)\,d\tau\\
-&=
-s_k+v_k\Delta t+\frac{1}{2}a\Delta t^2\\
-&=
-s_k+v_k\Delta t+
-\frac{F_{\mathrm{net}}}{2m}\Delta t^2.
-\end{aligned}
-\]
-
-These updates are exact only under the stated one-dimensional,
-constant-mass, and constant-net-force assumptions.
-
-\subsection{Worked example}\label{worked-example-2}
-
-Consider a robot with mass \(m=20\,\mathrm{kg}\), forward traction
-magnitude \(F_{\mathrm{drive}}=30\,\mathrm N\), and backward resistance
-magnitude \(F_{\mathrm{resist}}=10\,\mathrm N\). Its net force and
-acceleration are
-
-\[
-F_{\mathrm{net}}
-=
-30-10
-=
-20\,\mathrm N,
-\]
-
-\[
-a
-=
-\frac{20}{20}
-=
-1\,\mathrm{m\,s^{-2}}.
-\]
-
-If \(s_k=0\,\mathrm m\), \(v_k=0\,\mathrm{m\,s^{-1}}\), and
-\(\Delta t=2\,\mathrm s\), then
-
-\[
-v_{k+1}
-=
-0+(1)(2)
-=
-2\,\mathrm{m\,s^{-1}},
-\]
-
-and
-
-\[
-s_{k+1}
-=
-0+(0)(2)+\frac{1}{2}(1)(2^2)
-=
-2\,\mathrm m.
-\]
-
-The example predicts motion only along the fixed line. It does not yet
-explain how motor torque becomes traction, how much traction the ground
-can support, or how wheel and chassis rotation affect the result.
-
-\subsection*{Quick test A}\label{quick-test-a}
-\addcontentsline{toc}{subsection}{Quick test A}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  In one sentence each, distinguish kinematics from dynamics.
-\item
-  Define \(s\), \(v\), \(a\), \(m\), and \(F_{\mathrm{net}}\), including
-  units.
-\item
-  Starting from \(F_{\mathrm{net}}=ma\), derive
-  \(\dot v=F_{\mathrm{net}}/m\) and state why division by \(m\) is
-  valid.
-\item
-  A \(10\,\mathrm{kg}\) robot experiences \(18\,\mathrm N\) forward and
-  \(3\,\mathrm N\) backward. Find its acceleration.
-\item
-  With the same net force, what happens to acceleration if mass doubles?
-\item
-  Name two assumptions that must hold for the constant-force position
-  update to be exact.
-\end{enumerate}
-
-\subsection*{Quick test A answers and
-hints}\label{quick-test-a-answers-and-hints}
-\addcontentsline{toc}{subsection}{Quick test A answers and hints}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Kinematics relates motion variables without modelling their physical
-  causes; dynamics relates forces and torques to acceleration and
-  motion.
-\item
-  \(s\) is signed position in metres, \(v=\dot s\) is signed velocity in
-  \(\mathrm{m\,s^{-1}}\), \(a=\dot v\) is signed acceleration in
-  \(\mathrm{m\,s^{-2}}\), \(m>0\) is mass in kilograms, and
-  \(F_{\mathrm{net}}\) is the signed sum of external force components in
-  newtons.
-\item
-  Substitute \(a=\dot v\) into \(F_{\mathrm{net}}=ma\) and divide both
-  sides by the strictly positive mass \(m\).
-\item
-  \(F_{\mathrm{net}}=18-3=15\,\mathrm N\), so
-  \(a=15/10=1.5\,\mathrm{m\,s^{-2}}\).
-\item
-  Acceleration halves because \(a=F_{\mathrm{net}}/m\).
-\item
-  Examples include one-dimensional translation, constant mass, constant
-  net force during the interval, and validity of the rigid-body model in
-  an inertial frame.
-\end{enumerate}
-
-\section{From motor torque to wheel
-traction}\label{from-motor-torque-to-wheel-traction}
-
-\subsection{Torque and its units}\label{torque-and-its-units}
-
-Torque, also called the moment of a force, is a vector quantity that
-represents the tendency of a force to rotate a body about a chosen point
-or axis. Torque is not a separate kind of force: it depends on the
-applied force and where that force acts.
-
-Choose a point \(O\) on the rotation axis. Let
-\(\boldsymbol\rho\in\mathbb R^3\) be the position vector from \(O\) to
-the point where the force is applied, measured in metres, and let
-\(\mathbf F\in\mathbb R^3\) be the applied force expressed in the same
-coordinate frame, measured in newtons. The torque about \(O\) is
-
-\[
-\boxed{
-\boldsymbol\tau_O
-\mathrel{:=}
-\boldsymbol\rho\times\mathbf F
-},
-\]
-
-where \(\times\) denotes the three-dimensional vector cross product and
-\(\boldsymbol\tau_O\in\mathbb R^3\) is measured in newton-metres,
-written \(\mathrm{N\,m}\). If
-\(\boldsymbol\rho=[\rho_x\;\rho_y\;\rho_z]^{\mathsf T}\) and
-\(\mathbf F=[F_x\;F_y\;F_z]^{\mathsf T}\), then the cross product is
-calculated as
-
-\[
-\boldsymbol\rho\times\mathbf F
-=
-\begin{bmatrix}
-\rho_yF_z-\rho_zF_y\\
-\rho_zF_x-\rho_xF_z\\
-\rho_xF_y-\rho_yF_x
-\end{bmatrix}.
-\]
-
-The order of the cross product matters:
-\(\mathbf F\times\boldsymbol\rho=-\boldsymbol\tau_O\).
-
-The torque vector is perpendicular to the plane containing
-\(\boldsymbol\rho\) and \(\mathbf F\). Its direction follows the
-right-hand rule: curl the fingers of the right hand from
-\(\boldsymbol\rho\) toward \(\mathbf F\) through the smaller angle, and
-the thumb points in the direction of \(\boldsymbol\tau_O\).
-
-Figure Figure~\ref{fig-torque-vector-geometry} shows the position
-vector, applied force, angle, perpendicular moment arm, and out-of-page
-torque direction in one geometric construction.
-
-\begin{figure}
-
-\centering{
-
-\includegraphics[width=0.88\linewidth,height=\textheight,keepaspectratio]{index_files/mediabag/figures/torque_vector_geometry.pdf}
-
-}
-
-\caption{\label{fig-torque-vector-geometry}Vector geometry of torque
-about point \(O\).}
-
-\end{figure}%
-
-Let \(\rho\mathrel{:=}\lVert\boldsymbol\rho\rVert_2\) be the distance
-from \(O\) to the force application point in metres, let
-\(F\mathrel{:=}\lVert\mathbf F\rVert_2\) be the force magnitude in
-newtons, and let \(\theta\in[0,\pi]\) be the angle from
-\(\boldsymbol\rho\) to \(\mathbf F\). The cross-product magnitude
-satisfies
-
-\[
-\begin{aligned}
-\lVert\boldsymbol\rho\times\mathbf F\rVert_2^2
-&=
-\lVert\boldsymbol\rho\rVert_2^2
-\lVert\mathbf F\rVert_2^2
--
-(\boldsymbol\rho^{\mathsf T}\mathbf F)^2\\
-&=
-\rho^2F^2-\rho^2F^2\cos^2\theta\\
-&=
-\rho^2F^2\sin^2\theta.
-\end{aligned}
-\]
-
-Taking the nonnegative square root gives the torque magnitude
-
-\[
-\boxed{
-\tau
-\mathrel{:=}
-\lVert\boldsymbol\tau_O\rVert_2
-=
-\rho F\sin\theta
-}.
-\]
-
-Only the component of force perpendicular to \(\boldsymbol\rho\)
-contributes to the torque magnitude. Equivalently, define the
-perpendicular moment arm
-
-\[
-L
-\mathrel{:=}
-\rho\sin\theta,
-\]
-
-where \(L\geq0\) is the shortest distance in metres from \(O\) to the
-force's line of action. The line of action is the infinite line through
-the application point in the direction of \(\mathbf F\). Substitution
-gives the scalar formula
-
-\[
-\boxed{
-\tau=FL
-}.
-\]
-
-Thus \(\tau=FL\) is not a different torque law; it is the magnitude of
-the cross-product law written using the perpendicular moment arm. If
-\(\boldsymbol\rho\) and \(\mathbf F\) are perpendicular, then
-\(\theta=\pi/2\), \(L=\rho\), and \(\tau=\rho F\). If they are parallel
-or antiparallel, then \(\sin\theta=0\) and the torque is zero.
-
-Figure Figure~\ref{fig-torque-angle-examples} holds radius and force
-magnitude constant while changing only \(\theta\). The angled force
-produces less torque because only its component perpendicular to the
-radius contributes.
-
-\begin{figure}
-
-\centering{
-
-\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{index_files/mediabag/figures/torque_angle_examples.pdf}
-
-}
-
-\caption{\label{fig-torque-angle-examples}Torque magnitude for equal
-forces applied at \(90^\circ\) and \(60^\circ\).}
-
-\end{figure}%
-
-If \(\mathbf e_a\in\mathbb R^3\) is a unit vector along a chosen axis,
-the signed scalar torque about that axis is the projection
-
-\[
-\tau_a
-\mathrel{:=}
-\mathbf e_a^{\mathsf T}\boldsymbol\tau_O.
-\]
-
-Positive or negative \(\tau_a\) indicates which rotational direction the
-torque acts about the selected axis. Although torque and energy both
-have dimensions of force times distance, torque is a vector rotational
-action, whereas energy is a scalar quantity.
-
-For a wheel of radius \(r\), the position vector from the axle to the
-ground contact is perpendicular to the longitudinal traction force, so
-\(L=r\) and the contact-torque magnitude is \(rF\). This geometry is the
-origin of the commonly used wheel relation \(F=\tau/r\), but applying it
-to a driven wheel requires the signed rotational balance derived next.
-
-\subsection{The wheel rotational
-balance}\label{the-wheel-rotational-balance}
-
-Let \(i\in\{L,R\}\) identify the left or right drive wheel. Use the same
-sign convention as the kinematics chapter: \(\dot\phi_i>0\) means that
-wheel \(i\) rotates in the direction that rolls the robot forward. Its
-angular acceleration is \(\ddot\phi_i=d\dot\phi_i/dt\), measured in
-\(\mathrm{rad\,s^{-2}}\).
-
-Let \(\tau_i\in\mathbb R\) be the signed drive torque applied at the
-axle of wheel \(i\), measured in \(\mathrm{N\,m}\), with positive torque
-acting in the positive wheel-rotation direction. Let \(F_i\in\mathbb R\)
-be the signed longitudinal force exerted by the ground on wheel \(i\),
-measured in newtons, with \(F_i>0\) pointing forward. This
-ground-contact force is called the wheel's traction force.
-
-Let \(I_i\in\mathbb R_{>0}\) be the wheel's mass moment of inertia about
-its axle, measured in \(\mathrm{kg\,m^2}\). A mass moment of inertia
-quantifies resistance to angular acceleration about a specified axis; it
-is the rotational counterpart of mass in translational dynamics.
-
-The positive axle torque tends to increase \(\dot\phi_i\). The moment of
-a positive traction force about the axle acts in the opposite rotational
-direction, so the signed net torque about the axle is
-
-\[
-\tau_{\mathrm{net},i}
-=
-\tau_i-rF_i.
-\]
-
-Newton's second law for rotation states that net torque equals mass
-moment of inertia times angular acceleration. Therefore,
-
-\[
-\boxed{
-\tau_i-rF_i
-=
-I_i\ddot\phi_i
-}.
-\]
-
-Solving this balance for traction gives
-
-\[
-\boxed{
-F_i
-=
-\frac{\tau_i-I_i\ddot\phi_i}{r}
-}.
-\]
-
-The wheel must use part of the applied torque to accelerate its own
-rotational inertia. If wheel inertia is negligible or \(\ddot\phi_i\) is
-sufficiently small, the balance reduces to the quasi-static
-approximation
-
-\[
-\boxed{
-F_i\approx\frac{\tau_i}{r}
-}.
-\]
-
-Here, \emph{quasi-static} means that the wheel's rotational-inertia term
-is small enough to neglect in the torque balance; it does not mean that
-the robot's translational acceleration must be zero. The dimensional
-check is
-
-\[
-\frac{\mathrm{N\,m}}{\mathrm m}
-=
-\mathrm N,
-\]
-
-which matches the unit of traction force.
-
-\subsection{Combining the two drive
-wheels}\label{combining-the-two-drive-wheels}
-
-The motor torques are internal interactions when the robot, motors, and
-wheels are treated as one system. The longitudinal forces exerted by the
-ground are external forces, so they accelerate the whole robot. During
-straight forward driving, assume \(F_L\geq0\) and \(F_R\geq0\). Their
-total nonnegative drive-force magnitude is
-
-\[
-F_{\mathrm{drive}}
-=
-F_L+F_R.
-\]
-
-Under the quasi-static wheel approximation,
-
-\[
-F_{\mathrm{drive}}
-\approx
-\frac{\tau_L+\tau_R}{r}.
-\]
-
-If \(F_{\mathrm{resist}}\geq0\) is the magnitude of all backward
-longitudinal resistance included in the model, the chassis acceleration
-from Section~\ref{sec-dynamics-force-acceleration} becomes
-
-\[
-a
-\approx
-\frac{1}{m}
-\left(
-\frac{\tau_L+\tau_R}{r}
--F_{\mathrm{resist}}
-\right).
-\]
-
-This equation assumes straight motion and does not describe yaw
-acceleration caused by unequal wheel torques. It also assumes that the
-wheel-ground contacts can supply the calculated traction without
-slipping.
-
-\subsection{Ideal gearing}\label{ideal-gearing}
-
-An electric motor often rotates faster and produces less torque than the
-wheel requires, so a reduction gearbox is placed between the motor and
-wheel. Let \(G>1\) be the dimensionless reduction ratio, let
-\(\dot\phi_m\) and \(\tau_m\) be the motor-shaft angular speed and
-torque, and let \(\dot\phi_w\) and \(\tau_w\) be the wheel-side angular
-speed and torque. Choose the positive motor and wheel shaft directions
-so that positive motor rotation produces positive wheel rotation through
-the transmission.
-
-For an ideal lossless gearbox,
-
-\[
-\dot\phi_w
-=
-\frac{\dot\phi_m}{G}.
-\]
-
-Mechanical rotational power is \(P=\tau\dot\phi\), measured in watts,
-where \(1\,\mathrm W=1\,\mathrm{N\,m\,s^{-1}}\). Conservation of power
-for the ideal gearbox gives
-
-\[
-\tau_m\dot\phi_m
-=
-\tau_w\dot\phi_w.
-\]
-
-Substituting \(\dot\phi_m=G\dot\phi_w\) and cancelling the nonzero wheel
-speed gives
-
-\[
-\tau_w=G\tau_m.
-\]
-
-Thus an ideal reduction gearbox divides angular speed by \(G\) and
-multiplies torque by \(G\). If \(\eta\in(0,1]\) is a dimensionless
-efficiency representing power losses for forward motor-to-wheel power
-flow, a simple non-ideal approximation is
-
-\[
-\tau_w=\eta G\tau_m.
-\]
-
-Combining this approximation with negligible wheel rotational inertia
-gives
-
-\[
-F
-\approx
-\frac{\eta G\tau_m}{r}.
-\]
-
-This expression is a demanded traction force, not a guarantee that the
-ground contact can produce it. Gear losses, bearing friction,
-motor-current limits, wheel inertia, and the wheel-ground friction limit
-can all reduce the realised motion.
-
-\subsection{Worked example}\label{worked-example-3}
-
-Consider two identical drive wheels with radius \(r=0.10\,\mathrm m\).
-Suppose each wheel receives axle torque
-\(\tau_L=\tau_R=1.2\,\mathrm{N\,m}\), and neglect wheel rotational
-inertia and drivetrain losses. Each wheel's predicted traction is
-
-\[
-F_L=F_R
-=
-\frac{1.2}{0.10}
-=
-12\,\mathrm N.
-\]
-
-The total drive force is therefore
-
-\[
-F_{\mathrm{drive}}
-=
-12+12
-=
-24\,\mathrm N.
-\]
-
-For robot mass \(m=20\,\mathrm{kg}\) and backward resistance magnitude
-\(F_{\mathrm{resist}}=4\,\mathrm N\), the predicted acceleration is
-
-\[
-a
-=
-\frac{24-4}{20}
-=
-1\,\mathrm{m\,s^{-2}}.
-\]
-
-This result remains valid only while the assumed torques are available
-and both wheel contacts roll without longitudinal slip.
-
-\subsection*{Quick test B}\label{quick-test-b}
-\addcontentsline{toc}{subsection}{Quick test B}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Define torque, moment arm, mass moment of inertia, and traction force,
-  including units.
-\item
-  Starting from \(\tau_i-rF_i=I_i\ddot\phi_i\), solve for \(F_i\).
-\item
-  State the approximation required to use \(F_i\approx\tau_i/r\).
-\item
-  Why does the ground-contact force, rather than the internal motor
-  torque by itself, appear in the whole-robot translational force
-  balance?
-\item
-  An ideal gearbox has \(G=20\), motor torque
-  \(\tau_m=0.15\,\mathrm{N\,m}\), and wheel radius
-  \(r=0.06\,\mathrm m\). Neglecting inertia and losses, calculate the
-  wheel torque and demanded traction force.
-\item
-  Why can the demanded force \(\tau_w/r\) differ from the traction force
-  realised on the ground?
-\end{enumerate}
-
-\subsection*{Quick test B answers and
-hints}\label{quick-test-b-answers-and-hints}
-\addcontentsline{toc}{subsection}{Quick test B answers and hints}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Torque is a rotational action about an axis in \(\mathrm{N\,m}\); the
-  moment arm is the perpendicular axis-to-line-of-action distance in
-  metres; mass moment of inertia measures resistance to angular
-  acceleration about an axis in \(\mathrm{kg\,m^2}\); and traction is
-  the longitudinal ground-contact force on the wheel in newtons.
-\item
-  Move \(I_i\ddot\phi_i\) to the other side and divide by \(r>0\) to
-  obtain \(F_i=(\tau_i-I_i\ddot\phi_i)/r\).
-\item
-  The wheel rotational-inertia term \(I_i\ddot\phi_i\) must be
-  negligible relative to the applied torque, and omitted drivetrain
-  losses must also be acceptably small.
-\item
-  Motor torque transfers forces internally among the motor, wheel, and
-  chassis; the ground exerts the external longitudinal force that
-  changes the momentum of the whole robot.
-\item
-  \(\tau_w=G\tau_m=(20)(0.15)=3.0\,\mathrm{N\,m}\) and
-  \(F=\tau_w/r=3.0/0.06=50\,\mathrm N\).
-\item
-  The wheel may need torque to accelerate its own inertia, the
-  drivetrain has losses and limits, and the contact may slip when the
-  demanded traction exceeds the available friction.
-\end{enumerate}
-
-\section*{References}\label{references-6}
-\addcontentsline{toc}{section}{References}
-
-\markright{References}
-
-\begin{itemize}
-\tightlist
-\item
-  Kevin M. Lynch and Frank C. Park, \emph{Modern Robotics: Mechanics,
-  Planning, and Control}, Chapter 8, especially Sections 8.1, 8.2, and
-  8.9.
-\item
-  Karl J. Åström and Richard M. Murray, \emph{Feedback Systems: An
-  Introduction for Scientists and Engineers}, Chapter 3.
 \end{itemize}
 
 

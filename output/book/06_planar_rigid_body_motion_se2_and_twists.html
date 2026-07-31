@@ -370,12 +370,6 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./08_dynamics_forces_and_actuator_limits.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></a>
-  </div>
-</li>
       </ul>
   </li>
     </ul>
@@ -394,7 +388,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#a-pose-is-a-relative-geometric-relationship" id="toc-a-pose-is-a-relative-geometric-relationship" class="nav-link" data-scroll-target="#a-pose-is-a-relative-geometric-relationship"><span class="header-section-number">6.1.1</span> A pose is a relative geometric relationship</a></li>
   <li><a href="#sec-se2-planar-rotations" id="toc-sec-se2-planar-rotations" class="nav-link" data-scroll-target="#sec-se2-planar-rotations"><span class="header-section-number">6.1.2</span> Planar rotations and <span class="math inline">\(SO(2)\)</span></a></li>
-  <li><a href="#sec-se2-transforming-point" id="toc-sec-se2-transforming-point" class="nav-link" data-scroll-target="#sec-se2-transforming-point"><span class="header-section-number">6.1.3</span> Transforming a point by rotation and translation</a></li>
+  <li><a href="#sec-se2-transforming-point" id="toc-sec-se2-transforming-point" class="nav-link" data-scroll-target="#sec-se2-transforming-point"><span class="header-section-number">6.1.3</span> Transforming point coordinates by rotation and translation</a></li>
   <li><a href="#homogeneous-transformations-and-se2" id="toc-homogeneous-transformations-and-se2" class="nav-link" data-scroll-target="#homogeneous-transformations-and-se2"><span class="header-section-number">6.1.4</span> Homogeneous transformations and <span class="math inline">\(SE(2)\)</span></a></li>
   <li><a href="#composing-transformations" id="toc-composing-transformations" class="nav-link" data-scroll-target="#composing-transformations"><span class="header-section-number">6.1.5</span> Composing transformations</a></li>
   <li><a href="#sec-se2-inverting-transformation" id="toc-sec-se2-inverting-transformation" class="nav-link" data-scroll-target="#sec-se2-inverting-transformation"><span class="header-section-number">6.1.6</span> Inverting a transformation</a></li>
@@ -409,7 +403,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#passive-coordinate-change" id="toc-passive-coordinate-change" class="nav-link" data-scroll-target="#passive-coordinate-change"><span class="header-section-number">6.2.1</span> Passive coordinate change</a></li>
   <li><a href="#active-rigid-body-motion" id="toc-active-rigid-body-motion" class="nav-link" data-scroll-target="#active-rigid-body-motion"><span class="header-section-number">6.2.2</span> Active rigid-body motion</a></li>
-  <li><a href="#one-matrix-form-three-interpretations" id="toc-one-matrix-form-three-interpretations" class="nav-link" data-scroll-target="#one-matrix-form-three-interpretations"><span class="header-section-number">6.2.3</span> One matrix form, three interpretations</a></li>
+  <li><a href="#sec-se2-transformation-interpretations" id="toc-sec-se2-transformation-interpretations" class="nav-link" data-scroll-target="#sec-se2-transformation-interpretations"><span class="header-section-number">6.2.3</span> One matrix form, three interpretations</a></li>
   <li><a href="#composition-order" id="toc-composition-order" class="nav-link" data-scroll-target="#composition-order"><span class="header-section-number">6.2.4</span> Composition order</a></li>
   <li><a href="#sec-se2-noncommutative" id="toc-sec-se2-noncommutative" class="nav-link" data-scroll-target="#sec-se2-noncommutative"><span class="header-section-number">6.2.5</span> Why composition in <span class="math inline">\(SE(2)\)</span> is not commutative</a></li>
   <li><a href="#interpretation-failures-and-engineering-checks" id="toc-interpretation-failures-and-engineering-checks" class="nav-link" data-scroll-target="#interpretation-failures-and-engineering-checks"><span class="header-section-number">6.2.6</span> Interpretation failures and engineering checks</a></li>
@@ -555,8 +549,8 @@ SO(2)
 <p>where <span class="math inline">\(\mathbb Z\)</span> is the set of integers. Thus, <span class="math inline">\(\theta\)</span> is a <strong>coordinate</strong> used to describe an orientation, while <span class="math inline">\(\mathbf R(\theta)\)</span> represents the <strong>orientation</strong> itself. Angles that differ by an integer multiple of <span class="math inline">\(2\pi\)</span> describe the same element of <span class="math inline">\(SO(2)\)</span>.</p>
 </section>
 <section id="sec-se2-transforming-point" class="level3" data-number="6.1.3">
-<h3 data-number="6.1.3" class="anchored" data-anchor-id="sec-se2-transforming-point"><span class="header-section-number">6.1.3</span> Transforming a point by rotation and translation</h3>
-<p>Let <span class="math inline">\(P\)</span> be a geometric point fixed to the robot. Its position relative to <span class="math inline">\(O_b\)</span>, expressed in body-frame coordinates, is <span class="math inline">\({}^{b}\mathbf p_P\in\mathbb R^2\)</span> and is measured in metres. Its world-frame position is obtained by first rotating its body-frame displacement and then adding the world-frame position of the body origin:</p>
+<h3 data-number="6.1.3" class="anchored" data-anchor-id="sec-se2-transforming-point"><span class="header-section-number">6.1.3</span> Transforming point coordinates by rotation and translation</h3>
+<p>Let <span class="math inline">\(P\)</span> be a geometric point fixed to the robot. Its position relative to <span class="math inline">\(O_b\)</span>, expressed in body-frame coordinates, is <span class="math inline">\({}^{b}\mathbf p_P\in\mathbb R^2\)</span> and is measured in metres. To obtain its world-frame position, first use <span class="math inline">\(\mathbf R_{wb}\)</span> to re-express this body-frame displacement along the world axes and then add the world-frame position of the body origin:</p>
 <p><span class="math display">\[
 \boxed{
 {}^{w}\mathbf p_P
@@ -566,7 +560,7 @@ SO(2)
 {}^{w}\mathbf p_b
 }.
 \]</span></p>
-<p>This equation follows by tracing the geometric displacement from <span class="math inline">\(O_w\)</span> to <span class="math inline">\(P\)</span>. First travel from <span class="math inline">\(O_w\)</span> to <span class="math inline">\(O_b\)</span> by <span class="math inline">\({}^{w}\mathbf p_b\)</span>. Then travel from <span class="math inline">\(O_b\)</span> to <span class="math inline">\(P\)</span> by <span class="math inline">\({}^{b}\mathbf p_P\)</span>, but rotate that second displacement with <span class="math inline">\(\mathbf R_{wb}\)</span> so that both terms are expressed in world-frame coordinates before adding them.</p>
+<p>This equation follows by tracing the geometric displacement from <span class="math inline">\(O_w\)</span> to <span class="math inline">\(P\)</span>. First travel from <span class="math inline">\(O_w\)</span> to <span class="math inline">\(O_b\)</span> by <span class="math inline">\({}^{w}\mathbf p_b\)</span>. Then travel from <span class="math inline">\(O_b\)</span> to <span class="math inline">\(P\)</span> by the displacement whose body-frame coordinate is <span class="math inline">\({}^{b}\mathbf p_P\)</span>. Multiplication by <span class="math inline">\(\mathbf R_{wb}\)</span> expresses that same displacement in world coordinates so that the two terms can be added. This passive coordinate mapping does not physically move <span class="math inline">\(P\)</span>.</p>
 <p>A free vector, such as a displacement or velocity vector, has direction and magnitude but no fixed origin. It therefore changes coordinates using rotation alone:</p>
 <p><span class="math display">\[
 {}^{w}\mathbf v
@@ -577,7 +571,7 @@ SO(2)
 </section>
 <section id="homogeneous-transformations-and-se2" class="level3" data-number="6.1.4">
 <h3 data-number="6.1.4" class="anchored" data-anchor-id="homogeneous-transformations-and-se2"><span class="header-section-number">6.1.4</span> Homogeneous transformations and <span class="math inline">\(SE(2)\)</span></h3>
-<p>The point mapping in <a href="#sec-se2-transforming-point" class="quarto-xref"><span>Section 6.1.3</span></a> contains both a matrix multiplication and a vector addition. Homogeneous coordinates package these two operations into one matrix multiplication. Define the homogeneous coordinate column of point <span class="math inline">\(P\)</span> by appending a <span class="math inline">\(1\)</span>:</p>
+<p>The point mapping in <a href="#sec-se2-transforming-point" class="quarto-xref"><span>Section 6.1.3</span></a> contains both a matrix multiplication and a vector addition. Homogeneous coordinates package these two operations into one matrix multiplication. Define the body- and world-frame homogeneous coordinate columns of point <span class="math inline">\(P\)</span> by appending a <span class="math inline">\(1\)</span>:</p>
 <p><span class="math display">\[
 {}^{b}\overline{\mathbf p}_P
 \mathrel{:=}
@@ -585,9 +579,17 @@ SO(2)
 {}^{b}\mathbf p_P\\
 1
 \end{bmatrix}
+\in\mathbb R^3,
+\qquad
+{}^{w}\overline{\mathbf p}_P
+\mathrel{:=}
+\begin{bmatrix}
+{}^{w}\mathbf p_P\\
+1
+\end{bmatrix}
 \in\mathbb R^3.
 \]</span></p>
-<p>The overline identifies a homogeneous coordinate representation, not a different geometric point. Define the <strong>homogeneous transformation</strong> from frame <span class="math inline">\(\{b\}\)</span> to frame <span class="math inline">\(\{w\}\)</span> by</p>
+<p>The overline identifies a homogeneous coordinate representation, not a different geometric point. The first two entries have units of metres, while the appended <span class="math inline">\(1\)</span> is dimensionless and exists only to make translation part of a matrix multiplication. Define the <strong>homogeneous transformation</strong> from frame <span class="math inline">\(\{b\}\)</span> to frame <span class="math inline">\(\{w\}\)</span> by</p>
 <p><span class="math display">\[
 \boxed{
 \mathbf T_{wb}
@@ -596,8 +598,8 @@ SO(2)
 \mathbf R_{wb}&amp;{}^{w}\mathbf p_b\\
 \mathbf 0_2^\mathsf T&amp;1
 \end{bmatrix}
-}
-\in\mathbb R^{3\times3},
+\in\mathbb R^{3\times3}
+},
 \]</span></p>
 <p>where <span class="math inline">\(\mathbf 0_2=[0\;0]^\mathsf T\in\mathbb R^2\)</span>. The subscript order means that <span class="math inline">\(\mathbf T_{wb}\)</span> maps homogeneous point coordinates from frame <span class="math inline">\(\{b\}\)</span> to frame <span class="math inline">\(\{w\}\)</span>:</p>
 <p><span class="math display">\[
@@ -621,7 +623,7 @@ SO(2)
 \end{bmatrix}.
 \end{aligned}
 \]</span></p>
-<p>The upper two entries reproduce the point-transformation equation. Appending <span class="math inline">\(1\)</span> causes the translation column to contribute to the result. Thus, <span class="math inline">\(\mathbf T_{wb}\)</span> rotates the point’s body-frame displacement into the world frame and then adds the world position of the body origin.</p>
+<p>The upper two entries reproduce the point-transformation equation. Appending <span class="math inline">\(1\)</span> causes the translation column to contribute to the result. Thus, <span class="math inline">\(\mathbf T_{wb}\)</span> re-expresses the point’s body-relative displacement in world coordinates and then adds the world position of the body origin.</p>
 <p>Using <span class="math inline">\({}^{w}\mathbf p_b=[x\;y]^\mathsf T\)</span> and <span class="math inline">\(\mathbf R_{wb}=\mathbf R_{wb}(\theta)\)</span> gives the component form</p>
 <p><span class="math display">\[
 \mathbf T_{wb}
@@ -730,7 +732,7 @@ SE(2)
 {}^{a}\mathbf p_b
 }.
 \]</span></p>
-<p>The translation vectors cannot be added directly until they are expressed in the same frame. The product first rotates <span class="math inline">\({}^{b}\mathbf p_c\)</span> into frame <span class="math inline">\(\{a\}\)</span> and only then adds <span class="math inline">\({}^{a}\mathbf p_b\)</span>.</p>
+<p>The translation vectors cannot be added directly until they are expressed in the same frame. The product first re-expresses <span class="math inline">\({}^{b}\mathbf p_c\)</span> in frame <span class="math inline">\(\{a\}\)</span> and only then adds <span class="math inline">\({}^{a}\mathbf p_b\)</span>.</p>
 </section>
 <section id="sec-se2-inverting-transformation" class="level3" data-number="6.1.6">
 <h3 data-number="6.1.6" class="anchored" data-anchor-id="sec-se2-inverting-transformation"><span class="header-section-number">6.1.6</span> Inverting a transformation</h3>
@@ -898,7 +900,7 @@ x\\y\\\theta
 <li><span class="math inline">\(\mathbf R_{wb}\)</span> describes the orientation of frame <span class="math inline">\(\{b\}\)</span> relative to frame <span class="math inline">\(\{w\}\)</span>, while <span class="math inline">\({}^{w}\mathbf p_b\)</span> locates <span class="math inline">\(O_b\)</span> relative to <span class="math inline">\(O_w\)</span> using world coordinates. The order <span class="math inline">\(wb\)</span> means that the rotation maps coordinate columns from <span class="math inline">\(\{b\}\)</span> to <span class="math inline">\(\{w\}\)</span>.</li>
 <li><span class="math inline">\(SO(2)=\{\mathbf R\in\mathbb R^{2\times2}\mid\mathbf R^\mathsf T\mathbf R=\mathbf I_2,\det\mathbf R=1\}\)</span>. Orthogonality preserves lengths and angles and gives <span class="math inline">\(\mathbf R^{-1}=\mathbf R^\mathsf T\)</span>; determinant <span class="math inline">\(+1\)</span> preserves orientation and excludes reflections.</li>
 <li>Sine and cosine are <span class="math inline">\(2\pi\)</span>-periodic, so every entry of <span class="math inline">\(\mathbf R(\theta+2\pi)\)</span> equals the corresponding entry of <span class="math inline">\(\mathbf R(\theta)\)</span>.</li>
-<li>Block multiplication gives <span class="math inline">\({}^{a}\mathbf p_c=\mathbf R_{ab}{}^{b}\mathbf p_c+{}^{a}\mathbf p_b\)</span>. The first term rotates the <span class="math inline">\(b\)</span>-frame translation into frame <span class="math inline">\(\{a\}\)</span> before the two translations are added.</li>
+<li>Block multiplication gives <span class="math inline">\({}^{a}\mathbf p_c=\mathbf R_{ab}{}^{b}\mathbf p_c+{}^{a}\mathbf p_b\)</span>. The first term re-expresses the <span class="math inline">\(b\)</span>-frame translation in frame <span class="math inline">\(\{a\}\)</span> before the two translations are added.</li>
 <li>The reversed displacement must be expressed in frame <span class="math inline">\(\{b\}\)</span>, whereas <span class="math inline">\({}^{a}\mathbf p_b\)</span> is expressed in frame <span class="math inline">\(\{a\}\)</span>. Premultiplication by <span class="math inline">\(\mathbf R_{ab}^\mathsf T\)</span> performs the necessary coordinate change.</li>
 <li><span class="math inline">\(\mathbf R_{wb}(-\pi/2)[0.5\;0]^\mathsf T=[0\;-0.5]^\mathsf T\,\mathrm m\)</span>, so <span class="math inline">\({}^{w}\mathbf p_P=[3\;1.5]^\mathsf T\,\mathrm m\)</span>.</li>
 <li>Rigid-motion composition must account for the frame in which each translation is expressed and for the order of rotations and translations. Componentwise addition does neither, and angular coordinates are periodic.</li>
@@ -1000,8 +1002,8 @@ x\\y\\\theta
 \]</span></p>
 <p>Here, the coordinates changed because the geometric point moved, not because a different coordinate frame was selected.</p>
 </section>
-<section id="one-matrix-form-three-interpretations" class="level3" data-number="6.2.3">
-<h3 data-number="6.2.3" class="anchored" data-anchor-id="one-matrix-form-three-interpretations"><span class="header-section-number">6.2.3</span> One matrix form, three interpretations</h3>
+<section id="sec-se2-transformation-interpretations" class="level3" data-number="6.2.3">
+<h3 data-number="6.2.3" class="anchored" data-anchor-id="sec-se2-transformation-interpretations"><span class="header-section-number">6.2.3</span> One matrix form, three interpretations</h3>
 <p>A homogeneous transformation may describe a relative pose, perform a passive coordinate change, or act as an active rigid-motion operator. The matrix arithmetic can be identical while the geometric meaning differs.</p>
 <table class="caption-top table">
 <colgroup>

@@ -97,9 +97,9 @@ $$
 
 where $\mathbb Z$ is the set of integers. Thus, $\theta$ is a **coordinate** used to describe an orientation, while $\mathbf R(\theta)$ represents the **orientation** itself. Angles that differ by an integer multiple of $2\pi$ describe the same element of $SO(2)$.
 
-### Transforming a point by rotation and translation {#sec-se2-transforming-point}
+### Transforming point coordinates by rotation and translation {#sec-se2-transforming-point}
 
-Let $P$ be a geometric point fixed to the robot. Its position relative to $O_b$, expressed in body-frame coordinates, is ${}^{b}\mathbf p_P\in\mathbb R^2$ and is measured in metres. Its world-frame position is obtained by first rotating its body-frame displacement and then adding the world-frame position of the body origin:
+Let $P$ be a geometric point fixed to the robot. Its position relative to $O_b$, expressed in body-frame coordinates, is ${}^{b}\mathbf p_P\in\mathbb R^2$ and is measured in metres. To obtain its world-frame position, first use $\mathbf R_{wb}$ to re-express this body-frame displacement along the world axes and then add the world-frame position of the body origin:
 
 $$
 \boxed{
@@ -111,7 +111,7 @@ $$
 }.
 $$
 
-This equation follows by tracing the geometric displacement from $O_w$ to $P$. First travel from $O_w$ to $O_b$ by ${}^{w}\mathbf p_b$. Then travel from $O_b$ to $P$ by ${}^{b}\mathbf p_P$, but rotate that second displacement with $\mathbf R_{wb}$ so that both terms are expressed in world-frame coordinates before adding them.
+This equation follows by tracing the geometric displacement from $O_w$ to $P$. First travel from $O_w$ to $O_b$ by ${}^{w}\mathbf p_b$. Then travel from $O_b$ to $P$ by the displacement whose body-frame coordinate is ${}^{b}\mathbf p_P$. Multiplication by $\mathbf R_{wb}$ expresses that same displacement in world coordinates so that the two terms can be added. This passive coordinate mapping does not physically move $P$.
 
 A free vector, such as a displacement or velocity vector, has direction and magnitude but no fixed origin. It therefore changes coordinates using rotation alone:
 
@@ -125,7 +125,7 @@ Translation appears in the point equation because a point is located relative to
 
 ### Homogeneous transformations and $SE(2)$
 
-The point mapping in @sec-se2-transforming-point contains both a matrix multiplication and a vector addition. Homogeneous coordinates package these two operations into one matrix multiplication. Define the homogeneous coordinate column of point $P$ by appending a $1$:
+The point mapping in @sec-se2-transforming-point contains both a matrix multiplication and a vector addition. Homogeneous coordinates package these two operations into one matrix multiplication. Define the body- and world-frame homogeneous coordinate columns of point $P$ by appending a $1$:
 
 $$
 {}^{b}\overline{\mathbf p}_P
@@ -134,10 +134,18 @@ $$
 {}^{b}\mathbf p_P\\
 1
 \end{bmatrix}
+\in\mathbb R^3,
+\qquad
+{}^{w}\overline{\mathbf p}_P
+\mathrel{:=}
+\begin{bmatrix}
+{}^{w}\mathbf p_P\\
+1
+\end{bmatrix}
 \in\mathbb R^3.
 $$
 
-The overline identifies a homogeneous coordinate representation, not a different geometric point. Define the **homogeneous transformation** from frame $\{b\}$ to frame $\{w\}$ by
+The overline identifies a homogeneous coordinate representation, not a different geometric point. The first two entries have units of metres, while the appended $1$ is dimensionless and exists only to make translation part of a matrix multiplication. Define the **homogeneous transformation** from frame $\{b\}$ to frame $\{w\}$ by
 
 $$
 \boxed{
@@ -147,8 +155,8 @@ $$
 \mathbf R_{wb}&{}^{w}\mathbf p_b\\
 \mathbf 0_2^\mathsf T&1
 \end{bmatrix}
-}
-\in\mathbb R^{3\times3},
+\in\mathbb R^{3\times3}
+},
 $$
 
 where $\mathbf 0_2=[0\;0]^\mathsf T\in\mathbb R^2$. The subscript order means that $\mathbf T_{wb}$ maps homogeneous point coordinates from frame $\{b\}$ to frame $\{w\}$:
@@ -175,7 +183,7 @@ $$
 \end{aligned}
 $$
 
-The upper two entries reproduce the point-transformation equation. Appending $1$ causes the translation column to contribute to the result. Thus, $\mathbf T_{wb}$ rotates the point’s body-frame displacement into the world frame and then adds the world position of the body origin.
+The upper two entries reproduce the point-transformation equation. Appending $1$ causes the translation column to contribute to the result. Thus, $\mathbf T_{wb}$ re-expresses the point's body-relative displacement in world coordinates and then adds the world position of the body origin.
 
 Using ${}^{w}\mathbf p_b=[x\;y]^\mathsf T$ and $\mathbf R_{wb}=\mathbf R_{wb}(\theta)$ gives the component form
 
@@ -303,7 +311,7 @@ $$
 }.
 $$
 
-The translation vectors cannot be added directly until they are expressed in the same frame. The product first rotates ${}^{b}\mathbf p_c$ into frame $\{a\}$ and only then adds ${}^{a}\mathbf p_b$.
+The translation vectors cannot be added directly until they are expressed in the same frame. The product first re-expresses ${}^{b}\mathbf p_c$ in frame $\{a\}$ and only then adds ${}^{a}\mathbf p_b$.
 
 ### Inverting a transformation {#sec-se2-inverting-transformation}
 
@@ -490,7 +498,7 @@ Thus, ${}^{w}\mathbf p_P=[2\;2]^\mathsf T\,\mathrm m$. The one-metre body-frame 
 1. $\mathbf R_{wb}$ describes the orientation of frame $\{b\}$ relative to frame $\{w\}$, while ${}^{w}\mathbf p_b$ locates $O_b$ relative to $O_w$ using world coordinates. The order $wb$ means that the rotation maps coordinate columns from $\{b\}$ to $\{w\}$.
 2. $SO(2)=\{\mathbf R\in\mathbb R^{2\times2}\mid\mathbf R^\mathsf T\mathbf R=\mathbf I_2,\det\mathbf R=1\}$. Orthogonality preserves lengths and angles and gives $\mathbf R^{-1}=\mathbf R^\mathsf T$; determinant $+1$ preserves orientation and excludes reflections.
 3. Sine and cosine are $2\pi$-periodic, so every entry of $\mathbf R(\theta+2\pi)$ equals the corresponding entry of $\mathbf R(\theta)$.
-4. Block multiplication gives ${}^{a}\mathbf p_c=\mathbf R_{ab}{}^{b}\mathbf p_c+{}^{a}\mathbf p_b$. The first term rotates the $b$-frame translation into frame $\{a\}$ before the two translations are added.
+4. Block multiplication gives ${}^{a}\mathbf p_c=\mathbf R_{ab}{}^{b}\mathbf p_c+{}^{a}\mathbf p_b$. The first term re-expresses the $b$-frame translation in frame $\{a\}$ before the two translations are added.
 5. The reversed displacement must be expressed in frame $\{b\}$, whereas ${}^{a}\mathbf p_b$ is expressed in frame $\{a\}$. Premultiplication by $\mathbf R_{ab}^\mathsf T$ performs the necessary coordinate change.
 6. $\mathbf R_{wb}(-\pi/2)[0.5\;0]^\mathsf T=[0\;-0.5]^\mathsf T\,\mathrm m$, so ${}^{w}\mathbf p_P=[3\;1.5]^\mathsf T\,\mathrm m$.
 7. Rigid-motion composition must account for the frame in which each translation is expressed and for the order of rotations and translations. Componentwise addition does neither, and angular coordinates are periodic.
@@ -609,7 +617,7 @@ $$
 
 Here, the coordinates changed because the geometric point moved, not because a different coordinate frame was selected.
 
-### One matrix form, three interpretations
+### One matrix form, three interpretations {#sec-se2-transformation-interpretations}
 
 A homogeneous transformation may describe a relative pose, perform a passive coordinate change, or act as an active rigid-motion operator. The matrix arithmetic can be identical while the geometric meaning differs.
 

@@ -99,7 +99,7 @@ $$
 =
 \begin{bmatrix}
 x\\y\\\theta
-\end{bmatrix},
+\end{bmatrix}.
 $$
 
 where $x$ and $y$ are the entries of ${}^{w}\mathbf p_b=[x\;y]^\mathsf T$ and $\theta$ is the orientation of frame $\{b\}$ relative to frame $\{w\}$. These three **generalised coordinates** construct the transformation representing the configuration:
@@ -937,6 +937,36 @@ $$
 
 The prime labels the vector after rotation and does not denote a derivative. The coordinate-change equation describes one geometric vector in two frames; the active-rotation equation describes two geometric vectors in one fixed frame.
 
+Why can the same numerical matrix perform both calculations? Suppose frame $\{b\}$ initially coincides with frame $\{w\}$ and is then physically rotated. The active rotation sends the original world-axis directions to the new body-axis directions:
+
+$$
+\mathbf e_{x,w}
+\longmapsto
+{}^{w}\mathbf e_{x,b},
+\qquad
+\mathbf e_{y,w}
+\longmapsto
+{}^{w}\mathbf e_{y,b},
+\qquad
+\mathbf e_{z,w}
+\longmapsto
+{}^{w}\mathbf e_{z,b}.
+$$
+
+A linear transformation is determined by the images of its basis vectors, and those images form its matrix columns. Its active-rotation matrix is therefore
+
+$$
+\begin{bmatrix}
+{}^{w}\mathbf e_{x,b}&
+{}^{w}\mathbf e_{y,b}&
+{}^{w}\mathbf e_{z,b}
+\end{bmatrix}
+=
+\mathbf R_{wb}.
+$$
+
+The identical columns also re-express a fixed vector from body coordinates to world coordinates. The numerical operation is the same, but the labels distinguish a changed vector in one frame from an unchanged vector described in two frames.
+
 ### Composition order: the rightmost rotation acts first {#sec-so3-composition-order}
 
 Let $\mathbf Q_1,\mathbf Q_2\in SO(3)$ be two active rotation operators whose inputs and outputs are expressed in the same fixed frame. If $\mathbf Q_1$ acts first and $\mathbf Q_2$ acts second, then
@@ -1705,11 +1735,77 @@ $$
 |\alpha|.
 $$
 
-The vector is dimensionless in SI because radians are dimensionless, although its entries are labelled in radians to preserve their physical meaning. It represents a finite orientation change, not angular velocity; angular velocity has units of $\mathrm{rad\,s^{-1}}$.
+The word *exponential* does not refer to the definition $\boldsymbol\varphi_w=\alpha\mathbf a_w$ itself. It anticipates the construction derived below: the skew-symmetric matrix $[\boldsymbol\varphi_w]_\times$ is supplied to the matrix exponential to recover the finite rotation $\mathbf Q_w=\exp([\boldsymbol\varphi_w]_\times)$.
+
+If the same rotation is produced during a time interval $[t_0,t_1]$ about the fixed axis $\mathbf a_w$, let $\alpha(t_0)=0$ and $\alpha(t_1)=\alpha$. The world-expressed angular velocity and accumulated angle then satisfy
+
+$$
+\boxed{
+\boldsymbol\omega_w(t)
+=
+\dot\alpha(t)\mathbf a_w
+},
+\qquad
+\alpha
+=
+\int_{t_0}^{t_1}\dot\alpha(t)\,dt.
+$$
+
+Because $\mathbf a_w$ is constant over this interval,
+
+$$
+\boxed{
+\boldsymbol\varphi_w
+=
+\alpha\mathbf a_w
+=
+\int_{t_0}^{t_1}\boldsymbol\omega_w(t)\,dt
+}.
+$$
+
+The complete fixed-axis relationship is therefore
+
+$$
+\underbrace{
+\boldsymbol\omega_w(t)
+}_{\text{angular velocity}}
+\xrightarrow{\;\text{integrate over }[t_0,t_1]\;}
+\underbrace{
+\boldsymbol\varphi_w=\alpha\mathbf a_w
+}_{\text{accumulated rotation coordinates}}
+\xrightarrow{\;\exp([\,\cdot\,]_\times)\;}
+\underbrace{
+\mathbf Q_w
+}_{\text{finite rotation}}.
+$$
+
+The vector $\boldsymbol\varphi_w$ is dimensionless in SI because radians are dimensionless, although its entries are labelled in radians to preserve their physical meaning. It represents accumulated finite rotation coordinates, not angular velocity; angular velocity has units of $\mathrm{rad\,s^{-1}}$.
 
 ### The matrix exponential
 
-To construct the finite rotation, first consider a differentiable world-coordinate vector $\mathbf p(s)\in\mathbb R^3$ rotating about $\mathbf a_w$, where $s\in\mathbb R$ is a dimensionless angle parameter measured in radians. The angular rate with respect to $s$ has unit magnitude, so the vector-rate equation from @sec-so3-angular-velocity-definition becomes
+To construct the finite rotation, first consider a differentiable world-coordinate vector $\mathbf p(s)\in\mathbb R^3$ rotating about $\mathbf a_w$, where $s\in\mathbb R$ is the accumulated signed rotation angle, measured in radians and dimensionless in SI. Section @sec-so3-angular-velocity-definition derived $\dot{\mathbf r}_i=\boldsymbol\omega_w\times\mathbf r_i$ for each body-axis column; the same vector-rate equation applies to any vector rotating with the body:
+
+$$
+\frac{d\mathbf p}{dt}
+=
+\boldsymbol\omega_w\times\mathbf p.
+$$
+
+If $s=s(t)$, then $\boldsymbol\omega_w=\mathbf a_w\,ds/dt$. Applying the chain rule gives
+
+$$
+\frac{d\mathbf p}{dt}
+=
+\frac{d\mathbf p}{ds}\frac{ds}{dt}
+=
+\left(
+\mathbf a_w\times\mathbf p
+\right)
+\frac{ds}{dt}.
+$$
+
+Cancelling $ds/dt$ when it is nonzero, with the stationary case obtained by continuity, gives the vector-rate equation with angle rather than time as the independent variable:
+
 
 $$
 \frac{d\mathbf p}{ds}
@@ -1739,7 +1835,19 @@ $$
 }.
 $$
 
-This definition extends the ordinary scalar exponential to square matrices. For a constant matrix $\mathbf A$, term-by-term differentiation of the series gives
+Here, $\mathbf A^0\mathrel{:=}\mathbf I_n$, $0!\mathrel{:=}1$, and $k!\mathrel{:=}1\cdot2\cdots k$ for each positive integer $k$. The dots denote an **infinite series**, defined as the limit of its finite partial sums:
+
+$$
+\boxed{
+\exp(\mathbf A)
+\mathrel{:=}
+\lim_{N\to\infty}
+\sum_{k=0}^{N}
+\frac{\mathbf A^k}{k!}
+}.
+$$
+
+Convergence means that every entry of these partial-sum matrices approaches a finite value as $N\to\infty$. This definition mirrors the scalar series $e^z=\sum_{k=0}^{\infty}z^k/k!$ and converges for every finite square matrix $\mathbf A$. For a constant matrix $\mathbf A$, term-by-term differentiation of the series gives
 
 $$
 \frac{d}{ds}\exp(s\mathbf A)
@@ -1747,15 +1855,46 @@ $$
 \mathbf A\exp(s\mathbf A).
 $$
 
-Therefore,
+The scalar separation step $d p/p$ cannot be used here because division by a vector and the ordinary logarithm of a vector are not defined. Its matrix counterpart is an **integrating factor**, meaning a matrix chosen so that the differential equation becomes the derivative of one product. Set $\mathbf A\mathrel{:=}[\mathbf a_w]_\times\in\mathbb R^{3\times3}$ and left-multiply $d\mathbf p/ds=\mathbf A\mathbf p$ by $\exp(-s\mathbf A)$. The product rule gives
 
 $$
+\begin{aligned}
+\frac{d}{ds}
+\left[
+\exp(-s\mathbf A)\mathbf p(s)
+\right]
+&=
+-\mathbf A\exp(-s\mathbf A)\mathbf p(s)
++
+\exp(-s\mathbf A)\frac{d\mathbf p}{ds}\\
+&=
+-\mathbf A\exp(-s\mathbf A)\mathbf p(s)
++
+\exp(-s\mathbf A)\mathbf A\mathbf p(s)\\
+&=
+\mathbf 0_3.
+\end{aligned}
+$$
+
+The last equality uses $\mathbf A\exp(-s\mathbf A)=\exp(-s\mathbf A)\mathbf A$, which holds because the exponential series contains only powers of $\mathbf A$. The product is therefore constant. Evaluating it at $s=0$ and using $\exp(\mathbf 0_{3\times3})=\mathbf I_3$ gives
+
+$$
+\exp(-s\mathbf A)\mathbf p(s)
+=
+\mathbf p_0.
+$$
+
+Left-multiplying by $\exp(s\mathbf A)$ and using $\exp(s\mathbf A)^{-1}=\exp(-s\mathbf A)$ yields
+
+$$
+\boxed{
 \mathbf p(s)
 =
 \exp\!\left(s[\mathbf a_w]_\times\right)\mathbf p_0
+}.
 $$
 
-solves the vector-rate equation because
+This integrating-factor argument derives the solution. Differentiating the result provides a separate verification:
 
 $$
 \begin{aligned}
@@ -1793,7 +1932,29 @@ $$
 \exp:\mathfrak{so}(3)\to SO(3)
 $$
 
-is called the **exponential map** for rotations. It converts the linear, infinitesimal representation $[\boldsymbol\varphi_w]_\times\in\mathfrak{so}(3)$ into a finite rotation matrix $\mathbf Q_w\in SO(3)$.
+is called the **exponential map** for rotations. The arrow states that the function accepts an element of $\mathfrak{so}(3)$ and returns an element of $SO(3)$. For the rotation vector introduced above,
+
+$$
+\underbrace{
+[\boldsymbol\varphi_w]_\times
+}_{\in\mathfrak{so}(3)}
+\quad\longmapsto\quad
+\underbrace{
+\exp\!\left([\boldsymbol\varphi_w]_\times\right)
+}_{\in SO(3)}.
+$$
+
+Thus, the exponential map converts the dimensionless skew-symmetric matrix form $[\boldsymbol\varphi_w]_\times$ of the exponential coordinates into a finite rotation matrix $\mathbf Q_w$. Although $[\boldsymbol\varphi_w]_\times$ belongs to the tangent space $\mathfrak{so}(3)$, it need not represent an infinitesimal change: its scale is set by the possibly finite angle $\alpha$. During time-dependent motion, the genuinely infinitesimal rotation coordinate accumulated over an infinitesimal time interval $dt$ is
+
+$$
+\boxed{
+[d\boldsymbol\varphi_w]_\times
+=
+[\boldsymbol\omega_w]_\times\,dt
+},
+$$
+
+where $\boldsymbol\omega_w\in\mathbb R^3$ is the world-expressed angular velocity in $\mathrm{rad\,s^{-1}}$.
 
 To verify that the result is a rotation matrix, set $\boldsymbol\Omega\mathrel{:=}[\mathbf a_w]_\times$. Because $\boldsymbol\Omega^\mathsf T=-\boldsymbol\Omega$, transposing the exponential series gives
 
@@ -1803,7 +1964,7 @@ $$
 \exp(-\alpha\boldsymbol\Omega).
 $$
 
-The two exponent matrices $-\alpha\boldsymbol\Omega$ and $\alpha\boldsymbol\Omega$ commute because each is a scalar multiple of the same matrix. Hence,
+The inverse property of the matrix exponential gives $\exp(-\alpha\boldsymbol\Omega)=\exp(\alpha\boldsymbol\Omega)^{-1}$. Hence,
 
 $$
 \mathbf Q_w^\mathsf T\mathbf Q_w
@@ -1811,16 +1972,67 @@ $$
 \exp(-\alpha\boldsymbol\Omega)
 \exp(\alpha\boldsymbol\Omega)
 =
-\exp(\mathbf 0_{3\times3})
+\exp(\alpha\boldsymbol\Omega)^{-1}
+\exp(\alpha\boldsymbol\Omega)
 =
 \mathbf I_3.
 $$
 
-Thus, $\mathbf Q_w$ is orthogonal. At $\alpha=0$, $\mathbf Q_w=\mathbf I_3$ and $\det(\mathbf Q_w)=1$. The determinant varies continuously with $\alpha$, while an orthogonal matrix can have determinant only $+1$ or $-1$, so it cannot change sign without leaving the orthogonal set. Therefore, $\det(\mathbf Q_w)=1$ for every $\alpha$, proving $\mathbf Q_w\in SO(3)$.
+Thus, $\mathbf Q_w$ is orthogonal. Taking determinants of $\mathbf Q_w^\mathsf T\mathbf Q_w=\mathbf I_3$ gives
+
+$$
+\det(\mathbf Q_w)^2
+=
+1,
+$$
+
+so an orthogonal matrix can have determinant only $+1$ or $-1$. At $\alpha=0$,
+
+$$
+\mathbf Q_w(0)
+=
+\exp(\mathbf 0_{3\times3})
+=
+\mathbf I_3,
+\qquad
+\det(\mathbf Q_w(0))
+=
+1.
+$$
+
+As $\alpha$ changes continuously, every entry of $\mathbf Q_w(\alpha)=\exp(\alpha\boldsymbol\Omega)$ also changes continuously. The determinant is calculated from those entries using sums and products, so $\det(\mathbf Q_w(\alpha))$ is continuous. To change from $+1$ to $-1$, it would have to pass through intermediate values, including zero. This is impossible while $\mathbf Q_w$ remains orthogonal because an orthogonal matrix has determinant only $+1$ or $-1$ and is never singular. Therefore, $\det(\mathbf Q_w)=1$ for every $\alpha$, proving $\mathbf Q_w\in SO(3)$.
 
 ### Deriving Rodrigues' rotation formula
 
-The infinite series has a finite closed form because powers of $\boldsymbol\Omega=[\mathbf a_w]_\times$ repeat in a simple pattern. For every $\mathbf y\in\mathbb R^3$, the vector triple-product identity gives
+Rodrigues' formula is a finite closed form of the matrix exponential derived above. Setting $\boldsymbol\Omega\mathrel{:=}[\mathbf a_w]_\times$ in the exponential-series definition gives
+
+$$
+\mathbf Q_w
+=
+\exp(\alpha\boldsymbol\Omega)
+=
+\mathbf I_3
++
+\alpha\boldsymbol\Omega
++
+\frac{\alpha^2\boldsymbol\Omega^2}{2!}
++
+\frac{\alpha^3\boldsymbol\Omega^3}{3!}
++
+\cdots.
+$$
+
+This expression contains infinitely many powers of $\boldsymbol\Omega$. The powers can be reduced to a repeating pattern involving only $\mathbf I_3$, $\boldsymbol\Omega$, and $\boldsymbol\Omega^2$. To find that pattern, apply the vector triple-product identity from @sec-linear-algebra-cross-product,
+
+$$
+\mathbf a\times(\mathbf b\times\mathbf c)
+=
+\mathbf b(\mathbf a^\mathsf T\mathbf c)
+-
+\mathbf c(\mathbf a^\mathsf T\mathbf b),
+$$
+
+with $\mathbf a=\mathbf b=\mathbf a_w$ and $\mathbf c=\mathbf y$, where $\mathbf y\in\mathbb R^3$. This substitution gives
 
 $$
 \begin{aligned}
@@ -1830,7 +2042,7 @@ $$
 &=
 \mathbf a_w(\mathbf a_w^\mathsf T\mathbf y)
 -
-(\mathbf a_w^\mathsf T\mathbf a_w)\mathbf y\\
+\mathbf y(\mathbf a_w^\mathsf T\mathbf a_w)\\
 &=
 \left(
 \mathbf a_w\mathbf a_w^\mathsf T
@@ -1840,7 +2052,7 @@ $$
 \end{aligned}
 $$
 
-The last equality uses $\mathbf a_w^\mathsf T\mathbf a_w=1$. Because the equation holds for every $\mathbf y$,
+The second equality is the triple-product identity after the stated substitution: $\mathbf a_w^\mathsf T\mathbf y$ is the scalar projection factor in the first term, while $\mathbf a_w^\mathsf T\mathbf a_w$ is the squared norm of the axis. The last equality uses $\mathbf a_w^\mathsf T\mathbf a_w=1$, rewrites $\mathbf a_w(\mathbf a_w^\mathsf T\mathbf y)$ as $(\mathbf a_w\mathbf a_w^\mathsf T)\mathbf y$, and rewrites $\mathbf y$ as $\mathbf I_3\mathbf y$. Because the equation holds for every $\mathbf y$,
 
 $$
 \boxed{
@@ -1940,7 +2152,74 @@ $$
 \mathbf y_{\parallel}.
 $$
 
-Because $\boldsymbol\Omega\mathbf y=\mathbf a_w\times\mathbf y_{\perp}$ and $\boldsymbol\Omega^2\mathbf y=-\mathbf y_{\perp}$, Rodrigues' formula gives
+Because $\mathbf a_w$ is a unit vector, $\mathbf y=\mathbf y_{\parallel}+\mathbf y_{\perp}$. Moreover, $\mathbf a_w^\mathsf T\mathbf y_{\perp}=\mathbf a_w^\mathsf T\mathbf y-(\mathbf a_w^\mathsf T\mathbf y)(\mathbf a_w^\mathsf T\mathbf a_w)=0$, so $\mathbf y_{\perp}$ is perpendicular to the axis. The parallel component is a scalar multiple of $\mathbf a_w$, so its cross product with $\mathbf a_w$ is zero. Therefore,
+
+$$
+\begin{aligned}
+\boldsymbol\Omega\mathbf y
+&=
+\mathbf a_w\times
+\left(
+\mathbf y_{\parallel}+\mathbf y_{\perp}
+\right)\\
+&=
+\underbrace{\mathbf a_w\times\mathbf y_{\parallel}}_{\mathbf 0_3}
++
+\mathbf a_w\times\mathbf y_{\perp}\\
+&=
+\mathbf a_w\times\mathbf y_{\perp}.
+\end{aligned}
+$$
+
+The identity $\boldsymbol\Omega^2=\mathbf a_w\mathbf a_w^\mathsf T-\mathbf I_3$ derived above gives the second required result:
+
+$$
+\begin{aligned}
+\boldsymbol\Omega^2\mathbf y
+&=
+\mathbf a_w(\mathbf a_w^\mathsf T\mathbf y)-\mathbf y\\
+&=
+\mathbf y_{\parallel}
+-
+\left(
+\mathbf y_{\parallel}+\mathbf y_{\perp}
+\right)\\
+&=
+-\mathbf y_{\perp}.
+\end{aligned}
+$$
+
+Apply Rodrigues' matrix formula to $\mathbf y$ and substitute these two results:
+
+$$
+\begin{aligned}
+\mathbf Q_w\mathbf y
+&=
+\left[
+\mathbf I_3
++
+\sin\alpha\,\boldsymbol\Omega
++
+(1-\cos\alpha)\boldsymbol\Omega^2
+\right]\mathbf y\\
+&=
+\mathbf y
++
+\sin\alpha
+(\mathbf a_w\times\mathbf y_{\perp})
+-
+(1-\cos\alpha)\mathbf y_{\perp}\\
+&=
+\mathbf y_{\parallel}
++
+\cos\alpha\,\mathbf y_{\perp}
++
+\sin\alpha
+(\mathbf a_w\times\mathbf y_{\perp}).
+\end{aligned}
+$$
+
+Thus,
 
 $$
 \boxed{
@@ -1955,7 +2234,9 @@ $$
 }.
 $$
 
-The parallel component remains unchanged, while the perpendicular component rotates through angle $\alpha$ in its plane according to the right-hand rule.
+@fig-so3-rodrigues-vector-decomposition illustrates this decomposition for $\mathbf a_w=\mathbf e_z$. The parallel component remains unchanged. In the plane perpendicular to $\mathbf a_w$, the vectors $\mathbf y_{\perp}$ and $\mathbf a_w\times\mathbf y_{\perp}$ are perpendicular and have equal length, so the coefficients $\cos\alpha$ and $\sin\alpha$ rotate $\mathbf y_{\perp}$ through angle $\alpha$ according to the right-hand rule.
+
+![Geometric interpretation of Rodrigues' formula for the example axis $\mathbf a_w=\mathbf e_z$. The vector's parallel component remains fixed while its perpendicular component rotates through $\alpha$.](figures/rodrigues_vector_decomposition.svg){#fig-so3-rodrigues-vector-decomposition width=90%}
 
 ### Check: rotation about the world $z_w$-axis
 
@@ -2099,8 +2380,1461 @@ Axis--angle coordinates are not globally unique. The pairs $(\mathbf a_w,\alpha)
 7. A finite increment expressed using world axes acts on the world-coordinate columns and therefore premultiplies. An increment expressed using the old body axes composes after the body-to-world mapping and therefore postmultiplies.
 8. Examples are $(\mathbf a_w,\alpha)\sim(-\mathbf a_w,-\alpha)$, angles differing by $2\pi k$ give the same rotation, and the axis is arbitrary for zero rotation.
 
+## Spatial pose and $SE(3)$ {#sec-se3-spatial-pose}
+
+### From a point transformation to a homogeneous matrix {#sec-se3-point-transformation}
+
+Orientation alone does not locate a rigid body in three-dimensional space. Suppose frame $\{b\}$ is fixed to a rigid body and frame $\{w\}$ is fixed in the world. A **spatial pose** is the physical placement of frame $\{b\}$ relative to frame $\{w\}$, consisting of:
+
+- the orientation $\mathbf R_{wb}\in SO(3)$ of frame $\{b\}$ relative to frame $\{w\}$; and
+- the position ${}^{w}\mathbf p_b\in\mathbb R^3$ of the body origin $O_b$, expressed in world coordinates and measured in metres.
+
+Consider a material point $P$ fixed in the body. Its body-frame coordinate ${}^{b}\mathbf p_P\in\mathbb R^3$ is constant and measured in metres. The product $\mathbf R_{wb}{}^{b}\mathbf p_P$ expresses the displacement from $O_b$ to $P$ along the world axes. It changes the coordinate description of that displacement; it does not physically move $P$. This displacement is not yet the world position of $P$. Adding the world position of $O_b$ gives
+
+$$
+\boxed{
+{}^{w}\mathbf p_P
+=
+\mathbf R_{wb}{}^{b}\mathbf p_P
++
+{}^{w}\mathbf p_b
+}.
+$$
+
+Every term in this equation belongs to $\mathbb R^3$ and has units of metres. The equation first re-expresses the body-relative displacement in world coordinates and then adds the translation from the world origin $O_w$ to the body origin $O_b$.
+
+The rotation and translation can be packaged into one matrix by appending a final coordinate equal to one. Define the **homogeneous point coordinates**
+
+$$
+{}^{b}\overline{\mathbf p}_P
+\mathrel{:=}
+\begin{bmatrix}
+{}^{b}\mathbf p_P\\
+1
+\end{bmatrix}
+\in\mathbb R^4,
+\qquad
+{}^{w}\overline{\mathbf p}_P
+\mathrel{:=}
+\begin{bmatrix}
+{}^{w}\mathbf p_P\\
+1
+\end{bmatrix}
+\in\mathbb R^4.
+$$
+
+The overline distinguishes the four-entry homogeneous coordinate from the ordinary three-entry position coordinate. Its first three entries have units of metres, while the appended $1$ is dimensionless and exists only to make translation part of a matrix multiplication.
+
+Define the **homogeneous transformation**
+
+$$
+\boxed{
+\mathbf T_{wb}
+\mathrel{:=}
+\begin{bmatrix}
+\mathbf R_{wb}&{}^{w}\mathbf p_b\\
+\mathbf 0_3^\mathsf T&1
+\end{bmatrix}
+\in\mathbb R^{4\times4}
+}.
+$$
+
+Block multiplication now reproduces the physical point-transformation equation:
+
+$$
+\begin{aligned}
+\mathbf T_{wb}{}^{b}\overline{\mathbf p}_P
+&=
+\begin{bmatrix}
+\mathbf R_{wb}&{}^{w}\mathbf p_b\\
+\mathbf 0_3^\mathsf T&1
+\end{bmatrix}
+\begin{bmatrix}
+{}^{b}\mathbf p_P\\
+1
+\end{bmatrix}\\
+&=
+\begin{bmatrix}
+\mathbf R_{wb}{}^{b}\mathbf p_P+{}^{w}\mathbf p_b\\
+1
+\end{bmatrix}\\
+&=
+{}^{w}\overline{\mathbf p}_P.
+\end{aligned}
+$$
+
+For a free vector $\mathbf v$, translation is irrelevant because a free vector has no fixed origin. Append a $0$ instead of a $1$ to define its homogeneous coordinate column:
+
+$$
+{}^{b}\overline{\mathbf v}
+\mathrel{:=}
+\begin{bmatrix}
+{}^{b}\mathbf v\\
+0
+\end{bmatrix}
+\in\mathbb R^4.
+$$
+
+Applying $\mathbf T_{wb}$ then gives
+
+$$
+\mathbf T_{wb}
+\begin{bmatrix}
+{}^{b}\mathbf v\\
+0
+\end{bmatrix}
+=
+\begin{bmatrix}
+\mathbf R_{wb}{}^{b}\mathbf v\\
+0
+\end{bmatrix}.
+$$
+
+The appended $0$ prevents the translation column from contributing, so this equation reproduces the rotation-only coordinate mapping ${}^{w}\mathbf v=\mathbf R_{wb}{}^{b}\mathbf v$ from @sec-so3-rotation-construction.
+
+As distinguished for planar transformations in @sec-se2-transformation-interpretations, the same homogeneous-matrix form has three possible interpretations:
+
+- As a **relative-pose description**, $\mathbf T_{wb}$ stores the orientation and position of frame $\{b\}$ relative to frame $\{w\}$.
+- As a **passive coordinate change**, ${}^{w}\overline{\mathbf p}_P=\mathbf T_{wb}{}^{b}\overline{\mathbf p}_P$ maps the coordinates of the unchanged geometric point $P$ from frame $\{b\}$ to frame $\{w\}$.
+- As an **active rigid-motion operator**, an explicitly declared $\mathbf T_{\Delta}\in SE(3)$ moves a geometric point from $P$ to $P'$ while both coordinate columns remain expressed in the same frame, for example ${}^{w}\overline{\mathbf p}_{P'}=\mathbf T_{\Delta}{}^{w}\overline{\mathbf p}_P$.
+
+The project notation therefore uses a frame-labelled symbol such as $\mathbf T_{wb}$ for the first two interpretations and a separately declared symbol such as $\mathbf T_{\Delta}$ for an active motion. A transformation matrix is not itself the position of one point; applying the relative-pose mapping $\mathbf T_{wb}$ to every body-fixed point reconstructs the body's complete spatial placement.
+
+The set containing every matrix of this form is the **special Euclidean group in three dimensions**:
+
+$$
+\boxed{
+SE(3)
+\mathrel{:=}
+\left\{
+\begin{bmatrix}
+\mathbf R&\mathbf p\\
+\mathbf 0_3^\mathsf T&1
+\end{bmatrix}
+\in\mathbb R^{4\times4}
+\;\middle|\;
+\mathbf R\in SO(3),
+\ \mathbf p\in\mathbb R^3
+\right\}
+}.
+$$
+
+Here, *Euclidean* indicates that the transformation preserves Euclidean distances and angles, while *special* indicates that $\det(\mathbf R)=1$, so the transformation preserves orientation and excludes reflections. In a physical pose, the entries of $\mathbf p$ are measured in metres even though the abstract set definition writes $\mathbf p\in\mathbb R^3$.
+
+For a single free rigid body, its spatial pose determines its complete configuration: the body-frame coordinates of all material points are fixed, so the pose's one rotation and one translation locate every point. After the world and body frames have been fixed, each spatial pose produces exactly one matrix $\mathbf T_{wb}\in SE(3)$. Conversely, each matrix $\mathbf T_{wb}\in SE(3)$ specifies exactly one spatial pose because its rotation block gives $\mathbf R_{wb}$ and its translation column gives ${}^{w}\mathbf p_b$. The configuration space of a free spatial rigid body can therefore be identified with $SE(3)$:
+
+$$
+\boxed{
+\mathcal C\cong SE(3)
+}.
+$$
+
+### Composing and inverting spatial transformations {#sec-se3-composition-inverse}
+
+To **compose** transformations means to perform two coordinate mappings in sequence and replace them with one direct mapping. Introduce frames $\{a\}$, $\{b\}$, and $\{c\}$. Let $\mathbf T_{ab}\in SE(3)$ map point coordinates from frame $\{b\}$ to frame $\{a\}$, and let $\mathbf T_{bc}\in SE(3)$ map them from frame $\{c\}$ to frame $\{b\}$. Applying both mappings to a geometric point $P$ gives
+
+$$
+\begin{aligned}
+{}^{a}\overline{\mathbf p}_P
+&=
+\mathbf T_{ab}
+\left(
+\mathbf T_{bc}{}^{c}\overline{\mathbf p}_P
+\right)\\
+&=
+\left(
+\mathbf T_{ab}\mathbf T_{bc}
+\right)
+{}^{c}\overline{\mathbf p}_P.
+\end{aligned}
+$$
+
+The rightmost transformation $\mathbf T_{bc}$ acts first. The direct mapping from frame $\{c\}$ to frame $\{a\}$ is therefore
+
+$$
+\boxed{
+\mathbf T_{ac}
+=
+\mathbf T_{ab}\mathbf T_{bc}
+}.
+$$
+
+The repeated inner label $b$ identifies the intermediate frame and provides a useful frame-cancellation check. To see how the orientation and position parts combine, write
+
+$$
+\mathbf T_{ab}
+=
+\begin{bmatrix}
+\mathbf R_{ab}&{}^{a}\mathbf p_b\\
+\mathbf 0_3^\mathsf T&1
+\end{bmatrix},
+\qquad
+\mathbf T_{bc}
+=
+\begin{bmatrix}
+\mathbf R_{bc}&{}^{b}\mathbf p_c\\
+\mathbf 0_3^\mathsf T&1
+\end{bmatrix}.
+$$
+
+Here, ${}^{a}\mathbf p_b\in\mathbb R^3$ is the position of origin $O_b$ relative to origin $O_a$, expressed in frame $\{a\}$, and ${}^{b}\mathbf p_c\in\mathbb R^3$ is the position of origin $O_c$ relative to origin $O_b$, expressed in frame $\{b\}$; both are measured in metres. Block multiplication gives
+
+$$
+\begin{aligned}
+\mathbf T_{ab}\mathbf T_{bc}
+&=
+\begin{bmatrix}
+\mathbf R_{ab}\mathbf R_{bc}&
+\mathbf R_{ab}{}^{b}\mathbf p_c+{}^{a}\mathbf p_b\\
+\mathbf 0_3^\mathsf T&1
+\end{bmatrix}.
+\end{aligned}
+$$
+
+Consequently,
+
+$$
+\boxed{
+\mathbf R_{ac}
+=
+\mathbf R_{ab}\mathbf R_{bc},
+\qquad
+{}^{a}\mathbf p_c
+=
+\mathbf R_{ab}{}^{b}\mathbf p_c
++
+{}^{a}\mathbf p_b
+}.
+$$
+
+The position columns cannot be added until they are expressed along the same axes. Multiplication by $\mathbf R_{ab}$ re-expresses ${}^{b}\mathbf p_c$ in frame $\{a\}$ before it is added to ${}^{a}\mathbf p_b$. Because $\mathbf R_{ab}\mathbf R_{bc}\in SO(3)$ and the new translation belongs to $\mathbb R^3$, the product remains in $SE(3)$. This proves that $SE(3)$ is closed under matrix multiplication.
+
+The **inverse transformation** reverses a coordinate mapping. Starting from
+
+$$
+{}^{a}\mathbf p_P
+=
+\mathbf R_{ab}{}^{b}\mathbf p_P
++
+{}^{a}\mathbf p_b,
+$$
+
+subtract ${}^{a}\mathbf p_b$ and premultiply by $\mathbf R_{ab}^{-1}=\mathbf R_{ab}^\mathsf T$:
+
+$$
+\begin{aligned}
+{}^{b}\mathbf p_P
+&=
+\mathbf R_{ab}^\mathsf T
+\left(
+{}^{a}\mathbf p_P-{}^{a}\mathbf p_b
+\right)\\
+&=
+\mathbf R_{ab}^\mathsf T{}^{a}\mathbf p_P
+-
+\mathbf R_{ab}^\mathsf T{}^{a}\mathbf p_b.
+\end{aligned}
+$$
+
+Comparing this result with the standard point-transformation form shows that the reverse rotation and translation are
+
+$$
+\mathbf R_{ba}
+=
+\mathbf R_{ab}^\mathsf T,
+\qquad
+{}^{b}\mathbf p_a
+=
+-\mathbf R_{ab}^\mathsf T{}^{a}\mathbf p_b.
+$$
+
+Therefore,
+
+$$
+\boxed{
+\mathbf T_{ab}^{-1}
+=
+\mathbf T_{ba}
+=
+\begin{bmatrix}
+\mathbf R_{ab}^\mathsf T&
+-\mathbf R_{ab}^\mathsf T{}^{a}\mathbf p_b\\
+\mathbf 0_3^\mathsf T&1
+\end{bmatrix}
+\in SE(3)
+}.
+$$
+
+The inverse translation is not generally $-{}^{a}\mathbf p_b$, because that column is expressed in frame $\{a\}$. The factor $\mathbf R_{ab}^\mathsf T$ re-expresses the negated displacement in frame $\{b\}$, producing the position ${}^{b}\mathbf p_a$ of origin $O_a$ relative to origin $O_b$.
+
+The identity transformation is
+
+$$
+\boxed{
+\mathbf T_{aa}
+=
+\begin{bmatrix}
+\mathbf I_3&\mathbf 0_3\\
+\mathbf 0_3^\mathsf T&1
+\end{bmatrix}
+=
+\mathbf I_4
+}.
+$$
+
+It leaves every homogeneous point coordinate unchanged. Matrix multiplication is associative, the product of two elements remains in $SE(3)$, $\mathbf I_4$ is the identity element, and the inverse derived above belongs to $SE(3)$. These four properties establish that $SE(3)$ is a group under matrix multiplication. The operation is generally not commutative: changing the order of spatial rotations and translations can change the final pose.
+
+### Worked example: composition and inverse round trip {#sec-se3-worked-composition}
+
+Consider three coordinate frames $\{a\}$, $\{b\}$, and $\{c\}$. This example uses rotations about two different axes so that the calculation is genuinely three-dimensional. Let frame $\{b\}$ have the following orientation and origin position relative to frame $\{a\}$:
+
+$$
+\mathbf R_{ab}
+=
+\mathbf R_z\!\left(\frac{\pi}{2}\right)
+=
+\begin{bmatrix}
+0&-1&0\\
+1&0&0\\
+0&0&1
+\end{bmatrix},
+\qquad
+{}^{a}\mathbf p_b
+=
+\begin{bmatrix}
+1\\2\\0
+\end{bmatrix}
+\mathrm{m}.
+$$
+
+The matrix $\mathbf R_{ab}\in SO(3)$ maps coordinate columns from frame $\{b\}$ to frame $\{a\}$, while ${}^{a}\mathbf p_b\in\mathbb R^3$ is the position of origin $O_b$ relative to origin $O_a$, expressed along the axes of frame $\{a\}$. Let frame $\{c\}$ have the following orientation and origin position relative to frame $\{b\}$:
+
+$$
+\mathbf R_{bc}
+=
+\mathbf R_x\!\left(\frac{\pi}{2}\right)
+=
+\begin{bmatrix}
+1&0&0\\
+0&0&-1\\
+0&1&0
+\end{bmatrix},
+\qquad
+{}^{b}\mathbf p_c
+=
+\begin{bmatrix}
+1\\0\\1
+\end{bmatrix}
+\mathrm{m}.
+$$
+
+The direct orientation from frame $\{c\}$ to frame $\{a\}$ is found by composition:
+
+$$
+\begin{aligned}
+\mathbf R_{ac}
+&=
+\mathbf R_{ab}\mathbf R_{bc}\\
+&=
+\begin{bmatrix}
+0&-1&0\\
+1&0&0\\
+0&0&1
+\end{bmatrix}
+\begin{bmatrix}
+1&0&0\\
+0&0&-1\\
+0&1&0
+\end{bmatrix}\\
+&=
+\begin{bmatrix}
+0&0&1\\
+1&0&0\\
+0&1&0
+\end{bmatrix}.
+\end{aligned}
+$$
+
+To combine the origin positions, ${}^{b}\mathbf p_c$ must first be re-expressed in frame $\{a\}$. Therefore,
+
+$$
+\begin{aligned}
+{}^{a}\mathbf p_c
+&=
+\mathbf R_{ab}{}^{b}\mathbf p_c
++
+{}^{a}\mathbf p_b\\
+&=
+\begin{bmatrix}
+0&-1&0\\
+1&0&0\\
+0&0&1
+\end{bmatrix}
+\begin{bmatrix}
+1\\0\\1
+\end{bmatrix}
++
+\begin{bmatrix}
+1\\2\\0
+\end{bmatrix}\\
+&=
+\begin{bmatrix}
+0\\1\\1
+\end{bmatrix}
++
+\begin{bmatrix}
+1\\2\\0
+\end{bmatrix}\\
+&=
+\begin{bmatrix}
+1\\3\\1
+\end{bmatrix}
+\mathrm{m}.
+\end{aligned}
+$$
+
+The composed transformation is consequently
+
+$$
+\boxed{
+\mathbf T_{ac}
+=
+\mathbf T_{ab}\mathbf T_{bc}
+=
+\begin{bmatrix}
+0&0&1&1\\
+1&0&0&3\\
+0&1&0&1\\
+0&0&0&1
+\end{bmatrix}
+}.
+$$
+
+The first three entries of the last column are measured in metres; the rotation entries and the homogeneous last row are dimensionless.
+
+To check both the numerical result and the multiplication order, choose a geometric point $P$ whose coordinates in frame $\{c\}$ are
+
+$$
+{}^{c}\mathbf p_P
+=
+\begin{bmatrix}
+0\\1\\0
+\end{bmatrix}
+\mathrm{m}.
+$$
+
+First map its coordinates from frame $\{c\}$ to frame $\{b\}$:
+
+$$
+\begin{aligned}
+{}^{b}\mathbf p_P
+&=
+\mathbf R_{bc}{}^{c}\mathbf p_P
++
+{}^{b}\mathbf p_c\\
+&=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}
++
+\begin{bmatrix}
+1\\0\\1
+\end{bmatrix}\\
+&=
+\begin{bmatrix}
+1\\0\\2
+\end{bmatrix}
+\mathrm{m}.
+\end{aligned}
+$$
+
+Then map the result from frame $\{b\}$ to frame $\{a\}$:
+
+$$
+\begin{aligned}
+{}^{a}\mathbf p_P
+&=
+\mathbf R_{ab}{}^{b}\mathbf p_P
++
+{}^{a}\mathbf p_b\\
+&=
+\begin{bmatrix}
+0\\1\\2
+\end{bmatrix}
++
+\begin{bmatrix}
+1\\2\\0
+\end{bmatrix}\\
+&=
+\begin{bmatrix}
+1\\3\\2
+\end{bmatrix}
+\mathrm{m}.
+\end{aligned}
+$$
+
+The direct transformation gives the same coordinates:
+
+$$
+\begin{aligned}
+{}^{a}\mathbf p_P
+&=
+\mathbf R_{ac}{}^{c}\mathbf p_P
++
+{}^{a}\mathbf p_c\\
+&=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}
++
+\begin{bmatrix}
+1\\3\\1
+\end{bmatrix}\\
+&=
+\begin{bmatrix}
+1\\3\\2
+\end{bmatrix}
+\mathrm{m}.
+\end{aligned}
+$$
+
+This agreement confirms that $\mathbf T_{bc}$ must act first and $\mathbf T_{ab}$ second in the product $\mathbf T_{ab}\mathbf T_{bc}$. These equations re-express the coordinates of the same point $P$; they do not physically move the point.
+
+The inverse should recover the original frame-$\{c\}$ coordinates. Using the inverse formula from @sec-se3-composition-inverse gives
+
+$$
+\begin{aligned}
+\mathbf R_{ca}
+&=
+\mathbf R_{ac}^{\mathsf T}
+=
+\begin{bmatrix}
+0&1&0\\
+0&0&1\\
+1&0&0
+\end{bmatrix},\\
+{}^{c}\mathbf p_a
+&=
+-\mathbf R_{ac}^{\mathsf T}{}^{a}\mathbf p_c\\
+&=
+-
+\begin{bmatrix}
+3\\1\\1
+\end{bmatrix}
+=
+\begin{bmatrix}
+-3\\-1\\-1
+\end{bmatrix}
+\mathrm{m}.
+\end{aligned}
+$$
+
+Therefore,
+
+$$
+\mathbf T_{ca}
+=
+\mathbf T_{ac}^{-1}
+=
+\begin{bmatrix}
+0&1&0&-3\\
+0&0&1&-1\\
+1&0&0&-1\\
+0&0&0&1
+\end{bmatrix}.
+$$
+
+Applying this reverse mapping to the calculated frame-$\{a\}$ coordinates gives
+
+$$
+\begin{aligned}
+{}^{c}\mathbf p_P
+&=
+\mathbf R_{ca}{}^{a}\mathbf p_P
++
+{}^{c}\mathbf p_a\\
+&=
+\begin{bmatrix}
+3\\2\\1
+\end{bmatrix}
++
+\begin{bmatrix}
+-3\\-1\\-1
+\end{bmatrix}\\
+&=
+\begin{bmatrix}
+0\\1\\0
+\end{bmatrix}
+\mathrm{m}.
+\end{aligned}
+$$
+
+The round trip returns the original coordinates exactly. Point mapping through both intermediate frames and inverse round trips are therefore useful checks for a spatial-transformation calculation.
+
+## Quick test F: spatial pose and $SE(3)$ {.unnumbered}
+
+Try these questions without looking back at the preceding sections.
+
+1. In the transformation
+
+   $$
+   \mathbf T_{wb}
+   =
+   \begin{bmatrix}
+   \mathbf R_{wb}&{}^{w}\mathbf p_b\\
+   \mathbf 0_3^\mathsf T&1
+   \end{bmatrix},
+   $$
+
+   what do $\mathbf R_{wb}$ and ${}^{w}\mathbf p_b$ describe, and which coordinate mapping does $\mathbf T_{wb}$ perform?
+2. Why is a point represented by $[\,\mathbf p^\mathsf T\;1\,]^\mathsf T$ in homogeneous coordinates, while a free vector is represented by $[\,\mathbf v^\mathsf T\;0\,]^\mathsf T$?
+3. Let $\mathbf T_{ab}$ map coordinates from frame $\{b\}$ to frame $\{a\}$ and let $\mathbf T_{bc}$ map coordinates from frame $\{c\}$ to frame $\{b\}$. Derive the rotation and translation blocks of $\mathbf T_{ac}=\mathbf T_{ab}\mathbf T_{bc}$.
+4. Why must ${}^{b}\mathbf p_c$ be multiplied by $\mathbf R_{ab}$ before it can be added to ${}^{a}\mathbf p_b$?
+5. Derive $\mathbf T_{ab}^{-1}$. Why is its translation block generally not equal to $-{}^{a}\mathbf p_b$?
+6. Suppose
+
+   $$
+   \mathbf R_{wb}
+   =
+   \mathbf R_z\!\left(\frac{\pi}{2}\right),
+   \qquad
+   {}^{w}\mathbf p_b
+   =
+   \begin{bmatrix}
+   1\\2\\3
+   \end{bmatrix}
+   \mathrm{m},
+   \qquad
+   {}^{b}\mathbf p_P
+   =
+   \begin{bmatrix}
+   2\\0\\1
+   \end{bmatrix}
+   \mathrm{m}.
+   $$
+
+   Calculate ${}^{w}\mathbf p_P$.
+7. Explain the difference between interpreting $\mathbf T_{wb}$ as a passive coordinate mapping and interpreting a separately declared $\mathbf T_{\Delta}$ as an active rigid motion.
+
+### Answers and hints {.unnumbered}
+
+1. The rotation $\mathbf R_{wb}\in SO(3)$ describes the orientation of frame $\{b\}$ relative to frame $\{w\}$ and maps coordinate columns from body axes to world axes. The position ${}^{w}\mathbf p_b\in\mathbb R^3$ locates body origin $O_b$ relative to world origin $O_w$, expressed along world axes and measured in metres. The complete transformation maps body-frame point coordinates to world-frame point coordinates:
+
+   $$
+   {}^{w}\overline{\mathbf p}_P
+   =
+   \mathbf T_{wb}{}^{b}\overline{\mathbf p}_P.
+   $$
+
+2. Multiplying a homogeneous point by $\mathbf T_{wb}$ gives
+
+   $$
+   \mathbf T_{wb}
+   \begin{bmatrix}
+   {}^{b}\mathbf p_P\\1
+   \end{bmatrix}
+   =
+   \begin{bmatrix}
+   \mathbf R_{wb}{}^{b}\mathbf p_P+{}^{w}\mathbf p_b\\1
+   \end{bmatrix},
+   $$
+
+   so the appended $1$ allows the translation column to contribute. A free vector has no fixed origin, so translation must not affect it:
+
+   $$
+   \mathbf T_{wb}
+   \begin{bmatrix}
+   {}^{b}\mathbf v\\0
+   \end{bmatrix}
+   =
+   \begin{bmatrix}
+   \mathbf R_{wb}{}^{b}\mathbf v\\0
+   \end{bmatrix}.
+   $$
+
+3. Block multiplication gives
+
+   $$
+   \boxed{
+   \mathbf R_{ac}
+   =
+   \mathbf R_{ab}\mathbf R_{bc},
+   \qquad
+   {}^{a}\mathbf p_c
+   =
+   \mathbf R_{ab}{}^{b}\mathbf p_c
+   +
+   {}^{a}\mathbf p_b
+   }.
+   $$
+
+4. The columns ${}^{b}\mathbf p_c$ and ${}^{a}\mathbf p_b$ initially use different coordinate axes. The product $\mathbf R_{ab}{}^{b}\mathbf p_c$ re-expresses the first displacement along frame-$\{a\}$ axes, after which the two frame-$\{a\}$ coordinate columns can be added.
+5. Solving ${}^{a}\mathbf p_P=\mathbf R_{ab}{}^{b}\mathbf p_P+{}^{a}\mathbf p_b$ for ${}^{b}\mathbf p_P$ gives
+
+   $$
+   \boxed{
+   \mathbf T_{ab}^{-1}
+   =
+   \mathbf T_{ba}
+   =
+   \begin{bmatrix}
+   \mathbf R_{ab}^\mathsf T&
+   -\mathbf R_{ab}^\mathsf T{}^{a}\mathbf p_b\\
+   \mathbf 0_3^\mathsf T&1
+   \end{bmatrix}
+   }.
+   $$
+
+   The reverse displacement must be expressed along frame-$\{b\}$ axes. The factor $\mathbf R_{ab}^\mathsf T$ performs this coordinate change, so merely negating the frame-$\{a\}$ column is insufficient.
+6. A positive quarter-turn about $z_w$ maps $[\,2\;0\;1\,]^\mathsf T$ to $[\,0\;2\;1\,]^\mathsf T$. Therefore,
+
+   $$
+   \begin{aligned}
+   {}^{w}\mathbf p_P
+   &=
+   \mathbf R_{wb}{}^{b}\mathbf p_P
+   +
+   {}^{w}\mathbf p_b\\
+   &=
+   \begin{bmatrix}
+   0\\2\\1
+   \end{bmatrix}
+   +
+   \begin{bmatrix}
+   1\\2\\3
+   \end{bmatrix}\\
+   &=
+   \boxed{
+   \begin{bmatrix}
+   1\\4\\4
+   \end{bmatrix}
+   \mathrm{m}
+   }.
+   \end{aligned}
+   $$
+
+7. In the passive interpretation, the geometric point remains unchanged and $\mathbf T_{wb}$ changes only its coordinate description from frame $\{b\}$ to frame $\{w\}$. In the active interpretation, $\mathbf T_{\Delta}$ physically moves a point or rigid body while the input and output coordinates are expressed in the same declared frame. The same matrix multiplication can implement either interpretation, so the frames and intended meaning must be stated.
+
+## Embedding planar poses in $SE(3)$ {#sec-se2-se3-embedding}
+
+A mobile robot may be modelled as moving only in a plane even though its software exchanges three-dimensional poses with other robots, sensors, and maps. A planar pose must therefore be represented inside the spatial-pose space without changing its geometric meaning.
+
+Choose the world plane $z_w=0$ as the plane containing the body origin. Restrict the body to translation along $x_w$ and $y_w$ and rotation about $z_w$. The body cannot translate along $z_w$ or rotate about the horizontal $x_w$ and $y_w$ axes under this model. Its planar pose coordinates are
+
+$$
+\mathbf q
+=
+\begin{bmatrix}
+x\\y\\\theta
+\end{bmatrix},
+$$
+
+Here:
+
+- $x$ is the $x_w$-coordinate of body origin $O_b$ relative to world origin $O_w$, measured in metres;
+- $y$ is the $y_w$-coordinate of $O_b$ relative to $O_w$, measured in metres;
+- $\theta$ is the orientation of body frame $\{b\}$ relative to world frame $\{w\}$, measured as a positive right-hand rotation about the shared $z$-axis in radians.
+
+The corresponding world-frame position of the body origin is
+
+$$
+{}^{w}\mathbf p_b
+=
+\begin{bmatrix}
+x\\y\\0
+\end{bmatrix}
+\mathrm m.
+$$
+
+To distinguish matrices of different sizes, let the superscripts $(2)$ and $(3)$ label planar and spatial representations; they are dimension labels, not matrix powers. The planar transformation from @sec-se2-transformation-interpretations is
+
+$$
+\mathbf T_{wb}^{(2)}
+=
+\begin{bmatrix}
+\cos\theta&-\sin\theta&x\\
+\sin\theta&\cos\theta&y\\
+0&0&1
+\end{bmatrix}
+\in SE(2).
+$$
+
+The same physical placement is represented spatially by
+
+$$
+\boxed{
+\mathbf T_{wb}^{(3)}
+=
+\begin{bmatrix}
+\cos\theta&-\sin\theta&0&x\\
+\sin\theta&\cos\theta&0&y\\
+0&0&1&0\\
+0&0&0&1
+\end{bmatrix}
+\in SE(3)
+}.
+$$
+
+The upper-left $3\times3$ block is the rotation $\mathbf R_z(\theta)\in SO(3)$ derived in @sec-so3-active-axis-rotations. Its third column $[\,0\;0\;1\,]^\mathsf T$ states that $z_b$ remains aligned with $z_w$. The translation column $[\,x\;y\;0\,]^\mathsf T$ states that the body origin remains in the chosen world plane.
+
+Write a generic planar transformation using dimensionless rotation entries $r_{ij}$, where $i,j\in\{1,2\}$ are row and column indices, and translation entries $p_1$ and $p_2$, measured in metres. The conversion can then be defined by the mapping
+
+$$
+\boxed{
+\begin{aligned}
+\iota:SE(2)&\longrightarrow SE(3),\\
+\begin{bmatrix}
+r_{11}&r_{12}&p_1\\
+r_{21}&r_{22}&p_2\\
+0&0&1
+\end{bmatrix}
+&\longmapsto
+\begin{bmatrix}
+r_{11}&r_{12}&0&p_1\\
+r_{21}&r_{22}&0&p_2\\
+0&0&1&0\\
+0&0&0&1
+\end{bmatrix}.
+\end{aligned}
+}
+$$
+
+The Greek letter $\iota$ names this **group embedding**. A group embedding is a one-to-one mapping that places one group inside another while preserving the group operation. This mapping is one-to-one because all four planar rotation entries and both planar translation entries can be read back uniquely from the spatial matrix.
+
+To verify that point transformations are preserved, let a point $P$ in the body plane have body-frame coordinates
+
+$$
+{}^{b}\mathbf p_P^{(2)}
+=
+\begin{bmatrix}
+p_x\\p_y
+\end{bmatrix}
+\in\mathbb R^2,
+\qquad
+{}^{b}\mathbf p_P^{(3)}
+=
+\begin{bmatrix}
+p_x\\p_y\\0
+\end{bmatrix}
+\in\mathbb R^3,
+$$
+
+where $p_x$ and $p_y$ are measured in metres. The spatial transformation gives
+
+$$
+\begin{aligned}
+{}^{w}\mathbf p_P^{(3)}
+&=
+\begin{bmatrix}
+\cos\theta&-\sin\theta&0\\
+\sin\theta&\cos\theta&0\\
+0&0&1
+\end{bmatrix}
+\begin{bmatrix}
+p_x\\p_y\\0
+\end{bmatrix}
++
+\begin{bmatrix}
+x\\y\\0
+\end{bmatrix}\\
+&=
+\begin{bmatrix}
+\cos\theta\,p_x-\sin\theta\,p_y+x\\
+\sin\theta\,p_x+\cos\theta\,p_y+y\\
+0
+\end{bmatrix}.
+\end{aligned}
+$$
+
+The first two entries are exactly the result of the planar transformation $\mathbf T_{wb}^{(2)}$, while the third entry remains zero. The spatial matrix therefore reproduces the planar point mapping rather than approximating it.
+
+The planar motion model does not flatten the robot into a two-dimensional object. If a body-fixed point has height $p_z$ relative to the body origin, then
+
+$$
+{}^{b}\mathbf p_P^{(3)}
+=
+\begin{bmatrix}
+p_x\\p_y\\p_z
+\end{bmatrix}
+\quad\Longrightarrow\quad
+{}^{w}\mathbf p_P^{(3)}
+=
+\begin{bmatrix}
+\cos\theta\,p_x-\sin\theta\,p_y+x\\
+\sin\theta\,p_x+\cos\theta\,p_y+y\\
+p_z
+\end{bmatrix}.
+$$
+
+Here, $p_z$ is measured in metres. The body can therefore have three-dimensional geometry; the restriction is that its origin has no vertical motion and its orientation has no rotation away from the shared $z$-axis.
+
+The embedding also preserves composition. Let
+
+$$
+\mathbf T_1^{(2)}
+=
+\begin{bmatrix}
+\mathbf R_1&\mathbf p_1\\
+\mathbf 0_2^\mathsf T&1
+\end{bmatrix},
+\qquad
+\mathbf T_2^{(2)}
+=
+\begin{bmatrix}
+\mathbf R_2&\mathbf p_2\\
+\mathbf 0_2^\mathsf T&1
+\end{bmatrix}
+\in SE(2),
+$$
+
+where $\mathbf R_1,\mathbf R_2\in SO(2)$ and $\mathbf p_1,\mathbf p_2\in\mathbb R^2$, with the position entries measured in metres. Their planar product is
+
+$$
+\mathbf T_1^{(2)}\mathbf T_2^{(2)}
+=
+\begin{bmatrix}
+\mathbf R_1\mathbf R_2&
+\mathbf R_1\mathbf p_2+\mathbf p_1\\
+\mathbf 0_2^\mathsf T&1
+\end{bmatrix}.
+$$
+
+In each embedded matrix, the planar rotation and translation occupy the same entries, while the added $z$-axis row and column remain unchanged. Multiplying the embedded matrices therefore produces the embedded planar product:
+
+$$
+\boxed{
+\iota\!\left(
+\mathbf T_1^{(2)}\mathbf T_2^{(2)}
+\right)
+=
+\iota\!\left(\mathbf T_1^{(2)}\right)
+\iota\!\left(\mathbf T_2^{(2)}\right)
+}.
+$$
+
+The planar identity maps to the spatial identity:
+
+$$
+\iota\!\left(\mathbf I_3\right)
+=
+\mathbf I_4.
+$$
+
+Applying the composition identity to $\mathbf T^{(2)}(\mathbf T^{(2)})^{-1}=\mathbf I_3$ therefore gives
+
+$$
+\boxed{
+\iota\!\left(
+(\mathbf T^{(2)})^{-1}
+\right)
+=
+\iota\!\left(\mathbf T^{(2)}\right)^{-1}
+}.
+$$
+
+Thus, planar composition and inversion can be performed before or after embedding with the same result.
+
+For example, take $x=2\,\mathrm m$, $y=-1\,\mathrm m$, and $\theta=\pi/2$. Then
+
+$$
+\mathbf T_{wb}^{(3)}
+=
+\begin{bmatrix}
+0&-1&0&2\\
+1&0&0&-1\\
+0&0&1&0\\
+0&0&0&1
+\end{bmatrix}.
+$$
+
+A body-frame point ${}^{b}\mathbf p_P^{(3)}=[\,1\;0\;0\,]^\mathsf T\,\mathrm m$ is mapped to
+
+$$
+{}^{w}\mathbf p_P^{(3)}
+=
+\begin{bmatrix}
+0\\1\\0
+\end{bmatrix}
++
+\begin{bmatrix}
+2\\-1\\0
+\end{bmatrix}
+=
+\begin{bmatrix}
+2\\0\\0
+\end{bmatrix}
+\mathrm m.
+$$
+
+### Recovering and checking a planar pose
+
+The reverse conversion is defined only for spatial poses that satisfy the planar restrictions. Let
+
+$$
+\mathbf T^{(3)}
+=
+\begin{bmatrix}
+\mathbf R&\mathbf p\\
+\mathbf 0_3^\mathsf T&1
+\end{bmatrix}
+\in SE(3),
+\qquad
+\mathbf e_z
+\mathrel{:=}
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}.
+$$
+
+Here, $\mathbf p=[\,p_1\;p_2\;p_3\,]^\mathsf T\in\mathbb R^3$ is the translation column, measured in metres. When $\mathbf T^{(3)}=\mathbf T_{wb}^{(3)}$, it is the world-frame position ${}^{w}\mathbf p_b$ of body origin $O_b$.
+
+The spatial pose belongs to the embedded copy $\iota(SE(2))\subset SE(3)$ exactly when
+
+$$
+\boxed{
+\mathbf R\mathbf e_z
+=
+\mathbf e_z,
+\qquad
+\mathbf e_z^\mathsf T\mathbf p
+=
+0
+}.
+$$
+
+The second condition selects the third component of the translation column:
+
+$$
+\mathbf e_z^\mathsf T\mathbf p
+=
+\begin{bmatrix}
+0&0&1
+\end{bmatrix}
+\begin{bmatrix}
+p_1\\p_2\\p_3
+\end{bmatrix}
+=
+p_3.
+$$
+
+The first equation says that rotation leaves the common $z$-axis unchanged. Because $\mathbf R\in SO(3)$, its remaining two columns must then be a right-handed orthonormal basis of the $x$--$y$ plane. The second equation says that the body origin has zero world-frame $z$-coordinate. The transformation must consequently have the structure
+
+$$
+\mathbf T^{(3)}
+=
+\begin{bmatrix}
+r_{11}&r_{12}&0&p_1\\
+r_{21}&r_{22}&0&p_2\\
+0&0&1&0\\
+0&0&0&1
+\end{bmatrix},
+\qquad
+\begin{bmatrix}
+r_{11}&r_{12}\\
+r_{21}&r_{22}
+\end{bmatrix}
+\in SO(2).
+$$
+
+The planar coordinates can therefore be recovered as
+
+$$
+\boxed{
+x=p_1,
+\qquad
+y=p_2,
+\qquad
+\theta
+=
+\operatorname{atan2}(r_{21},r_{11})
+}.
+$$
+
+The function $\operatorname{atan2}(u,v)$ returns the signed angle $\alpha$ satisfying $\sin\alpha=u/\sqrt{u^2+v^2}$ and $\cos\alpha=v/\sqrt{u^2+v^2}$. Here, $r_{21}=\sin\theta$ and $r_{11}=\cos\theta$, so using both entries identifies the correct quadrant. Its usual output interval is $(-\pi,\pi]$; angles differing by an integer multiple of $2\pi$ represent the same orientation.
+
+An exact planar matrix uses zeros and ones in the restricted entries, but computed matrices contain rounding error. Let $\widetilde{\mathbf R}$ and $\widetilde{\mathbf p}$ denote computed rotation and translation blocks after the complete $SE(3)$ transformation has first been validated. A numerical planar check can use the residuals
+
+$$
+\delta_R
+\mathrel{:=}
+\left\|
+\widetilde{\mathbf R}\mathbf e_z-\mathbf e_z
+\right\|_2,
+\qquad
+\delta_p
+\mathrel{:=}
+\left|
+\mathbf e_z^\mathsf T\widetilde{\mathbf p}
+\right|.
+$$
+
+The orientation residual $\delta_R$ is dimensionless, while the position residual $\delta_p$ is measured in metres. With declared tolerances $\varepsilon_R>0$ and $\varepsilon_p>0$ having the same respective units, the pose may be treated as planar only when
+
+$$
+\boxed{
+\delta_R\le\varepsilon_R,
+\qquad
+\delta_p\le\varepsilon_p
+}.
+$$
+
+The tolerances should reflect the numerical precision and the application's geometric accuracy rather than being hidden constants. A pose that fails either check should not be silently converted to $(x,y,\theta)$. It must either be rejected as non-planar or passed to an explicitly declared projection that acknowledges the discarded information.
+
+The embedding represents only the three-degree-of-freedom subset of $SE(3)$ satisfying the planar restrictions. It is not a projection of an arbitrary spatial pose onto a plane: such a projection would discard vertical position and rotations about horizontal axes and could not be inverted uniquely.
+
+## Quick test G: planar poses inside $SE(3)$ {.unnumbered}
+
+Try these questions without looking back at the section.
+
+1. Write the $SE(3)$ matrix that embeds the planar pose coordinates $(x,y,\theta)$.
+2. Which entries of the embedded matrix enforce the planar-motion restrictions?
+3. Does embedding a planar pose require every point of the robot to have zero $z$-coordinate? Explain with a body-fixed point $[\,p_x\;p_y\;p_z\,]^\mathsf T$.
+4. For a validated $\mathbf T^{(3)}\in SE(3)$ with rotation block $\mathbf R$ and translation block $\mathbf p$, state the two equations that determine whether it belongs to $\iota(SE(2))$, and show how to recover $x$, $y$, and $\theta$.
+5. Why should software use separate orientation and position tolerances when checking whether a computed spatial pose is planar?
+
+### Answers and hints {.unnumbered}
+
+1. The embedding is
+
+   $$
+   \boxed{
+   \mathbf T_{wb}^{(3)}
+   =
+   \begin{bmatrix}
+   \cos\theta&-\sin\theta&0&x\\
+   \sin\theta&\cos\theta&0&y\\
+   0&0&1&0\\
+   0&0&0&1
+   \end{bmatrix}
+   }.
+   $$
+
+2. The third rotation column and row keep $z_b$ aligned with $z_w$, and the zero third translation entry keeps the body origin in the plane:
+
+   $$
+   \mathbf R\mathbf e_z=\mathbf e_z,
+   \qquad
+   \mathbf e_z^\mathsf T\mathbf p=0.
+   $$
+
+3. No. The pose restricts the motion of the body frame, not the shape of the rigid body. An embedded pose maps the point to
+
+   $$
+   {}^{w}\mathbf p_P
+   =
+   \begin{bmatrix}
+   \cos\theta\,p_x-\sin\theta\,p_y+x\\
+   \sin\theta\,p_x+\cos\theta\,p_y+y\\
+   p_z
+   \end{bmatrix},
+   $$
+
+   so the point retains its height $p_z$ relative to the body origin.
+4. For $\mathbf e_z=[\,0\;0\;1\,]^\mathsf T$, the exact conditions and recovered coordinates are
+
+   $$
+   \boxed{
+   \mathbf R\mathbf e_z=\mathbf e_z,
+   \qquad
+   \mathbf e_z^\mathsf T\mathbf p=0,
+   \qquad
+   x=p_1,
+   \quad
+   y=p_2,
+   \quad
+   \theta=\operatorname{atan2}(r_{21},r_{11})
+   }.
+   $$
+
+5. The rotation residual is dimensionless, whereas the vertical-position residual is measured in metres. One numerical threshold cannot express meaningful limits for both quantities. The tolerances must also be declared so that the accepted geometric error is visible and testable.
+
+## Unit quaternions and planar yaw {#sec-so3-unit-quaternion-yaw}
+
+A rotation matrix is convenient for geometric calculations, but it stores nine entries even though a spatial orientation has only three degrees of freedom. Many robotics interfaces therefore store the same orientation using four quaternion components constrained to have unit norm. Unit quaternions also provide convenient formulas for composing rotations and interpolating between orientations, where *interpolating* means constructing intermediate orientations between two given orientations. The immediate problem in this section is to understand what those four components mean and then convert the planar yaw angle $\theta$ into a unit quaternion representing the same orientation as $\mathbf R_z(\theta)$.
+
+### Why introduce unit quaternions
+
+The axis--angle representation from @sec-so3-axis-angle-exponential describes a finite rotation using a unit axis direction $\mathbf a\in\mathbb R^3$, expressed in a declared coordinate frame, and a signed rotation angle $\alpha\in\mathbb R$ measured in radians. A unit quaternion packages this same rotation information into the ordered scalar--vector pair
+
+$$
+\boxed{
+\mathsf q
+\mathrel{:=}
+\left(
+\underbrace{
+\cos\frac{\alpha}{2}
+}_{q_w},
+\quad
+\underbrace{
+\mathbf a\sin\frac{\alpha}{2}
+}_{\mathbf q_v}
+\right),
+\qquad
+\mathbf q_v
+\mathrel{:=}
+\begin{bmatrix}
+q_x\\q_y\\q_z
+\end{bmatrix}
+\in\mathbb R^3
+},
+$$
+
+where $\mathsf q$ denotes the quaternion, $q_w\in\mathbb R$ is its scalar part, and $\mathbf q_v\in\mathbb R^3$ is its vector part. The vector part is the rotation axis $\mathbf a$ scaled by $\sin(\alpha/2)$, while the scalar part is $\cos(\alpha/2)$; together they encode the axis and signed angle. The half-angle does not mean that the physical rotation is only $\alpha/2$; the quaternion rotation operation derived below produces the full rotation angle $\alpha$.
+
+The quaternion is therefore a representation of a three-dimensional orientation, not a position or a physical vector in four-dimensional space. Its components can be collected into a column in $\mathbb R^4$ for storage and computation, but the individual values $q_x$, $q_y$, and $q_z$ are not three independent rotation angles. They are the components of the scaled axis $\mathbf a\sin(\alpha/2)$. All four components are dimensionless.
+
+Because $\mathbf a$ is a unit vector, $\mathbf a^\mathsf T\mathbf a=1$, the four components satisfy
+
+$$
+\boxed{
+\left\|\mathsf q\right\|_2^2
+\mathrel{:=}
+q_w^2
++
+\mathbf q_v^\mathsf T\mathbf q_v
+=
+q_w^2+q_x^2+q_y^2+q_z^2
+=
+\cos^2\frac{\alpha}{2}
++
+\sin^2\frac{\alpha}{2}
+\mathbf a^\mathsf T\mathbf a
+=
+1
+}.
+$$
+
+A quaternion satisfying this equation is called a **unit quaternion**. Although it stores four numbers, the unit-norm equation imposes one scalar constraint, leaving three independent local degrees of freedom, matching a spatial orientation in $SO(3)$. For zero rotation, $\alpha=0$ gives $\mathsf q=(1,\mathbf 0_3)$; for a rotation through $\pi$ radians, it gives $\mathsf q=(0,\mathbf a)$.
+
+### The Hamilton product and quaternion rotation
+
+Quaternion multiplication is not componentwise multiplication. For $\mathsf q_1=(q_{w1},\mathbf q_{v1})$ and $\mathsf q_2=(q_{w2},\mathbf q_{v2})$, the **Hamilton product** $\otimes$ is defined by
+
+$$
+\boxed{
+\mathsf q_1\otimes\mathsf q_2
+\mathrel{:=}
+\left(
+q_{w1}q_{w2}-\mathbf q_{v1}^\mathsf T\mathbf q_{v2},
+\quad
+q_{w1}\mathbf q_{v2}
++
+q_{w2}\mathbf q_{v1}
++
+\mathbf q_{v1}\times\mathbf q_{v2}
+\right)
+}.
+$$
+
+The first output is the scalar part and the second output is the three-dimensional vector part. The cross-product term makes the Hamilton product generally noncommutative: changing the order can change the result.
+
+The **quaternion conjugate** reverses the sign of the vector part:
+
+$$
+\mathsf q^*
+\mathrel{:=}
+\left(q_w,-\mathbf q_v\right).
+$$
+
+Substitution into the Hamilton-product definition gives
+
+$$
+\mathsf q\otimes\mathsf q^*
+=
+\left(
+q_w^2+\mathbf q_v^\mathsf T\mathbf q_v,
+\mathbf 0_3
+\right).
+$$
+
+For a unit quaternion, this product equals the Hamilton-product identity $(1,\mathbf 0_3)$, so $\mathsf q^{-1}=\mathsf q^*$.
+
+To rotate a coordinate column $\mathbf y\in\mathbb R^3$, first represent it as the **pure quaternion** $\mathsf y\mathrel{:=}(0,\mathbf y)$, where *pure* means that the scalar part is zero. Quaternion rotation is defined by
+
+$$
+\boxed{
+\mathsf y'
+=
+\mathsf q\otimes\mathsf y\otimes\mathsf q^*
+},
+$$
+
+where $\mathsf y'=(0,\mathbf y')$ contains the rotated coordinate column $\mathbf y'$. To connect this definition to rotation matrices, first apply one Hamilton product:
+
+$$
+\mathsf q\otimes\mathsf y
+=
+\left(
+-\mathbf q_v^\mathsf T\mathbf y,
+\quad
+q_w\mathbf y+\mathbf q_v\times\mathbf y
+\right).
+$$
+
+Multiplying this result by $\mathsf q^*=(q_w,-\mathbf q_v)$ makes the scalar part zero because
+
+$$
+-q_w\mathbf q_v^\mathsf T\mathbf y
++
+(q_w\mathbf y+\mathbf q_v\times\mathbf y)^\mathsf T\mathbf q_v
+=
+0.
+$$
+
+The vector part is
+
+$$
+\begin{aligned}
+\mathbf y'
+&=
+(\mathbf q_v^\mathsf T\mathbf y)\mathbf q_v
++
+q_w(q_w\mathbf y+\mathbf q_v\times\mathbf y)
+-
+(q_w\mathbf y+\mathbf q_v\times\mathbf y)\times\mathbf q_v\\
+&=
+\left(q_w^2-\mathbf q_v^\mathsf T\mathbf q_v\right)\mathbf y
++
+2\mathbf q_v(\mathbf q_v^\mathsf T\mathbf y)
++
+2q_w(\mathbf q_v\times\mathbf y).
+\end{aligned}
+$$
+
+The second equality uses $\mathbf y\times\mathbf q_v=-\mathbf q_v\times\mathbf y$ and the vector triple-product identity from @sec-linear-algebra-cross-product. This equation describes the active rotation of $\mathbf y$ while its coordinate frame remains fixed.
+
+### Why the half-angle formula produces the full rotation
+
+It remains to verify that the unit quaternion defined above represents rotation through the full angle $\alpha$. Substitute $q_w=\cos(\alpha/2)$ and $\mathbf q_v=\mathbf a\sin(\alpha/2)$ into the quaternion-rotation result. The half-angle identities give
+
+$$
+\begin{aligned}
+q_w^2-\mathbf q_v^\mathsf T\mathbf q_v
+&=
+\cos\alpha,\\
+2\mathbf q_v(\mathbf q_v^\mathsf T\mathbf y)
+&=
+(1-\cos\alpha)\mathbf a(\mathbf a^\mathsf T\mathbf y),\\
+2q_w(\mathbf q_v\times\mathbf y)
+&=
+\sin\alpha(\mathbf a\times\mathbf y).
+\end{aligned}
+$$
+
+Therefore,
+
+$$
+\boxed{
+\mathbf y'
+=
+\cos\alpha\,\mathbf y
++
+(1-\cos\alpha)\mathbf a(\mathbf a^\mathsf T\mathbf y)
++
+\sin\alpha(\mathbf a\times\mathbf y)
+}.
+$$
+
+This is Rodrigues' rotation formula from @sec-so3-axis-angle-exponential. The quaternion and rotation matrix therefore describe the same finite orientation change.
+
+### Planar yaw and ROS 2 component order
+
+For planar yaw, the rotation axis is $\mathbf a=\mathbf e_z=[\,0\;0\;1\,]^\mathsf T$ and the rotation angle is $\alpha=\theta$. The scalar--vector quaternion is consequently
+
+$$
+\mathsf q_{wb}^{\mathrm{yaw}}
+=
+\left(
+\cos\frac{\theta}{2},
+\quad
+\begin{bmatrix}
+0\\0\\\sin(\theta/2)
+\end{bmatrix}
+\right).
+$$
+
+The ROS 2 `geometry_msgs/msg/Quaternion` message stores the vector components first and the scalar component last. Its field-order column is therefore
+
+$$
+\boxed{
+\begin{bmatrix}
+q_x\\q_y\\q_z\\q_w
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\
+0\\
+\sin(\theta/2)\\
+\cos(\theta/2)
+\end{bmatrix}
+}.
+$$
+
+The quaternion is already normalized because
+
+$$
+q_x^2+q_y^2+q_z^2+q_w^2
+=
+\sin^2\frac{\theta}{2}
++
+\cos^2\frac{\theta}{2}
+=
+1.
+$$
+
+For example, a positive yaw of $\theta=\pi/2$ gives
+
+$$
+\begin{bmatrix}
+q_x\\q_y\\q_z\\q_w
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\0\\\sqrt{2}/2\\\sqrt{2}/2
+\end{bmatrix}.
+$$
+
+The quaternion components $q_x$, $q_y$, and $q_z$ must not be confused with the position coordinates $x$, $y$, and $z$ in a pose message. A spatial pose stores position and orientation as separate fields.
+
+### Equivalent signs and numerical normalization
+
+The unit quaternions $\mathsf q$ and $-\mathsf q$ represent the same orientation. Their rotation actions are identical because
+
+$$
+(-\mathsf q)
+\otimes
+\mathsf y
+\otimes
+(-\mathsf q)^*
+=
+\mathsf q
+\otimes
+\mathsf y
+\otimes
+\mathsf q^*.
+$$
+
+The two minus signs cancel because the Hamilton product is linear in each input. For the yaw formula, increasing $\theta$ by $2\pi$ changes both half-angle terms' signs and therefore changes $\mathsf q$ to $-\mathsf q$, while leaving the physical orientation unchanged. Componentwise quaternion equality is consequently too strict for testing orientation equality unless a sign convention has first been imposed.
+
+Floating-point computations may produce a finite quaternion component column $\widetilde{\mathbf c}_{xyzw}\mathrel{:=}[\,\widetilde q_x\;\widetilde q_y\;\widetilde q_z\;\widetilde q_w\,]^\mathsf T\in\mathbb R^4$ whose norm is close to, but not exactly, one. If $\|\widetilde{\mathbf c}_{xyzw}\|_2$ is safely nonzero, normalization gives
+
+$$
+\boxed{
+\mathbf c_{xyzw}
+=
+\frac{
+\widetilde{\mathbf c}_{xyzw}
+}{
+\left\|\widetilde{\mathbf c}_{xyzw}\right\|_2
+}
+}.
+$$
+
+Normalization corrects small numerical drift; it does not repair non-finite components, a zero or near-zero norm, an incorrect frame convention, or an incorrect rotation. Such inputs require explicit rejection rather than normalization.
+
 ## References {.unnumbered}
 
-- Kevin M. Lynch and Frank C. Park, *Modern Robotics: Mechanics, Planning, and Control*, Chapter 2 for configuration space and degrees of freedom, and Chapter 3, especially Sections 3.2.1-3.2.3 on spatial rotation matrices, angular velocity, exponential coordinates, and Rodrigues' formula.
-- John J. Craig, *Introduction to Robotics: Mechanics and Control*, 4th ed., Chapters 1-2, especially degrees of freedom, body-attached frames, proper orthonormal rotation matrices, spatial orientation, and the equivalent angle--axis representation.
-- Peter Corke, *Robotics, Vision and Control: Fundamental Algorithms in Python*, 3rd ed., Chapters 2-3, especially rotation matrices, the matrix exponential, Rodrigues' formula, rotational velocity, and body- and world-frame expressions of spatial motion.
+- Kevin M. Lynch and Frank C. Park, *Modern Robotics: Mechanics, Planning, and Control*, Chapter 2 for configuration space and degrees of freedom, and Chapter 3, especially Sections 3.2.1-3.2.3 on spatial rotation matrices, angular velocity, exponential coordinates, and Rodrigues' formula, and Section 3.3.1 on homogeneous transformation matrices.
+- John J. Craig, *Introduction to Robotics: Mechanics and Control*, 4th ed., Chapters 1-2, especially degrees of freedom, body-attached frames, proper orthonormal rotation matrices, spatial orientation, homogeneous transformations, equivalent angle--axis representations, and Euler parameters.
+- Peter Corke, *Robotics, Vision and Control: Fundamental Algorithms in Python*, 3rd ed., Chapters 2-3, especially rotation matrices, the matrix exponential, Rodrigues' formula, unit quaternions, rotational velocity, and body- and world-frame expressions of spatial motion.
+- ROS 2 Jazzy `geometry_msgs`, [Quaternion message definition](https://docs.ros.org/en/jazzy/p/geometry_msgs/msg/Quaternion.html), for the `x`, `y`, `z`, and `w` field order.

@@ -68,7 +68,7 @@ Add terminology from a chapter only after that chapter has been completed and re
 : An origin together with an ordered orthonormal basis used to assign coordinates to points and vectors. See @sec-geometry-coordinate-frames.
 
 **Cross product**
-: A three-dimensional vector operation whose output is perpendicular to both inputs, with direction given by the right-hand rule and magnitude equal to the product of their lengths and the sine of their included angle. See @sec-geometry-coordinate-frames.
+: A three-dimensional vector operation whose output is perpendicular to both inputs, with direction given by the right-hand rule and magnitude equal to the product of their lengths and the sine of their included angle. See @sec-linear-algebra-cross-product.
 
 ## D {.unnumbered}
 
@@ -367,6 +367,9 @@ Add terminology from a chapter only after that chapter has been completed and re
 : A nonzero vector divided by its Euclidean norm so that its resulting norm is one. See @sec-linear-algebra-vector-norm.
 
 ## V {.unnumbered}
+
+**Vector triple-product identity**
+: The identity $\mathbf a\times(\mathbf b\times\mathbf c)=\mathbf b(\mathbf a^\mathsf T\mathbf c)-\mathbf c(\mathbf a^\mathsf T\mathbf b)$, used to replace a nested cross product with dot products and scaled vectors. See @sec-linear-algebra-cross-product.
 
 **Vee operator**
 : The inverse of a declared hat operator, recovering a twist coordinate column from its structured Lie-algebra matrix. See @sec-se2-hat-operator.

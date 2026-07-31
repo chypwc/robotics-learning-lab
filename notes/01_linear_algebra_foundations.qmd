@@ -316,6 +316,129 @@ $$
 
 then nonzero $\mathbf{u}$ and $\mathbf{v}$ are perpendicular.
 
+### Cross product and useful identities {#sec-linear-algebra-cross-product}
+
+The dot product returns a scalar that measures alignment. Three-dimensional geometry also needs an operation that constructs a vector perpendicular to two given directions. Let $\mathbf u=[u_1\;u_2\;u_3]^\mathsf T\in\mathbb R^3$ and $\mathbf v=[v_1\;v_2\;v_3]^\mathsf T\in\mathbb R^3$ be coordinate columns expressed in the same right-handed orthonormal frame. Their **cross product** is the coordinate column
+
+$$
+\boxed{
+\mathbf u\times\mathbf v
+\mathrel{:=}
+\begin{bmatrix}
+u_2v_3-u_3v_2\\
+u_3v_1-u_1v_3\\
+u_1v_2-u_2v_1
+\end{bmatrix}
+\in\mathbb R^3
+}.
+$$
+
+The output is perpendicular to both inputs because direct substitution gives
+
+$$
+\mathbf u^\mathsf T(\mathbf u\times\mathbf v)
+=
+0,
+\qquad
+\mathbf v^\mathsf T(\mathbf u\times\mathbf v)
+=
+0.
+$$
+
+Its direction follows the right-hand rule. Expanding its squared norm gives
+
+$$
+\begin{aligned}
+\|\mathbf u\times\mathbf v\|_2^2
+&=
+(u_2v_3-u_3v_2)^2
++
+(u_3v_1-u_1v_3)^2
++
+(u_1v_2-u_2v_1)^2\\
+&=
+\|\mathbf u\|_2^2\|\mathbf v\|_2^2
+-
+(\mathbf u^\mathsf T\mathbf v)^2\\
+&=
+\|\mathbf u\|_2^2\|\mathbf v\|_2^2\sin^2\theta,
+\end{aligned}
+$$
+
+where $\theta\in[0,\pi]$ is the angle between the nonzero inputs and the last equality uses $\mathbf u^\mathsf T\mathbf v=\|\mathbf u\|_2\|\mathbf v\|_2\cos\theta$. Taking the nonnegative square root gives
+
+$$
+\boxed{
+\|\mathbf u\times\mathbf v\|_2
+=
+\|\mathbf u\|_2\|\mathbf v\|_2\sin\theta
+}.
+$$
+
+If the input components have physical units, the cross-product components have the product of those units. The coordinate definition also gives the useful identities
+
+$$
+\boxed{
+\mathbf u\times\mathbf v
+=
+-\mathbf v\times\mathbf u,
+\qquad
+\mathbf u\times\mathbf u
+=
+\mathbf 0_3
+}.
+$$
+
+Cross products are not associative: $\mathbf a\times(\mathbf b\times\mathbf c)$ and $(\mathbf a\times\mathbf b)\times\mathbf c$ are generally different. For $\mathbf a,\mathbf b,\mathbf c\in\mathbb R^3$ expressed in the same right-handed orthonormal frame, the **vector triple-product identity** is
+
+$$
+\boxed{
+\mathbf a\times(\mathbf b\times\mathbf c)
+=
+\mathbf b(\mathbf a^\mathsf T\mathbf c)
+-
+\mathbf c(\mathbf a^\mathsf T\mathbf b)
+}.
+$$
+
+To verify the identity from the cross-product definition, set $\mathbf d\mathrel{:=}\mathbf b\times\mathbf c$. Substituting the components of $\mathbf d$ into $\mathbf a\times\mathbf d$ and regrouping by the components of $\mathbf b$ and $\mathbf c$ gives
+
+$$
+\begin{aligned}
+\mathbf a\times\mathbf d
+&=
+\begin{bmatrix}
+a_2(b_1c_2-b_2c_1)-a_3(b_3c_1-b_1c_3)\\
+a_3(b_2c_3-b_3c_2)-a_1(b_1c_2-b_2c_1)\\
+a_1(b_3c_1-b_1c_3)-a_2(b_2c_3-b_3c_2)
+\end{bmatrix}\\
+&=
+\begin{bmatrix}
+b_1(\mathbf a^\mathsf T\mathbf c)-c_1(\mathbf a^\mathsf T\mathbf b)\\
+b_2(\mathbf a^\mathsf T\mathbf c)-c_2(\mathbf a^\mathsf T\mathbf b)\\
+b_3(\mathbf a^\mathsf T\mathbf c)-c_3(\mathbf a^\mathsf T\mathbf b)
+\end{bmatrix}\\
+&=
+\mathbf b(\mathbf a^\mathsf T\mathbf c)
+-
+\mathbf c(\mathbf a^\mathsf T\mathbf b).
+\end{aligned}
+$$
+
+A case used later for rotations sets $\mathbf b=\mathbf a$ and $\mathbf c=\mathbf y$:
+
+$$
+\boxed{
+\mathbf a\times(\mathbf a\times\mathbf y)
+=
+\mathbf a(\mathbf a^\mathsf T\mathbf y)
+-
+(\mathbf a^\mathsf T\mathbf a)\mathbf y
+}.
+$$
+
+If $\mathbf a$ is a unit vector, then $\mathbf a^\mathsf T\mathbf a=1$.
+
 ### Linear combinations, span, and basis
 
 Let $\mathbf v_1,\ldots,\mathbf v_k\in\mathbb R^n$ and let $\alpha_1,\ldots,\alpha_k\in\mathbb R$. A **linear combination** of these vectors is any vector of the form
@@ -373,6 +496,7 @@ Complete this test without looking back at the section.
 4. **Application:** Find the norm and unit direction of $\mathbf x=[3\;\;4]^\mathsf T$.
 5. **Limitations:** Why is the angle formula undefined when either vector is zero?
 6. **Basis:** Explain why two parallel nonzero vectors cannot form a basis of $\mathbb R^2$.
+7. **Cross product:** For a unit vector $\mathbf a\in\mathbb R^3$, use the vector triple-product identity to simplify $\mathbf a\times(\mathbf a\times\mathbf y)$.
 
 ### Answers and hints {.unnumbered}
 
@@ -382,6 +506,7 @@ Complete this test without looking back at the section.
 4. $\|\mathbf x\|_2=5$ and the unit direction is $[0.6\;\;0.8]^\mathsf T$.
 5. The denominator $\|\mathbf u\|_2\|\mathbf v\|_2$ becomes zero, and a zero vector has no direction.
 6. One vector is a scalar multiple of the other, so their span is only a line and their coefficient representation is not unique.
+7. $\mathbf a\times(\mathbf a\times\mathbf y)=\mathbf a(\mathbf a^\mathsf T\mathbf y)-\mathbf y$ because $\mathbf a^\mathsf T\mathbf a=1$.
 
 
 ## Matrices: linear maps and basis changes
@@ -1503,6 +1628,7 @@ Matrices in $SO(n)$ preserve lengths, angles, and orientation. Orthogonal matric
 7. Derive $\det(\mathbf A^{-1})=1/\det(\mathbf A)$.
 8. Distinguish $O(3)$ from $SO(3)$ and explain which set contains rigid-body rotation matrices.
 9. State the rank-nullity theorem and explain what its two terms count.
+10. State the vector triple-product identity and explain why the order and parentheses in a nested cross product matter.
 
 ### Cumulative answers and hints {.unnumbered}
 
@@ -1523,6 +1649,7 @@ Matrices in $SO(n)$ preserve lengths, angles, and orientation. Orthogonal matric
 7. Take determinants of $\mathbf A^{-1}\mathbf A=\mathbf I_n$ and use multiplicativity.
 8. $O(3)$ contains all orthogonal $3\times3$ matrices with determinant $\pm1$; $SO(3)$ contains the determinant-$1$ members and therefore the proper rigid-body rotations.
 9. For $\mathbf A\in\mathbb R^{m\times n}$, $\operatorname{rank}(\mathbf A)+\operatorname{nullity}(\mathbf A)=n$. Rank counts independent output directions produced by the map, while nullity counts independent input directions sent to zero.
+10. $\mathbf a\times(\mathbf b\times\mathbf c)=\mathbf b(\mathbf a^\mathsf T\mathbf c)-\mathbf c(\mathbf a^\mathsf T\mathbf b)$. The cross product is not associative, so changing the parentheses generally changes the result.
 
 ## References {.unnumbered}
 

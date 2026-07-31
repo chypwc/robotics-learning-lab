@@ -370,12 +370,6 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./08_dynamics_forces_and_actuator_limits.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></a>
-  </div>
-</li>
       </ul>
   </li>
     </ul>
@@ -401,7 +395,8 @@ window.Quarto = {
   <li><a href="#addition-and-scalar-multiplication" id="toc-addition-and-scalar-multiplication" class="nav-link" data-scroll-target="#addition-and-scalar-multiplication"><span class="header-section-number">1.1.2</span> Addition and scalar multiplication</a></li>
   <li><a href="#sec-linear-algebra-vector-norm" id="toc-sec-linear-algebra-vector-norm" class="nav-link" data-scroll-target="#sec-linear-algebra-vector-norm"><span class="header-section-number">1.1.3</span> Length and unit direction</a></li>
   <li><a href="#dot-product-and-angle" id="toc-dot-product-and-angle" class="nav-link" data-scroll-target="#dot-product-and-angle"><span class="header-section-number">1.1.4</span> Dot product and angle</a></li>
-  <li><a href="#linear-combinations-span-and-basis" id="toc-linear-combinations-span-and-basis" class="nav-link" data-scroll-target="#linear-combinations-span-and-basis"><span class="header-section-number">1.1.5</span> Linear combinations, span, and basis</a></li>
+  <li><a href="#sec-linear-algebra-cross-product" id="toc-sec-linear-algebra-cross-product" class="nav-link" data-scroll-target="#sec-linear-algebra-cross-product"><span class="header-section-number">1.1.5</span> Cross product and useful identities</a></li>
+  <li><a href="#linear-combinations-span-and-basis" id="toc-linear-combinations-span-and-basis" class="nav-link" data-scroll-target="#linear-combinations-span-and-basis"><span class="header-section-number">1.1.6</span> Linear combinations, span, and basis</a></li>
   </ul></li>
   <li><a href="#quick-test-a-vectors-and-bases" id="toc-quick-test-a-vectors-and-bases" class="nav-link" data-scroll-target="#quick-test-a-vectors-and-bases">Quick test A: vectors and bases</a>
   <ul class="collapse">
@@ -728,8 +723,115 @@ c=\|\mathbf{u}-\mathbf{v}\|_2.
 <p>then nonzero <span class="math inline">\(\mathbf{u}\)</span> and <span class="math inline">\(\mathbf{v}\)</span> are perpendicular.</p>
 </section>
 </section>
-<section id="linear-combinations-span-and-basis" class="level3" data-number="1.1.5">
-<h3 data-number="1.1.5" class="anchored" data-anchor-id="linear-combinations-span-and-basis"><span class="header-section-number">1.1.5</span> Linear combinations, span, and basis</h3>
+<section id="sec-linear-algebra-cross-product" class="level3" data-number="1.1.5">
+<h3 data-number="1.1.5" class="anchored" data-anchor-id="sec-linear-algebra-cross-product"><span class="header-section-number">1.1.5</span> Cross product and useful identities</h3>
+<p>The dot product returns a scalar that measures alignment. Three-dimensional geometry also needs an operation that constructs a vector perpendicular to two given directions. Let <span class="math inline">\(\mathbf u=[u_1\;u_2\;u_3]^\mathsf T\in\mathbb R^3\)</span> and <span class="math inline">\(\mathbf v=[v_1\;v_2\;v_3]^\mathsf T\in\mathbb R^3\)</span> be coordinate columns expressed in the same right-handed orthonormal frame. Their <strong>cross product</strong> is the coordinate column</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf u\times\mathbf v
+\mathrel{:=}
+\begin{bmatrix}
+u_2v_3-u_3v_2\\
+u_3v_1-u_1v_3\\
+u_1v_2-u_2v_1
+\end{bmatrix}
+\in\mathbb R^3
+}.
+\]</span></p>
+<p>The output is perpendicular to both inputs because direct substitution gives</p>
+<p><span class="math display">\[
+\mathbf u^\mathsf T(\mathbf u\times\mathbf v)
+=
+0,
+\qquad
+\mathbf v^\mathsf T(\mathbf u\times\mathbf v)
+=
+0.
+\]</span></p>
+<p>Its direction follows the right-hand rule. Expanding its squared norm gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+\|\mathbf u\times\mathbf v\|_2^2
+&amp;=
+(u_2v_3-u_3v_2)^2
++
+(u_3v_1-u_1v_3)^2
++
+(u_1v_2-u_2v_1)^2\\
+&amp;=
+\|\mathbf u\|_2^2\|\mathbf v\|_2^2
+-
+(\mathbf u^\mathsf T\mathbf v)^2\\
+&amp;=
+\|\mathbf u\|_2^2\|\mathbf v\|_2^2\sin^2\theta,
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(\theta\in[0,\pi]\)</span> is the angle between the nonzero inputs and the last equality uses <span class="math inline">\(\mathbf u^\mathsf T\mathbf v=\|\mathbf u\|_2\|\mathbf v\|_2\cos\theta\)</span>. Taking the nonnegative square root gives</p>
+<p><span class="math display">\[
+\boxed{
+\|\mathbf u\times\mathbf v\|_2
+=
+\|\mathbf u\|_2\|\mathbf v\|_2\sin\theta
+}.
+\]</span></p>
+<p>If the input components have physical units, the cross-product components have the product of those units. The coordinate definition also gives the useful identities</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf u\times\mathbf v
+=
+-\mathbf v\times\mathbf u,
+\qquad
+\mathbf u\times\mathbf u
+=
+\mathbf 0_3
+}.
+\]</span></p>
+<p>Cross products are not associative: <span class="math inline">\(\mathbf a\times(\mathbf b\times\mathbf c)\)</span> and <span class="math inline">\((\mathbf a\times\mathbf b)\times\mathbf c\)</span> are generally different. For <span class="math inline">\(\mathbf a,\mathbf b,\mathbf c\in\mathbb R^3\)</span> expressed in the same right-handed orthonormal frame, the <strong>vector triple-product identity</strong> is</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf a\times(\mathbf b\times\mathbf c)
+=
+\mathbf b(\mathbf a^\mathsf T\mathbf c)
+-
+\mathbf c(\mathbf a^\mathsf T\mathbf b)
+}.
+\]</span></p>
+<p>To verify the identity from the cross-product definition, set <span class="math inline">\(\mathbf d\mathrel{:=}\mathbf b\times\mathbf c\)</span>. Substituting the components of <span class="math inline">\(\mathbf d\)</span> into <span class="math inline">\(\mathbf a\times\mathbf d\)</span> and regrouping by the components of <span class="math inline">\(\mathbf b\)</span> and <span class="math inline">\(\mathbf c\)</span> gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf a\times\mathbf d
+&amp;=
+\begin{bmatrix}
+a_2(b_1c_2-b_2c_1)-a_3(b_3c_1-b_1c_3)\\
+a_3(b_2c_3-b_3c_2)-a_1(b_1c_2-b_2c_1)\\
+a_1(b_3c_1-b_1c_3)-a_2(b_2c_3-b_3c_2)
+\end{bmatrix}\\
+&amp;=
+\begin{bmatrix}
+b_1(\mathbf a^\mathsf T\mathbf c)-c_1(\mathbf a^\mathsf T\mathbf b)\\
+b_2(\mathbf a^\mathsf T\mathbf c)-c_2(\mathbf a^\mathsf T\mathbf b)\\
+b_3(\mathbf a^\mathsf T\mathbf c)-c_3(\mathbf a^\mathsf T\mathbf b)
+\end{bmatrix}\\
+&amp;=
+\mathbf b(\mathbf a^\mathsf T\mathbf c)
+-
+\mathbf c(\mathbf a^\mathsf T\mathbf b).
+\end{aligned}
+\]</span></p>
+<p>A case used later for rotations sets <span class="math inline">\(\mathbf b=\mathbf a\)</span> and <span class="math inline">\(\mathbf c=\mathbf y\)</span>:</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf a\times(\mathbf a\times\mathbf y)
+=
+\mathbf a(\mathbf a^\mathsf T\mathbf y)
+-
+(\mathbf a^\mathsf T\mathbf a)\mathbf y
+}.
+\]</span></p>
+<p>If <span class="math inline">\(\mathbf a\)</span> is a unit vector, then <span class="math inline">\(\mathbf a^\mathsf T\mathbf a=1\)</span>.</p>
+</section>
+<section id="linear-combinations-span-and-basis" class="level3" data-number="1.1.6">
+<h3 data-number="1.1.6" class="anchored" data-anchor-id="linear-combinations-span-and-basis"><span class="header-section-number">1.1.6</span> Linear combinations, span, and basis</h3>
 <p>Let <span class="math inline">\(\mathbf v_1,\ldots,\mathbf v_k\in\mathbb R^n\)</span> and let <span class="math inline">\(\alpha_1,\ldots,\alpha_k\in\mathbb R\)</span>. A <strong>linear combination</strong> of these vectors is any vector of the form</p>
 <p><span class="math display">\[
 \alpha_1\mathbf v_1+\cdots+\alpha_k\mathbf v_k.
@@ -774,6 +876,7 @@ x_1&amp;\cdots&amp;x_n
 <li><strong>Application:</strong> Find the norm and unit direction of <span class="math inline">\(\mathbf x=[3\;\;4]^\mathsf T\)</span>.</li>
 <li><strong>Limitations:</strong> Why is the angle formula undefined when either vector is zero?</li>
 <li><strong>Basis:</strong> Explain why two parallel nonzero vectors cannot form a basis of <span class="math inline">\(\mathbb R^2\)</span>.</li>
+<li><strong>Cross product:</strong> For a unit vector <span class="math inline">\(\mathbf a\in\mathbb R^3\)</span>, use the vector triple-product identity to simplify <span class="math inline">\(\mathbf a\times(\mathbf a\times\mathbf y)\)</span>.</li>
 </ol>
 <section id="answers-and-hints" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="answers-and-hints">Answers and hints</h3>
@@ -784,6 +887,7 @@ x_1&amp;\cdots&amp;x_n
 <li><span class="math inline">\(\|\mathbf x\|_2=5\)</span> and the unit direction is <span class="math inline">\([0.6\;\;0.8]^\mathsf T\)</span>.</li>
 <li>The denominator <span class="math inline">\(\|\mathbf u\|_2\|\mathbf v\|_2\)</span> becomes zero, and a zero vector has no direction.</li>
 <li>One vector is a scalar multiple of the other, so their span is only a line and their coefficient representation is not unique.</li>
+<li><span class="math inline">\(\mathbf a\times(\mathbf a\times\mathbf y)=\mathbf a(\mathbf a^\mathsf T\mathbf y)-\mathbf y\)</span> because <span class="math inline">\(\mathbf a^\mathsf T\mathbf a=1\)</span>.</li>
 </ol>
 </section>
 </section>
@@ -1690,6 +1794,7 @@ SO(n)
 <li>Derive <span class="math inline">\(\det(\mathbf A^{-1})=1/\det(\mathbf A)\)</span>.</li>
 <li>Distinguish <span class="math inline">\(O(3)\)</span> from <span class="math inline">\(SO(3)\)</span> and explain which set contains rigid-body rotation matrices.</li>
 <li>State the rank-nullity theorem and explain what its two terms count.</li>
+<li>State the vector triple-product identity and explain why the order and parentheses in a nested cross product matter.</li>
 </ol>
 <section id="cumulative-answers-and-hints" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="cumulative-answers-and-hints">Cumulative answers and hints</h3>
@@ -1709,6 +1814,7 @@ SO(n)
 <li><p>Take determinants of <span class="math inline">\(\mathbf A^{-1}\mathbf A=\mathbf I_n\)</span> and use multiplicativity.</p></li>
 <li><p><span class="math inline">\(O(3)\)</span> contains all orthogonal <span class="math inline">\(3\times3\)</span> matrices with determinant <span class="math inline">\(\pm1\)</span>; <span class="math inline">\(SO(3)\)</span> contains the determinant-<span class="math inline">\(1\)</span> members and therefore the proper rigid-body rotations.</p></li>
 <li><p>For <span class="math inline">\(\mathbf A\in\mathbb R^{m\times n}\)</span>, <span class="math inline">\(\operatorname{rank}(\mathbf A)+\operatorname{nullity}(\mathbf A)=n\)</span>. Rank counts independent output directions produced by the map, while nullity counts independent input directions sent to zero.</p></li>
+<li><p><span class="math inline">\(\mathbf a\times(\mathbf b\times\mathbf c)=\mathbf b(\mathbf a^\mathsf T\mathbf c)-\mathbf c(\mathbf a^\mathsf T\mathbf b)\)</span>. The cross product is not associative, so changing the parentheses generally changes the result.</p></li>
 </ol>
 </section>
 </section>
