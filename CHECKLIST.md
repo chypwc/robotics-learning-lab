@@ -1,1212 +1,495 @@
-# Project Intelligence Checklist (archived)
+# Project Intelligence Checklist
 
-This checklist operationalises the twelve-phase roadmap in [PLAN.md](PLAN.md) under the project rules in [AGENTS.md](AGENTS.md). `PLAN.md` remains the source for project identity, research rationale, architecture, scope, and engineering method; this file records execution and evidence. Physical manipulation hardware remains deferred.
+This is the sole live progress tracker. [PLAN.md](PLAN.md) defines what the programme teaches and why. This checklist records the current phase, exactly one active task, ordered artifact-level work, and links to evidence owned elsewhere.
 
-## How to use this checklist
+When a phase closes, link its verification report in the programme table, remove its detailed working tasks, and expand the next phase. [CHECKLIST.legacy.md](archive/CHECKLIST.legacy.md) and [CAPABILITY_TRACK.legacy.md](archive/CAPABILITY_TRACK.legacy.md) are historical and non-authoritative.
 
-- Keep only one implementation-sized capability active at a time.
-- Complete the reusable gates for each capability after Phase 0.
-- Treat each phase's capability order as a sequence of complete learning cycles, not as permission to learn the entire phase before implementing anything.
-- For the active capability only, learn and review its minimum prerequisite concepts, specify it, implement it, verify it, and integrate it before opening the next capability's learning block.
-- Revisit earlier theory through retrieval practice and implementation evidence, but draft new theory only when the next active capability requires it.
-- Add a link or path to evidence when checking an important item.
-- Mark a phase complete only when its required capability cycles are integrated and all exit evidence exists.
-- Correct blocking gaps before proceeding; place non-blocking improvements in the backlog.
-- Do not restart an entire learning cycle because of one failed test. Review the missed concept, retest it, and continue.
+## Working rules
+
+1. Keep exactly one implementation-sized capability and one task active.
+2. Complete each capability in dependency order: learn and review, specify, implement, verify, and close.
+3. Make every task name a concrete artifact or verifiable action.
+4. Link evidence instead of copying results into this file.
+5. Preserve accepted implementation and useful learning material when closing an earlier process gap.
+6. Put non-blocking work in the backlog; do not expand the active capability around it.
 
 ## Programme status
 
-- [x] Create the detailed project plan.
-- [x] Create the root project rules.
-- [x] Phase 0 — Development environment.
-- [ ] Phase 1 — Geometry, mechanics, and control.
-- [ ] Phase 2 — Probability and state estimation.
-- [ ] Phase 3 — Perception and semantic understanding.
-- [ ] Phase 4 — Mapping, SLAM, and memory.
-- [ ] Phase 5 — Planning and autonomous decision-making.
-- [ ] Phase 6 — Reusable reinforcement-learning foundations.
-- [ ] Phase 7 — Classical simulated manipulation.
-- [ ] Phase 8 — Imitation and reinforcement learning for manipulation.
-- [ ] Phase 9 — World models, road-agent prediction, and core research release.
-- [ ] Phase 10 — UAV mechanics, estimation, planning, and classical control.
-- [ ] Phase 11 — UAV learned models and intelligence transfer.
-- [ ] Phase 12 — Integrated multi-embodiment research release.
+All phases belong to the learning programme. Phase 9 and Phase 12 are distinct required capstone products.
 
-### Rebaselined programme structure
+| Milestone | Phases | Outcome | Status | Evidence |
+|---|---:|---|---|---|
+| `M0` — Environment bootstrap | 0 | Reproducible development environment | Complete | [Setup](docs/environment/environment_setup.md), [verification](docs/environment/environment_verification.md) |
+| `M1` — Classical intelligence foundation | 1–5 | Bounded planar-manipulator laboratory, classical mobile-robot inspection mission, and reusable autonomy contracts | Active | — |
+| `M2` — Reusable learning foundation | 6 | Reproducible reinforcement-learning, data, safety-cost, and evaluation workflows | Queued | — |
+| `M3` — Classical manipulation platform | 7 | Frozen classical manipulation and safety baseline | Queued | — |
+| `M4` — Manipulation learning | 8 | Frozen manipulation data and selected model-free learned baseline | Queued | — |
+| `M5` — Capstone Product A | 9 | Core Intelligence Release | Queued | — |
+| `M6` — Classical UAV platform | 10 | Frozen classical UAV inspection-and-return baseline | Queued | — |
+| `M7` — UAV intelligence transfer | 11 | Learned prediction, planning, uncertainty, and safety transfer to flight | Queued | — |
+| `M8` — Capstone Product B | 12 | Multi-embodiment Intelligence Transfer Release | Queued | — |
 
-| Phase | Main outcome | Selected self-driving contribution |
-|---:|---|---|
-| 1 | Geometry, mechanics, and control foundations | Nonholonomic model comparison, curvature, and smooth trajectories |
-| 2 | Probability and reusable state-estimation primitives | UKF, gating, data association, and redundant-sensor integrity |
-| 3 | Perception and semantic understanding | 3D perception, point clouds, multimodal calibration, and tracking |
-| 4 | Mapping, SLAM, and memory | Scan matching, dynamic maps, and moving-object separation |
-| 5 | Planning and autonomous decision-making | Agent prediction, behaviour selection, and risk-aware trajectories |
-| 6 | Reusable RL foundations on one bounded mobile-robot task | Offline learning from logs, imitation, interventions, and constrained RL |
-| 7 | Classical simulated manipulator baseline | Time-indexed collision prediction and safety envelopes |
-| 8 | Imitation and reinforcement learning for manipulation | Intervention data, recovery learning, and safety shielding |
-| 9 | World models, road-agent prediction, and Core Intelligence Release | Road-agent tracking, prediction, calibrated risk, and bounded decisions |
-| 10 | UAV mechanics, estimation, planning, and classical control | Redundant estimation and dynamic-obstacle tracking |
-| 11 | UAV learned models and intelligence transfer | Prediction-aware flight planning and learned residual models |
-| 12 | Integrated multi-embodiment research release | Operational design domains, hazard analysis, and scenario testing |
+## Current work
 
-The rebaseline brings simulated manipulation into scope as the primary learning domain, moves the main world-model comparison to contact-rich manipulation in Phase 9, limits self-driving work to a bounded road-agent intelligence benchmark, splits classical UAV foundations from learned transfer, and moves the integrated release from Phase 9 to Phase 12. The mobile robot supplies reusable foundations; manipulation supplies primary research evidence; road traffic and UAVs supply distinct transfer evidence.
-
-### Reinforcement-learning algorithm allocation
-
-| Phase | Required algorithmic contribution | Scope gate |
-|---:|---|---|
-| 6 | PPO, SAC, TD3, and one PID-Lagrangian constrained extension | Use one bounded mobile-robot task and one shared evaluation contract |
-| 8 | Behavioural cloning, IQL, goal-conditioned SAC with HER, RLPD, and one residual policy | Advance through pairwise, stage-gated comparisons rather than an undifferentiated algorithm tournament |
-| 9 | TD-MPC2 as the contemporary learned latent-model baseline | DreamerV3 may replace TD-MPC2 only when partial observability or pixels justify it; do not implement both for the core release |
-| 10 | No learned controller | Freeze the classical UAV benchmark before transferring intelligence |
-| 11 | Reuse selected Phase 6–9 methods | Introduce no new general-purpose RL family; select a transferred method only for a declared flight-specific hypothesis |
-| 12 | No new algorithm | Integrate and reproduce only the methods admitted by earlier phase gates |
-
-### Production and research tool allocation
-
-The production stack exists to make the intelligence experiments credible, reproducible, measurable, and deployable. It is not a separate curriculum to finish before RL or world-model work, and each tool enters only through the active capability gate.
-
-| Layer | Approved tools | Project role | Adoption gate |
-|---|---|---|---|
-| Production foundation | Linux, modern C++, Python, CMake, Git, automated testing, Docker and CI when justified | Reproducible builds, numerical software, diagnostics, concurrency, and release engineering | Add only the infrastructure required by the active capability or a clean reproduction boundary |
-| Robotics integration | ROS 2, `tf2`, `ros2_control`, Gazebo, `rosbag2` with MCAP | Typed communication, frame transforms, hardware abstraction, system simulation, telemetry, and replay | Keep pure algorithms behind narrow adapters; Gazebo remains the primary integration simulator |
-| Classical baselines | Nav2, MoveIt 2, Pinocchio, Eigen, and one justified optimisation solver | Frozen navigation, manipulation, dynamics, planning, control, and safety comparisons | Introduce each with its dependent capability; do not build parallel framework implementations |
-| Observation and belief | OpenCV, the minimum required PCL subset, and GTSAM | Calibrated vision, bounded 3D geometry, estimation, smoothing, and SLAM | OpenCV/PCL begin in Phase 3; GTSAM follows foundational filters and pose-graph theory |
-| Intelligence research | PyTorch, NumPy/SciPy, simulator-neutral RL environments, replay and trajectory contracts | Policies, offline and online RL, analytical/neural/hybrid world models, uncertainty, and predictive planning | Keep training and evaluation independent of ROS where practical and reuse the Phase 6 contracts in Phases 8–9 |
-| Deployment | ONNX Runtime, CUDA profiling, and TensorRT | Selected-model inference optimisation on a declared NVIDIA target | Defer until profiling identifies a requirement and numerical-equivalence tests are defined |
-
-## Programme controls
-
-- [ ] Record the available study and engineering hours per week.
-- [ ] Maintain one prioritised backlog.
-- [ ] Identify the currently active phase.
-- [ ] Define the current phase start date and target review date.
-- [ ] Apply the scope-control questions before adding work.
-- [ ] Review risks at the beginning and end of each phase.
-- [ ] Record consequential decisions in architecture decision records.
-- [ ] Preserve negative results and failed experiments.
-- [ ] Review the roadmap after every phase without changing the central research question casually.
-- [ ] Before activating a phase, divide its first required outcome into an implementation-sized capability and identify only that capability's prerequisite learning block.
-- [ ] Do not begin a later capability merely because its theory is interesting; require an approved dependency and a bounded engineering or experimental outcome.
-- [ ] Treat the Phase 9 core release as a valid stopping point before committing to the optional UAV extension in Phases 10–11.
-- [x] Formally rebaseline `PLAN.md` so its scope and phase numbering agree with this checklist.
-- [ ] Before Phase 6 algorithm note drafting, establish an `AGENTS.md`-compliant primary-source route for PPO, SAC, TD3, and PID-Lagrangian constrained RL; the current textbook index routes their general foundations but not these specific algorithms.
-- [ ] Before Phase 8 note drafting, establish an `AGENTS.md`-compliant primary-source route for behavioural cloning, IQL, RLPD, Hindsight Experience Replay, action chunking, and safe manipulation learning; the current textbook index does not route these topics explicitly.
-- [ ] Before the Phase 9 learned-planning block, establish an `AGENTS.md`-compliant primary-source route for TD-MPC2 and DreamerV3 in addition to the textbook-routed model-based RL foundations.
-- [ ] Before the Phase 5 dynamic-agent learning block, establish an `AGENTS.md`-compliant primary-source route for motion prediction and calibrated risk-aware decisions; extend it before Phase 9 to cover learned and multimodal road-agent prediction.
-- [ ] Before Phase 10 note drafting, resolve the dedicated multirotor and aerospace source gap already declared by `textbooks/INDEX.md`.
-- [ ] Resolve the tension between the read-only `textbooks/` rule and any future need to extend `textbooks/INDEX.md`; do not improvise an unapproved routing mechanism while drafting notes.
-- [ ] For every proposed dependency, record the active capability, the requirement it satisfies, its narrower alternative, its lifecycle owner, and its removal or replacement condition.
-- [ ] Keep the intelligence research core independent of ROS and simulator APIs where practical; require explicit adapters at production and simulation boundaries.
-- [ ] Keep Gazebo as the primary integration simulator and admit a second simulator only through a recorded benchmark and architecture decision.
-- [ ] Treat ONNX Runtime, custom CUDA work, TensorRT, distributed training, and specialised concurrency infrastructure as profiling-gated deployment or scale capabilities rather than default foundations.
-
-## Reusable capability gates
-
-Complete this dependency-gated cycle for each implementation-sized capability after Phase 0:
-
-    Learn and write → Review → Specify → Implement and document → Verify
-
-A phase contains several capability cycles. Start engineering when the active capability's prerequisite theory is reviewed and its minimum specification is ready; unrelated theory in the same phase need not be complete. After verification, use the result to identify the next capability's precise learning needs. Phase 0 and the Phase 12 release-integration work are the only exceptions that do not introduce ordinary learn-and-implement capability cycles.
-
-### Capability working cycle
-
-- [x] Select one active capability and identify its prerequisites.
-- [x] Draft or update only the prerequisite learning material.
-- [ ] Review the material and pass the relevant retrieval or cumulative test.
-- [x] Define minimum requirements, interfaces, acceptance cases, and exclusions.
-- [x] Create or update an implementation companion when implementation begins; do not create an empty placeholder.
-- [x] Implement the simplest credible baseline and its tests.
-- [x] Run the acceptance cases and record evidence.
-- [ ] Integrate the capability or place non-blocking work in the backlog.
-
-### A. Learn, review, and specify gate
-
-Begin with enough orientation to direct learning, without treating it as a separate definition stage:
-
-- [ ] State the capability and phase research question.
-- [ ] State the intended robot behaviour.
-- [ ] Identify prerequisite mathematics.
-- [ ] Identify prerequisite physics.
-- [ ] Identify prerequisite algorithms and software concepts.
-- [ ] List the major concepts in dependency order.
-- [ ] Define notation before using it.
-- [ ] Define units, frames, assumptions, and prerequisites.
-- [ ] Explain each concept in plain language.
-- [ ] Show central derivations step by step without unexplained jumps.
-- [ ] Include at least one worked example for each major topic.
-- [ ] Explain how the mathematics or physics informs engineering choices.
-- [ ] State failure conditions and limitations.
-- [ ] Use `$...$` for inline mathematics.
-- [ ] Use `$$...$$` for display mathematics.
-- [ ] Keep the chapter self-contained.
-- [ ] Ensure all algorithmic or scientific scripts trace to documented mathematics.
-
-For every major concept:
-
-- [ ] Learn the concept.
-- [ ] Complete a 5–15 minute closed-book quick test.
-- [ ] Test recall of definitions and notation.
-- [ ] Test a plain-language explanation.
-- [ ] Test one essential derivation step.
-- [ ] Test one short application.
-- [ ] Test assumptions, units, or failure conditions.
-- [ ] Check answers and record misconceptions.
-- [ ] Review only missed material when necessary.
-- [ ] Retest failed prerequisite concepts.
-
-Before passing the review and specification gate:
-
-- [ ] Start later sessions with two or three retrieval questions from earlier concepts.
-- [ ] Complete any cumulative test applicable to the prerequisite learning block.
-- [ ] Correct failed prerequisite concepts.
-- [ ] Schedule non-critical weaknesses for spaced review.
-- [ ] Add tests, answers, hints, or worked solutions to the lecture-note source.
-- [ ] Compile the prerequisite learning block successfully as part of the lecture-note book.
-- [ ] Write measurable capability requirements informed by the documented theory.
-- [ ] Define the simplest credible baseline.
-- [ ] Define interfaces and architecture implications sufficiently for implementation.
-- [ ] Define the acceptance scenario before implementation.
-- [ ] State what is excluded from the active capability.
-- [ ] Record traceability from equations to requirements and planned tests.
-- [ ] Confirm the learning record and engineering specification are ready before implementation begins.
-
-### B. Implementation and documentation gate
-
-- [ ] Assign unique IDs to requirements.
-- [ ] Trace infrastructure work to an engineering requirement.
-- [ ] Define module responsibilities.
-- [ ] Define interfaces, schemas, units, frames, and timestamps.
-- [ ] Define valid ranges and uncertainty representation.
-- [ ] Define invalid, missing, and stale-data behaviour.
-- [ ] Keep configuration separate from source code.
-- [ ] Separate mathematical, learning, and evaluation cores from ROS, simulator, storage, and deployment adapters where practical.
-- [ ] Define callback, worker, queue, deadline, cancellation, and shutdown behaviour where concurrency is present.
-- [x] Implement the simplest credible baseline first.
-- [x] Create or extend the implementation companion alongside the first implementation work.
-- [x] Record reusable equation mappings, contracts, pseudocode, snippets, invariants, tests, and cautions in the companion.
-- [x] Keep code modular and testable.
-- [ ] Add structured logging and diagnostics.
-- [x] Add unit tests.
-- [x] Add package integration tests.
-- [ ] Add ROS interface tests where applicable.
-- [ ] Add a headless simulation test where applicable.
-- [ ] Add failure handling and safe fallback where applicable.
-- [ ] Pin material dependencies and configurations.
-- [x] Record the link between equations, requirements, implementation, and tests.
-
-### C. Verification and integration gate
-
-- [ ] State the hypothesis and falsification condition.
-- [ ] Declare independent, dependent, and controlled variables.
-- [ ] Freeze baselines and ablations.
-- [ ] Freeze scenarios and random seeds.
-- [ ] Define metrics and aggregation.
-- [ ] Define failure and excluded-run policies.
-- [ ] Record software, data, model, and configuration versions.
-- [ ] Record dataset or episode splits, interaction counts, checkpoints, simulator parameters, and wall-clock cost where they affect a scientific claim.
-- [x] Run the acceptance scenarios.
-- [x] Record requirement results.
-- [ ] Record performance and resource measures.
-- [ ] Record safety and failure observations.
-- [ ] Preserve negative results.
-- [ ] Correct blocking defects.
-- [ ] Add non-blocking work to the backlog.
-- [ ] Update the theory chapter only when an error or important result requires it.
-- [ ] Complete the design or release review.
-- [ ] Create a versioned capability release.
-
-## Phase 0 — Development environment
-
-Phase 0 only establishes and verifies the project environment. Learning chapters, capability requirements, robot implementation, sensors, and mission engineering begin in later capability phases.
-
-### Set up
-
-- [x] Confirm Windows 11 remains the host operating system.
-- [x] Install or verify WSL2 Ubuntu 24.04.
-- [x] Configure the Codex app to access the WSL checkout and execute project commands through Ubuntu WSL2.
-- [x] Create the authoritative repository checkout under the WSL Linux home filesystem.
-- [x] Confirm the repository is not built from `/mnt/c` or `/mnt/d`.
-- [x] Install and verify ROS 2 Jazzy.
-- [x] Install and verify Gazebo Harmonic.
-- [x] Install and verify the modern C++ toolchain.
-- [x] Install and verify the Python environment.
-- [x] Install PyTorch inside WSL2.
-- [x] Install and verify Quarto and the PDF toolchain.
-
-### Verify and record
-
-- [x] Create and build a minimal ROS workspace from a clean shell.
-- [x] Run a minimal ROS publisher/subscriber smoke test.
-- [x] Launch Gazebo Harmonic through a minimal documented command.
-- [x] Verify PyTorch detects the GPU.
-- [x] Compile a minimal Quarto/LaTeX document.
-- [x] Record environment versions.
-- [x] Record installation and verification commands.
-- [x] Record the environment architecture decision.
-- [x] Record failures, workarounds, and known limitations.
-
-### Phase 0 exit
-
-- [x] The authoritative checkout is under the WSL Linux home filesystem.
-- [x] A clean shell builds the minimal ROS workspace.
-- [x] The ROS publisher/subscriber smoke test passes.
-- [x] Gazebo launches through a documented command.
-- [x] PyTorch GPU verification passes.
-- [x] The document toolchain compiles a minimal document.
-- [x] Environment versions and verification results are recorded.
-- [x] Phase 0 review is complete.
-
-Evidence:
-
-- Environment setup record: [docs/environment/environment_setup.md](docs/environment/environment_setup.md)
-- Verification report: [docs/environment/environment_verification.md](docs/environment/environment_verification.md)
+- **Milestone:** `M1` — Classical intelligence foundation.
+- **Phase:** Phase 1 — Geometry, mechanics, and control.
+- **Capability:** `P1.2` — Spatial geometry kernel.
+- **Active task:** Route the Chapter 8 prerequisite blocks through *Modern Robotics*, Chapter 3, and compare them with Craig, Chapter 2, and Corke, Chapters 2–3.
+- **Next capability:** `P1.3` — General robot kinematics and Jacobians.
+- **Blockers:** None.
 
 ## Phase 1 — Geometry, mechanics, and control
 
-### Capability order
+Phase 1 closes when two bounded learning systems pass. First, a deterministic 2R/3R planar manipulator laboratory must solve declared inverse-kinematics cases and track joint trajectories with classical controllers under declared gravity, friction, saturation, disturbance, and model mismatch. Second, the headless simulated differential-drive robot must estimate its planar motion, follow bounded straight and curved trajectories under declared disturbances, and reach a stopped-safe state after every declared command failure. The two manipulator specifications own the laboratory scenarios and thresholds; the final acceptance specification owns the mobile-system scenarios and thresholds. The phase report must keep the educational manipulator evidence distinct from the mobile-robot integration and safety evidence while explaining both from the shared geometry, mechanics, and control foundations.
 
-Complete the motion-model capability already in progress, including its still-open review and specification gate, before starting spatial-geometry implementation. Then move serially through spatial geometry, wheel odometry, its ROS 2 and Gazebo acceptance path, and the dynamics-and-control capabilities. Introduce the Ackermann and smooth-trajectory comparison only when learning trajectory generation; it is a bounded modelling exercise, not a second vehicle implementation.
+### Evidence-based gap assessment
 
-### Learn, review, and specify
+| Area | Current evidence | Gap to the Phase 1 goal | Disposition |
+|---|---|---|---|
+| Linear algebra and coordinate frames | [Chapter 1](notes/01_linear_algebra_foundations.qmd) covers vectors, matrices, rank, null spaces, determinants, and orthogonal maps; [Chapter 2](notes/02_geometry_and_coordinate_frames.qmd) covers frames, coordinate changes, and a cumulative test; Chapter 7 introduces a constraint Jacobian, rank, and tangent null space | The total derivative, multivariable chain rule, task and robot Jacobians, linearisation, and eigenvalue-based stability have not yet been taught | Teach the new mathematics where general kinematics and control first require it |
+| Planar rigid-body and differential-drive motion | [Chapter 3](notes/03_kinematics_and_numerical_integration.qmd), [Chapter 6](notes/06_planar_rigid_body_motion_se2_and_twists.qmd), the [specification](docs/01_motion_models/differential_drive_motion_model.md), and the [package](ros_ws/src/differential_drive_motion_model) cover ideal planar kinematics, exact constant-input integration, and Forward Euler | Encoder odometry, timestamps, drift, and broader ODE treatment remain outside the closed ideal-motion capability | Preserve the accepted `P1.1` evidence and add the deferred topics only in their owning later capabilities |
+| Spatial rigid-body motion | The reviewed [Chapter 7](notes/07_degrees_of_freedom_and_spatial_motion_so3_se3.qmd) covers degrees of freedom, $SO(3)$, $SE(3)$, quaternions, body and spatial twists, the adjoint, retrieval tests, a cumulative review, limitations, and numerical checks | Screw motion and the $SE(3)$ exponential and logarithm remain intentionally outside Chapter 7 | Begin screw motion and spatial integration in Chapter 8 |
+| General robot kinematics | No current note or package defines a general configuration-to-pose map or maps generalised velocity to task or rigid-body velocity | The total derivative, multivariable chain rule, forward kinematics, revolute and prismatic screw axes, product-of-exponentials models, task and body/space Jacobians, and robot singularities are absent | Add one reusable general-kinematics chapter and workbench before specialising it to a planar manipulator laboratory |
+| Inverse kinematics and planar manipulation | No current note, specification, or package solves a manipulator task | Analytic and numerical inverse kinematics, convergence, multiple solutions, reachability, damped least squares, joint limits, redundancy, null-space objectives, manipulability, and manipulator-specific acceptance evidence are absent | Add a bounded 2R/3R planar manipulator kinematics stage in Phase 1; reserve the spatial production arm and manipulation mission for Phase 7 |
+| Wheeled constraints and odometry | Chapter 3 derives the ideal no-sideways differential-drive constraint and wheel/body mapping; Chapters 3 and 7 distinguish holonomic and nonholonomic constraints | The general Pfaffian-to-parametric framework, rolling-constraint matrices, encoder odometry, Ackermann steering, and the bicycle comparison are absent | Add a wheeled-constraints and odometry chapter, then implement one differential-drive odometry pipeline |
+| Dynamic systems and mechanics | The preserved [dynamics draft](notes/14_dynamic_systems_mechanics_and_actuator_limits.qmd) covers one-dimensional Newtonian motion, wheel traction balance, and ideal gearing | General state ODEs, planar yaw dynamics, manipulator mass, Coriolis/centrifugal and gravity terms, inertia, friction and traction bounds, resistance, actuator saturation, braking, and a reference numerical method are absent | Preserve and complete the shared dynamic-systems foundation, then derive separate bounded differential-drive and 2R manipulator plants |
+| Trajectory generation | No current learning or implementation artifact | Path versus trajectory, time scaling, curvature, velocity, acceleration, jerk, wheel feasibility, and safe rejection are absent | Add one bounded straight-and-constant-curvature trajectory chapter and generator |
+| Feedback and control | No current learning or implementation artifact | Error dynamics, stability, open-loop and feedback distinctions, P/PI/PD/PID, sampling, delay, saturation, anti-windup, derivative filtering, disturbance rejection, gravity compensation, computed-torque control, and metrics are absent | Establish the shared feedback foundation on the mobile benchmark, then apply it to the bounded planar manipulator without duplicating the generic theory |
+| ROS 2 integration and safety | [Chapter 5](notes/05_ros2_packages_and_development_workflow.qmd) covers package and build workflow; existing functions validate numeric inputs | ROS messages, `tf2`, simulation time, Gazebo acceptance, command supervision, watchdog, emergency stop, stopped-safe behaviour, telemetry, replay, and fault injection are absent | Learn these at their adapter boundary, verify simulation safety behaviour, and make no certified functional-safety claim |
 
-- [x] Create the unified notation and conventions note.
-- [x] Create the Quarto book structure and introductory index.
-- [x] Draft the linear algebra foundations chapter.
-- [x] Review and approve `notes/01_linear_algebra_foundations.qmd`.
-- [x] Draft coordinate frames and unit conventions.
-- [x] Review and approve `notes/02_geometry_and_coordinate_frames.qmd`.
-- [x] Draft the kinematics and numerical integration chapter.
-- [x] Review and approve `notes/03_kinematics_and_numerical_integration.qmd`.
-- [x] Draft `notes/06_planar_rigid_body_motion_se2_and_twists.qmd` from the routed textbook sections.
-- [x] Review and approve the planar rigid-body motion, $SE(2)$, and twists chapter.
-- [ ] Draft `notes/07_degrees_of_freedom_and_spatial_motion_so3_se3.qmd` from the routed textbook sections.
-- [ ] Review and approve the degrees of freedom and spatial motion, $SO(3)$, and $SE(3)$ chapter.
-- [ ] Draft `notes/08_wheeled_robot_constraints_jacobians_and_odometry.qmd` from the routed textbook sections.
-- [ ] Review and approve the wheeled-robot constraints, Jacobians, and odometry chapter.
-- [ ] Specify the bounded spatial rigid-body geometry capability, including interfaces, exclusions, and acceptance cases traced to Chapter 7.
-- [ ] Specify the bounded wheel-odometry capability, including interfaces, exclusions, and acceptance cases traced to Chapter 8.
-- [ ] Confirm that each implementation or integration slice below fits within one or two focused development days; split or reduce any slice that does not.
-- [ ] Draft `notes/09_dynamics_forces_torque_friction_and_actuator_limits.qmd` from the routed textbook sections.
-- [ ] Review and approve the dynamics, forces, torque, friction, and actuator limits chapter.
-- [x] Select the pure differential-drive motion model as the first active implementation-sized capability.
-- [x] Draft the minimum motion-model requirements, interfaces, acceptance cases, and exclusions.
-- [ ] Pass the applicable retrieval and cumulative test in `notes/03_kinematics_and_numerical_integration.qmd`.
-- [x] Rotation matrices.
-- [ ] Homogeneous transformations.
-- [ ] Jacobians.
-- [x] Ordinary differential equations.
-- [x] Numerical integration.
-- [x] Differential-drive kinematics.
-- [ ] Nonholonomic constraints shared by differential-drive and Ackermann-steered vehicles.
-- [ ] Curvature, signed turning radius, steering limits, and the kinematic bicycle model as a comparative worked example.
-- [ ] Velocity, acceleration, curvature, and jerk constraints for smooth trajectories across ground, manipulation, and flight embodiments.
-- [ ] Newtonian mechanics.
-- [ ] Force, torque, friction, and actuator limits.
-- [ ] Feedback and proportional control.
-- [ ] Integral and derivative control.
-- [ ] Stability intuition and transient response.
-- [ ] Delay, saturation, wind-up, and disturbance rejection.
-- [ ] Complete a quick test after every major concept.
-- [ ] Pass the cumulative Phase 1 test.
-- [x] Compile the current notes as a Quarto HTML book.
-- [ ] Compile each prerequisite learning block before implementing its dependent capability.
+### Scope boundary
 
-### Implement and document
+- Phase 1 includes reusable forward and velocity kinematics plus one educational manipulator laboratory: closed-form 2R and numerical inverse kinematics, a 3R planar redundancy example, bounded manipulability and null-space reasoning, a deterministic 2R dynamic plant, joint trajectories, and classical joint control.
+- The Phase 1 manipulator is a numerical teaching instrument, not a manipulation product. It uses modern C++, Eigen, deterministic tests, and offline visualisation; it has no gripper, contact, grasping, collision scene, object mission, perception dependency, ROS runtime, or Gazebo arm.
+- Phase 7 owns the spatial six- or seven-degree-of-freedom product: Pinocchio validation, production URDF/SRDF, `ros2_control`, MoveIt 2, collision-aware planning, gripper and contact models, task-space force-aware control, mission execution, recovery, and safety evidence. It reuses rather than reteaches Phase 1 foundations.
+- Ackermann steering and the kinematic bicycle model remain a mathematical comparison. Do not create a second vehicle implementation.
+- Probabilistic odometry, covariance estimation, sensor fusion, and slip estimation belong to Phase 2. Obstacle-aware and kinodynamic planning belong to Phase 5.
+- OpenCV and PCL enter with perception in Phase 3. Pinocchio, `ros2_control`, and MoveIt 2 enter with the Phase 7 manipulation product. Phase 1 uses modern C++, CMake, Eigen, GTest, ROS 2, `tf2`, Gazebo, and Python analysis only where an artifact requires them.
+- Safety evidence is limited to verified behaviour in the declared simulation and fault model; it is not a hardware or functional-safety certification.
+- Treat each concept checkbox in a note-writing block as a separate draft-and-review gate. Do not batch several unchecked learning blocks into one review.
 
-Work through the following slices serially. Each slice must remain independently testable and small enough for one or two focused development days.
+### Interface, limit, and evidence ownership
 
-- [ ] Complete the review and specification gate for the first differential-drive motion capability.
-- [x] Create `notes/04_kinematics_and_numerical_integration_implementation.qmd` alongside the first implementation block.
-- [x] Create and revise the general ROS 2 package-development workflow in `notes/05_ros2_packages_and_development_workflow.qmd`.
-- [x] Scaffold the `differential_drive_motion_model` ROS 2 Python package with its metadata and resource marker.
-- [x] Implement the wheel-to-body velocity mapping with explicit input validation.
-- [x] Add and pass focused wheel-to-body unit tests.
-- [x] Implement the differential-drive kinematic model.
+| Boundary | Owner |
+|---|---|
+| Reference geometry and kinematic feasibility | `differential_drive_trajectory`; it reports infeasible references but does not simulate actuator saturation |
+| Tracking, regulation, output limiting, and anti-windup | `differential_drive_control`; it consumes the declared measurement interface and emits bounded left/right wheel-effort requests |
+| Operational command envelope, freshness, emergency-stop priority, reset, and stopped-safe state | `motion_safety_supervisor`; it does not reproduce controller or plant dynamics |
+| Realised wheel-effort, effort slew, traction, resistance, and disturbance constraints | `differential_drive_planar_plant` offline and the selected Gazebo actuator/physics boundary in integration |
+| Offline controller performance claims | `docs/reports/phase_01_controller_benchmark.md`, backed by tested metrics and a durable configuration/results manifest |
+| Educational manipulator kinematics interfaces and deterministic correctness | `docs/02_spatial_kinematics/planar_manipulator_kinematics_lab.md` and the focused `planar_manipulator_lab` tests |
+| Educational manipulator dynamics and controller-comparison claims | `docs/reports/phase_01_planar_manipulator_lab_verification.md`, backed by the dynamics/control specification, focused tests, and frozen scenario manifest |
+| Simulation safety claims | `docs/reports/phase_01_motion_safety_verification.md`, backed by fault-injection evidence |
+| Final Phase 1 conclusion | `docs/reports/phase_01_geometry_mechanics_control_verification.md`, which references rather than duplicates the component reports |
 
-#### Spatial rigid-body geometry slice — target: 1–2 days
+### Theory-to-project map
 
-- [ ] Implement only the pure spatial-geometry operations required by the next capability: validate $SO(3)$ rotations, compose and invert $SE(3)$ transforms, transform a point, and embed a planar pose in $SE(3)$.
-- [ ] Introduce Eigen with the first C++ spatial-geometry or numerical implementation, covering fixed-size matrices and vectors, geometric transforms, decompositions, solver use, and numerical-conditioning checks required by that implementation.
-- [ ] Keep the mathematical acceptance cases independent of Eigen so they verify the model rather than the library.
-- [ ] Convert planar yaw to the normalised quaternion representation required by ROS 2 messages.
-- [ ] Add focused acceptance tests for identity, composition order, inverse round trips, point transformation, non-planar rotation, and planar embedding.
-- [ ] Exclude a general Lie-group library, exponential and logarithm maps, multiple Euler-angle conventions, optimisation, and uncertainty propagation.
+| Capability | Learning artifact | Side project and principal tools | Status |
+|---|---|---|---|
+| `P1.1` — Ideal planar motion kernel | Close Chapters 2–3 and preserve Chapters 4 and 6 | Existing `differential_drive_motion_model`, Python and `pytest` | Complete |
+| `P1.2` — Spatial geometry kernel | Finish Chapter 7; begin Chapter 8 with screw motion and spatial integration | `rigid_body_kinematics`, modern C++, CMake, Eigen, and GTest | Active: Chapter 7 reviewed; Chapter 8 prerequisite blocks next |
+| `P1.3` — General kinematics and Jacobians | Complete Chapter 8 | Extend `rigid_body_kinematics` with bounded forward and velocity kinematics | Queued |
+| `P1.4` — Planar manipulator kinematics laboratory | Chapter 10 | Begin `planar_manipulator_lab` with 2R/3R inverse kinematics, modern C++, Eigen, GTest, and offline visualisation | Queued |
+| `P1.5` — Wheel-odometry pipeline | Chapter 12 | `differential_drive_odometry`, pure Python core plus thin ROS 2 adapter, `nav_msgs`, and `tf2` | Queued |
+| `P1.6` — Differential-drive dynamics laboratory | Complete the renamed Chapter 14 | `differential_drive_planar_plant`, modern C++ and deterministic numerical tests | Queued |
+| `P1.7` — Bounded trajectory generator | Chapter 16 | `differential_drive_trajectory`, modern C++ and independent constraint checks | Queued |
+| `P1.8` — Offline controller benchmark | Chapter 18 | `differential_drive_control`, modern C++ core and Python analysis | Queued |
+| `P1.9` — Planar manipulator dynamics and control laboratory | Chapter 20 | Extend `planar_manipulator_lab` with a 2R plant, joint trajectories, classical controllers, and frozen comparisons | Queued |
+| `P1.10` — Nominal Gazebo integration | Chapter 22 implementation companion | `differential_drive_gazebo`, thin ROS 2 adapters, and evaluator-only ground truth | Queued |
+| `P1.11` — Motion safety and fault acceptance | Extend Chapter 22 | `motion_safety_supervisor`, diagnostics, fault injection, and `rosbag2` MCAP | Queued |
+| `P1.12` — Phase 1 evaluation and learning closure | Chapter 23 cumulative review | Final acceptance campaign, phase verification report, and book render | Queued |
 
-#### Wheel-odometry core slice — target: 1–2 days
+### P1.1 — Close the preserved ideal planar motion kernel
 
-- [ ] Implement a pure, stateless wheel-odometry update from previous and current wheel angles, elapsed time, geometry, and previous pose.
-- [ ] Reuse the existing differential-drive mappings and exact integration instead of duplicating their equations.
-- [ ] Return the updated planar pose and body twist with explicit frames, units, and timestamp assumptions.
-- [ ] Add focused acceptance tests for no motion, straight motion, rotation in place, curved motion, variable intervals, wheel ordering, and invalid inputs.
-- [ ] Exclude covariance, encoder noise, slip estimation, encoder rollover, filtering, and control.
+Do not rewrite or port the accepted implementation during this capability.
 
-#### ROS 2 odometry adapter slice — target: 1 day
+#### Learn and review
 
-- [ ] Add one minimal ROS 2 node that subscribes to wheel joint states and publishes `nav_msgs/Odometry` plus the `odom` to `base_link` transform.
-- [ ] Declare only the required parameters: wheel names, wheel radius, track width, and frame names.
-- [ ] Define first-sample, duplicate-timestamp, out-of-order, missing-joint, and non-finite-input behaviour.
-- [ ] Add focused ROS interface tests without adding unrelated launch or telemetry infrastructure.
+- [x] **Active:** Complete and self-check the retrieval and cumulative tests in `notes/03_kinematics_and_numerical_integration.qmd`; correct any blocking misconception.
+- [x] Add a cumulative test with answers or hints to `notes/02_geometry_and_coordinate_frames.qmd`, review it, correct any blocking misconception, and render and inspect the updated chapter.
 
-#### Gazebo acceptance slice — target: 1–2 days
+#### Verify and close
 
-- [ ] Add the smallest differential-drive Gazebo model and launch path needed to exercise the odometry node.
-- [ ] Run one deterministic acceptance sequence containing straight motion, rotation in place, and a curved segment.
-- [ ] Compare published odometry with simulator ground truth using declared position and heading tolerances.
-- [ ] Exclude sensor noise studies, slip modelling, visual tooling, controller comparison, and general simulation infrastructure from this slice.
-
-#### Dynamics and control capabilities — begin after the odometry acceptance slice
-
-- [ ] Implement trajectory generation.
-- [ ] Enforce declared velocity, acceleration, curvature where applicable, and jerk limits in trajectory generation without creating a production self-driving-car stack.
-- [ ] Implement an open-loop baseline.
-- [ ] Implement proportional control.
-- [ ] Implement PID control.
-- [ ] Add velocity and acceleration limits.
-- [ ] Add saturation handling.
-- [ ] Add command validation.
-- [ ] Add watchdog behaviour.
-- [ ] Add emergency stop.
-- [ ] Add stopped-safe fallback.
-- [ ] Add control telemetry and diagnostics.
-- [ ] Add unit and simulation tests.
-
-### Verify, integrate, and exit
-
-- [ ] Freeze straight and curved trajectory scenarios.
-- [ ] Test sensor noise.
-- [ ] Test command latency.
-- [ ] Test actuator saturation.
-- [ ] Test model mismatch.
-- [ ] Test external disturbances.
-- [ ] Compare open-loop, proportional, and PID control.
-- [ ] Measure tracking error, overshoot, settling time, and control effort.
-- [ ] Verify the trajectory generator respects its velocity, acceleration, curvature, and jerk constraints.
-- [ ] Verify constraint violations remain within requirements.
-- [ ] Verify watchdog and emergency-stop behaviour.
-- [ ] Explain the observed behaviour from the documented equations.
-- [ ] Complete the Phase 1 review and release.
+- [x] Check that the equations, conventions, units, validation behaviour, and exclusions agree across the theory, specification, implementation companion, public API, and deterministic tests.
+- [x] Re-run the package test suite and link the result if the accepted source has changed; otherwise preserve the existing evidence.
+- [x] Close `P1.1` without reimplementing accepted work.
 
 Evidence:
 
-- Learning and requirements record: [docs/01_motion_models/differential_drive_motion_model.md](docs/01_motion_models/differential_drive_motion_model.md)
-- Unified notation: [notes/notation.qmd](notes/notation.qmd)
-- Linear algebra chapter draft: [notes/01_linear_algebra_foundations.qmd](notes/01_linear_algebra_foundations.qmd) — reviewed
-- Geometry chapter draft: [notes/02_geometry_and_coordinate_frames.qmd](notes/02_geometry_and_coordinate_frames.qmd) — reviewed
-- Kinematics and numerical integration chapter: [notes/03_kinematics_and_numerical_integration.qmd](notes/03_kinematics_and_numerical_integration.qmd) — reviewed
-- Implementation companion: [notes/04_kinematics_and_numerical_integration_implementation.qmd](notes/04_kinematics_and_numerical_integration_implementation.qmd)
-- ROS 2 package workflow: [notes/05_ros2_packages_and_development_workflow.qmd](notes/05_ros2_packages_and_development_workflow.qmd)
-- Planar rigid-body motion, $SE(2)$, and twists: [notes/06_planar_rigid_body_motion_se2_and_twists.qmd](notes/06_planar_rigid_body_motion_se2_and_twists.qmd) — reviewed
-- Degrees of freedom and spatial motion, $SO(3)$, and $SE(3)$: [notes/07_degrees_of_freedom_and_spatial_motion_so3_se3.qmd](notes/07_degrees_of_freedom_and_spatial_motion_so3_se3.qmd) — drafting and review in progress
-- Wheeled-robot constraints, Jacobians, and odometry: `notes/08_wheeled_robot_constraints_jacobians_and_odometry.qmd` — planned
-- Dynamics, forces, torque, friction, and actuator limits: `notes/09_dynamics_forces_torque_friction_and_actuator_limits.qmd` — planned; the current draft still requires renaming
-- Package source: [ros_ws/src/differential_drive_motion_model](ros_ws/src/differential_drive_motion_model)
-- Deterministic motion-model verification: [ros_ws/src/differential_drive_motion_model/test](ros_ws/src/differential_drive_motion_model/test) — 50 tests, 0 errors, 0 failures, and 0 skipped through `colcon test`
-- Release: _TBD_
-
-## Phase 2 — Probability and state estimation
-
-### Capability order
-
-Complete separate cycles for the odometry-only and naive-fusion baselines, the Kalman filter, the extended Kalman filter, estimator-consistency monitoring, and finally the UKF and object-tracking primitives. Learn gating and data association only after Gaussian state estimation is understood and verified.
-
-### Learn, review, and specify
-
-- [ ] Conditional probability and Bayes' rule.
-- [ ] Gaussian random variables.
-- [ ] Expectation and covariance.
-- [ ] Recursive Bayesian filtering.
-- [ ] Kalman-filter derivation.
-- [ ] Nonlinear measurement models.
-- [ ] Extended Kalman filters.
-- [ ] Unscented transforms and the unscented Kalman filter.
-- [ ] Observability.
-- [ ] Sensor bias, drift, latency, and calibration.
-- [ ] Innovation statistics and uncertainty consistency.
-- [ ] Mahalanobis distance and statistical measurement gating.
-- [ ] Nearest-neighbour data association and the assumptions that bound its use.
-- [ ] Track initiation, confirmation, coasting, and deletion under missed detections and false positives.
-- [ ] Redundant-sensor disagreement and estimator-integrity monitoring.
-- [ ] Numerical conditioning.
-- [ ] Complete a quick test after every major concept.
-- [ ] Pass the cumulative Phase 2 test.
-- [ ] Compile each prerequisite learning block before implementing its dependent capability.
-
-### Implement and document
-
-- [ ] Define wheel-odometry sensor and process models.
-- [ ] Define the IMU model.
-- [ ] Define landmark or simulated-position observations.
-- [ ] Implement the odometry-only baseline.
-- [ ] Implement a naive-fusion baseline.
-- [ ] Implement the Kalman filter.
-- [ ] Implement the extended Kalman filter.
-- [ ] Implement a bounded UKF comparison only after the EKF capability passes its acceptance cases.
-- [ ] Publish covariance.
-- [ ] Monitor innovations.
-- [ ] Publish sensor-health flags.
-- [ ] Implement reusable measurement gating and a position-and-velocity tracking baseline for later perception capabilities.
-- [ ] Define track lifecycle and invalid, stale, duplicate, and out-of-order measurement behaviour.
-- [ ] Detect persistent disagreement between redundant measurements.
-- [ ] Inject noise, bias, latency, outliers, and dropout.
-- [ ] Add estimator unit, integration, and simulation tests.
-
-### Verify, integrate, and exit
-
-- [ ] Compare odometry only, naive fusion, tuned EKF, and mis-specified EKF.
-- [ ] Test sensor dropout and recovery.
-- [ ] Measure position and orientation error.
-- [ ] Evaluate innovation statistics.
-- [ ] Evaluate uncertainty consistency.
-- [ ] Compare EKF and UKF behaviour on one declared nonlinear case without treating either method as universally superior.
-- [ ] Test gating and data association with clutter, missed detections, crossing targets, and incorrect noise assumptions.
-- [ ] Verify sensor disagreement becomes observable before it can silently dominate the estimate.
-- [ ] Verify incorrect assumptions are detectable.
-- [ ] Verify sensor loss triggers a degraded mode.
-- [ ] Complete the Phase 2 review and release.
-
-Evidence:
-
-- Learning and requirements record: _TBD_
-- Lecture notes and tests: _TBD_
-- Implementation: _TBD_
-- Verification report: _TBD_
-- Release: _TBD_
-
-## Phase 3 — Perception and semantic understanding
-
-### Capability order
-
-Complete separate cycles for calibrated sensor preprocessing, the simplest credible detector or segmenter, confidence calibration, three-dimensional geometric perception, and multi-object tracking. Use simulated or classical detections before adding a learned 3D detector so tracking and fusion do not depend on an unnecessarily large perception model.
-
-### Learn, review, and specify
-
-- [ ] Camera and pinhole models.
-- [ ] Projective geometry and homogeneous image coordinates.
-- [ ] Rigid transforms and geometric error.
-- [ ] Optics, lighting, field of view, and resolution.
-- [ ] Depth and LiDAR measurement geometry.
-- [ ] Three-dimensional point-cloud coordinates, filtering, voxelisation, and dominant-plane removal.
-- [ ] Camera–range-sensor extrinsic calibration and temporal synchronisation.
-- [ ] Three-dimensional bounding geometry and association between camera and range detections.
-- [ ] Neural networks and backpropagation.
-- [ ] CNNs and representation learning.
-- [ ] Transfer learning.
-- [ ] Augmentation and class imbalance.
-- [ ] Precision, recall, and calibration.
-- [ ] Multi-object tracking outputs, identity management, and tracking metrics.
-- [ ] Inference latency and resource constraints.
-- [ ] Domain shift and out-of-distribution inputs.
-- [ ] Complete a quick test after every major concept.
-- [ ] Pass the cumulative Phase 3 test.
-- [ ] Compile each prerequisite learning block before implementing its dependent capability.
-
-### Implement and document
-
-- [ ] Calibrate camera and range-sensor models using documented mathematics and OpenCV only as the bounded implementation layer.
-- [ ] Implement sensor preprocessing with the minimum required OpenCV modules.
-- [ ] Implement the minimum point-cloud filtering and clustering needed by a bounded 3D perception capability using one declared PCL subset; do not duplicate the capability in Open3D.
-- [ ] Synchronise multimodal observations and transform them into a shared frame with explicit timestamp tolerances.
-- [ ] Define and version the dataset.
-- [ ] Write annotation and data-quality rules.
-- [ ] Train or adapt a detector or segmenter.
-- [ ] Calibrate model confidence.
-- [ ] Add object tracking.
-- [ ] Publish position, orientation where observable, velocity where estimated, bounding geometry, timestamp, frame, confidence, covariance, and track identifier through a shared 3D observation interface.
-- [ ] Project detections into the shared world frame.
-- [ ] Create the training and evaluation pipeline.
-- [ ] Register model artefacts and configurations.
-- [ ] Implement the ROS inference node.
-- [ ] Add latency, resource, and failure telemetry.
-
-### Verify, integrate, and exit
-
-- [ ] Test normal conditions.
-- [ ] Test blur.
-- [ ] Test low light.
-- [ ] Test partial occlusion.
-- [ ] Test unfamiliar backgrounds.
-- [ ] Test sensor noise.
-- [ ] Test calibration error, cross-sensor timestamp offset, missed detections, false positives, and crossing tracks.
-- [ ] Measure accuracy, calibration, latency, and resource use.
-- [ ] Measure downstream navigation impact.
-- [ ] Verify output frames and timestamps.
-- [ ] Verify confidence degrades under adverse conditions.
-- [ ] Verify fused outputs preserve frame, time, covariance, and provenance information needed by manipulation, road-agent prediction, and UAV planning.
-- [ ] Reproduce evaluation from versioned data and model artefacts.
-- [ ] Complete the Phase 3 review and release.
-
-Evidence:
-
-- Learning and requirements record: _TBD_
-- Lecture notes and tests: _TBD_
-- Dataset and model: _TBD_
-- Implementation: _TBD_
-- Verification report: _TBD_
-- Release: _TBD_
-
-## Phase 4 — Mapping, SLAM, and memory
-
-### Capability order
-
-Complete separate cycles for occupancy mapping, localisation and SLAM integration, one bounded scan-matching capability, static-versus-dynamic world-state separation, and finally semantic and episodic memory. Do not implement multiple registration algorithms merely to fill a catalogue.
-
-### Learn, review, and specify
-
-- [ ] Occupancy grids and Bayesian map updates.
-- [ ] Localisation, mapping, and SLAM.
-- [ ] Pose graphs and graph optimisation.
-- [ ] Loop closure.
-- [ ] Point-cloud registration residuals, correspondence, convergence, degeneracy, and initialisation sensitivity.
-- [ ] Iterative Closest Point as the required scan-matching method and Normal Distributions Transform at comparative conceptual depth.
-- [ ] Static geometry, dynamic occupancy, moving-object filtering, and temporal map confidence.
-- [ ] Spatial indexing and nearest-neighbour retrieval.
-- [ ] Working memory.
-- [ ] Spatial-semantic memory.
-- [ ] Episodic memory.
-- [ ] Replay, retrieval, forgetting, and invalidation.
-- [ ] Computational ideas from place cells, grid cells, and predictive coding.
-- [ ] Complete a quick test after every major concept.
-- [ ] Pass the cumulative Phase 4 test.
-- [ ] Compile each prerequisite learning block before implementing its dependent capability.
-
-### Implement and document
-
-- [ ] Implement or integrate occupancy mapping.
-- [ ] Reuse the project-owned Phase 2 foundational filters without wrapping them in GTSAM, then introduce GTSAM for the bounded pose-graph, smoothing, or SLAM capability that requires factor graphs.
-- [ ] Integrate SLAM while keeping the measurement front end, factor definitions, frame conventions, and failure handling explicit rather than hidden behind GTSAM.
-- [ ] Implement or integrate one bounded ICP-based scan-matching capability with declared convergence and failure behaviour.
-- [ ] Keep dynamic agents out of the persistent static map and represent their time-indexed occupancy separately.
-- [ ] Attach semantic observations to the map.
-- [ ] Define the current working-state representation.
-- [ ] Define the episodic event schema.
-- [ ] Include provenance, time, confidence, and invalidation fields.
-- [ ] Implement event retrieval.
-- [ ] Implement deterministic mission replay.
-- [ ] Version maps and memory stores.
-- [ ] Implement environmental change detection.
-- [ ] Age or invalidate dynamic and changed map content using time, confidence, and provenance.
-- [ ] Implement stale-memory invalidation.
-
-### Verify, integrate, and exit
-
-- [ ] Compare no persistent memory, geometric memory, and geometric-plus-episodic memory.
-- [ ] Run repeated missions.
-- [ ] Run missions in changed environments.
-- [ ] Test registration under poor initialisation, sparse geometry, repeated structure, and moving-object contamination.
-- [ ] Verify dynamic objects cannot silently become permanent obstacles or corrupt loop closure.
-- [ ] Measure mission efficiency and retrieval cost.
-- [ ] Measure stale-memory failures.
-- [ ] Verify memory improves at least one mission measure.
-- [ ] Verify stale memories cannot silently dominate decisions.
-- [ ] Complete the Phase 4 review and release.
-
-Evidence:
-
-- Learning and requirements record: _TBD_
-- Lecture notes and tests: _TBD_
-- Implementation: _TBD_
-- Verification report: _TBD_
-- Release: _TBD_
-
-## Phase 5 — Planning and autonomous decision-making
-
-### Capability order
-
-Complete separate cycles for mission execution, global planning, static local collision avoidance, trajectory optimisation or MPC, and only then prediction-aware planning around dynamic agents. The dynamic-agent capability consumes tracking output from Phase 3 and time-indexed world state from Phase 4.
-
-### Learn, review, and specify
-
-- [ ] Graphs, queues, heaps, and complexity.
-- [ ] Dijkstra and A*.
-- [ ] Admissible heuristics.
-- [ ] Configuration space and collision detection.
-- [ ] Sampling-based planning, RRT, and RRT*.
-- [ ] Constrained optimisation.
-- [ ] Splines and trajectory smoothing.
-- [ ] Model-predictive control.
-- [ ] Expected utility, risk, and constraints.
-- [ ] Constant-velocity, constant-acceleration, and constant-turn-rate motion predictions for dynamic agents.
-- [ ] Multi-hypothesis futures, predicted occupancy, time to collision, collision probability, and uncertainty-aware risk.
-- [ ] Candidate behaviours such as proceed, slow, stop, yield, and replan.
-- [ ] Chance constraints and conservative fallback when prediction confidence is inadequate.
-- [ ] Behaviour trees and hierarchical planning.
-- [ ] Complete a quick test after every major concept.
-- [ ] Pass the cumulative Phase 5 test.
-- [ ] Compile each prerequisite learning block before implementing its dependent capability.
-
-### Implement and document
-
-- [ ] Define a validated mission schema.
-- [ ] Implement the mission executive.
-- [ ] Implement A* global planning.
-- [ ] Implement a local collision-avoidance baseline.
-- [ ] Integrate Nav2 only after the project-owned global-planning and local-avoidance baselines pass, and use it as the bounded production navigation baseline rather than a replacement for their documented algorithms.
-- [ ] Evaluate one sampling-based planner.
-- [ ] Select one optimisation solver only after writing the trajectory-optimisation or MPC problem, dimensions, constraints, tolerances, failure behaviour, and benchmark; do not add multiple solver stacks.
-- [ ] Implement trajectory optimisation or MPC behind a solver-independent problem and result interface.
-- [ ] Add a dynamic-agent prediction interface that supplies trajectories, probabilities or covariance, time horizon, and provenance.
-- [ ] Evaluate candidate actions against predicted occupancy and declared risk thresholds.
-- [ ] Add proceed, slow, stop, yield, and replan behaviours without building road-lane or traffic-rule infrastructure.
-- [ ] Handle planner timeout.
-- [ ] Handle infeasible goals.
-- [ ] Implement replanning.
-- [ ] Log alternatives, costs, constraints, and selection.
-- [ ] Keep the safety supervisor authoritative.
-
-### Verify, integrate, and exit
-
-- [ ] Test different obstacle densities.
-- [ ] Test narrow passages.
-- [ ] Test moving obstacles.
-- [ ] Test multimodal or incorrect agent predictions, occlusion, delayed tracks, horizon truncation, and overconfident uncertainty.
-- [ ] Test localisation uncertainty.
-- [ ] Test blocked goals.
-- [ ] Test limited computation.
-- [ ] Test energy-aware route costs.
-- [ ] Measure success, path cost, clearance, latency, and energy.
-- [ ] Measure missed conflicts, unnecessary stops, minimum separation, progress, and prediction-to-decision latency.
-- [ ] Verify planner failure triggers fallback.
-- [ ] Complete the mobile-robot inspection mission.
-- [ ] Complete the Phase 5 review and release.
-
-Evidence:
-
-- Learning and requirements record: _TBD_
-- Lecture notes and tests: _TBD_
-- Implementation: _TBD_
-- Verification report: _TBD_
-- Release: _TBD_
-
-## Phase 6 — Reusable reinforcement-learning foundations
-
-### Capability order
-
-Use exactly one bounded mobile-robot task and complete separate cycles for the environment and logging contract, the classical baseline, PPO, SAC, TD3, log-based imitation and offline evaluation, and finally one constrained-policy experiment. Reuse the resulting actor-critic, replay, cost, logging, evaluation, and inference interfaces in Phase 8; do not reimplement general PPO, SAC, or TD3 infrastructure for the manipulator.
-
-### Learn, review, and specify
-
-- [ ] MDPs and partial observability.
-- [ ] Policy gradients.
-- [ ] Actor-critic methods.
-- [ ] PPO.
-- [ ] SAC.
-- [ ] Deterministic policy gradients and DDPG as prerequisites for understanding TD3; do not require a separate DDPG benchmark.
-- [ ] TD3, twin critics, target-policy smoothing, and delayed policy updates.
-- [ ] Replay, entropy, target networks, and critic bias.
-- [ ] Recurrent and goal-conditioned RL.
-- [ ] Hierarchical RL.
-- [ ] Constrained MDPs, distinct reward and safety-cost signals, Lagrangian relaxation, PID-Lagrangian multiplier updates, and safe exploration.
-- [ ] Behavioural cloning, imitation from logged trajectories, and covariate shift.
-- [ ] Offline RL, counterfactual limits of fixed logs, and offline-to-online learning.
-- [ ] Dataset imbalance, rare safety-critical events, and intervention-labelled data.
-- [ ] Curriculum learning and domain randomisation.
-- [ ] Distribution shift and robust evaluation.
-- [ ] Complete a quick test after every major concept.
-- [ ] Pass the cumulative Phase 6 test.
-- [ ] Compile each prerequisite learning block before implementing its dependent capability.
-
-### Implement and document
-
-- [ ] Select exactly one bounded RL task.
-- [ ] Explain why learning may add value.
-- [ ] Freeze the classical baseline.
-- [ ] Freeze a simulator-neutral environment and evaluation API expressed with explicit NumPy/PyTorch-compatible observations, actions, terminations, truncations, rewards, safety costs, and task context.
-- [ ] Keep reward, safety-cost, replay, trajectory, model, and held-out evaluation logic independent of ROS; connect ROS and Gazebo through bounded adapters.
-- [ ] Define reward, each safety cost, its aggregation horizon, and its allowed budget independently of the hard safety supervisor.
-- [ ] Define and version a reusable episodic trajectory schema with observations, actions, rewards, safety costs, terminations, timestamps, task context, and safety interventions.
-- [ ] Use NumPy/SciPy for transparent numerical baselines and PyTorch for learned models; do not introduce a general RL framework unless it supplies a stated requirement without hiding the algorithm under study.
-- [ ] Define one structured experiment-configuration and artefact-tracking workflow for seeds, configurations, checkpoints, metrics, failures, interaction counts, and wall-clock cost.
-- [ ] Add deterministic batched or multiprocessing environment collection only after the single-environment path passes; record worker seeding, episode ownership, queue bounds, cancellation, and shutdown behaviour.
-- [ ] Implement or reproduce PPO.
-- [ ] Implement or reproduce SAC.
-- [ ] Implement or reproduce TD3 using the same environment, observation, action, and evaluation contracts.
-- [ ] Implement one PID-Lagrangian constrained extension of PPO or SAC only after its unconstrained parent baseline passes.
-- [ ] Keep the classical safety wrapper authoritative; the learned cost critic and multiplier must not replace hard action validation or fallback.
-- [ ] Track seeds and configurations.
-- [ ] Track checkpoints and training curves.
-- [ ] Preserve failure episodes and implement one bounded behavioural-cloning baseline from the frozen mobile-robot logs.
-- [ ] Keep offline evaluation claims separate from online or simulator-interaction evidence.
-- [ ] Add curriculum or domain randomisation only with a stated hypothesis.
-- [ ] Add the classical safety wrapper.
-- [ ] Implement the ROS inference interface as a narrow adapter over the framework-independent policy contract.
-- [ ] Define safe behaviour when the policy is missing or invalid.
-
-### Verify, integrate, and exit
-
-- [ ] Compare the classical baseline, PPO, SAC, and TD3 under matched scenarios and declared interaction budgets.
-- [ ] Compare the PID-Lagrangian variant with its unconstrained parent using matched initial conditions, reward, safety costs, and hard-safety limits.
-- [ ] Compare the log-based behavioural-cloning baseline without requiring it to outperform interactive RL.
-- [ ] Evaluate multiple seeds.
-- [ ] Evaluate held-out scenarios.
-- [ ] Measure average and worst-case performance.
-- [ ] Measure sample efficiency and failure rate.
-- [ ] Measure cumulative safety cost, budget exceedance, constraint violations, multiplier response, and reward–constraint trade-offs.
-- [ ] Measure robustness and inference latency.
-- [ ] Record safety interventions.
-- [ ] Test missing, stale, non-finite, out-of-range, and late policy outputs independently of task reward.
-- [ ] Verify the constrained learner cannot bypass the classical safety wrapper and does not turn an average cost budget into a per-step safety guarantee.
-- [ ] Retain a learned policy only if it earns a measured advantage.
-- [ ] Verify safe operation without the policy.
-- [ ] Complete the Phase 6 review and release.
-
-Evidence:
-
-- Learning and requirements record: _TBD_
-- Lecture notes and tests: _TBD_
-- Training artefacts: _TBD_
-- Reward, safety-cost, constraint-budget, and intervention traces: _TBD_
-- Implementation: _TBD_
-- Verification report: _TBD_
-- Release: _TBD_
-
-## Phase 7 — Classical simulated manipulation
-
-### Capability order
-
-Complete separate cycles for the arm model and forward kinematics, inverse and differential kinematics, planning-scene collision checking, trajectory execution and control, grasping, and finally the classical inspection executive. Use simulator ground-truth object poses until the classical manipulation baseline passes; perception integration is a later bounded capability, not a prerequisite for validating arm motion.
-
-### Learn, review, and specify
-
-- [ ] Serial kinematic chains and revolute and prismatic joints.
-- [ ] Joint space, configuration space, and task space.
-- [ ] Forward kinematics and the product-of-exponentials representation.
-- [ ] Analytical and numerical inverse kinematics.
-- [ ] Geometric Jacobians and differential inverse kinematics.
-- [ ] Redundancy, null-space motion, singularities, and manipulability.
-- [ ] Joint position, velocity, acceleration, and torque limits.
-- [ ] Manipulator rigid-body dynamics, gravity, Coriolis, centrifugal, friction, and external-contact terms.
-- [ ] End-effector frames, grasp frames, contact normals, friction cones, and grasp stability.
-- [ ] Joint-space, task-space, impedance, and admittance control at the depth required by the baseline.
-- [ ] Configuration-space collision checking, time-indexed collision prediction, swept volumes, and safety envelopes.
-- [ ] Specify one inspection-oriented grasp, reorientation, and placement task with safe retreat behaviour.
-- [ ] Complete quick tests after each major concept and cumulative tests after each capability-sized learning block.
-- [ ] Compile each approved prerequisite learning block before implementing its dependent capability.
-
-### Implement and document
-
-- [ ] Add one simulated six- or seven-degree-of-freedom manipulator; exclude multiple arm platforms and physical hardware.
-- [ ] Define its URDF, SRDF, frames, joints, limits, collision geometry, and controllers.
-- [ ] Integrate `ros2_control` and MoveIt 2 through requirements-traced interfaces.
-- [ ] Introduce Pinocchio as the bounded articulated-kinematics and dynamics library after the corresponding derivations are approved; keep MoveIt 2 responsible for production manipulation integration and planning.
-- [ ] Implement or verify forward kinematics against known configurations and cross-check Pinocchio, MoveIt 2, and independently derived acceptance cases without treating agreement between two libraries as ground truth.
-- [ ] Implement or integrate inverse kinematics with explicit convergence, joint-limit, and singularity behaviour.
-- [ ] Verify Pinocchio Jacobian, inverse-dynamics, mass-matrix, gravity, and nonlinear-effect outputs required by the baseline against known cases and physical invariants.
-- [ ] Establish the planning scene and environment and self-collision checking.
-- [ ] Generate and execute joint-space and Cartesian trajectories with declared velocity, acceleration, and jerk limits.
-- [ ] Add gripper control and grasp-state detection.
-- [ ] Add dynamic-obstacle predictions and safety envelopes to trajectory validation only after static planning passes.
-- [ ] Implement a deterministic inspection executive for reach, grasp, lift, reorient, inspect, place, retreat, and stopped-safe states.
-- [ ] Define planning timeout, unreachable goal, invalid state, collision, failed grasp, stale object pose, and excessive-force behaviour.
-- [ ] Record joint state, end-effector pose, commands, planning results, contact events, safety interventions, and timing.
-
-### Verify, integrate, and exit
-
-- [ ] Test reachable, unreachable, multiple-solution, near-singular, and joint-limit cases.
-- [ ] Test environment collision, self-collision, moving-obstacle, and planning-timeout cases.
-- [ ] Test object-pose error, failed grasp, changed mass, friction variation, and safe retreat.
-- [ ] Measure task success, end-effector error, planning and execution latency, path length, clearance, peak contact force, and control effort.
-- [ ] Verify unsafe trajectories are rejected before execution.
-- [ ] Verify every declared failure reaches a bounded hold, retreat, or stopped-safe state.
-- [ ] Freeze the classical manipulation baseline and its benchmark before starting Phase 8 learning experiments.
-- [ ] Complete the Phase 7 review and capability release.
-
-Evidence:
-
-- Learning and requirements record: _TBD_
-- Lecture notes and tests: _TBD_
-- Manipulator description and classical implementation: _TBD_
-- Classical benchmark: _TBD_
-- Verification report: _TBD_
-- Release: _TBD_
-
-## Phase 8 — Imitation and reinforcement learning for manipulation
-
-### Capability order
-
-Complete separate cycles for the demonstration-data contract, pointwise behavioural cloning, recovery data, IQL on the frozen dataset, action chunking if justified, goal-conditioned SAC with hindsight replay, RLPD for offline-to-online learning, and one residual policy. Advance through the declared pairwise gates rather than training every method concurrently. Add at most one generative imitation policy after simpler baselines reveal a specific multimodality limitation.
-
-### Learn, review, and specify
-
-- [ ] Expert demonstrations and behaviour cloning.
-- [ ] Covariate shift and compounding execution error.
-- [ ] Recovery demonstrations, interventions, and DAgger.
-- [ ] Observation histories and action chunking.
-- [ ] Multimodal expert behaviour and conditional generative policies at the depth required to choose one experiment.
-- [ ] Goal-conditioned MDPs, sparse rewards, and Hindsight Experience Replay.
-- [ ] Offline dataset support, out-of-distribution actions, expectile value regression, advantage-weighted policy extraction, and IQL.
-- [ ] Conservative value learning and CQL at the conceptual depth required to contrast it with IQL; do not require a second offline-RL implementation without a specific pessimism hypothesis.
-- [ ] Demonstration-seeded replay, balanced offline and online sampling, critic ensembles, and RLPD for offline-to-online learning.
-- [ ] Residual reinforcement learning over a classical controller.
-- [ ] Constrained policies, safety shielding, and independent action validation.
-- [ ] Domain randomisation, out-of-distribution detection, and sim-to-real limits.
-- [ ] Specify the hypotheses, baselines, dataset splits, interventions, reward terms, constraints, and falsification conditions before training.
-- [ ] Complete quick tests after each major concept and cumulative tests after each capability-sized learning block.
-- [ ] Compile each approved prerequisite learning block before implementing its dependent capability.
-
-### Implement and document
-
-- [ ] Reuse the Phase 6 trajectory schema and extend it only for manipulator state, object state, task context, contact, and intervention data.
-- [ ] Keep the manipulation learning environment and policies behind the Phase 6 simulator-neutral contracts; use Gazebo for authoritative integration and evaluation.
-- [ ] Consider a second simulator only if a recorded Phase 8 benchmark demonstrates a necessary contact, throughput, reproducibility, or parallel-sampling advantage and quantifies model-conversion and cross-simulator discrepancy.
-- [ ] Collect versioned scripted-expert or teleoperated demonstrations with episode-level training, validation, and held-out splits.
-- [ ] Implement a pointwise behavioural-cloning baseline.
-- [ ] Collect and evaluate recovery and intervention-labelled demonstrations.
-- [ ] Audit state-action coverage, demonstrator quality, interventions, failures, and held-out support before making an offline-RL claim.
-- [ ] Implement IQL as the principal fixed-dataset RL baseline using the same frozen data splits as behavioural cloning.
-- [ ] Add observation history or action chunking only under a stated temporal-dependence hypothesis.
-- [ ] Reuse the Phase 6 SAC infrastructure for goal-conditioned SAC with hindsight replay.
-- [ ] Implement RLPD using the frozen demonstration dataset and a declared simulator-interaction budget only after the behavioural-cloning, IQL, and online SAC baselines are frozen.
-- [ ] Implement one residual policy that corrects a frozen classical controller.
-- [ ] Add at most one ACT-, diffusion-, or flow-based policy only if pointwise or chunked cloning demonstrably averages incompatible actions.
-- [ ] Keep the Phase 7 planner, controller, trajectory validator, and safety supervisor available and authoritative.
-- [ ] Reject missing, stale, late, non-finite, out-of-range, collision-inducing, and constraint-violating learned actions.
-- [ ] Record dataset, model, optimiser, seed, checkpoint, latency, intervention, and safety metadata.
-
-### Verify, integrate, and exit
-
-- [ ] Compare behavioural cloning with IQL under identical fixed data, splits, observations, and evaluation scenarios.
-- [ ] Compare goal-conditioned SAC with HER against RLPD under matched online-interaction budgets and identical prior data.
-- [ ] Compare the residual policy with its frozen classical parent and the relevant non-residual learner.
-- [ ] Summarise the admitted classical, behavioural-cloning, recovery-informed, IQL, goal-conditioned SAC, RLPD, and residual results without treating unmatched data or interaction budgets as a fair leaderboard.
-- [ ] Evaluate multiple seeds and held-out object poses, masses, friction values, geometries, backgrounds, and pose errors.
-- [ ] Test partial observation, disturbed grasps, inference delay, missing policy, invalid policy output, and safety-wrapper intervention.
-- [ ] Measure success, data and environment-step efficiency, collision and constraint violations, peak contact force, recovery, generalisation, latency, and worst-case performance.
-- [ ] Test IQL under low-coverage and mixed-quality datasets and report where fixed-data support prevents a justified policy-improvement claim.
-- [ ] Test whether RLPD improves interaction efficiency rather than merely benefiting from more total data or computation.
-- [ ] Retain a learned method only if it earns a declared advantage over the relevant simpler baseline.
-- [ ] Verify the manipulator remains operational and safe without any learned policy.
-- [ ] Preserve negative results and observed reward or dataset failure modes.
-- [ ] Complete the Phase 8 review and capability release.
-
-Evidence:
-
-- Learning and requirements record: _TBD_
-- Lecture notes and tests: _TBD_
-- Demonstration dataset and data card: _TBD_
-- Dataset coverage and offline-RL admissibility audit: _TBD_
-- Training artefacts and models: _TBD_
-- Verification report: _TBD_
-- Release: _TBD_
-
-## Phase 9 — World models, road-agent prediction, and core research release
-
-### Capability order
-
-Complete separate cycles for the manipulator analytical model and data service, the neural transition model, the physics-plus-residual model, predictive uncertainty, explicit model-based planning, one TD-MPC2 learned latent-model baseline, road-agent tracking, road-agent prediction, and the bounded risk-aware decision benchmark. Freeze and reproduce the core release only after these capabilities pass their own gates.
-
-### Learn, review, and specify
-
-- [ ] System identification and analytical manipulator dynamics.
-- [ ] Neural transition and residual dynamics models.
-- [ ] Probabilistic prediction, aleatoric and epistemic uncertainty, ensembles, and calibration.
-- [ ] Latent variables and variational inference only if observable state proves insufficient.
-- [ ] One-step and rollout error, compounding model error, and model exploitation.
-- [ ] Random shooting, cross-entropy planning, uncertainty penalties, and horizon limits.
-- [ ] Dyna, PETS, and explicit model-based RL as foundations for planning with learned dynamics.
-- [ ] TD-MPC and TD-MPC2, including latent dynamics, temporal-difference value learning, terminal-value estimates, and local trajectory optimisation.
-- [ ] DreamerV3 and imagined latent rollouts at the conceptual depth required to recognise when partial observability or pixels justify it as an alternative.
-- [ ] Select TD-MPC2 by default; permit DreamerV3 to replace it through a recorded decision only when the observation model requires latent memory or visual representation learning, and exclude implementing both for the core release.
-- [ ] Road-agent Kalman and UKF tracking, gating, association, and track lifecycle as applications of Phases 2–3.
-- [ ] Constant-velocity, constant-acceleration, and constant-turn-rate-and-velocity prediction.
-- [ ] Neural, physics-plus-residual, and multimodal trajectory prediction.
-- [ ] Predicted occupancy, time to collision, collision probability, calibration, and bounded proceed, slow, stop, yield, or replan decisions.
-- [ ] Specify manipulation as the primary hypothesis test and road-agent prediction as secondary transfer evidence.
-- [ ] Exclude a complete self-driving stack, lane perception, traffic-rule implementation, detailed tyre dynamics, and vehicle hardware.
-- [ ] Complete quick tests after each major concept and cumulative tests after each capability-sized learning block.
-- [ ] Compile each approved prerequisite learning block before implementing its dependent capability.
-
-### Implement and document
-
-- [ ] Reuse and version the trajectory-data schema and collection service from Phases 6 and 8.
-- [ ] Define one simulator- and ROS-independent transition-model contract accepting state, action, and context and returning a next-state predictive distribution, uncertainty, validity, and provenance.
-- [ ] Implement the analytical manipulator transition model using the approved mechanics and bounded Pinocchio computations, with simulator-derived quantities excluded unless they are available to every compared model under the frozen observation contract.
-- [ ] Implement the neural manipulator transition model.
-- [ ] Implement the physics-plus-residual manipulator model for declared gaps such as friction, payload, delay, compliance, sliding, or contact transitions.
-- [ ] Estimate and calibrate predictive uncertainty.
-- [ ] Build one-step, contact-transition, and long-horizon rollout evaluation.
-- [ ] Implement one random-shooting or cross-entropy planner and integrate uncertainty penalties, horizon limits, and confidence-triggered fallback.
-- [ ] Implement or reproduce one bounded TD-MPC2 baseline on the same manipulator task, observation contract, action contract, and evaluation scenarios after the explicit-model planners pass.
-- [ ] If the recorded selection gate admits DreamerV3 instead, replace the preceding TD-MPC2 item rather than adding a second learned latent-model implementation.
-- [ ] Define one versioned recorded or procedurally generated road-agent dataset and its allowed use, splits, contexts, and limitations.
-- [ ] Reuse Phase 2 gating and tracking interfaces to produce imperfect road-agent tracks.
-- [ ] Implement constant-velocity, constant-turn-rate, neural, and physics-plus-residual trajectory predictors; add a multimodal predictor only under a stated hypothesis.
-- [ ] Implement the bounded proceed, slow, stop, yield, or replan decision interface using predicted occupancy and risk thresholds.
-- [ ] Keep the core road benchmark prediction- and risk-decision-based; do not add end-to-end driving RL before the Core Intelligence Release.
-- [ ] Keep manipulation and road experiments on the same prediction, uncertainty, logging, and evaluation abstractions where their meanings genuinely agree.
-
-### Verify, integrate, and core release
-
-- [ ] Compare manipulator analytical, neural, and hybrid models on one-step and long-horizon prediction, sample efficiency, calibration, out-of-distribution behaviour, computation, and task outcomes.
-- [ ] Compare analytical-model planning, neural-model planning, hybrid-model planning, TD-MPC2 or its approved DreamerV3 replacement, the Phase 8 model-free winner, and the classical Phase 7 baseline.
-- [ ] Measure learned latent-model interaction efficiency, rollout or latent-prediction quality, task performance, training cost, planning computation, inference latency, and fallback use under matched evaluation scenarios.
-- [ ] Test manipulator model exploitation and verify uncertainty can trigger a useful classical fallback.
-- [ ] Compare road constant-velocity, constant-turn-rate, neural, and hybrid predictors using displacement error, negative log-likelihood, calibration, missed modes, and long-horizon degradation.
-- [ ] Measure road missed conflicts, unnecessary stops, minimum separation, progress, and decision latency under occlusion, delayed tracks, and unfamiliar motion.
-- [ ] State whether the main physics-plus-residual hypothesis is supported, rejected, or narrowed by the primary manipulation experiment.
-- [ ] State separately whether the road-agent experiment supports cross-domain transfer; do not use secondary evidence to rescue a failed primary hypothesis.
-- [ ] Freeze manipulation and road benchmarks, baselines, ablations, metrics, seeds, trial counts, and failure policies.
-- [ ] Reproduce the principal core result from a clean environment.
-- [ ] Profile the selected release model and add ONNX Runtime or TensorRT only if a declared NVIDIA deployment target fails its latency or resource requirement; verify numerical equivalence and worst-case latency against the PyTorch reference.
-- [ ] Publish a versioned Core Intelligence Release containing the mobile robot, manipulator, road benchmark, data and model documentation, decision traces, negative results, and research conclusion.
-
-Evidence:
-
-- Learning and requirements record: _TBD_
-- Lecture notes and tests: _TBD_
-- Manipulation dataset and models: _TBD_
-- TD-MPC2 or DreamerV3 selection record and learned latent-model artefacts: _TBD_
-- Road-agent dataset and models: _TBD_
-- Core verification report: _TBD_
-- Research conclusion: _TBD_
-- Core release: _TBD_
-
-## Phase 10 — UAV mechanics, estimation, planning, and classical control
-
-### Capability order
-
-Phases 10–11 are an optional extension after the Core Intelligence Release. If activated, complete separate cycles for PX4 software-in-the-loop, multirotor dynamics and actuator allocation, classical state estimation, cascaded control, three-dimensional planning, energy and flight-envelope management, and the inspection-and-return executive. Introduce no RL algorithm in Phase 10 and freeze the classical UAV before transferring any learned component in Phase 11.
-
-### Learn, review, and specify
-
-- [ ] Revisit three-dimensional frames, quaternions, angular velocity, and attitude error from the approved spatial-motion foundations.
-- [ ] Six-degree-of-freedom rigid-body dynamics and inertia tensors.
-- [ ] Thrust, reaction torque, rotor allocation, drag, wind, and payload effects.
-- [ ] Hover linearisation, cascaded position and attitude control, LQR, and constrained MPC.
-- [ ] IMU, GNSS, barometer, magnetometer, and optical-flow measurement models.
-- [ ] EKF and UKF attitude and position estimation, redundant-sensor disagreement, and estimator integrity.
-- [ ] GPS-denied navigation and degraded estimation.
-- [ ] Three-dimensional search representations, dynamic-obstacle tracking, predicted occupancy, and time to conflict.
-- [ ] Energy consumption, flight envelopes, geofencing, battery reserve, communication loss, and failsafe behaviour.
-- [ ] Event-driven take-off, mission, abort, return, landing, and emergency modes.
-- [ ] Complete quick tests after each major concept and cumulative tests after each capability-sized learning block.
-- [ ] Compile each approved prerequisite learning block before implementing its dependent capability.
-
-### Implement and document
-
-- [ ] Establish a pinned PX4 software-in-the-loop environment and record its boundary with ROS 2.
-- [ ] Implement or verify the multirotor and actuator-allocation models.
-- [ ] Establish and instrument the classical attitude and position controller.
-- [ ] Establish the EKF baseline and one bounded UKF comparison where nonlinearity justifies it.
-- [ ] Add wind, payload, sensor, optical-flow, and GPS-denial scenarios.
-- [ ] Implement the minimum three-dimensional planner and dynamic-obstacle interface required by the mission.
-- [ ] Add energy, flight-envelope, geofence, and reserve constraints.
-- [ ] Implement take-off, inspection, abort, return, landing, and emergency states.
-- [ ] Define invalid estimate, sensor disagreement, communication loss, low battery, planner failure, and controller failure behaviour.
-- [ ] Reuse mission, perception, mapping, memory, telemetry, and safety interfaces only where their contracts remain physically valid.
-
-### Verify, integrate, and exit
-
-- [ ] Test nominal inspection and return, wind, changed mass, GPS loss, optical-flow degradation, sensor dropout, estimator inconsistency, communication loss, low battery, and planner failure.
-- [ ] Measure estimation error and consistency, tracking error, control effort, energy, minimum clearance, latency, and safety interventions.
-- [ ] Verify every declared critical failure enters a defined hover, abort, return, land, or terminated-safe mode.
-- [ ] Document which interfaces transfer unchanged and which require UAV-specific adaptation.
-- [ ] Freeze the classical UAV benchmark before Phase 11.
-- [ ] Complete the Phase 10 safety and architecture review and capability release.
-
-Evidence:
-
-- Learning and requirements record: _TBD_
-- Lecture notes and tests: _TBD_
-- PX4 and classical UAV implementation: _TBD_
-- Classical UAV benchmark: _TBD_
-- Verification and safety report: _TBD_
-- Release: _TBD_
-
-## Phase 11 — UAV learned models and intelligence transfer
-
-### Capability order
-
-Complete separate cycles for the transfer-interface audit, analytical UAV predictor, neural predictor, physics-plus-residual predictor, calibrated uncertainty, predictive flight planning, and at most one justified transferred RL capability. Introduce no new general-purpose RL family. Reuse Phase 6–9 algorithms and abstractions only after verifying their frames, units, timing, state semantics, data support, cost semantics, and safety assumptions for flight.
-
-### Learn, review, and specify
-
-- [ ] System identification for wind, drag, payload, and actuator mismatch.
-- [ ] Neural and physics-plus-residual UAV transition models.
-- [ ] Flight-specific uncertainty calibration and distribution shift.
-- [ ] Prediction-aware flight planning, multi-hypothesis obstacle motion, and chance-constrained flight corridors.
-- [ ] Offline learning from flight logs, intervention and failsafe records, and their counterfactual limitations.
-- [ ] Selection criteria for reusing IQL on strictly fixed logs or RLPD when bounded simulator interaction is allowed; do not select both without a comparative hypothesis.
-- [ ] Selection criteria for reusing SAC or TD3 in a residual policy and TD-MPC2 in learned-model planning.
-- [ ] Reuse of Phase 6 reward–cost separation and PID-Lagrangian constraints without treating them as a replacement for the flight envelope.
-- [ ] Confidence-triggered fallback and optional residual policies over classical control.
-- [ ] Specify transfer hypotheses separately for software reuse, sample efficiency, predictive performance, mission performance, and safety.
-- [ ] Complete quick tests after each major concept and cumulative tests after each capability-sized learning block.
-- [ ] Compile each approved prerequisite learning block before implementing its dependent capability.
-
-### Implement and document
-
-- [ ] Audit the Phase 9 mission, world-state, trajectory, model, uncertainty, planning, logging, and safety interfaces against UAV requirements.
-- [ ] Implement the analytical UAV predictive model.
-- [ ] Implement the neural UAV transition model.
-- [ ] Implement the physics-plus-residual model for declared wind, drag, payload, or actuator gaps.
-- [ ] Estimate and calibrate predictive uncertainty under nominal and shifted flight conditions.
-- [ ] Integrate one learned-model predictive planner with uncertainty penalties, horizon limits, flight-envelope constraints, and confidence-triggered classical fallback.
-- [ ] Reuse TD-MPC2 components only if the explicit analytical, neural, and hybrid planning comparison exposes a specific learned-planning gap.
-- [ ] Add at most one residual SAC or TD3 policy only after model-based comparisons pass and a specific remaining control gap is demonstrated.
-- [ ] If a policy-learning experiment uses fixed flight logs, select IQL; if it combines prior logs with bounded simulator interaction, select RLPD instead and declare the interaction budget.
-- [ ] Reuse the PID-Lagrangian mechanism only with flight-specific costs and budgets while keeping the Phase 10 flight envelope and failsafes authoritative.
-- [ ] Record which software, data, model, and safety components transfer unchanged, adapt, or cannot transfer.
-
-### Verify, integrate, and exit
-
-- [ ] Compare classical, analytical-model, neural-model, and hybrid-model flight under nominal and shifted wind, mass, battery, sensor, and communication conditions.
-- [ ] Compare one-step and rollout prediction, sample efficiency, calibration, mission success, energy, computation, and safety interventions.
-- [ ] Compare any transferred RL capability with its classical parent and relevant Phase 6–9 antecedent under matched flight scenarios and declared data and interaction budgets.
-- [ ] Test model exploitation, overconfident prediction, late inference, missing models, and invalid outputs.
-- [ ] Verify learned components cannot bypass the classical safety supervisor or flight envelope.
-- [ ] Retain a learned component only if it earns a declared advantage and the UAV remains safe without it.
-- [ ] State which intelligence claims transfer from manipulation and road-agent prediction and which remain embodiment-specific.
-- [ ] Complete the Phase 11 research, safety, and capability release.
-
-Evidence:
-
-- Learning and requirements record: _TBD_
-- Lecture notes and tests: _TBD_
-- UAV dataset and models: _TBD_
-- Transfer audit: _TBD_
-- Transferred-RL selection record, data budget, and interaction budget: _TBD_
-- Verification and safety report: _TBD_
-- Release: _TBD_
-
-## Phase 12 — Integrated multi-embodiment research release
-
-Phase 12 introduces no planned scientific or algorithmic capability. If evaluation exposes a knowledge or implementation gap, return that gap to a bounded capability cycle in the responsible earlier phase, verify it there, and then resume release integration.
-
-### Freeze the research package
-
-- [ ] Define the operational design domain and explicit exclusions for every mobile-robot, manipulator, road-agent, and UAV benchmark included in the release.
-- [ ] Freeze benchmark scenarios, evaluation protocols, baselines, ablations, metrics, seeds, trial counts, and failure policies.
-- [ ] Freeze software, data, model, configuration, and container versions.
-- [ ] Freeze the distinction between primary manipulation evidence, secondary road and UAV transfer evidence, and supporting mobile-robot evidence.
-
-### Complete evaluation and safety evidence
-
-- [ ] Run the complete mobile-robot, manipulator, road-agent, and activated UAV benchmark suites.
-- [ ] Run fault-injection, rare-event, and distribution-shift campaigns.
-- [ ] Complete cross-embodiment baseline and ablation matrices without combining incompatible metrics.
-- [ ] Complete hazard analysis, safety goals, functional and technical safety requirements, minimal-risk conditions, and hazard-to-test traceability.
-- [ ] Verify safety-monitor independence and replay representative critical events.
-- [ ] Preserve unsuccessful, excluded, and negative results with reasons.
-- [ ] Reproduce the principal result from a clean environment.
-
-### Complete engineering and research evidence
-
-- [ ] Finalise requirements, verification results, architecture, interfaces, hazards, data cards, model cards, build instructions, and reproduction instructions.
-- [ ] Verify the complete automated test suite and release containers where used.
-- [ ] Produce representative mission demonstrations and interpretable decision, prediction, uncertainty, intervention, and fallback traces.
-- [ ] Compile the full lecture-note book to PDF and HTML.
-- [ ] Verify notation, terminology, cumulative tests, answers, and cross-references across the complete book.
-- [ ] Complete the technical research report and state whether the primary hypothesis is supported, rejected, or narrowed.
-- [ ] Separate primary results, transfer results, limitations, boundary conditions, negative results, and future hypotheses.
-- [ ] Complete the final research, architecture, safety, and engineering reviews.
-- [ ] Publish the integrated multi-embodiment research release.
-
-Evidence:
-
-- Frozen benchmarks and operational design domains: _TBD_
-- Hazard analysis and safety evidence: _TBD_
-- Lecture-note book: _TBD_
-- Technical report: _TBD_
-- Reproduction record: _TBD_
-- Demonstrations: _TBD_
-- Final release: _TBD_
-
-## Lecture-note book quality checklist
-
-- [ ] Every chapter states learning objectives.
-- [ ] Every chapter identifies prerequisites.
-- [ ] Notation is defined before use.
-- [ ] Symbols are consistent across chapters.
-- [ ] Units and coordinate frames are explicit.
-- [ ] Assumptions are explicit.
-- [ ] Derivations are step-by-step.
-- [ ] Important equations use valid LaTeX syntax.
-- [ ] Worked examples are correct and reproducible.
-- [ ] Major concepts have quick retrieval tests.
-- [ ] Every chapter has a cumulative test.
-- [ ] Answers, hints, or worked solutions are available.
-- [ ] Engineering connections are explained.
-- [ ] Failure modes and limitations are discussed.
-- [ ] Sources and citations are complete.
-- [ ] Code-generated figures are reproducible.
-- [ ] PDF compilation passes.
-- [ ] HTML compilation passes.
-- [ ] Document-link checks pass.
-
-## Systems-engineering quality checklist
-
-- [ ] Mission and system boundaries remain current.
-- [ ] Every benchmark defines its operational design domain and explicit exclusions.
-- [ ] Requirements have unique IDs and measurable thresholds.
-- [ ] Requirements include operating conditions and verification methods.
-- [ ] Interfaces define schemas, units, frames, timing, and invalid states.
-- [ ] Architecture reflects the implemented system.
-- [ ] Hazards have controls and verification evidence.
-- [ ] Hazards trace through safety goals and functional and technical safety requirements to acceptance or fault-injection evidence.
-- [ ] Requirements trace to architecture, implementation, and tests.
-- [ ] Consequential decisions have decision records.
-- [ ] Each subsystem defines fallback behaviour.
-- [ ] Design reviews occur before phase release.
-- [ ] Verification results are preserved with release evidence.
-- [ ] Data cards and model cards record provenance, intended use, limitations, splits, configurations, and known failure modes.
-
-## Software-engineering quality checklist
-
-- [ ] Algorithmic code traces to documented mathematics.
-- [ ] Infrastructure code traces to requirements.
-- [ ] C++ is used appropriately for timing-sensitive and performance-critical nodes.
-- [ ] Python and PyTorch are used appropriately for learning, data, and evaluation.
-- [ ] Eigen, OpenCV, PCL, GTSAM, Nav2, MoveIt 2, Pinocchio, and optimisation dependencies appear only in capabilities with a documented need and acceptance boundary.
-- [ ] Mathematical, learning, and evaluation cores remain testable without ROS, Gazebo, storage, or deployment runtimes where practical.
-- [ ] ROS, simulator, storage, and deployment adapters preserve schemas, units, frames, timestamps, validity, uncertainty, and failure semantics.
-- [ ] Concurrent callbacks and workers have declared ownership, rates, deadlines, queue bounds, synchronisation, cancellation, shutdown, and deterministic-test behaviour.
-- [ ] Package responsibilities are explicit.
-- [ ] Configuration is separated from source code.
-- [ ] Dependencies are pinned.
-- [ ] Random seeds are explicit where relevant.
-- [ ] Formatting and linting pass.
-- [ ] Static analysis passes where configured.
-- [ ] Unit tests pass.
-- [ ] Integration tests pass.
-- [ ] ROS interface tests pass.
-- [ ] Headless simulation tests pass.
-- [ ] Scenario acceptance tests pass.
-- [ ] Fault-injection tests pass where applicable.
-- [ ] Logs and diagnostics are structured.
-- [ ] `rosbag2` with MCAP or an explicitly justified alternative records the system topics required for replay and verification.
-- [ ] Datasets, episode splits, configurations, checkpoints, simulator parameters, and evaluation protocols are versioned.
-- [ ] CPU, memory, and GPU use are observable where relevant.
-- [ ] Custom CUDA, distributed training, ONNX Runtime, and TensorRT are introduced only after profiling and have correctness and performance evidence.
-- [ ] Builds are reproducible.
-- [ ] Containers and CI are added when they create a declared clean-build, headless-test, training, or release boundary rather than as speculative infrastructure.
-- [ ] Releases are versioned.
-
-## Core completion criteria — Phase 9
-
-- [ ] The mobile robot completes the defined inspection mission.
-- [ ] The Phase 6 classical, PPO, SAC, and TD3 baselines and the selected PID-Lagrangian extension have been compared under matched scenarios, interaction budgets, and explicit safety-cost accounting.
-- [ ] The classical manipulator completes the grasp, reorientation, inspection, placement, and safe-retreat mission.
-- [ ] Manipulation behavioural cloning, IQL, goal-conditioned SAC with HER, RLPD, and residual RL have passed their stage gates and have been compared with the relevant frozen baselines under declared data and interaction budgets.
-- [ ] The bounded road-agent benchmark compares analytical, neural, and hybrid predictors and risk-aware decisions.
-- [ ] Analytical, neural, hybrid, and TD-MPC2 or approved DreamerV3 manipulator planning approaches have been compared reproducibly.
-- [ ] The primary hypothesis has an evidence-based conclusion from manipulation, with road evidence reported separately as transfer evidence.
-- [ ] Every learned component in the Core Intelligence Release has a classical baseline and safe fallback.
-- [ ] Safety, data, model, and distribution-shift limitations are explicit.
-- [ ] Another person can reproduce the principal core experiment from the documentation.
-
-## Extended completion criteria — Phase 12
-
-- [ ] The UAV completes the transferred inspection-and-return mission if Phases 10–11 are activated.
-- [ ] Classical, neural, and physics-plus-residual UAV models have been compared under nominal and shifted conditions.
-- [ ] Transferred and embodiment-specific intelligence components are distinguished by evidence.
-- [ ] Perception, belief, memory, planning, control, prediction, learning, and safety use documented interfaces.
-- [ ] Every learned component has a classical baseline.
-- [ ] Every learned component has a safe fallback.
-- [ ] Analytical, neural, hybrid, and the admitted learned latent-model planning approach have been compared reproducibly.
-- [ ] Any UAV RL capability reuses a Phase 6–9 method under a recorded transfer hypothesis; no new general-purpose RL family is introduced during integration.
-- [ ] The primary hypothesis has an evidence-based conclusion.
-- [ ] Every released benchmark has an operational design domain, hazard traceability, and defined minimal-risk behaviour.
-- [ ] Safety and distribution-shift limitations are explicit.
-- [ ] The complete lecture-note book compiles to PDF and HTML.
-- [ ] Another person can reproduce the principal experiment from the documentation.
+- [Theory](notes/03_kinematics_and_numerical_integration.qmd)
+- [Implementation companion](notes/04_kinematics_and_numerical_integration_implementation.qmd)
+- [Planar rigid-body theory](notes/06_planar_rigid_body_motion_se2_and_twists.qmd)
+- [Specification](docs/01_motion_models/differential_drive_motion_model.md)
+- [Package and deterministic tests](ros_ws/src/differential_drive_motion_model)
+
+### P1.2 — Spatial geometry kernel
+
+The outcome is the geometry layer of the spatial and general kinematics workbench. Preserve the current uncommitted Chapter 7 work.
+
+#### Learn and review
+
+- [x] Finish `notes/07_degrees_of_freedom_and_spatial_motion_so3_se3.qmd` with a spatial-twist retrieval test, cumulative chapter test and answers, representation limitations, numerical checks, and implementation implications.
+- [x] Review and approve Chapter 7 one small learning block at a time.
+- [x] After approval, reconcile its already-started notation entries and add only its newly approved glossary terms.
+- [x] Reconcile `notes/_quarto.yml` with the reviewed source set, render and inspect Chapter 7, and remove stale generated pages that are not requested deliverables.
+- [x] Rename the preserved dynamics draft to `notes/14_dynamic_systems_mechanics_and_actuator_limits.qmd` without rewriting or losing its content; update every repository reference to the new path and run a local-link check in the same batch.
+- [ ] Before drafting Chapter 8, route its prerequisite blocks through *Modern Robotics*, Chapter 3, and compare the formulation with Craig, Chapter 2, and Corke, Chapters 2–3.
+- [ ] Draft and review the screw-axis, pitch, and revolute-versus-prismatic motion block in `notes/08_general_robot_kinematics_and_jacobians.qmd`.
+- [ ] Draft and review the $SE(3)$ exponential and logarithm block, including how project linear-first twists map to each textbook's convention.
+- [ ] Draft and review the constant-twist body-versus-space integration block.
+- [ ] Draft and review the small-angle, near-$\pi$, branch-ambiguity, and worked-spatial-example block.
+- [ ] Obtain user approval of these exact prerequisite blocks before specifying or implementing the spatial geometry kernel.
+
+#### Specify
+
+- [ ] Create `docs/02_spatial_kinematics/spatial_geometry_kernel.md` with the linear-first twist convention, frames, types, tolerances, valid domains, invalid-input behaviour, exclusions, and library-independent acceptance cases.
+
+#### Implement and document
+
+- [ ] When implementation begins, create `notes/09_general_robot_kinematics_and_jacobians_implementation.qmd` and document the CMake target, Eigen representation choices, public headers, validation policy, and test strategy.
+- [ ] Create `ros_ws/src/rigid_body_kinematics` as an `ament_cmake` C++ package with Eigen, GTest, explicit compiler warnings, and no ROS runtime dependency in the mathematical core.
+- [ ] Implement distinct vector rotation and point transformation operations together with bounded $SO(3)$ and $SE(3)$ validation, composition, and inversion.
+- [ ] Implement hat and vee maps, $SO(3)$ and $SE(3)$ exponential and logarithm maps, constant-twist integration, and the $SE(3)$ adjoint using the project's linear-first twist order.
+- [ ] Implement planar-pose embedding and extraction plus normalised planar-yaw quaternion conversion without attempting to replace `tf2`.
+
+#### Verify and close
+
+- [ ] Test identity, inverse round trips, noncommuting composition order, known rotations about two axes, point-versus-vector behaviour, planar embedding, and quaternion sign equivalence.
+- [ ] Test exponential/logarithm round trips away from declared branch ambiguities and the identity $\widehat{\operatorname{Ad}_{T}\boldsymbol\xi}=T\widehat{\boldsymbol\xi}T^{-1}$.
+- [ ] Test the identity and small-angle series path, deterministic near-$\pi$ axis handling, and documented rejection or canonicalisation at ambiguous logarithm branches.
+- [ ] Reject non-finite, malformed, non-orthogonal, reflective, and inapplicable non-planar inputs without returning a valid-looking result.
+- [ ] Link the approved note blocks, specification, companion, package, and tests and close `P1.2`.
+
+### P1.3 — General robot kinematics and Jacobians
+
+The outcome is a bounded reusable implementation of general forward and velocity kinematics that the next educational manipulator capability and later robot products can share.
+
+#### Learn and review
+
+- [ ] Before drafting, route the chapter through *Modern Robotics*, Chapters 4–5, compare with Craig, Chapters 3 and 5, and use Corke, Chapters 7–8, for an independent numerical viewpoint.
+- [ ] Draft and review the Chapter 8 block on configuration space versus coordinate vector, task variables, the forward map $T(\mathbf q)$, the total derivative, and the multivariable chain rule.
+- [ ] Draft and review the transform-chain and space-form/body-form product-of-exponentials block for validated revolute and prismatic screw axes.
+- [ ] Draft and review the task, body, and space Jacobian block, including derivation from pose rate and frame conversion through the adjoint.
+- [ ] Draft and review the rank, range, null-space, and singularity block, including finite-difference verification on a planar 2R chain embedded in $SE(3)$ and one small non-planar chain.
+- [ ] Add retrieval tests after each major concept, a cumulative test with answers or hints, limitations, and an explicit dependency map to the inverse-kinematics laboratory in `P1.4` and the full manipulation product in Phase 7.
+- [ ] Review and approve the chapter, then update notation, glossary, `notes/_quarto.yml`, and the rendered book in that order.
+
+#### Specify
+
+- [ ] Create `docs/02_spatial_kinematics/general_kinematics_and_jacobians.md` with serial-chain inputs, home pose, screw-axis matrices, frame conventions, outputs, invalid-input behaviour, exclusions, and fixed analytic acceptance cases.
+
+#### Implement and document
+
+- [ ] Extend the implementation companion with the serial-chain representation, multiplication order, public interfaces, and finite-difference verification method.
+- [ ] Extend `rigid_body_kinematics` with space-form and body-form product-of-exponentials forward kinematics.
+- [ ] Implement space and body Jacobians for a validated $n$-joint open chain without adding inverse kinematics, pseudoinverse control, URDF parsing, collision, or dynamics to this general-purpose package.
+
+#### Verify and close
+
+- [ ] Verify that zero joint displacement returns the home pose and that single revolute and prismatic joints match independent closed forms.
+- [ ] Verify a planar 2R chain against independent trigonometric kinematics and verify that the space and body forms describe the same pose.
+- [ ] Compare the analytic Jacobian with a finite-difference velocity check and verify the body/space adjoint relation; demonstrate rank loss of the $2\times2$ end-effector position-task Jacobian at a straightened planar 2R configuration and contrast it with the full twist Jacobian, which retains the angular-velocity row.
+- [ ] Link the approved theory, specification, companion, package, and deterministic tests and close `P1.3`.
+- [ ] Record the actual effort and elapsed time for `P1.1`–`P1.3` so the scope checkpoint after the first planar-manipulator stage has a reliable baseline.
+
+### P1.4 — Planar manipulator inverse-kinematics laboratory
+
+The outcome is the first stage of one educational planar-manipulator side project. It turns the reusable kinematics from `P1.3` into inspectable 2R/3R inverse-kinematics experiments without starting the Phase 7 manipulation product.
+
+#### Learn and review
+
+- [ ] Draft `notes/10_inverse_kinematics_redundancy_and_planar_manipulators.qmd` from *Modern Robotics*, Chapter 6, while reusing Chapters 4–5, supported by Craig, Chapters 3–5, and Corke, Chapters 7–8.
+- [ ] Define an inverse-kinematics problem from the forward map and a declared task error; distinguish existence, reachability, uniqueness, branch choice, exact solutions, approximate solutions, convergence, and solver failure.
+- [ ] Derive closed-form position inverse kinematics for a planar 2R arm, including its reachable annulus, elbow-up and elbow-down branches, boundary cases, and the effect of joint limits.
+- [ ] Analyse the 2R position-task Jacobian through rank and singular values and connect task-specific rank loss to singular configurations and numerical conditioning.
+- [ ] Derive Newton–Raphson inverse kinematics from first-order task linearisation and then derive the Moore–Penrose-pseudoinverse update for square, overdetermined, underdetermined, and rank-deficient local models.
+- [ ] Derive damped least squares as a regularised local least-squares problem with explicit task units, frames, stopping tolerances, step bounds, damping policy, and near-singular behaviour; state that damping guarantees neither reachability nor convergence.
+- [ ] For a 3R planar arm with a two-dimensional position task, derive redundancy, the exact Moore–Penrose null-space projector, one projected joint-centering objective, and a bounded position-task manipulability measure.
+- [ ] Show that a damped inverse produces only an approximate projector that can disturb the primary task, and that null-space bias does not enforce hard joint limits or solve a general constrained inverse-kinematics problem.
+- [ ] Relate repeated resolved-rate updates to numerical inverse kinematics while deferring dynamic task-space control, collision constraints, grasping, contact, and global motion planning.
+- [ ] Add worked reachable, unreachable, multiple-solution, singular, near-singular, joint-limit, and redundant cases; add retrieval tests, a cumulative test with answers, limitations, review, notation, glossary, `notes/_quarto.yml`, and render evidence.
+
+#### Specify
+
+- [ ] Create `docs/02_spatial_kinematics/planar_manipulator_kinematics_lab.md` with fixed 2R and 3R fixtures, link lengths, joint conventions and limits, task definitions, solver inputs and outputs, SI units, frames, tolerances, iteration and step limits, damping and seed policies, status values, invalid-input behaviour, exclusions, and frozen acceptance cases.
+- [ ] Define the independent evidence paths before implementation: planar trigonometric closed forms for 2R pose and branches, finite differences for Jacobians, forward evaluation for task residual, and null-space residual for the 3R secondary objective.
+
+#### Implement and document
+
+- [ ] When implementation begins, create `notes/11_planar_manipulator_kinematics_implementation.qmd` with equation-to-code mappings, angle normalisation, branch enumeration, solver state, stopping order, damping and step policy, joint-limit handling, status semantics, and verification oracles.
+- [ ] Create `ros_ws/src/planar_manipulator_lab` as a pure C++ `ament_cmake` package that depends on `rigid_body_kinematics`, Eigen, and GTest but has no ROS runtime, URDF, Pinocchio, MoveIt 2, `ros2_control`, Gazebo, collision, or contact dependency.
+- [ ] Implement the independent closed-form 2R position solver, a bounded iterative pseudoinverse/damped-least-squares solver that consumes the reusable forward map and Jacobian, and the declared 3R exact-pseudoinverse null-space joint-centering experiment without duplicating the general kinematics core.
+- [ ] Add a deterministic offline scenario runner that writes a versioned machine-readable result table; use a small Python plotting script only to visualise arm configurations, residual histories, branch choices, and joint-limit behaviour from those results.
+
+#### Verify and close
+
+- [ ] Verify 2R forward/inverse round trips throughout the reachable annulus, both elbow branches where they exist, inner and outer boundary cases, and the declared angle-equivalence convention.
+- [ ] Verify explicit unreachable, singular, near-singular, non-converged, invalid-dimension, invalid-model, and non-finite outcomes without returning a valid-looking success result; verify deterministic filtering of analytic branches that violate joint limits.
+- [ ] Compare analytic and numerical solutions on frozen targets; verify residual and iteration thresholds, deterministic results for fixed seeds, and bounded damped-least-squares behaviour near singularities. When a numerical candidate violates limits or no valid candidate is found, require non-success without claiming that the globally constrained problem is infeasible.
+- [ ] Verify the 3R position-task Jacobian and exact null-space projection independently, show that the secondary joint-centering velocity preserves the primary task to tolerance, demonstrate the declared leakage from the damped approximate projector, and verify the declared manipulability behaviour at regular and singular configurations.
+- [ ] Link the approved theory, specification, companion, package, deterministic tests, scenario manifest, and plots and close the kinematics stage of `planar_manipulator_lab`.
+- [ ] Compare actual effort and elapsed time for `P1.1`–`P1.4` with the revised 12–16 week Phase 1 duration; ask the user to revise duration or deliberately narrow remaining scope if the estimate is no longer credible rather than silently skipping required learning or evidence.
+
+### P1.5 — Wheeled constraints and wheel-odometry pipeline
+
+The outcome is one deterministic differential-drive odometry pipeline. The bicycle model remains a learning comparison.
+
+#### Learn and review
+
+- [ ] Draft `notes/12_wheeled_robot_constraints_and_odometry.qmd` from *Modern Robotics*, Chapter 13, supported by Corke, Chapter 4, *Probabilistic Robotics*, Chapter 5, and LaValle, Chapter 13.
+- [ ] Derive rolling and no-slip constraints in Pfaffian form, distinguish holonomic from nonholonomic constraints, and relate $A(\mathbf q)\dot{\mathbf q}=0$ to $\dot{\mathbf q}=G(\mathbf q)\mathbf u$.
+- [ ] Derive the full and reduced differential-drive models, wheel/body Jacobians, feasible wheel-speed set, cumulative encoder increments, timestamped pose and twist update, and exact $SE(2)$ odometry integration.
+- [ ] Derive Ackermann steering geometry, the bounded kinematic bicycle model, $\kappa=\tan\delta/L$, and minimum turning radius; compare its feasible motions with differential drive without implementing a car.
+- [ ] Explain calibration error, unequal effective radii, quantisation, slip, skid, drift, stale data, and why Phase 1 odometry cannot claim a calibrated covariance.
+- [ ] Add retrieval tests, cumulative test and answers, limitations, review, notation, glossary, `notes/_quarto.yml`, and render evidence.
+
+#### Specify
+
+- [ ] Create `docs/03_wheel_odometry/differential_drive_odometry.md` with cumulative-wheel-angle and timestamp inputs, pose and body-twist outputs, frames, SI units, wheel identifiers, initialisation, state-mutation rules, covariance-field policy, ROS adapter contract, exclusions, and acceptance cases.
+
+#### Implement and document
+
+- [ ] When implementation begins, create `notes/13_wheeled_robot_constraints_and_odometry_implementation.qmd` covering encoder differencing, timestamp validation, state ownership, ROS message semantics, `tf2`, parameters, and the pure-core/adapter boundary.
+- [ ] Create `ros_ws/src/differential_drive_odometry` as an `ament_python` package that depends on and reuses `differential_drive_motion_model`; do not duplicate its wheel/body mapping or exact integration.
+- [ ] Implement a pure odometer state machine that accepts cumulative wheel angles and a timestamp and returns planar pose, body twist, status, and timestamp.
+- [ ] Add a thin ROS 2 node that consumes `sensor_msgs/JointState` and publishes consistent `nav_msgs/Odometry` and `odom` to `base_link` transforms through `tf2`.
+
+#### Verify and close
+
+- [ ] Test initialisation without false displacement, no motion, straight motion, rotation in place, curved motion, arbitrary initial heading, and equivalent constant motion under different valid sample intervals.
+- [ ] Test wheel ordering, SI units, duplicate and out-of-order timestamps, missing joints, non-finite samples, invalid geometry, and the rule that invalid updates do not mutate state.
+- [ ] Verify agreement among message pose, quaternion, body twist, timestamp, and transform; state explicitly that covariance is not yet calibrated.
+- [ ] Link the approved theory, specification, companion, pure tests, and ROS adapter tests and close `P1.5`.
+
+### P1.6 — Dynamic systems, mechanics, and differential-drive planar plant
+
+The outcome is a deterministic plant that makes actuator limits and controller comparisons physically meaningful without pretending to be a high-fidelity tyre or motor model.
+
+#### Learn and review
+
+- [ ] Before drafting, route dynamic-system concepts through *Feedback Systems*, Chapters 3, 5, and 6; route mechanics through *Modern Robotics*, Chapter 8, supported by Craig, Chapters 6 and 8, Corke, Chapter 9, and LaValle, Section 13.2.4, for the smooth differential-drive state model.
+- [ ] Continue `notes/14_dynamic_systems_mechanics_and_actuator_limits.qmd`, preserving all useful material from the renamed draft.
+- [ ] Define state, input, output, the vector ODE $\dot{\mathbf x}=f(\mathbf x,\mathbf u,t)$, conversion of higher-order mechanics to first-order state equations, equilibrium, local linearisation, and the eigenvalue intuition needed later for stability.
+- [ ] Generalise numerical integration from scalar Forward Euler to vector state, compare it with one declared higher-order reference method, and explain accuracy, convergence, step size, and numerical stability.
+- [ ] Derive planar Newton–Euler longitudinal and yaw dynamics, mass moment of inertia, unequal wheel-force yaw moment, wheel torque to traction, gearing, and simple resistance; for two declared identical driven wheels, reflect wheel inertia into effective longitudinal mass and yaw inertia through the ideal no-slip relation, and define bare chassis inertias so the wheel contribution is not counted twice.
+- [ ] Derive static traction bounds, demanded-versus-realised force, one bounded friction model, wheel-torque magnitude and slew-rate limits, braking, and stopping-distance reasoning; explain torque-speed, current, power, and detailed electrical models only as explicit deferrals.
+- [ ] Add worked analytic and numerical cases, retrieval tests, cumulative test and answers, and model limitations, then review and approve the chapter.
+- [ ] After approval, add only the newly approved dynamics notation and glossary terms, update `notes/_quarto.yml`, and render and inspect the chapter.
+
+#### Specify
+
+- [ ] Create `docs/04_motion_control/motion_stack_interfaces.md` and freeze the semantic chain `trajectory sample → nonholonomic tracker → body/wheel velocity target → wheel-effort regulator → safety supervisor → simulator wheel-effort adapter`, including types, SI units, timestamps, feedback sources, and the distinct limit owners named above.
+- [ ] Create `docs/decisions/0001_phase_01_gazebo_wheel_effort_interface.md` from current official Gazebo and ROS 2 documentation; select a supported wheel-effort boundary that exercises the Phase 1 regulator without `cmd_vel` bypass or early `ros2_control` adoption, and stop for a scope decision if no minimal supported boundary exists.
+- [ ] Create `docs/04_motion_control/differential_drive_planar_plant.md` with state $(x,y,\theta,v,\omega)$, wheel-torque inputs, bare chassis mass and yaw inertia, identical-wheel and ideal-no-slip assumptions, reflected wheel inertia without double counting, geometry, resistance and friction parameters, wheel-torque magnitude and slew limits, traction limits, disturbance inputs, integration policy, outputs, validity ranges, exclusions, and analytic acceptance cases.
+
+#### Implement and document
+
+- [ ] When implementation begins, create `notes/15_dynamic_systems_mechanics_and_actuator_limits_implementation.qmd` with state layout, force and moment balance, reflected wheel inertia, saturation order, integrator choice, configuration, and diagnostics.
+- [ ] Create `ros_ws/src/differential_drive_planar_plant` as a deterministic C++ `ament_cmake` package with a pure library and GTest suite.
+- [ ] Implement symmetric and differential wheel-torque dynamics, declared resistance, actuator saturation, traction limiting, external longitudinal force and yaw-moment disturbances, and explicit actuator-limited and traction-limited status.
+- [ ] Implement Forward Euler for comparison and the reviewed higher-order method as the reference simulation path.
+
+#### Verify and close
+
+- [ ] Verify rest equilibrium, symmetric-torque straight acceleration, antisymmetric-torque yaw acceleration, zero-net-yaw symmetry, known constant-force motion, and declared stopping cases.
+- [ ] Verify numerical convergence against an analytic one-dimensional case and check energy, sign, unit, and bound invariants where the model supports them.
+- [ ] Verify that torque and realised traction never exceed declared limits and that saturation and disturbance status is observable.
+- [ ] Link the approved theory, specification, companion, package, and deterministic tests and close `P1.6`.
+
+### P1.7 — Bounded straight-and-arc trajectory generator
+
+The outcome is the smallest trajectory set needed for the Phase 1 controller comparison.
+
+#### Learn and review
+
+- [ ] Draft `notes/16_bounded_trajectory_generation.qmd` from *Modern Robotics*, Chapters 9 and 13, supported by Craig, Chapter 7, and Corke, Chapters 3–4.
+- [ ] Distinguish path, trajectory, and sampled command sequence; define path coordinate $s$, time scaling $s(t)$, and derive pose, velocity, acceleration, curvature, angular rate, and jerk through the chain rule.
+- [ ] Derive straight and constant-curvature differential-drive paths, $\omega=v\kappa$, wheel-speed and wheel-acceleration feasibility, and endpoint continuity.
+- [ ] Derive one bounded quintic time scaling with duration selected from analytic derivative limits; use a trapezoidal profile only as a comparison that exposes acceleration or jerk discontinuities.
+- [ ] Distinguish invalid input from geometric or wheel-demand infeasibility that increasing duration cannot resolve, derive the sampling effects, and require an exact final sample when duration is not an integer multiple of the sample period; defer arbitrary splines, obstacle avoidance, and time-optimal planning.
+- [ ] Add worked cases, retrieval tests, cumulative test and answers, limitations, review, notation, glossary, `notes/_quarto.yml`, and render evidence.
+
+#### Specify
+
+- [ ] Create `docs/04_motion_control/bounded_trajectory_generation.md` with start pose, signed path length, constant curvature, sample period, declared speed, acceleration, angular, jerk, curvature, and wheel limits, output sample schema, invalid-input behaviour, exclusions, and fixed acceptance cases.
+
+#### Implement and document
+
+- [ ] When implementation begins, create `notes/17_bounded_trajectory_generation_implementation.qmd` with duration selection, analytic derivatives, sample construction, constraint checker, and floating-point tolerances.
+- [ ] Create `ros_ws/src/differential_drive_trajectory` as a pure C++ `ament_cmake` package with no ROS runtime dependency.
+- [ ] Implement deterministic straight and constant-curvature trajectories that start and finish at rest and expose time, pose, $v_d$, $\omega_d$, acceleration, angular acceleration, jerk, curvature, and wheel demands.
+- [ ] Implement the constraint checker as a test/evaluation oracle that does not share the generator's duration-selection path.
+
+#### Verify and close
+
+- [ ] Verify exact declared start and end poses, monotonic time and path progress, zero endpoint speed and acceleration, $\omega_d=\kappa v_d$, and independent circle geometry.
+- [ ] Verify every sample against declared speed, acceleration, angular, jerk, curvature, wheel-speed, and wheel-acceleration limits.
+- [ ] Verify deterministic sampling, inclusion of the exact final sample, and explicit rejection of invalid limits, time steps, and requests that are infeasible under the declared geometry or wheel constraints.
+- [ ] Link the approved theory, specification, companion, package, and deterministic tests and close `P1.7`.
+
+### P1.8 — Feedback, PID, and offline controller benchmark
+
+The outcome is a reproducible controller comparison on the same plant, trajectories, scenarios, metrics, and compute path.
+
+#### Learn and review
+
+- [ ] Draft `notes/18_feedback_stability_and_practical_pid_control.qmd` primarily from *Feedback Systems*, Chapters 3, 5–6, and 11, supported by *Modern Robotics*, Chapter 11 and Section 13.3.4, and Corke, Chapter 9.
+- [ ] Define plant, reference, output, error, sensor, controller, actuator, feedforward, open loop, closed loop, and disturbance paths before deriving a controller.
+- [ ] Derive first- and second-order error dynamics, equilibria, poles or eigenvalues, local stability, damping ratio, natural frequency, steady-state error, overshoot, settling time, and control effort.
+- [ ] Derive the roles and limitations of P, PI, PD, and PID; include constant-disturbance rejection, sampled implementation, derivative filtering, saturation, integrator windup, and one explicit anti-windup method.
+- [ ] Explain why delay reduces stability margin, how noise reaches derivative action, how model mismatch changes the response, and where local linear reasoning ceases to justify a claim; consult *Feedback Systems*, Sections 9.2 and 10.3 or its Chapter 14 delay discussion for the delay claim and Sections 2.3–2.5 for disturbance, tracking, and robustness principles without expanding into a full frequency-domain design chapter.
+- [ ] Define a nonholonomic-compatible control architecture; do not apply three independent PID loops directly to world-frame $x$, $y$, and heading.
+- [ ] Add worked cases, retrieval tests, cumulative test and answers, limitations, review, notation, glossary, `notes/_quarto.yml`, and render evidence.
+
+#### Specify
+
+- [ ] Create `docs/04_motion_control/differential_drive_control_benchmark.md` before controller implementation; depend on `differential_drive_trajectory`, `differential_drive_planar_plant`, and the shared motion-stack interfaces rather than copying them, then freeze controller layers and names, component-level scenarios, sample time, deterministic noise and latency schedules, disturbances, model mismatches, seeds, metrics, thresholds, and exclusions.
+- [ ] Define the compared stacks explicitly: feedforward/open-loop, proportional feedback, and a PID-based stack with derivative filtering, controller-output limiting to the shared wheel-effort contract, and anti-windup; do not make “PID always wins” an acceptance criterion.
+- [ ] Define the offline feedback contract: controllers receive only the declared simulated measurement with injected measurement effects, while raw plant state is evaluator-only; the later Gazebo controller receives odometry and joint-state feedback, never simulator ground truth.
+- [ ] Define a durable results manifest containing configuration, seeds, software revision, metric schema, commands, summary results, and hashes or retention locations for generated traces; do not make bulky transient logs an unnamed evidence store.
+
+#### Implement and document
+
+- [ ] When implementation begins, create `notes/19_feedback_stability_and_practical_pid_control_implementation.qmd` with error coordinates, discrete state, gain units, update order, saturation and anti-windup order, latency buffer, telemetry schema, and reproducibility controls.
+- [ ] Create `ros_ws/src/differential_drive_control` as a C++ `ament_cmake` package with pure controller and experiment-runner libraries independent of ROS and Gazebo.
+- [ ] Implement the frozen feedforward, proportional, and PID-based stacks without changing their contracts between scenarios.
+- [ ] Implement deterministic injection of bounded sensor noise and command latency, and configure the depended-on plant to realise wheel-effort saturation, traction limits, external force and yaw-moment disturbance, and declared parameter mismatch; do not reimplement plant constraints in the benchmark runner.
+- [ ] Compute tracking error, overshoot, settling time, control effort, trajectory smoothness, and every declared constraint violation from the same logged series.
+
+#### Verify and close
+
+- [ ] Verify equilibrium and simple known controller responses before running trajectory comparisons.
+- [ ] On the precise inner velocity plant for which the error dynamics were derived, demonstrate the predicted proportional steady-state error under a constant load and its bounded correction by integral action; do not claim this behaviour for every proportional trajectory controller.
+- [ ] Verify that anti-windup bounds the integrator and recovers after saturation and that the filtered derivative has the declared response to measurement noise.
+- [ ] Run every frozen straight and curved scenario for every controller stack; preserve negative results and do not retune per scenario unless the benchmark explicitly allows it.
+- [ ] Use Python only to generate reproducible tables and plots from the recorded series; keep acceptance calculations in the tested benchmark path.
+- [ ] Create `docs/reports/phase_01_controller_benchmark.md` with interpreted offline results, negative results, limitations, and links to the durable manifest and deterministic tests.
+- [ ] Link the approved theory, specification, companion, package, benchmark report, and deterministic tests and close `P1.8`; final Gazebo acceptance remains owned by `P1.12`.
+
+### P1.9 — Planar manipulator dynamics and classical-control laboratory
+
+The outcome is the second and final stage of `planar_manipulator_lab`: a deterministic vertical-plane 2R plant and a frozen comparison of classical joint controllers. It applies the shared mechanics, trajectory, and feedback learning without importing the Phase 7 manipulation stack.
+
+#### Learn and review
+
+- [ ] Draft `notes/20_planar_manipulator_dynamics_and_classical_control.qmd` primarily from *Modern Robotics*, Chapters 8 and 11, supported by Craig, Chapters 6 and 9–10, Corke, Chapter 9, and the already approved feedback chapter.
+- [ ] Define the fixed-base vertical-plane 2R model with link length, mass, centre-of-mass distance, planar mass moment of inertia, joint position and velocity, gravity, viscous joint friction, joint limits, and torque limits, including the frames and SI units of every quantity.
+- [ ] Derive kinetic and potential energy and then the Euler–Lagrange equations in the form $M(\mathbf q)\ddot{\mathbf q}+\mathbf c(\mathbf q,\dot{\mathbf q})+\mathbf g(\mathbf q)+D\dot{\mathbf q}=\boldsymbol\tau$; distinguish the Coriolis/centrifugal bias vector from one possible matrix representation.
+- [ ] Derive forward dynamics, inverse dynamics, static gravity torque, and the symmetry and positive-definiteness properties of the mass matrix over the declared model domain.
+- [ ] Reuse the approved quintic time-scaling ideas to construct one fixed joint-space reference with position, velocity, and acceleration; distinguish joint-space tracking from end-effector task error.
+- [ ] Derive joint-space PD, gravity-compensated PD, inverse-dynamics feedforward, and computed-torque PD with gain units, nominal error dynamics, torque saturation, and explicit limitations under model mismatch and unmodelled contact.
+- [ ] Explain why integral control, task-space force control, impedance/admittance control, collision avoidance, payload contact, and adaptive or robust control are not required by this laboratory.
+- [ ] Add worked equilibrium, gravity, forward/inverse-dynamics, energy, setpoint, and trajectory-tracking cases; add retrieval tests, a cumulative test with answers, limitations, review, notation, glossary, `notes/_quarto.yml`, and render evidence.
+
+#### Specify
+
+- [ ] Create `docs/04_motion_control/planar_manipulator_dynamics_and_control.md` with the fixed 2R model, state, parameters, force and sign conventions, valid joint envelope, torque bounds, integration policy, controller interfaces, fixed references, disturbances, model-mismatch cases, metrics, deterministic seeds, status values, invalid-input behaviour, exclusions, and frozen acceptance thresholds. Treat a joint-limit crossing as a detected experiment violation and termination condition rather than inventing unmodelled hard-stop contact dynamics.
+- [ ] Define a durable scenario and results manifest shared by every admitted controller; freeze the same initial states, references, sample times, disturbance schedules, nominal parameters, mismatched controller parameters, metrics, and retuning policy before implementation comparisons begin.
+
+#### Implement and document
+
+- [ ] When implementation begins, create `notes/21_planar_manipulator_dynamics_and_classical_control_implementation.qmd` with state layout, model-term evaluation, forward/inverse-dynamics order, integrator, saturation, controller update order, gain units, telemetry, scenario configuration, and reproducibility controls.
+- [ ] Extend `ros_ws/src/planar_manipulator_lab` with separate pure model, controller, simulation, metric, and experiment-runner components; do not couple it to the differential-drive plant or controller packages and do not add a ROS runtime or simulator adapter.
+- [ ] Implement the fixed 2R mass matrix, Coriolis/centrifugal bias, gravity, viscous friction, forward and inverse dynamics, declared reference, deterministic integrator, torque saturation, joint-envelope monitoring, external joint-disturbance input, and model-mismatch injection.
+- [ ] Implement the frozen joint-space PD, gravity-compensated PD, and computed-torque PD stacks without per-scenario retuning; keep the controller's nominal model distinct from the evaluator-owned plant parameters.
+- [ ] Extend the offline runner and plotting path to record and display joint and end-effector errors, torque, effort, energy where applicable, saturation, disturbances, and constraint violations from one versioned result schema.
+
+#### Verify and close
+
+- [ ] Verify independent closed-form mass, bias, and gravity cases; mass-matrix symmetry and positive definiteness; static gravity compensation; and forward/inverse-dynamics round trips over the frozen valid domain.
+- [ ] Verify rest and equilibrium cases, bounded zero-gravity and zero-friction energy error, numerical refinement behaviour, torque bounds, joint-envelope violation detection, saturation status, invalid-input rejection, and deterministic repeatability.
+- [ ] Run every controller on the same setpoint and quintic-reference scenarios under nominal parameters, declared disturbances, torque saturation, and frozen mass, inertia, and friction mismatch without per-scenario retuning.
+- [ ] Compare joint RMSE, end-effector position RMSE, maximum error, settling time where applicable, peak torque, integrated squared effort, saturation time, and constraint violations; preserve negative results and do not require computed torque to win every case.
+- [ ] Create `docs/reports/phase_01_planar_manipulator_lab_verification.md` with interpreted kinematics, dynamics, and control results, the scenario-manifest link, limitations, negative results, and the explicit boundary to the Phase 7 product.
+- [ ] Link both approved manipulator theory chapters, both specifications, both companions, the package, deterministic tests, scenario manifest, plots, and verification report and close `P1.9`.
+
+### P1.10 — Nominal ROS 2 and Gazebo closed-loop integration
+
+The outcome is one headless nominal integration path that demonstrably exercises the accepted trajectory, odometry, controller, and wheel-effort interfaces. Simulator ground truth is evaluator-only.
+
+#### Learn and review
+
+- [ ] Consult current official ROS 2 and Gazebo documentation for simulation time, joint state, the selected wheel-effort boundary, launch, bridging, and headless execution; do not rely on stale textbook software guidance.
+- [ ] Review the shared motion-stack interface specification and wheel-effort architecture decision against the installed environment before writing the integration specification.
+
+#### Specify
+
+- [ ] Create `docs/05_phase_01_integration/gazebo_closed_loop_integration.md` with the robot and world, launch graph, selected wheel-effort adapter, topics, frames, timestamps, parameters, nominal scenarios, evaluator-only ground truth, telemetry proving that the regulator output reaches the effort boundary, tolerances, exclusions, and acceptance commands.
+- [ ] Limit this capability to no-motion, straight, rotation-in-place, and constant-curvature nominal cases; leave injected failures and final mobile-system thresholds to `P1.11` and `P1.12`.
+
+#### Implement and document
+
+- [ ] When implementation begins, create `notes/22_ros2_gazebo_integration_and_motion_safety_implementation.qmd` with the durable simulation-clock, launch, bridge, effort-adapter, frame, timestamp, and evaluator boundary.
+- [ ] Create `ros_ws/src/differential_drive_gazebo` with the minimum robot, world, launch, nominal scenario runner, and evaluator required by the specification.
+- [ ] Add thin ROS 2 adapters to the trajectory and controller packages; do not duplicate their pure algorithms in the Gazebo package.
+- [ ] Integrate trajectory reference, odometry and joint-state feedback, controller wheel-effort request, the selected Gazebo effort adapter, `tf2`, and evaluator-only ground truth with explicit units, frames, and timestamps.
+- [ ] Keep `differential_drive_planar_plant` as the offline benchmark rather than a second physics engine in the Gazebo loop, and do not use `cmd_vel` or simulator ground truth to bypass the accepted controller stack.
+
+#### Verify and close
+
+- [ ] Run the nominal headless scenarios and verify that controller inputs contain only odometry and declared joint-state measurements while ground truth reaches only the evaluator.
+- [ ] Compare odometry with simulator ground truth on no-motion, straight, spin, and curved segments using the integration specification's tolerances.
+- [ ] Trace one complete sample from trajectory reference through regulator wheel effort to Gazebo joint response and recorded odometry.
+- [ ] Link the integration specification, implementation companion, packages, launch tests, and nominal results and close `P1.10`.
+
+### P1.11 — Motion safety supervisor and fault acceptance
+
+The outcome is separately owned, reusable command-safety logic verified through unit, integration, and declared simulation fault cases.
+
+#### Learn and review
+
+- [ ] Consult current official ROS 2 time, diagnostics, lifecycle or state-machine, and `rosbag2` MCAP documentation required by the safety boundary.
+- [ ] Review why operational safety state, control stability, and physical actuator limits are different claims, and retain the explicit non-certified simulation-safety boundary for the specification.
+
+#### Specify
+
+- [ ] Create `docs/05_phase_01_integration/motion_safety_supervisor.md` with the raw and validated wheel-effort command schemas, safe envelope, source and sequence identity, clock choice, freshness semantics, state machine, priority rules, diagnostics, reset preconditions, stopped-safe output, exclusions, and deterministic acceptance cases.
+- [ ] In the specification, distinguish operational safety state from control stability and physical actuator limits and bound every claim to the declared simulation and fault model.
+- [ ] Specify command dropout separately from joint-state or odometry dropout, and specify duplicate, out-of-order, paused, and reset simulation timestamps without allowing invalid data to refresh a watchdog.
+- [ ] Specify that emergency stop latches until an explicit safe reset, invalid or unsupported commands are rejected, controller output limits remain controller-owned, and the plant or Gazebo remains the owner of realised physical constraints.
+- [ ] Specify the stopped-safe effort policy—zero effort, bounded braking, or a state-dependent combination—from the reviewed stopping model, including the conservative fallback when velocity feedback is stale or missing.
+- [ ] Define the durable safety-evidence manifest and MCAP retention policy: commit scenario configuration, software revision, summary metrics, event manifest, and hashes or declared locations; do not commit bulky bags by default.
+
+#### Implement and document
+
+- [ ] Extend `notes/22_ros2_gazebo_integration_and_motion_safety_implementation.qmd` with command validation, watchdog clock, state transitions, emergency-stop priority, reset, diagnostics, recording, and shutdown behaviour only when implementation begins.
+- [ ] Create `ros_ws/src/motion_safety_supervisor` with a pure deterministic state machine, focused unit tests, and a thin ROS 2 node; keep Gazebo assets and scenario orchestration in `differential_drive_gazebo`.
+- [ ] Implement safe-envelope validation, sequence and timestamp checks, command and feedback watchdogs, latched emergency stop, explicit reset policy, stopped-safe output, and structured diagnostic status.
+- [ ] Add fault scenarios and record reference, raw and validated efforts, odometry, joint states, ground truth, diagnostics, limit events, and safety interventions through `rosbag2` with MCAP storage.
+
+#### Verify and close
+
+- [ ] Verify pure state transitions, priority, timeout boundaries, invalid-input non-mutation, reset preconditions, and stopped-safe output deterministically.
+- [ ] Inject invalid command, command-publisher dropout, joint-state dropout, odometry dropout, duplicate and out-of-order timestamps, simulation-time reset, and emergency stop in headless integration tests.
+- [ ] Measure watchdog reaction time, stop time, stopping distance, intervention sequence, and diagnostic status for every applicable fault.
+- [ ] Create `docs/reports/phase_01_motion_safety_verification.md` with interpreted fault results, failures, limitations, evidence-manifest link, and the simulation-only safety claim.
+- [ ] Link the specification, companion, supervisor package, integration tests, safety report, and evidence manifest and close `P1.11`.
+
+### P1.12 — Phase 1 system evaluation and learning closure
+
+The outcome is the final Phase 1 conclusion. This capability evaluates accepted components; any defect returns to its owning package and specification rather than being patched only in the evaluator.
+
+#### Learn and review
+
+- [ ] Create `notes/23_geometry_mechanics_and_control_cumulative_review.qmd` with separate retrieval, derivation, application, and limitation blocks spanning frames, planar and spatial kinematics, Jacobians, inverse kinematics, redundancy, odometry, mobile and manipulator dynamics, trajectories, classical control, integration, and safety.
+- [ ] Complete and self-check every cumulative block, correct each blocking misconception, and obtain user approval.
+- [ ] Add the approved cumulative review to `notes/_quarto.yml`; because it introduces no new concepts or notation, verify rather than duplicate glossary and notation entries.
+
+#### Specify
+
+- [ ] Create `docs/05_phase_01_integration/phase_01_acceptance.md` as the sole owner of final mobile-system scenarios, parameterisations, metrics, thresholds, commands, environment, held-out seeds, log manifest, and pass/fail rules; reference the accepted component specifications instead of copying their requirements, and freeze the document before running the final campaign. The two planar-manipulator specifications and `P1.9` verification report remain authoritative for the separate educational laboratory.
+- [ ] Freeze nominal straight and curved cases plus wheel-geometry mismatch, bounded external disturbance, encoder noise, command latency, physical effort and traction saturation, command dropout, feedback dropout, invalid command, timestamp fault, and emergency-stop cases.
+- [ ] Require identical system scenarios for each admitted controller stack where comparison is meaningful, and state when a safety-only scenario has no controller ranking.
+
+#### Verify and close
+
+- [ ] Run the complete headless acceptance campaign from a clean documented environment and preserve its configuration, seeds, event manifest, machine-readable metrics, and retained-log hashes or locations.
+- [ ] Compare the frozen controller stacks without per-scenario retuning and report tracking error, overshoot, settling time, effort, smoothness, constraint violations, watchdog reaction time, stop time, and stopping distance.
+- [ ] Verify every final pass/fail rule against the tested metric path; preserve failed cases and negative results.
+- [ ] Confirm that the frozen `P1.9` planar-manipulator report passes its own kinematics, dynamics, and control gates; reference it without rerunning or copying its cases into the mobile-system campaign.
+- [ ] Create `docs/reports/phase_01_geometry_mechanics_control_verification.md` with the final interpretation, distinct links to the planar-manipulator, mobile-controller, and safety reports, limitations, safety-claim boundary, and deferred work.
+- [ ] Render and inspect the complete Phase 1 book, link the final report in the programme table, mark Phase 1 complete, reduce this detailed section to its milestone row, and expand Phase 2.
+
+## Backlog
+
+- [ ] Remove the two accidental duplicate `body_to_wheel` code blocks appended to `notes/README.md` when that file is next in scope.

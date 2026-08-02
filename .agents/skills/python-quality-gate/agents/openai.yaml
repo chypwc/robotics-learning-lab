@@ -1,0 +1,4 @@
+interface:
+  display_name: "Python Quality Gate"
+  short_description: "Review and verify repository Python changes"
+  default_prompt: "Use $python-quality-gate to review and verify this Python change."

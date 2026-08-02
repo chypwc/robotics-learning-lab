@@ -1,0 +1,4 @@
+interface:
+  display_name: "Robotics Capability Audit"
+  short_description: "Trace robotics contracts and evidence"
+  default_prompt: "Use $robotics-capability-audit to check this capability across theory, specification, API, and tests."

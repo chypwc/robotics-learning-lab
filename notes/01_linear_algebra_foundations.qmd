@@ -439,6 +439,57 @@ $$
 
 If $\mathbf a$ is a unit vector, then $\mathbf a^\mathsf T\mathbf a=1$.
 
+### Scalar triple product {#sec-linear-algebra-scalar-triple-product}
+
+A cross product supplies a direction perpendicular to two vectors and a magnitude equal to their parallelogram area. Taking its dot product with a third vector converts this area vector into a signed volume. For $\mathbf a,\mathbf b,\mathbf c\in\mathbb R^3$ expressed in the same right-handed orthonormal frame, the **scalar triple product** is
+
+$$
+\boxed{
+\mathbf a^\mathsf T
+(\mathbf b\times\mathbf c)
+\in\mathbb R
+}.
+$$
+
+The word *scalar* records that the outer dot product returns one real number, while *triple* records that the expression uses three vectors. Substituting the cross-product components gives the explicit formula
+
+$$
+\begin{aligned}
+\mathbf a^\mathsf T(\mathbf b\times\mathbf c)
+&=
+a_1(b_2c_3-b_3c_2)
++
+a_2(b_3c_1-b_1c_3)\\
+&\quad+
+a_3(b_1c_2-b_2c_1).
+\end{aligned}
+$$
+
+Geometrically, $\|\mathbf b\times\mathbf c\|_2$ is the area of the parallelogram spanned by $\mathbf b$ and $\mathbf c$. If $\mathbf b\times\mathbf c\ne\mathbf 0_3$, define its unit normal by $\mathbf n\mathrel{:=}(\mathbf b\times\mathbf c)/\|\mathbf b\times\mathbf c\|_2$. Then
+
+$$
+\mathbf a^\mathsf T(\mathbf b\times\mathbf c)
+=
+\underbrace{\mathbf a^\mathsf T\mathbf n}_{\text{signed height}}
+\underbrace{\|\mathbf b\times\mathbf c\|_2}_{\text{base area}}.
+$$
+
+Its absolute value is therefore the volume of the parallelepiped spanned by the three vectors. Its sign states whether the ordered directions $(\mathbf a,\mathbf b,\mathbf c)$ have positive or negative orientation, and it is zero when the three vectors are coplanar. If the input vectors carry physical units, the scalar triple product carries the product of all three units.
+
+Direct component expansion also gives the cyclic identities
+
+$$
+\boxed{
+\mathbf a^\mathsf T(\mathbf b\times\mathbf c)
+=
+\mathbf b^\mathsf T(\mathbf c\times\mathbf a)
+=
+\mathbf c^\mathsf T(\mathbf a\times\mathbf b)
+}.
+$$
+
+Cyclically moving the three vectors does not change the value, but swapping any two vectors reverses its sign. This scalar-valued expression differs from the vector triple product in @sec-linear-algebra-cross-product, whose output is a vector. The determinant discussion in @sec-linear-algebra-determinants will show that the scalar triple product is also the determinant of the matrix whose columns are $\mathbf a$, $\mathbf b$, and $\mathbf c$ in that order.
+
 ### Linear combinations, span, and basis
 
 Let $\mathbf v_1,\ldots,\mathbf v_k\in\mathbb R^n$ and let $\alpha_1,\ldots,\alpha_k\in\mathbb R$. A **linear combination** of these vectors is any vector of the form
@@ -497,6 +548,7 @@ Complete this test without looking back at the section.
 5. **Limitations:** Why is the angle formula undefined when either vector is zero?
 6. **Basis:** Explain why two parallel nonzero vectors cannot form a basis of $\mathbb R^2$.
 7. **Cross product:** For a unit vector $\mathbf a\in\mathbb R^3$, use the vector triple-product identity to simplify $\mathbf a\times(\mathbf a\times\mathbf y)$.
+8. **Scalar triple product:** Evaluate $\mathbf e_1^\mathsf T(\mathbf e_2\times\mathbf e_3)$, then predict the value after swapping $\mathbf e_2$ and $\mathbf e_3$. What geometric change causes the sign change?
 
 ### Answers and hints {.unnumbered}
 
@@ -507,6 +559,7 @@ Complete this test without looking back at the section.
 5. The denominator $\|\mathbf u\|_2\|\mathbf v\|_2$ becomes zero, and a zero vector has no direction.
 6. One vector is a scalar multiple of the other, so their span is only a line and their coefficient representation is not unique.
 7. $\mathbf a\times(\mathbf a\times\mathbf y)=\mathbf a(\mathbf a^\mathsf T\mathbf y)-\mathbf y$ because $\mathbf a^\mathsf T\mathbf a=1$.
+8. Since $\mathbf e_2\times\mathbf e_3=\mathbf e_1$, the first value is $1$. Swapping the two cross-product inputs gives $\mathbf e_3\times\mathbf e_2=-\mathbf e_1$, so the second value is $-1$. The swap reverses the orientation of the ordered directions while preserving the volume magnitude.
 
 
 ## Matrices: linear maps and basis changes
@@ -896,7 +949,7 @@ This order becomes critical when several coordinate transformations are composed
 8. The theorem is $\operatorname{rank}(\mathbf A)+\operatorname{nullity}(\mathbf A)=n$. The matrix in Question 4 has two input columns, rank one, and a one-dimensional null space, so $1+1=2$.
 
 
-## Determinants and signed volume
+## Determinants and signed volume {#sec-linear-algebra-determinants}
 
 ### What the determinant measures
 
@@ -914,7 +967,7 @@ $$
 \det(\mathbf A)=ad-bc.
 $$
 
-Its magnitude is the area of the parallelogram formed by the columns of $\mathbf A$. For $\mathbf A=[\mathbf a_1\;\mathbf a_2\;\mathbf a_3]\in\mathbb R^{3\times3}$, the determinant is the scalar triple product
+Its magnitude is the area of the parallelogram formed by the columns of $\mathbf A$. For $\mathbf A=[\mathbf a_1\;\mathbf a_2\;\mathbf a_3]\in\mathbb R^{3\times3}$, the determinant is the scalar triple product defined in @sec-linear-algebra-scalar-triple-product:
 
 $$
 \det(\mathbf A)
@@ -1519,6 +1572,76 @@ $$
 }.
 $$
 
+### How an invertible linear map transforms a cross product {#sec-linear-algebra-cross-product-linear-map}
+
+The cross product depends on lengths, angles, and the handedness of the coordinate system. A general linear map may stretch those lengths, change the angles, or reverse the handedness, so it does not usually pass through a cross product unchanged.
+
+Let $\mathbf A\in\mathbb R^{3\times3}$ be nonsingular, and let $\mathbf a,\mathbf b\in\mathbb R^3$ be expressed in the same right-handed orthonormal coordinates. The transformed cross product is
+
+$$
+\boxed{
+(\mathbf A\mathbf a)\times(\mathbf A\mathbf b)
+=
+\det(\mathbf A)\mathbf A^{-\mathsf T}
+(\mathbf a\times\mathbf b)
+},
+$$
+
+where $\mathbf A^{-\mathsf T}\mathrel{:=}(\mathbf A^{-1})^\mathsf T=(\mathbf A^\mathsf T)^{-1}$ is the **inverse transpose** of $\mathbf A$. Nonsingularity is required because $\mathbf A^{-1}$ must exist.
+
+To prove the identity, compare the dot product of both sides with an arbitrary test column $\mathbf c\in\mathbb R^3$. The scalar-triple-product formula from @sec-linear-algebra-scalar-triple-product gives
+
+$$
+\begin{aligned}
+\mathbf c^\mathsf T
+\left[
+(\mathbf A\mathbf a)\times(\mathbf A\mathbf b)
+\right]
+&=
+\det
+\begin{bmatrix}
+\mathbf c&\mathbf A\mathbf a&\mathbf A\mathbf b
+\end{bmatrix}\\
+&=
+\det
+\left(
+\mathbf A
+\begin{bmatrix}
+\mathbf A^{-1}\mathbf c&\mathbf a&\mathbf b
+\end{bmatrix}
+\right)\\
+&=
+\det(\mathbf A)
+\det
+\begin{bmatrix}
+\mathbf A^{-1}\mathbf c&\mathbf a&\mathbf b
+\end{bmatrix}\\
+&=
+\det(\mathbf A)
+(\mathbf A^{-1}\mathbf c)^\mathsf T
+(\mathbf a\times\mathbf b)\\
+&=
+\mathbf c^\mathsf T
+\left[
+\det(\mathbf A)\mathbf A^{-\mathsf T}
+(\mathbf a\times\mathbf b)
+\right].
+\end{aligned}
+$$
+
+The second equality uses $\mathbf c=\mathbf A(\mathbf A^{-1}\mathbf c)$ to factor $\mathbf A$ from all three columns. The third uses determinant multiplicativity. The final equality uses $(\mathbf A^{-1}\mathbf c)^\mathsf T=\mathbf c^\mathsf T\mathbf A^{-\mathsf T}$. Because both candidate vectors have the same dot product with every $\mathbf c$, they are equal.
+
+For an orthogonal matrix $\mathbf Q\in\mathbb R^{3\times3}$, $\mathbf Q^\mathsf T\mathbf Q=\mathbf I_3$ implies $\mathbf Q^{-\mathsf T}=\mathbf Q$. The general identity then becomes
+
+$$
+(\mathbf Q\mathbf a)\times(\mathbf Q\mathbf b)
+=
+\det(\mathbf Q)\mathbf Q
+(\mathbf a\times\mathbf b).
+$$
+
+If $\det(\mathbf Q)=1$, then $\mathbf Q$ is a proper rotation and preserves the cross-product direction. If $\det(\mathbf Q)=-1$, then $\mathbf Q$ contains a reflection and reverses that direction. This determinant sign is why orthogonality alone is insufficient for a rotation to preserve cross products.
+
 ## Quick test C: determinants {.unnumbered}
 
 1. **Recall:** What does $|\det(\mathbf A)|$ measure geometrically?
@@ -1528,6 +1651,7 @@ $$
 5. **Limitations:** Why is the determinant not defined in the same way for a rectangular matrix?
 6. **Composition:** Explain geometrically why $\det(\mathbf A\mathbf B)=\det(\mathbf A)\det(\mathbf B)$.
 7. **Reindexing:** If $\sigma(1)=2$, $\sigma(2)=3$, and $\sigma(3)=1$, find $\tau=\sigma^{-1}$ and verify $\prod_{j=1}^{3}a_{j,\sigma(j)}=\prod_{k=1}^{3}a_{\tau(k),k}$.
+8. **Cross products under linear maps:** State how a nonsingular $\mathbf A\in\mathbb R^{3\times3}$ transforms a cross product. Why does a proper rotation preserve the cross product while a reflection reverses it?
 
 ### Answers and hints {.unnumbered}
 
@@ -1538,6 +1662,7 @@ $$
 5. A rectangular map changes dimension, so it does not map an $n$-dimensional volume to another volume in the same $n$-dimensional space.
 6. $\mathbf B$ scales signed volume first and $\mathbf A$ scales the resulting signed volume second, so the factors multiply.
 7. The inverse is $\tau(1)=3$, $\tau(2)=1$, and $\tau(3)=2$. The left product is $a_{1,2}a_{2,3}a_{3,1}$, while the reindexed product is $a_{3,1}a_{1,2}a_{2,3}$; these are equal because scalar factors commute.
+8. $(\mathbf A\mathbf a)\times(\mathbf A\mathbf b)=\det(\mathbf A)\mathbf A^{-\mathsf T}(\mathbf a\times\mathbf b)$. For orthogonal $\mathbf Q$, $\mathbf Q^{-\mathsf T}=\mathbf Q$. A proper rotation has determinant $+1$ and therefore preserves the cross product, whereas an orthogonal reflection has determinant $-1$ and introduces a minus sign.
 
 
 ## Orthogonal matrices

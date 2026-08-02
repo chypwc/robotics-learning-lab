@@ -383,7 +383,7 @@ window.Quarto = {
   <ul>
   <li><a href="#why-this-chapter-matters" id="toc-why-this-chapter-matters" class="nav-link active" data-scroll-target="#why-this-chapter-matters">Why this chapter matters</a></li>
   <li><a href="#prerequisites-and-assumptions" id="toc-prerequisites-and-assumptions" class="nav-link" data-scroll-target="#prerequisites-and-assumptions">Prerequisites and assumptions</a></li>
-  <li><a href="#degrees-of-freedom-and-configuration-space" id="toc-degrees-of-freedom-and-configuration-space" class="nav-link" data-scroll-target="#degrees-of-freedom-and-configuration-space"><span class="header-section-number">7.1</span> Degrees of freedom and configuration space</a>
+  <li><a href="#sec-spatial-configuration-dof" id="toc-sec-spatial-configuration-dof" class="nav-link" data-scroll-target="#sec-spatial-configuration-dof"><span class="header-section-number">7.1</span> Degrees of freedom and configuration space</a>
   <ul class="collapse">
   <li><a href="#configuration-is-a-complete-geometric-description" id="toc-configuration-is-a-complete-geometric-description" class="nav-link" data-scroll-target="#configuration-is-a-complete-geometric-description"><span class="header-section-number">7.1.1</span> Configuration is a complete geometric description</a></li>
   <li><a href="#definition-of-degree-of-freedom" id="toc-definition-of-degree-of-freedom" class="nav-link" data-scroll-target="#definition-of-degree-of-freedom"><span class="header-section-number">7.1.2</span> Definition of degree of freedom</a></li>
@@ -432,7 +432,7 @@ window.Quarto = {
   <li><a href="#the-matrix-exponential" id="toc-the-matrix-exponential" class="nav-link" data-scroll-target="#the-matrix-exponential"><span class="header-section-number">7.5.2</span> The matrix exponential</a></li>
   <li><a href="#deriving-rodrigues-rotation-formula" id="toc-deriving-rodrigues-rotation-formula" class="nav-link" data-scroll-target="#deriving-rodrigues-rotation-formula"><span class="header-section-number">7.5.3</span> Deriving Rodrigues’ rotation formula</a></li>
   <li><a href="#check-rotation-about-the-world-z_w-axis" id="toc-check-rotation-about-the-world-z_w-axis" class="nav-link" data-scroll-target="#check-rotation-about-the-world-z_w-axis"><span class="header-section-number">7.5.4</span> Check: rotation about the world <span class="math inline">\(z_w\)</span>-axis</a></li>
-  <li><a href="#applying-a-constant-angular-velocity-over-a-time-interval" id="toc-applying-a-constant-angular-velocity-over-a-time-interval" class="nav-link" data-scroll-target="#applying-a-constant-angular-velocity-over-a-time-interval"><span class="header-section-number">7.5.5</span> Applying a constant angular velocity over a time interval</a></li>
+  <li><a href="#sec-so3-constant-angular-velocity-update" id="toc-sec-so3-constant-angular-velocity-update" class="nav-link" data-scroll-target="#sec-so3-constant-angular-velocity-update"><span class="header-section-number">7.5.5</span> Applying a constant angular velocity over a time interval</a></li>
   </ul></li>
   <li><a href="#quick-test-e-axisangle-coordinates-and-the-exponential-map" id="toc-quick-test-e-axisangle-coordinates-and-the-exponential-map" class="nav-link" data-scroll-target="#quick-test-e-axisangle-coordinates-and-the-exponential-map">Quick test E: axis–angle coordinates and the exponential map</a>
   <ul class="collapse">
@@ -476,6 +476,21 @@ window.Quarto = {
   <li><a href="#sec-se3-spatial-twist" id="toc-sec-se3-spatial-twist" class="nav-link" data-scroll-target="#sec-se3-spatial-twist"><span class="header-section-number">7.9.3</span> Spatial twist expressed in the world frame</a></li>
   <li><a href="#sec-se3-adjoint-twist" id="toc-sec-se3-adjoint-twist" class="nav-link" data-scroll-target="#sec-se3-adjoint-twist"><span class="header-section-number">7.9.4</span> Relating body and spatial twists through the adjoint</a></li>
   </ul></li>
+  <li><a href="#quick-test-i-spatial-rigid-body-velocity-and-twists" id="toc-quick-test-i-spatial-rigid-body-velocity-and-twists" class="nav-link" data-scroll-target="#quick-test-i-spatial-rigid-body-velocity-and-twists">Quick test I: spatial rigid-body velocity and twists</a>
+  <ul class="collapse">
+  <li><a href="#answers-and-hints-8" id="toc-answers-and-hints-8" class="nav-link" data-scroll-target="#answers-and-hints-8">Answers and hints</a></li>
+  </ul></li>
+  <li><a href="#sec-spatial-representation-checks" id="toc-sec-spatial-representation-checks" class="nav-link" data-scroll-target="#sec-spatial-representation-checks"><span class="header-section-number">7.10</span> Representation limitations and numerical checks</a>
+  <ul class="collapse">
+  <li><a href="#equivalent-information-does-not-make-representations-interchangeable" id="toc-equivalent-information-does-not-make-representations-interchangeable" class="nav-link" data-scroll-target="#equivalent-information-does-not-make-representations-interchangeable"><span class="header-section-number">7.10.1</span> Equivalent information does not make representations interchangeable</a></li>
+  <li><a href="#checking-rotation-matrices-transformations-and-quaternions" id="toc-checking-rotation-matrices-transformations-and-quaternions" class="nav-link" data-scroll-target="#checking-rotation-matrices-transformations-and-quaternions"><span class="header-section-number">7.10.2</span> Checking rotation matrices, transformations, and quaternions</a></li>
+  <li><a href="#checking-twists-and-their-units" id="toc-checking-twists-and-their-units" class="nav-link" data-scroll-target="#checking-twists-and-their-units"><span class="header-section-number">7.10.3</span> Checking twists and their units</a></li>
+  <li><a href="#round-trip-checks-and-implementation-consequences" id="toc-round-trip-checks-and-implementation-consequences" class="nav-link" data-scroll-target="#round-trip-checks-and-implementation-consequences"><span class="header-section-number">7.10.4</span> Round-trip checks and implementation consequences</a></li>
+  </ul></li>
+  <li><a href="#cumulative-chapter-review" id="toc-cumulative-chapter-review" class="nav-link" data-scroll-target="#cumulative-chapter-review">Cumulative chapter review</a>
+  <ul class="collapse">
+  <li><a href="#answers-and-hints-9" id="toc-answers-and-hints-9" class="nav-link" data-scroll-target="#answers-and-hints-9">Answers and hints</a></li>
+  </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -513,8 +528,8 @@ window.Quarto = {
 <p>The reader should understand vectors, matrices, rank, and constraints from <a href="01_linear_algebra_foundations.html" class="quarto-xref"><span>Chapter 1</span></a>; coordinate frames, cross products, and three-dimensional point transformations from <a href="02_geometry_and_coordinate_frames.html" class="quarto-xref"><span>Chapter 2</span></a>; and planar rigid transformations, tangent spaces, and twists from <a href="06_planar_rigid_body_motion_se2_and_twists.html" class="quarto-xref"><span>Chapter 6</span></a>.</p>
 <p>Physical space is modelled as three-dimensional Euclidean space. Every body considered here is rigid, so the distance between any two body-fixed points remains constant. Frames are right-handed and orthonormal. Position is measured in metres, time in seconds, and angles in radians.</p>
 </section>
-<section id="degrees-of-freedom-and-configuration-space" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="degrees-of-freedom-and-configuration-space"><span class="header-section-number">7.1</span> Degrees of freedom and configuration space</h2>
+<section id="sec-spatial-configuration-dof" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="sec-spatial-configuration-dof"><span class="header-section-number">7.1</span> Degrees of freedom and configuration space</h2>
 <section id="configuration-is-a-complete-geometric-description" class="level3" data-number="7.1.1">
 <h3 data-number="7.1.1" class="anchored" data-anchor-id="configuration-is-a-complete-geometric-description"><span class="header-section-number">7.1.1</span> Configuration is a complete geometric description</h3>
 <p>A system’s <strong>configuration</strong> is a complete geometric specification of the position of every labelled material point of the system at one instant. A <em>material point</em> is a particular point fixed in the physical material of the body; its identity does not change as the body moves. Configuration describes where the system is, not how fast it is moving or what forces act on it.</p>
@@ -1816,28 +1831,110 @@ x_3&amp;0&amp;-x_1\\
 }.
 \]</span></p>
 <p>The subscript <span class="math inline">\(b\)</span> does not mean that the body rotates relative to itself. It means that the body’s angular velocity relative to the world is resolved into components along <span class="math inline">\(x_b\)</span>, <span class="math inline">\(y_b\)</span>, and <span class="math inline">\(z_b\)</span>.</p>
-<p>A proper rotation preserves cross products. Insert the identity <span class="math inline">\(\mathbf I_3=\mathbf R_{wb}^\mathsf T\mathbf R_{wb}\)</span> before <span class="math inline">\(\mathbf y\)</span>, and then use <span class="math inline">\((\mathbf R^\mathsf T\mathbf a)\times(\mathbf R^\mathsf T\mathbf b)=\mathbf R^\mathsf T(\mathbf a\times\mathbf b)\)</span> for <span class="math inline">\(\mathbf R\in SO(3)\)</span>. Consequently, for every <span class="math inline">\(\mathbf y\in\mathbb R^3\)</span>,</p>
+<p><strong>Claim to prove.</strong> The world-expressed orientation-rate equation derived above is</p>
+<p><span class="math display">\[
+\dot{\mathbf R}_{wb}
+=
+[\boldsymbol\omega_w]_\times\mathbf R_{wb}.
+\]</span></p>
+<p>We claim that the same orientation rate can be written using the body-expressed angular velocity as</p>
+<p><span class="math display">\[
+\boxed{
+\dot{\mathbf R}_{wb}
+=
+\mathbf R_{wb}[\boldsymbol\omega_b]_\times
+}.
+\]</span></p>
+<p>This is the result to be proved. It states that the world-expressed angular-velocity matrix premultiplies <span class="math inline">\(\mathbf R_{wb}\)</span>, whereas the body-expressed angular-velocity matrix postmultiplies it.</p>
+<p>It is sufficient to prove the intermediate coordinate-conversion identity</p>
+<p><span class="math display">\[
+\boxed{
+[\boldsymbol\omega_w]_\times
+=
+\mathbf R_{wb}
+[\boldsymbol\omega_b]_\times
+\mathbf R_{wb}^\mathsf T
+}.
+\]</span></p>
+<p>Indeed, substituting this identity into <span class="math inline">\(\dot{\mathbf R}_{wb}=[\boldsymbol\omega_w]_\times\mathbf R_{wb}\)</span> will make <span class="math inline">\(\mathbf R_{wb}^\mathsf T\mathbf R_{wb}=\mathbf I_3\)</span> cancel and produce the claimed body-expressed equation. The remaining task is therefore to prove how a cross-product matrix changes between rotated coordinate frames.</p>
+<p>Let <span class="math inline">\(\mathbf R\in SO(3)\)</span> map coordinate columns from a source frame to a target frame, and let <span class="math inline">\(\mathbf a,\mathbf b\in\mathbb R^3\)</span> be arbitrary vector-coordinate columns in the source frame. The letters <span class="math inline">\(\mathbf a\)</span> and <span class="math inline">\(\mathbf b\)</span> are generic placeholders; <span class="math inline">\(\mathbf a\)</span> will later be replaced by <span class="math inline">\(\boldsymbol\omega_b\)</span>. Their target-frame coordinate columns are <span class="math inline">\(\mathbf R\mathbf a\)</span> and <span class="math inline">\(\mathbf R\mathbf b\)</span>. The general transformation law from <a href="01_linear_algebra_foundations.html#sec-linear-algebra-cross-product-linear-map" class="quarto-xref"><span>Section 1.3.4</span></a> is</p>
+<p><span class="math display">\[
+(\mathbf A\mathbf a)\times(\mathbf A\mathbf b)
+=
+\det(\mathbf A)\mathbf A^{-\mathsf T}
+(\mathbf a\times\mathbf b).
+\]</span></p>
+<p>Set <span class="math inline">\(\mathbf A=\mathbf R\)</span>. Because a proper rotation satisfies <span class="math inline">\(\det(\mathbf R)=1\)</span> and <span class="math inline">\(\mathbf R^{-\mathsf T}=\mathbf R\)</span>, the general law reduces to</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R
+\left(
+\mathbf a\times\mathbf b
+\right)
+=
+(\mathbf R\mathbf a)
+\times
+(\mathbf R\mathbf b)
+},
+\qquad
+\mathbf a,\mathbf b\in\mathbb R^3.
+\]</span></p>
+<p>The left-hand side first computes <span class="math inline">\(\mathbf a\times\mathbf b\)</span> in the source coordinates and then converts the result to the target coordinates. The right-hand side first converts both inputs and then computes their cross product in the target coordinates. The equality says that both procedures describe the same geometric cross-product vector.</p>
+<p>We now use this vector identity to convert the cross-product matrix. Keep <span class="math inline">\(\mathbf a\)</span> as the source-frame vector that generates <span class="math inline">\([\mathbf a]_\times\)</span>, and let <span class="math inline">\(\mathbf y\in\mathbb R^3\)</span> be an arbitrary target-frame input column. In the product <span class="math inline">\(\mathbf R[\mathbf a]_\times\mathbf R^\mathsf T\mathbf y\)</span>, the operations occur from right to left: <span class="math inline">\(\mathbf R^\mathsf T\)</span> converts <span class="math inline">\(\mathbf y\)</span> to the source coordinates, <span class="math inline">\([\mathbf a]_\times\)</span> forms the cross product there, and <span class="math inline">\(\mathbf R\)</span> converts the result back to the target coordinates. Algebraically,</p>
 <p><span class="math display">\[
 \begin{aligned}
-\left[\boldsymbol\omega_b\right]_\times\mathbf y
+\mathbf R[\mathbf a]_\times\mathbf R^\mathsf T\mathbf y
 &amp;=
-(\mathbf R_{wb}^\mathsf T\boldsymbol\omega_w)\times\mathbf y\\
-&amp;=
-(\mathbf R_{wb}^\mathsf T\boldsymbol\omega_w)
-\times
-(\mathbf R_{wb}^\mathsf T\mathbf R_{wb}\mathbf y)\\
-&amp;=
-\mathbf R_{wb}^\mathsf T
+\mathbf R
 \left(
-\boldsymbol\omega_w\times(\mathbf R_{wb}\mathbf y)
+\mathbf a\times(\mathbf R^\mathsf T\mathbf y)
 \right)\\
 &amp;=
-\mathbf R_{wb}^\mathsf T
-[\boldsymbol\omega_w]_\times
-\mathbf R_{wb}\mathbf y.
+(\mathbf R\mathbf a)
+\times
+(\mathbf R\mathbf R^\mathsf T\mathbf y)\\
+&amp;=
+(\mathbf R\mathbf a)\times\mathbf y\\
+&amp;=
+[\mathbf R\mathbf a]_\times\mathbf y.
 \end{aligned}
 \]</span></p>
-<p>Because the two matrix expressions produce the same output for every <span class="math inline">\(\mathbf y\)</span>, their matrices are equal:</p>
+<p>Because the two matrices give the same output for every <span class="math inline">\(\mathbf y\)</span>, they are equal:</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R[\mathbf a]_\times\mathbf R^\mathsf T
+=
+[\mathbf R\mathbf a]_\times
+}.
+\]</span></p>
+<p>Finally, specialize the generic identity to the angular velocity by setting <span class="math inline">\(\mathbf R=\mathbf R_{wb}\)</span> and <span class="math inline">\(\mathbf a=\boldsymbol\omega_b\)</span>. The definition <span class="math inline">\(\boldsymbol\omega_b=\mathbf R_{wb}^\mathsf T\boldsymbol\omega_w\)</span> is equivalent to <span class="math inline">\(\boldsymbol\omega_w=\mathbf R_{wb}\boldsymbol\omega_b\)</span>, so</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R_{wb}[\boldsymbol\omega_b]_\times\mathbf R_{wb}^\mathsf T
+=
+[\mathbf R_{wb}\boldsymbol\omega_b]_\times
+=
+[\boldsymbol\omega_w]_\times
+}.
+\]</span></p>
+<p>This is exactly the required intermediate identity. Substituting it into the known world-expressed orientation-rate equation completes the proof:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\dot{\mathbf R}_{wb}
+&amp;=
+[\boldsymbol\omega_w]_\times\mathbf R_{wb}\\
+&amp;=
+\mathbf R_{wb}
+[\boldsymbol\omega_b]_\times
+\mathbf R_{wb}^\mathsf T
+\mathbf R_{wb}\\
+&amp;=
+\boxed{
+\mathbf R_{wb}[\boldsymbol\omega_b]_\times
+}.
+\end{aligned}
+\]</span></p>
+<p>The same intermediate identity can be rearranged to recover the body-expressed cross-product matrix. Premultiplying by <span class="math inline">\(\mathbf R_{wb}^\mathsf T\)</span> and postmultiplying by <span class="math inline">\(\mathbf R_{wb}\)</span> gives</p>
 <p><span class="math display">\[
 [\boldsymbol\omega_b]_\times
 =
@@ -1848,7 +1945,7 @@ x_3&amp;0&amp;-x_1\\
 <p>Substituting <span class="math inline">\([\boldsymbol\omega_w]_\times=\dot{\mathbf R}_{wb}\mathbf R_{wb}^\mathsf T\)</span> then gives</p>
 <p><span class="math display">\[
 \begin{aligned}
-[\boldsymbol\omega_b]_\times
+\left[\boldsymbol\omega_b\right]_\times
 &amp;=
 \mathbf R_{wb}^\mathsf T
 \dot{\mathbf R}_{wb}
@@ -2573,8 +2670,8 @@ Figure&nbsp;7.2: Geometric interpretation of Rodrigues’ formula for the exampl
 \]</span></p>
 <p>This is exactly the coordinate-axis rotation <span class="math inline">\(\mathbf R_z(\alpha)\)</span> derived in <a href="#sec-so3-active-axis-rotations" class="quarto-xref"><span>Section 7.3.1</span></a>.</p>
 </section>
-<section id="applying-a-constant-angular-velocity-over-a-time-interval" class="level3" data-number="7.5.5">
-<h3 data-number="7.5.5" class="anchored" data-anchor-id="applying-a-constant-angular-velocity-over-a-time-interval"><span class="header-section-number">7.5.5</span> Applying a constant angular velocity over a time interval</h3>
+<section id="sec-so3-constant-angular-velocity-update" class="level3" data-number="7.5.5">
+<h3 data-number="7.5.5" class="anchored" data-anchor-id="sec-so3-constant-angular-velocity-update"><span class="header-section-number">7.5.5</span> Applying a constant angular velocity over a time interval</h3>
 <p>Suppose the world-expressed angular velocity <span class="math inline">\(\boldsymbol\omega_w\in\mathbb R^3\)</span> remains constant during a time interval <span class="math inline">\(\Delta t&gt;0\)</span>. If <span class="math inline">\(\boldsymbol\omega_w\ne\mathbf 0_3\)</span>, define</p>
 <p><span class="math display">\[
 \mathbf a_w
@@ -5183,7 +5280,57 @@ T_{\mathbf I_4}SE(3)
 <section id="sec-se3-adjoint-twist" class="level3" data-number="7.9.4">
 <h3 data-number="7.9.4" class="anchored" data-anchor-id="sec-se3-adjoint-twist"><span class="header-section-number">7.9.4</span> Relating body and spatial twists through the adjoint</h3>
 <p>The body twist <span class="math inline">\(\boldsymbol\xi_b\)</span> and spatial twist <span class="math inline">\(\boldsymbol\xi_w\)</span> describe the same instantaneous rigid-body motion, but their components use different axes and different reference origins. A conversion between them must therefore account for both the orientation <span class="math inline">\(\mathbf R_{wb}\)</span> and position <span class="math inline">\(\mathbf p={}^w\mathbf p_b\)</span> in the current pose <span class="math inline">\(\mathbf T_{wb}\)</span>.</p>
-<p>Start from the two matrix definitions derived above:</p>
+<section id="convert-the-angular-and-linear-parts" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="convert-the-angular-and-linear-parts">Convert the angular and linear parts</h4>
+<p>Write <span class="math inline">\(\mathbf R\mathrel{:=}\mathbf R_{wb}\)</span>. The angular-velocity coordinate relation was already established in <a href="#sec-so3-cross-product-matrix" class="quarto-xref"><span>Section 7.4.2</span></a>:</p>
+<p><span class="math display">\[
+\boxed{
+\boldsymbol\omega_w
+=
+\mathbf R\boldsymbol\omega_b
+}.
+\]</span></p>
+<p>This equation rotates the coordinate column of the same physical angular velocity from the body axes into the world axes. The present derivation uses this previously established relation.</p>
+<p>For the linear part, <span class="math inline">\(\boldsymbol\nu_b\)</span> is the velocity of the body origin <span class="math inline">\(O_b\)</span> expressed along the body axes. Its world-coordinate column is therefore</p>
+<p><span class="math display">\[
+{}^w\mathbf v_b
+=
+\mathbf R\boldsymbol\nu_b.
+\]</span></p>
+<p>The spatial-twist velocity field in <a href="#eq-se3-spatial-twist-body-origin-velocity" class="quarto-xref">Equation&nbsp;<span>7.1</span></a> gives the same body-origin velocity as</p>
+<p><span class="math display">\[
+{}^w\mathbf v_b
+=
+\boldsymbol\nu_w
++
+\boldsymbol\omega_w\times\mathbf p.
+\]</span></p>
+<p>Equating these two descriptions of <span class="math inline">\({}^w\mathbf v_b\)</span> and solving for <span class="math inline">\(\boldsymbol\nu_w\)</span> gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+\boldsymbol\nu_w
+&amp;=
+\mathbf R\boldsymbol\nu_b
+-
+\boldsymbol\omega_w\times\mathbf p\\
+&amp;=
+\mathbf R\boldsymbol\nu_b
++
+\mathbf p\times\boldsymbol\omega_w\\
+&amp;=
+\boxed{
+\mathbf R\boldsymbol\nu_b
++
+[\mathbf p]_\times\mathbf R\boldsymbol\omega_b
+}.
+\end{aligned}
+\]</span></p>
+<p>The second equality uses cross-product anticommutativity, <span class="math inline">\(-\boldsymbol\omega_w\times\mathbf p=\mathbf p\times\boldsymbol\omega_w\)</span>. The final equality uses <span class="math inline">\(\mathbf p\times\boldsymbol\omega_w=[\mathbf p]_\times\boldsymbol\omega_w\)</span> and the already-established relation <span class="math inline">\(\boldsymbol\omega_w=\mathbf R\boldsymbol\omega_b\)</span>.</p>
+<p>The two terms have different purposes. The term <span class="math inline">\(\mathbf R\boldsymbol\nu_b\)</span> changes the linear-velocity components from body axes to world axes. The term <span class="math inline">\([\mathbf p]_\times\mathbf R\boldsymbol\omega_b\)</span> changes the reference location for the linear part from <span class="math inline">\(O_b\)</span> to <span class="math inline">\(O_w\)</span>. Angular velocity needs no reference-location correction because every point of a rigid body shares the same angular velocity.</p>
+</section>
+<section id="confirm-the-conversion-using-the-hat-matrices" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="confirm-the-conversion-using-the-hat-matrices">Confirm the conversion using the hat matrices</h4>
+<p>The same result follows from the two hat-matrix definitions:</p>
 <p><span class="math display">\[
 \widehat{\boldsymbol\xi}_b
 =
@@ -5267,72 +5414,52 @@ T_{\mathbf I_4}SE(3)
 \end{bmatrix}.
 \end{aligned}
 \]</span></p>
-<p>The rotated cross-product-matrix identity from <a href="#sec-so3-cross-product-matrix" class="quarto-xref"><span>Section 7.4.2</span></a> is</p>
-<p><span class="math display">\[
-\mathbf R[\mathbf a]_\times\mathbf R^\mathsf T
-=
-[\mathbf R\mathbf a]_\times,
-\qquad
-\mathbf a\in\mathbb R^3.
-\]</span></p>
-<p>Applying it to <span class="math inline">\(\mathbf a=\boldsymbol\omega_b\)</span> shows that the upper-left block is</p>
+<p>The proper-rotation cross-product identity established in <a href="#sec-so3-cross-product-matrix" class="quarto-xref"><span>Section 7.4.2</span></a> gives</p>
 <p><span class="math display">\[
 \mathbf R[\boldsymbol\omega_b]_\times\mathbf R^\mathsf T
 =
-[\mathbf R\boldsymbol\omega_b]_\times
-=
-[\boldsymbol\omega_w]_\times,
+[\mathbf R\boldsymbol\omega_b]_\times.
 \]</span></p>
-<p>and hence</p>
+<p>The previously established coordinate relation <span class="math inline">\(\boldsymbol\omega_w=\mathbf R\boldsymbol\omega_b\)</span> then gives</p>
 <p><span class="math display">\[
 \boxed{
-\boldsymbol\omega_w
+\mathbf R[\boldsymbol\omega_b]_\times\mathbf R^\mathsf T
 =
-\mathbf R\boldsymbol\omega_b
+[\boldsymbol\omega_w]_\times
 }.
 \]</span></p>
-<p>Using this result in the upper-right block gives</p>
+<p>No new angular-velocity relation is being derived in this step. The proper-rotation identity only confirms that conjugating the body-coordinate skew block produces the angular block required by <span class="math inline">\(\widehat{\boldsymbol\xi}_w\)</span>.</p>
+<p>The conjugated upper-right block becomes</p>
 <p><span class="math display">\[
 \begin{aligned}
-\boldsymbol\nu_w
-&amp;=
+&amp;-\mathbf R[\boldsymbol\omega_b]_\times\mathbf R^\mathsf T\mathbf p
++
+\mathbf R\boldsymbol\nu_b\\
+&amp;\qquad=
+-[\boldsymbol\omega_w]_\times\mathbf p
++
+\mathbf R\boldsymbol\nu_b\\
+&amp;\qquad=
 \mathbf R\boldsymbol\nu_b
 -
-[\boldsymbol\omega_w]_\times\mathbf p\\
-&amp;=
-\mathbf R\boldsymbol\nu_b
--
-\boldsymbol\omega_w\times\mathbf p.
+\boldsymbol\omega_w\times\mathbf p\\
+&amp;\qquad=
+\boldsymbol\nu_w,
 \end{aligned}
 \]</span></p>
-<p>The cross product is anticommutative, so <span class="math inline">\(-\boldsymbol\omega_w\times\mathbf p=\mathbf p\times\boldsymbol\omega_w=[\mathbf p]_\times\boldsymbol\omega_w\)</span>. Substituting <span class="math inline">\(\boldsymbol\omega_w=\mathbf R\boldsymbol\omega_b\)</span> therefore gives</p>
+<p>where the final equality is the direct linear relation derived at the start of this subsection. Therefore, the complete conjugated matrix is</p>
 <p><span class="math display">\[
-\boxed{
-\boldsymbol\nu_w
+\mathbf T\widehat{\boldsymbol\xi}_b\mathbf T^{-1}
 =
-\mathbf R\boldsymbol\nu_b
-+
-[\mathbf p]_\times\mathbf R\boldsymbol\omega_b
-}.
-\]</span></p>
-<p>The two terms have distinct roles. The first rotates the body-origin velocity components from the body axes into the world axes. The second changes the reference location for the linear part from the body origin <span class="math inline">\(O_b\)</span> to the world origin <span class="math inline">\(O_w\)</span>. Angular velocity has no reference-point correction because every point of a rigid body shares the same angular velocity; only its coordinate components rotate.</p>
-<p>The linear relation agrees with <a href="#eq-se3-spatial-twist-body-origin-velocity" class="quarto-xref">Equation&nbsp;<span>7.1</span></a>. That equation states</p>
-<p><span class="math display">\[
-{}^w\mathbf v_b
+\begin{bmatrix}
+[\boldsymbol\omega_w]_\times&amp;\boldsymbol\nu_w\\
+\mathbf 0_3^\mathsf T&amp;0
+\end{bmatrix}
 =
-\boldsymbol\nu_w
-+
-\boldsymbol\omega_w\times\mathbf p.
+\widehat{\boldsymbol\xi}_w.
 \]</span></p>
-<p>Because <span class="math inline">\({}^w\mathbf v_b=\mathbf R\boldsymbol\nu_b\)</span>, substitution gives</p>
-<p><span class="math display">\[
-\mathbf R\boldsymbol\nu_b
-=
-\boldsymbol\nu_w
-+
-\boldsymbol\omega_w\times\mathbf p,
-\]</span></p>
-<p>which rearranges to the same result <span class="math inline">\(\boldsymbol\nu_w=\mathbf R\boldsymbol\nu_b-\boldsymbol\omega_w\times\mathbf p\)</span>.</p>
+<p>The component calculation and the conjugation calculation therefore agree: both convert the body-referenced description of one instantaneous motion into its world-referenced description.</p>
+</section>
 <section id="the-adjoint-matrix" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="the-adjoint-matrix">The adjoint matrix</h4>
 <p>Collect the linear and angular relations using the declared linear-first twist order:</p>
@@ -5387,7 +5514,71 @@ T_{\mathbf I_4}SE(3)
 \mathbf T\widehat{\boldsymbol\xi}\mathbf T^{-1}
 }.
 \]</span></p>
-<p>The inverse conversion follows by conjugating with <span class="math inline">\(\mathbf T^{-1}\)</span>:</p>
+</section>
+<section id="inverse-adjoint-operator" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="inverse-adjoint-operator">Inverse adjoint operator</h4>
+<p>The forward operator <span class="math inline">\(\operatorname{Ad}_{\mathbf T_{wb}}:\mathbb R^6\to\mathbb R^6\)</span> converts body-twist coordinates into spatial-twist coordinates. Recovering the body twist requires the inverse of this conversion. Two similar-looking operators appear:</p>
+<ul>
+<li><span class="math inline">\(\operatorname{Ad}_{\mathbf T_{wb}^{-1}}\)</span> means first form the inverse pose <span class="math inline">\(\mathbf T_{wb}^{-1}\in SE(3)\)</span> and then construct the adjoint associated with that pose.</li>
+<li><span class="math inline">\(\operatorname{Ad}_{\mathbf T_{wb}}^{-1}\)</span> means first construct the <span class="math inline">\(6\times6\)</span> adjoint matrix <span class="math inline">\(\operatorname{Ad}_{\mathbf T_{wb}}\)</span> and then take its ordinary matrix inverse.</li>
+</ul>
+<p>These procedures produce the same <span class="math inline">\(6\times6\)</span> linear operator. To prove this, let <span class="math inline">\(\boldsymbol\xi\in\mathbb R^6\)</span> be arbitrary and first apply <span class="math inline">\(\operatorname{Ad}_{\mathbf T}\)</span>, followed by <span class="math inline">\(\operatorname{Ad}_{\mathbf T^{-1}}\)</span>. Applying the hat definition twice gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+\widehat{
+\operatorname{Ad}_{\mathbf T^{-1}}
+\left(
+\operatorname{Ad}_{\mathbf T}\boldsymbol\xi
+\right)
+}
+&amp;=
+\mathbf T^{-1}
+\widehat{
+\operatorname{Ad}_{\mathbf T}\boldsymbol\xi
+}
+\mathbf T\\
+&amp;=
+\mathbf T^{-1}
+\left(
+\mathbf T\widehat{\boldsymbol\xi}\mathbf T^{-1}
+\right)
+\mathbf T\\
+&amp;=
+\widehat{\boldsymbol\xi}.
+\end{aligned}
+\]</span></p>
+<p>The hat map is one-to-one: each twist column has exactly one hatted matrix in <span class="math inline">\(\mathfrak{se}(3)\)</span>, and each matrix in <span class="math inline">\(\mathfrak{se}(3)\)</span> determines exactly one twist column. The equality of the hatted matrices therefore implies</p>
+<p><span class="math display">\[
+\operatorname{Ad}_{\mathbf T^{-1}}
+\left(
+\operatorname{Ad}_{\mathbf T}\boldsymbol\xi
+\right)
+=
+\boldsymbol\xi
+\]</span></p>
+<p>for every <span class="math inline">\(\boldsymbol\xi\in\mathbb R^6\)</span>. Hence, the product of the two adjoint matrices is the identity operator on <span class="math inline">\(\mathbb R^6\)</span>:</p>
+<p><span class="math display">\[
+\operatorname{Ad}_{\mathbf T^{-1}}
+\operatorname{Ad}_{\mathbf T}
+=
+\mathbf I_6.
+\]</span></p>
+<p>Repeating the same calculation in the opposite order, equivalently replacing <span class="math inline">\(\mathbf T\)</span> by <span class="math inline">\(\mathbf T^{-1}\)</span>, gives</p>
+<p><span class="math display">\[
+\operatorname{Ad}_{\mathbf T}
+\operatorname{Ad}_{\mathbf T^{-1}}
+=
+\mathbf I_6.
+\]</span></p>
+<p>Thus, <span class="math inline">\(\operatorname{Ad}_{\mathbf T^{-1}}\)</span> is both a left and a right inverse of <span class="math inline">\(\operatorname{Ad}_{\mathbf T}\)</span>. By the definition of a matrix inverse,</p>
+<p><span class="math display">\[
+\boxed{
+\operatorname{Ad}_{\mathbf T^{-1}}
+=
+\operatorname{Ad}_{\mathbf T}^{-1}
+}.
+\]</span></p>
+<p>Setting <span class="math inline">\(\mathbf T=\mathbf T_{wb}\)</span> and applying this inverse operator to <span class="math inline">\(\boldsymbol\xi_w\)</span> gives the inverse twist-coordinate conversion:</p>
 <p><span class="math display">\[
 \boxed{
 \boldsymbol\xi_b
@@ -5399,8 +5590,686 @@ T_{\mathbf I_4}SE(3)
 \boldsymbol\xi_w
 }.
 \]</span></p>
+<p>Physically, <span class="math inline">\(\mathbf T_{wb}^{-1}\)</span> reverses the pose-based change of reference from the body frame to the world frame. Its adjoint therefore reverses the corresponding change from body-twist coordinates to spatial-twist coordinates.</p>
 <p>If the two frame origins coincide, then <span class="math inline">\(\mathbf p=\mathbf 0_3\)</span> and the cross-product block vanishes. In that special case, both the linear and angular parts change only by rotation. In general, a twist is not a pair of free vectors: changing its reference frame requires both rotation and the position-dependent correction encoded by the adjoint.</p>
 </section>
+</section>
+</section>
+<section id="quick-test-i-spatial-rigid-body-velocity-and-twists" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="quick-test-i-spatial-rigid-body-velocity-and-twists">Quick test I: spatial rigid-body velocity and twists</h2>
+<p>Try these questions without looking back at the section.</p>
+<ol type="1">
+<li><strong>Recall:</strong> State the world-frame velocity of a body-fixed point <span class="math inline">\(P\)</span> in terms of the body-origin velocity, angular velocity, and relative-position vector.</li>
+<li><strong>Contrast:</strong> Define the body- and spatial-twist hat matrices from <span class="math inline">\(\mathbf T_{wb}\)</span> and <span class="math inline">\(\dot{\mathbf T}_{wb}\)</span>. Which side of the pose does each twist matrix multiply when reconstructing <span class="math inline">\(\dot{\mathbf T}_{wb}\)</span>?</li>
+<li><strong>Explanation:</strong> What physical quantity does <span class="math inline">\(\boldsymbol\nu_b\)</span> describe? What does <span class="math inline">\(\boldsymbol\nu_w\)</span> describe, and why is <span class="math inline">\(\boldsymbol\nu_w\)</span> generally not the velocity of the body origin?</li>
+<li><strong>Application:</strong> At one instant, let <span class="math inline">\(\mathbf p=[1\;0\;0]^\mathsf T\,\mathrm m\)</span>, <span class="math inline">\(\dot{\mathbf p}=[0\;1\;0]^\mathsf T\,\mathrm{m\,s^{-1}}\)</span>, and <span class="math inline">\(\boldsymbol\omega_w=[0\;0\;2]^\mathsf T\,\mathrm{rad\,s^{-1}}\)</span>. Calculate <span class="math inline">\(\boldsymbol\nu_w\)</span>. Then use the spatial-twist velocity field to calculate the velocity of a body-fixed point currently at <span class="math inline">\({}^w\mathbf p_P=[1\;1\;0]^\mathsf T\,\mathrm m\)</span>.</li>
+<li><strong>Derivation:</strong> Starting from <span class="math inline">\(\boldsymbol\omega_w=\mathbf R\boldsymbol\omega_b\)</span> and <span class="math inline">\(\boldsymbol\nu_w=\mathbf R\boldsymbol\nu_b+[\mathbf p]_\times\mathbf R\boldsymbol\omega_b\)</span>, stack the equations to derive <span class="math inline">\(\boldsymbol\xi_w=\operatorname{Ad}_{\mathbf T}\boldsymbol\xi_b\)</span> for the linear-first component order.</li>
+<li><strong>Reference origin:</strong> Under what condition does the adjoint reduce to rotating the linear and angular parts separately? Why does the position-dependent block vanish in that case?</li>
+<li><strong>Inverse conversion:</strong> Explain the difference between <span class="math inline">\(\operatorname{Ad}_{\mathbf T^{-1}}\)</span> and <span class="math inline">\(\operatorname{Ad}_{\mathbf T}^{-1}\)</span>. Why are they equal?</li>
+<li><strong>Common error:</strong> Why is the rule <span class="math inline">\(\boldsymbol\nu_w=\mathbf R\boldsymbol\nu_b\)</span> generally insufficient for converting the linear part of a twist, even though <span class="math inline">\(\boldsymbol\omega_w=\mathbf R\boldsymbol\omega_b\)</span> is sufficient for the angular part?</li>
+</ol>
+<section id="answers-and-hints-8" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="answers-and-hints-8">Answers and hints</h3>
+<ol type="1">
+<li><p>With all quantities expressed in world coordinates,</p>
+<p><span class="math display">\[
+\boxed{
+{}^w\mathbf v_P
+=
+{}^w\mathbf v_b
++
+\boldsymbol\omega_w\times{}^w\mathbf r_{O_bP}
+}.
+\]</span></p>
+<p>The first term is the translational velocity at the body origin. The second is the additional velocity caused by the point’s displacement from that origin while the body rotates.</p></li>
+<li><p>The definitions and reconstruction equations are</p>
+<p><span class="math display">\[
+\boxed{
+\widehat{\boldsymbol\xi}_b
+=
+\mathbf T_{wb}^{-1}\dot{\mathbf T}_{wb},
+\qquad
+\dot{\mathbf T}_{wb}
+=
+\mathbf T_{wb}\widehat{\boldsymbol\xi}_b
+},
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\boxed{
+\widehat{\boldsymbol\xi}_w
+=
+\dot{\mathbf T}_{wb}\mathbf T_{wb}^{-1},
+\qquad
+\dot{\mathbf T}_{wb}
+=
+\widehat{\boldsymbol\xi}_w\mathbf T_{wb}
+}.
+\]</span></p>
+<p>The body-twist matrix multiplies the pose on the right, whereas the spatial-twist matrix multiplies it on the left.</p></li>
+<li><p>The column <span class="math inline">\(\boldsymbol\nu_b=\mathbf R_{wb}^\mathsf T{}^w\mathbf v_b\)</span> is the velocity of the body origin relative to the world, expressed along the body axes. The column <span class="math inline">\(\boldsymbol\nu_w\)</span> is the value of the instantaneous rigid-motion velocity field at the world-origin location, expressed along the world axes. They satisfy</p>
+<p><span class="math display">\[
+{}^w\mathbf v_b
+=
+\boldsymbol\nu_w
++
+\boldsymbol\omega_w\times\mathbf p,
+\]</span></p>
+<p>so they differ whenever the rotational contribution between <span class="math inline">\(O_w\)</span> and <span class="math inline">\(O_b\)</span> is nonzero.</p></li>
+<li><p>First,</p>
+<p><span class="math display">\[
+\boldsymbol\omega_w\times\mathbf p
+=
+\begin{bmatrix}
+0\\0\\2
+\end{bmatrix}
+\times
+\begin{bmatrix}
+1\\0\\0
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\2\\0
+\end{bmatrix}
+\mathrm{m\,s^{-1}}.
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+\boldsymbol\nu_w
+=
+\dot{\mathbf p}-\boldsymbol\omega_w\times\mathbf p
+=
+\begin{bmatrix}
+0\\-1\\0
+\end{bmatrix}
+\mathrm{m\,s^{-1}}.
+\]</span></p>
+<p>At the declared point,</p>
+<p><span class="math display">\[
+\begin{aligned}
+{}^w\mathbf v_P
+&amp;=
+\boldsymbol\nu_w
++
+\boldsymbol\omega_w\times{}^w\mathbf p_P\\
+&amp;=
+\begin{bmatrix}
+0\\-1\\0
+\end{bmatrix}
++
+\begin{bmatrix}
+-2\\2\\0
+\end{bmatrix}\\
+&amp;=
+\boxed{
+\begin{bmatrix}
+-2\\1\\0
+\end{bmatrix}
+\mathrm{m\,s^{-1}}
+}.
+\end{aligned}
+\]</span></p></li>
+<li><p>Using <span class="math inline">\(\boldsymbol\xi=[\,\boldsymbol\nu^\mathsf T\;\boldsymbol\omega^\mathsf T\,]^\mathsf T\)</span>,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\boldsymbol\xi_w
+&amp;=
+\begin{bmatrix}
+\boldsymbol\nu_w\\
+\boldsymbol\omega_w
+\end{bmatrix}\\
+&amp;=
+\begin{bmatrix}
+\mathbf R\boldsymbol\nu_b
++
+[\mathbf p]_\times\mathbf R\boldsymbol\omega_b\\
+\mathbf R\boldsymbol\omega_b
+\end{bmatrix}\\
+&amp;=
+\underbrace{
+\begin{bmatrix}
+\mathbf R&amp;[\mathbf p]_\times\mathbf R\\
+\mathbf 0_{3\times3}&amp;\mathbf R
+\end{bmatrix}
+}_{\operatorname{Ad}_{\mathbf T}}
+\begin{bmatrix}
+\boldsymbol\nu_b\\
+\boldsymbol\omega_b
+\end{bmatrix}.
+\end{aligned}
+\]</span></p></li>
+<li><p>If the source and target frame origins coincide, then <span class="math inline">\(\mathbf p=\mathbf 0_3\)</span>. Consequently, <span class="math inline">\([\mathbf p]_\times=\mathbf 0_{3\times3}\)</span> and</p>
+<p><span class="math display">\[
+\operatorname{Ad}_{\mathbf T}
+=
+\begin{bmatrix}
+\mathbf R&amp;\mathbf 0_{3\times3}\\
+\mathbf 0_{3\times3}&amp;\mathbf R
+\end{bmatrix}.
+\]</span></p>
+<p>No reference-origin shift remains, so both parts require only a change of coordinate axes.</p></li>
+<li><p>The expression <span class="math inline">\(\operatorname{Ad}_{\mathbf T^{-1}}\)</span> means invert the pose first and then construct its adjoint. The expression <span class="math inline">\(\operatorname{Ad}_{\mathbf T}^{-1}\)</span> means construct the <span class="math inline">\(6\times6\)</span> adjoint matrix first and then invert that matrix. Applying the two maps in succession gives</p>
+<p><span class="math display">\[
+\operatorname{Ad}_{\mathbf T^{-1}}
+\operatorname{Ad}_{\mathbf T}
+=
+\operatorname{Ad}_{\mathbf T}
+\operatorname{Ad}_{\mathbf T^{-1}}
+=
+\mathbf I_6,
+\]</span></p>
+<p>because conjugation by <span class="math inline">\(\mathbf T\)</span> followed by conjugation by <span class="math inline">\(\mathbf T^{-1}\)</span> restores the original hatted twist. Therefore, <span class="math inline">\(\operatorname{Ad}_{\mathbf T^{-1}}=\operatorname{Ad}_{\mathbf T}^{-1}\)</span>.</p></li>
+<li><p>Angular velocity is the same at every point of a rigid body, so changing its coordinate frame requires only <span class="math inline">\(\boldsymbol\omega_w=\mathbf R\boldsymbol\omega_b\)</span>. The linear part of a twist is tied to a reference location as well as a coordinate basis. Changing from the body origin to the world origin contributes</p>
+<p><span class="math display">\[
+[\mathbf p]_\times\mathbf R\boldsymbol\omega_b
+=
+\mathbf p\times\boldsymbol\omega_w,
+\]</span></p>
+<p>so the complete relation is <span class="math inline">\(\boldsymbol\nu_w=\mathbf R\boldsymbol\nu_b+[\mathbf p]_\times\mathbf R\boldsymbol\omega_b\)</span>.</p></li>
+</ol>
+</section>
+</section>
+<section id="sec-spatial-representation-checks" class="level2" data-number="7.10">
+<h2 data-number="7.10" class="anchored" data-anchor-id="sec-spatial-representation-checks"><span class="header-section-number">7.10</span> Representation limitations and numerical checks</h2>
+<p>The preceding sections describe exact mathematical objects. Software stores their components as finite-precision numbers, so round-off, an incorrect convention, or an invalid input can produce an array that no longer represents the intended geometry. Validation must therefore check the defining constraints of each representation rather than merely checking its array shape.</p>
+<section id="equivalent-information-does-not-make-representations-interchangeable" class="level3" data-number="7.10.1">
+<h3 data-number="7.10.1" class="anchored" data-anchor-id="equivalent-information-does-not-make-representations-interchangeable"><span class="header-section-number">7.10.1</span> Equivalent information does not make representations interchangeable</h3>
+<p>A physical orientation can be represented by a rotation matrix, an axis–angle pair, or a unit quaternion. A physical pose can likewise be represented by a homogeneous transformation or by a chosen coordinate column. These representations may encode equivalent geometric information, but they have different mathematical types, constraints, and composition rules.</p>
+<p>For example, <span class="math inline">\(\mathbf R_{wb}\in SO(3)\)</span> contains nine entries constrained by orthogonality and determinant conditions, whereas a unit quaternion contains four components constrained by one unit-norm equation. The two unit quaternions <span class="math inline">\(\mathsf q\)</span> and <span class="math inline">\(-\mathsf q\)</span> represent the same rotation, so comparing their component columns directly can report a large difference even when their represented orientations are identical.</p>
+<p>Frame and storage conventions are also part of the data’s meaning. An implementation must state whether a rotation maps body coordinates to world coordinates or the reverse, whether an operation is active or passive, whether a quaternion is stored in scalar-first or scalar-last order, and whether a twist is body or spatial. This chapter uses the twist component order</p>
+<p><span class="math display">\[
+\boldsymbol\xi
+=
+\begin{bmatrix}
+\boldsymbol\nu\\
+\boldsymbol\omega
+\end{bmatrix}
+\in\mathbb R^6,
+\]</span></p>
+<p>with the three linear components first and the three angular components second. Reordering these six numbers without changing the associated formulas changes the represented motion.</p>
+</section>
+<section id="checking-rotation-matrices-transformations-and-quaternions" class="level3" data-number="7.10.2">
+<h3 data-number="7.10.2" class="anchored" data-anchor-id="checking-rotation-matrices-transformations-and-quaternions"><span class="header-section-number">7.10.2</span> Checking rotation matrices, transformations, and quaternions</h3>
+<p>Before checking a geometric constraint, first verify that every stored component is finite. A component equal to <span class="math inline">\(\operatorname{NaN}\)</span> or <span class="math inline">\(\pm\infty\)</span> does not represent a valid physical quantity and makes later residual tests unreliable.</p>
+<p>For a real matrix <span class="math inline">\(\mathbf M=[m_{ij}]\in\mathbb R^{m\times n}\)</span>, define the <strong>Frobenius norm</strong></p>
+<p><span class="math display">\[
+\left\|\mathbf M\right\|_{\mathrm F}
+\mathrel{:=}
+\sqrt{
+\sum_{i=1}^{m}
+\sum_{j=1}^{n}
+m_{ij}^2
+}.
+\]</span></p>
+<p>It measures the combined size of all matrix entries. For a candidate rotation matrix <span class="math inline">\(\widetilde{\mathbf R}\in\mathbb R^{3\times3}\)</span>, useful dimensionless residuals are</p>
+<p><span class="math display">\[
+\boxed{
+e_{\mathrm{orth}}
+\mathrel{:=}
+\left\|
+\widetilde{\mathbf R}^{\mathsf T}\widetilde{\mathbf R}
+-
+\mathbf I_3
+\right\|_{\mathrm F},
+\qquad
+e_{\det}
+\mathrel{:=}
+\left|
+\det(\widetilde{\mathbf R})-1
+\right|
+}.
+\]</span></p>
+<p>The first residual checks whether the columns are mutually perpendicular unit vectors. The second distinguishes a proper rotation from a reflection. For example, <span class="math inline">\(\operatorname{diag}(1,1,-1)\)</span> has orthonormal columns but determinant <span class="math inline">\(-1\)</span>, so its orthogonality residual is zero while its determinant residual is two. An implementation accepts the matrix only when both residuals are below declared dimensionless tolerances.</p>
+<p>A candidate homogeneous transformation <span class="math inline">\(\widetilde{\mathbf T}\in\mathbb R^{4\times4}\)</span> must have the structure</p>
+<p><span class="math display">\[
+\widetilde{\mathbf T}
+=
+\begin{bmatrix}
+\widetilde{\mathbf R}&amp;\widetilde{\mathbf p}\\
+\mathbf 0_3^\mathsf T&amp;1
+\end{bmatrix},
+\]</span></p>
+<p>where <span class="math inline">\(\widetilde{\mathbf R}\)</span> passes the rotation checks, <span class="math inline">\(\widetilde{\mathbf p}\in\mathbb R^3\)</span> is a finite translation column measured in metres, and the bottom row equals <span class="math inline">\([\,0\;0\;0\;1\,]\)</span>. Rotation residuals are dimensionless, whereas translation errors have units of metres; they should not be combined into one unscaled residual.</p>
+<p>For a quaternion component column <span class="math inline">\(\widetilde{\mathbf c}=[\,q_w\;q_x\;q_y\;q_z\,]^\mathsf T\in\mathbb R^4\)</span>, the unit-constraint residual is</p>
+<p><span class="math display">\[
+\boxed{
+e_q
+\mathrel{:=}
+\left|
+\left\|\widetilde{\mathbf c}\right\|_2-1
+\right|
+}.
+\]</span></p>
+<p>The quaternion section in <a href="#sec-so3-unit-quaternion-yaw" class="quarto-xref"><span>Section 7.8</span></a> explains when a small norm error may be corrected by normalisation. Validation and repair are different operations: validation reports whether the input satisfies a requirement, while repair changes the input according to an explicit policy. A zero, near-zero, or non-finite quaternion cannot be repaired safely by division, and an arbitrary invalid matrix should not be silently treated as a rotation.</p>
+</section>
+<section id="checking-twists-and-their-units" class="level3" data-number="7.10.3">
+<h3 data-number="7.10.3" class="anchored" data-anchor-id="checking-twists-and-their-units"><span class="header-section-number">7.10.3</span> Checking twists and their units</h3>
+<p>A twist must have six finite components, the declared component order, a declared expression frame, and a declared reference origin. Its linear part <span class="math inline">\(\boldsymbol\nu\in\mathbb R^3\)</span> is measured in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>, while its angular part <span class="math inline">\(\boldsymbol\omega\in\mathbb R^3\)</span> is measured in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>. The associated matrix must also have the structure</p>
+<p><span class="math display">\[
+\widehat{\boldsymbol\xi}
+=
+\begin{bmatrix}
+[\boldsymbol\omega]_\times&amp;\boldsymbol\nu\\
+\mathbf 0_3^\mathsf T&amp;0
+\end{bmatrix},
+\]</span></p>
+<p>so its upper-left block is skew-symmetric and its bottom row is zero.</p>
+<p>An ordinary Euclidean expression such as</p>
+<p><span class="math display">\[
+\left\|\boldsymbol\xi\right\|_2^2
+=
+\left\|\boldsymbol\nu\right\|_2^2
++
+\left\|\boldsymbol\omega\right\|_2^2
+\]</span></p>
+<p>adds squared quantities with different physical units and therefore is <strong>not</strong>, by itself, a meaningful physical magnitude. If an application needs one scalar for comparison, it must choose a characteristic length <span class="math inline">\(\ell&gt;0\)</span> measured in metres and may define</p>
+<p><span class="math display">\[
+\boxed{
+\left\|\boldsymbol\xi\right\|_{\ell}
+\mathrel{:=}
+\sqrt{
+\left\|\boldsymbol\nu\right\|_2^2
++
+\ell^2
+\left\|\boldsymbol\omega\right\|_2^2
+}
+}.
+\]</span></p>
+<p>This quantity has units of <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>. The product <span class="math inline">\(\ell\|\boldsymbol\omega\|_2\)</span> is the tangential-speed scale associated with rotation at distance <span class="math inline">\(\ell\)</span> from the reference axis. Different choices of <span class="math inline">\(\ell\)</span> express different engineering priorities, so this weighted magnitude is not a universal property of the rigid-body motion.</p>
+</section>
+<section id="round-trip-checks-and-implementation-consequences" class="level3" data-number="7.10.4">
+<h3 data-number="7.10.4" class="anchored" data-anchor-id="round-trip-checks-and-implementation-consequences"><span class="header-section-number">7.10.4</span> Round-trip checks and implementation consequences</h3>
+<p>For numerical tests, write <span class="math inline">\(\mathbf A\approx\mathbf B\)</span> when a declared residual between the two arrays is below a chosen tolerance. The tolerance must account for the quantity’s units, expected numerical scale, and floating-point precision. Useful round-trip and consistency checks include</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf R^\mathsf T\mathbf R
+&amp;\approx
+\mathbf I_3,
+&amp;
+\mathbf T\mathbf T^{-1}
+&amp;\approx
+\mathbf I_4,\\
+\operatorname{Ad}_{\mathbf T^{-1}}
+\operatorname{Ad}_{\mathbf T}
+&amp;\approx
+\mathbf I_6,
+&amp;
+\widehat{
+\operatorname{Ad}_{\mathbf T}\boldsymbol\xi
+}
+&amp;\approx
+\mathbf T\widehat{\boldsymbol\xi}\mathbf T^{-1}.
+\end{aligned}
+\]</span></p>
+<p>The first check tests a rotation constraint. The second tests the transformation inverse. The third tests the forward and inverse twist-coordinate mappings. The fourth checks that the coordinate adjoint and matrix-conjugation definitions describe the same operation. A point transformation can also be checked by mapping body coordinates to world coordinates and then applying <span class="math inline">\(\mathbf T^{-1}\)</span> to recover the original body coordinates.</p>
+<p>The body-expressed orientation-rate equation derived in <a href="#sec-so3-angular-velocity" class="quarto-xref"><span>Section 7.4</span></a> is</p>
+<p><span class="math display">\[
+\boxed{
+\dot{\mathbf R}_{wb}
+=
+\mathbf R_{wb}
+[\boldsymbol\omega_b]_\times
+}.
+\]</span></p>
+<p>For a numerical step beginning at time <span class="math inline">\(t_k\)</span>, define</p>
+<p><span class="math display">\[
+\mathbf R_k
+\mathrel{:=}
+\mathbf R_{wb}(t_k),
+\qquad
+\boldsymbol\omega_{b,k}
+\mathrel{:=}
+\boldsymbol\omega_b(t_k),
+\qquad
+\boldsymbol\Omega_k
+\mathrel{:=}
+[\boldsymbol\omega_{b,k}]_\times.
+\]</span></p>
+<p>Evaluating the orientation-rate equation at <span class="math inline">\(t_k\)</span> gives</p>
+<p><span class="math display">\[
+\dot{\mathbf R}_{wb}(t_k)
+=
+\mathbf R_k\boldsymbol\Omega_k.
+\]</span></p>
+<p>A direct Forward Euler update illustrates why preserving the representation constraints matters. Forward Euler replaces the next orientation by the current orientation plus the time step multiplied by the current orientation rate:</p>
+<p><span class="math display">\[
+\widetilde{\mathbf R}_{k+1}
+\mathrel{:=}
+\mathbf R_k+\Delta t\,\dot{\mathbf R}_{wb}(t_k)
+=
+\mathbf R_k+\Delta t\,\mathbf R_k\boldsymbol\Omega_k
+=
+\mathbf R_k
+\left(
+\mathbf I_3+\Delta t\,\boldsymbol\Omega_k
+\right).
+\]</span></p>
+<p>Because <span class="math inline">\(\boldsymbol\Omega_k^\mathsf T=-\boldsymbol\Omega_k\)</span> and <span class="math inline">\(\mathbf R_k^\mathsf T\mathbf R_k=\mathbf I_3\)</span>,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\widetilde{\mathbf R}_{k+1}^{\mathsf T}
+\widetilde{\mathbf R}_{k+1}
+&amp;=
+\left(
+\mathbf I_3-\Delta t\,\boldsymbol\Omega_k
+\right)
+\left(
+\mathbf I_3+\Delta t\,\boldsymbol\Omega_k
+\right)\\
+&amp;=
+\mathbf I_3
+-
+\Delta t^2\boldsymbol\Omega_k^2,
+\end{aligned}
+\]</span></p>
+<p>which is generally not <span class="math inline">\(\mathbf I_3\)</span>. The one-step orthogonality error is of order <span class="math inline">\(O(\Delta t^2)\)</span>, so repeated raw matrix updates can drift away from <span class="math inline">\(SO(3)\)</span>.</p>
+<p>The exact finite-rotation factor is available when the body-expressed angular velocity remains constant throughout the interval. The body-expressed update from <a href="#sec-so3-constant-angular-velocity-update" class="quarto-xref"><span>Section 7.5.5</span></a> becomes</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R_{k+1}
+=
+\mathbf R_k
+\underbrace{
+\exp\!\left(
+\Delta t\,\boldsymbol\Omega_k
+\right)
+}_{\text{exact finite-rotation factor}}
+}.
+\]</span></p>
+<p>The matrix exponential is a valid element of <span class="math inline">\(SO(3)\)</span>. Its series begins</p>
+<p><span class="math display">\[
+\exp\!\left(
+\Delta t\,\boldsymbol\Omega_k
+\right)
+=
+\mathbf I_3
++
+\Delta t\,\boldsymbol\Omega_k
++
+O(\Delta t^2).
+\]</span></p>
+<p>Forward Euler keeps only the first two terms and therefore replaces the exact factor <span class="math inline">\(\exp(\Delta t\,\boldsymbol\Omega_k)\)</span> by <span class="math inline">\(\mathbf I_3+\Delta t\,\boldsymbol\Omega_k\)</span>. A production implementation must use a declared structure-preserving update or a documented correction policy. The following chapter develops finite rigid-body motion and integration methods; the present result establishes the requirement they must satisfy.</p>
+<p>The principal implementation rules from this chapter are therefore:</p>
+<ul>
+<li>store frames, units, component order, and active or passive meaning with the interface contract;</li>
+<li>use the transpose as a validated rotation’s inverse and the block formula from <a href="#sec-se3-composition-inverse" class="quarto-xref"><span>Section 7.6.2</span></a> as a validated homogeneous transformation’s inverse;</li>
+<li>compose transformations in the physical order of the motions rather than adding pose components;</li>
+<li>reject non-finite values and geometric-constraint violations deliberately;</li>
+<li>normalise quaternions only under a stated tolerance and failure policy; and</li>
+<li>test representation invariants, inverse round trips, and equivalent conversion paths.</li>
+</ul>
+</section>
+</section>
+<section id="cumulative-chapter-review" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="cumulative-chapter-review">Cumulative chapter review</h2>
+<p>Try these questions without looking back. They test definitions, derivations, applications, and limitations from the whole chapter.</p>
+<ol type="1">
+<li>What is the difference among a rigid body’s physical configuration, a homogeneous transformation <span class="math inline">\(\mathbf T_{wb}\)</span>, and a coordinate column such as <span class="math inline">\([\,x\;y\;\theta\,]^\mathsf T\)</span>?</li>
+<li>For constraints <span class="math inline">\(\mathbf g(\mathbf z)=\mathbf 0\)</span> at a regular configuration <span class="math inline">\(\mathbf z_0\in\mathbb R^{n_v}\)</span>, state the Jacobian null-space description of allowable infinitesimal changes and the corresponding DOF formula. Why does a free spatial rigid body have six DOF?</li>
+<li>State the defining equations of <span class="math inline">\(SO(3)\)</span> and explain the geometric meaning of the columns of <span class="math inline">\(\mathbf R_{wb}\)</span>.</li>
+<li>If <span class="math inline">\(\mathbf Q_w\)</span> is an orientation change expressed along fixed world axes and <span class="math inline">\(\mathbf Q_b\)</span> is an orientation change expressed along the old body axes, how does each update <span class="math inline">\(\mathbf R_{wb}\)</span>?</li>
+<li>Give the world- and body-expressed angular-velocity equations for <span class="math inline">\(\dot{\mathbf R}_{wb}\)</span>. Why do the two angular-velocity columns describe the same physical turning?</li>
+<li>Let <span class="math inline">\(\mathbf a\in\mathbb R^3\)</span> be a unit rotation axis and <span class="math inline">\(\alpha\in\mathbb R\)</span> an angle. State the exponential-coordinate vector, its matrix exponential, and Rodrigues’ formula.</li>
+<li>State how <span class="math inline">\(\mathbf T_{wb}\in SE(3)\)</span> transforms a body-frame point coordinate into world coordinates, and derive the inverse transformation.</li>
+<li>What constraints identify the planar-motion subgroup embedded in <span class="math inline">\(SE(3)\)</span>, and how is planar yaw recovered from its rotation matrix?</li>
+<li>Write the unit quaternion for an axis–angle rotation. Why do <span class="math inline">\(\mathsf q\)</span> and <span class="math inline">\(-\mathsf q\)</span> represent the same orientation, and what is the Hamilton-product order when <span class="math inline">\(\mathsf q_1\)</span> acts first and <span class="math inline">\(\mathsf q_2\)</span> acts second?</li>
+<li>Distinguish a pose rate <span class="math inline">\(\dot{\mathbf T}_{wb}\)</span>, a body twist <span class="math inline">\(\boldsymbol\xi_b\)</span>, and a spatial twist <span class="math inline">\(\boldsymbol\xi_w\)</span>. What physical quantities do their linear parts represent?</li>
+<li>Let <span class="math inline">\(\mathbf R=\mathbf R_z(\pi/2)\)</span>, <span class="math inline">\(\mathbf p=[\,1\;2\;3\,]^\mathsf T\,\mathrm m\)</span>, <span class="math inline">\(\boldsymbol\nu_b=[\,1\;0\;0\,]^\mathsf T\,\mathrm{m\,s^{-1}}\)</span>, and <span class="math inline">\(\boldsymbol\omega_b=[\,0\;0\;2\,]^\mathsf T\,\mathrm{rad\,s^{-1}}\)</span>. Use the adjoint relation to calculate <span class="math inline">\(\boldsymbol\omega_w\)</span> and <span class="math inline">\(\boldsymbol\nu_w\)</span>.</li>
+<li>Why must software check both orthogonality and determinant for a candidate rotation matrix? Why is an ordinary Euclidean norm of a twist not a physically meaningful magnitude?</li>
+<li>Show why the Forward Euler orientation update <span class="math inline">\(\widetilde{\mathbf R}_{k+1}=\mathbf R_k(\mathbf I_3+\Delta t[\boldsymbol\omega_b]_\times)\)</span> generally leaves <span class="math inline">\(SO(3)\)</span>.</li>
+</ol>
+<section id="answers-and-hints-9" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="answers-and-hints-9">Answers and hints</h3>
+<ol type="1">
+<li><p>The configuration is the body’s physical placement relative to the fixed world. The matrix <span class="math inline">\(\mathbf T_{wb}\)</span> represents that placement as an element of <span class="math inline">\(SE(3)\)</span> and maps body-frame point coordinates to world-frame coordinates. A coordinate column is a chosen list of numbers used to construct a representation; it is not itself the physical body or an ordinary free vector.</p></li>
+<li><p>Linearising the constraints gives</p>
+<p><span class="math display">\[
+\mathbf J_{\mathbf g}(\mathbf z_0)\delta\mathbf z
+=
+\mathbf 0,
+\]</span></p>
+<p>so the allowable infinitesimal changes form</p>
+<p><span class="math display">\[
+\mathcal N\!\left(
+\mathbf J_{\mathbf g}(\mathbf z_0)
+\right)
+=
+\left\{
+\delta\mathbf z\in\mathbb R^{n_v}
+\;\middle|\;
+\mathbf J_{\mathbf g}(\mathbf z_0)\delta\mathbf z
+=
+\mathbf 0
+\right\}.
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+n_{\mathrm{dof}}
+=
+\dim\mathcal N\!\left(
+\mathbf J_{\mathbf g}(\mathbf z_0)
+\right)
+=
+n_v-\operatorname{rank}\!\left(
+\mathbf J_{\mathbf g}(\mathbf z_0)
+\right).
+\]</span></p>
+<p>A free spatial rigid body has three independent translation coordinates and three independent local orientation coordinates, giving six DOF.</p></li>
+<li><p>A proper rotation satisfies</p>
+<p><span class="math display">\[
+\mathbf R^\mathsf T\mathbf R
+=
+\mathbf I_3,
+\qquad
+\det(\mathbf R)
+=
+1.
+\]</span></p>
+<p>The columns of <span class="math inline">\(\mathbf R_{wb}\)</span> are the world-coordinate columns of the body axes <span class="math inline">\(x_b\)</span>, <span class="math inline">\(y_b\)</span>, and <span class="math inline">\(z_b\)</span>. They form a right-handed orthonormal basis.</p></li>
+<li><p>A world-expressed change premultiplies, whereas a body-expressed change postmultiplies:</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf R_{wb'}
+=
+\mathbf Q_w\mathbf R_{wb}
+},
+\qquad
+\boxed{
+\mathbf R_{wb'}
+=
+\mathbf R_{wb}\mathbf Q_b
+}.
+\]</span></p></li>
+<li><p>The two rate equations are</p>
+<p><span class="math display">\[
+\boxed{
+\dot{\mathbf R}_{wb}
+=
+[\boldsymbol\omega_w]_\times\mathbf R_{wb}
+=
+\mathbf R_{wb}[\boldsymbol\omega_b]_\times
+},
+\qquad
+\boldsymbol\omega_b
+=
+\mathbf R_{wb}^\mathsf T\boldsymbol\omega_w.
+\]</span></p>
+<p>The physical turning is the same; multiplication by <span class="math inline">\(\mathbf R_{wb}^\mathsf T\)</span> only resolves its components along the body axes instead of the world axes.</p></li>
+<li><p>Define</p>
+<p><span class="math display">\[
+\boldsymbol\varphi
+\mathrel{:=}
+\alpha\mathbf a,
+\qquad
+[\boldsymbol\varphi]_\times
+=
+\alpha[\mathbf a]_\times.
+\]</span></p>
+<p>The finite rotation is</p>
+<p><span class="math display">\[
+\mathbf Q
+=
+\exp\!\left(
+[\boldsymbol\varphi]_\times
+\right)
+=
+\mathbf I_3
++
+\sin\alpha[\mathbf a]_\times
++
+(1-\cos\alpha)[\mathbf a]_\times^2.
+\]</span></p>
+<p>Applied to <span class="math inline">\(\mathbf y\in\mathbb R^3\)</span>, Rodrigues’ formula is</p>
+<p><span class="math display">\[
+\mathbf Q\mathbf y
+=
+\cos\alpha\,\mathbf y
++
+(1-\cos\alpha)\mathbf a(\mathbf a^\mathsf T\mathbf y)
++
+\sin\alpha(\mathbf a\times\mathbf y).
+\]</span></p></li>
+<li><p>With</p>
+<p><span class="math display">\[
+\mathbf T_{wb}
+=
+\begin{bmatrix}
+\mathbf R_{wb}&amp;{}^w\mathbf p_b\\
+\mathbf 0_3^\mathsf T&amp;1
+\end{bmatrix},
+\]</span></p>
+<p>point coordinates satisfy</p>
+<p><span class="math display">\[
+{}^w\mathbf p_P
+=
+\mathbf R_{wb}{}^b\mathbf p_P
++
+{}^w\mathbf p_b.
+\]</span></p>
+<p>Rearranging and using <span class="math inline">\(\mathbf R_{wb}^{-1}=\mathbf R_{wb}^\mathsf T\)</span> gives</p>
+<p><span class="math display">\[
+{}^b\mathbf p_P
+=
+\mathbf R_{wb}^\mathsf T
+\left(
+{}^w\mathbf p_P-{}^w\mathbf p_b
+\right),
+\]</span></p>
+<p>and therefore</p>
+<p><span class="math display">\[
+\mathbf T_{wb}^{-1}
+=
+\begin{bmatrix}
+\mathbf R_{wb}^\mathsf T&amp;
+-\mathbf R_{wb}^\mathsf T{}^w\mathbf p_b\\
+\mathbf 0_3^\mathsf T&amp;1
+\end{bmatrix}.
+\]</span></p></li>
+<li><p>Using <span class="math inline">\(\mathbf e_z=[\,0\;0\;1\,]^\mathsf T\)</span>, planar motion satisfies</p>
+<p><span class="math display">\[
+\mathbf R\mathbf e_z
+=
+\mathbf e_z,
+\qquad
+\mathbf e_z^\mathsf T\mathbf p
+=
+0.
+\]</span></p>
+<p>For the embedded yaw rotation, <span class="math inline">\(\theta=\operatorname{atan2}(R_{21},R_{11})\)</span>.</p></li>
+<li><p>For a unit axis <span class="math inline">\(\mathbf a\)</span>,</p>
+<p><span class="math display">\[
+\mathsf q
+=
+\left(
+\cos\frac{\alpha}{2},
+\mathbf a\sin\frac{\alpha}{2}
+\right).
+\]</span></p>
+<p>Negating both parts does not change the quaternion sandwich product <span class="math inline">\(\mathsf q\otimes\mathsf y\otimes\mathsf q^*\)</span>, so <span class="math inline">\(\mathsf q\)</span> and <span class="math inline">\(-\mathsf q\)</span> represent the same rotation. If <span class="math inline">\(\mathsf q_1\)</span> acts first and <span class="math inline">\(\mathsf q_2\)</span> acts second, then <span class="math inline">\(\mathsf q_{\mathrm{total}}=\mathsf q_2\otimes\mathsf q_1\)</span>.</p></li>
+<li><p>The pose rate <span class="math inline">\(\dot{\mathbf T}_{wb}\)</span> is the entrywise derivative of a pose matrix and depends on the current pose. The body and spatial twists are obtained by</p>
+<p><span class="math display">\[
+\widehat{\boldsymbol\xi}_b
+=
+\mathbf T_{wb}^{-1}\dot{\mathbf T}_{wb},
+\qquad
+\widehat{\boldsymbol\xi}_w
+=
+\dot{\mathbf T}_{wb}\mathbf T_{wb}^{-1}.
+\]</span></p>
+<p>The body linear part is the world-relative velocity of the body origin expressed along body axes:</p>
+<p><span class="math display">\[
+\boldsymbol\nu_b
+=
+\mathbf R_{wb}^\mathsf T{}^w\mathbf v_b.
+\]</span></p>
+<p>The spatial linear part is the value of the rigid-motion velocity field at the world-origin location:</p>
+<p><span class="math display">\[
+\boldsymbol\nu_w
+=
+{}^w\mathbf v_b
+-
+\boldsymbol\omega_w\times\mathbf p.
+\]</span></p></li>
+<li><p>Rotation about <span class="math inline">\(z\)</span> leaves the angular-velocity column unchanged and maps the body <span class="math inline">\(x\)</span>-axis to the world <span class="math inline">\(y\)</span>-axis:</p>
+<p><span class="math display">\[
+\boldsymbol\omega_w
+=
+\mathbf R\boldsymbol\omega_b
+=
+\begin{bmatrix}
+0\\0\\2
+\end{bmatrix}
+\mathrm{rad\,s^{-1}},
+\qquad
+\mathbf R\boldsymbol\nu_b
+=
+\begin{bmatrix}
+0\\1\\0
+\end{bmatrix}
+\mathrm{m\,s^{-1}}.
+\]</span></p>
+<p>The origin-shift term is</p>
+<p><span class="math display">\[
+[\mathbf p]_\times\boldsymbol\omega_w
+=
+\mathbf p\times\boldsymbol\omega_w
+=
+\begin{bmatrix}
+4\\-2\\0
+\end{bmatrix}
+\mathrm{m\,s^{-1}}.
+\]</span></p>
+<p>Hence,</p>
+<p><span class="math display">\[
+\boxed{
+\boldsymbol\nu_w
+=
+\begin{bmatrix}
+4\\-1\\0
+\end{bmatrix}
+\mathrm{m\,s^{-1}}
+}.
+\]</span></p></li>
+<li><p>Orthogonality alone admits both proper rotations and reflections. The determinant check rejects the reflection case by requiring <span class="math inline">\(\det(\mathbf R)=1\)</span>. A twist’s linear and angular components have different units, so their squared Euclidean norms cannot be added as a physical magnitude without first choosing a length scale that converts angular rate to a linear-speed scale.</p></li>
+<li><p>Let <span class="math inline">\(\boldsymbol\Omega=[\boldsymbol\omega_b]_\times\)</span>. Then</p>
+<p><span class="math display">\[
+\begin{aligned}
+\widetilde{\mathbf R}_{k+1}^{\mathsf T}
+\widetilde{\mathbf R}_{k+1}
+&amp;=
+\left(
+\mathbf I_3-\Delta t\,\boldsymbol\Omega
+\right)
+\mathbf R_k^\mathsf T\mathbf R_k
+\left(
+\mathbf I_3+\Delta t\,\boldsymbol\Omega
+\right)\\
+&amp;=
+\mathbf I_3-\Delta t^2\boldsymbol\Omega^2.
+\end{aligned}
+\]</span></p>
+<p>This is generally not <span class="math inline">\(\mathbf I_3\)</span>, so the updated matrix is generally not in <span class="math inline">\(SO(3)\)</span> even though its one-step constraint error is <span class="math inline">\(O(\Delta t^2)\)</span>.</p></li>
+</ol>
 </section>
 </section>
 <section id="references" class="level2 unnumbered">

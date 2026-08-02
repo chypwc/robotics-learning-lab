@@ -1018,6 +1018,272 @@ The first condition tests approximate orthonormality; the second tests approxima
    \end{bmatrix}.
    $$
 
+## Cumulative chapter test {.unnumbered}
+
+Complete this test without looking back at the chapter. Show the intermediate steps in every calculation, preserve the frame labels, and state the physical units of every dimensional result.
+
+1. **Recall and meaning:** Define a three-dimensional coordinate frame $\{a\}$. Then state what the columns of $\mathbf R_{ab}\in\mathbb R^{3\times3}$ represent and the direction in which this matrix maps coordinate columns.
+2. **Derivation, application, and explanation:** Frame $\{b\}$ is rotated counter-clockwise by $\theta=\pi/2\,\mathrm{rad}$ relative to frame $\{a\}$. Derive $\mathbf R_{ab}(\pi/2)$ by expressing the three axes of frame $\{b\}$ in frame $\{a\}$. Then let
+
+   $$
+   {}^{b}\mathbf v
+   =
+   \begin{bmatrix}
+   2\\1\\0
+   \end{bmatrix}
+   \mathrm{m}.
+   $$
+
+   Compute ${}^{a}\mathbf v$. Which physical property of the geometric free vector is unchanged, and why?
+3. **Point–vector contrast:** Continue from Question 2: use the same frames, with frame $\{b\}$ rotated counter-clockwise by $\theta=\pi/2\,\mathrm{rad}$ relative to frame $\{a\}$, and use the rotation matrix $\mathbf R_{ab}(\pi/2)$ derived there. Now let the position of $O_b$ relative to $O_a$, expressed in frame $\{a\}$, be
+
+   $$
+   {}^{a}\mathbf p_b
+   =
+   \begin{bmatrix}
+   3\\-1\\0
+   \end{bmatrix}
+   \mathrm{m},
+   $$
+
+   and let a physical point $P$ have ${}^{b}\mathbf p_P=[2\;1\;0]^{\mathsf T}\,\mathrm{m}$. Compute ${}^{a}\mathbf p_P$. Then compute the frame-$\{a\}$ coordinates of a free displacement vector whose frame-$\{b\}$ coordinates are also $[2\;1\;0]^{\mathsf T}\,\mathrm{m}$. Explain why the two calculations differ.
+4. **Derivation:** Starting from $\mathbf R_{ab}^{\mathsf T}\mathbf R_{ab}=\mathbf I_3$, derive $\mathbf R_{ba}=\mathbf R_{ab}^{\mathsf T}$. Then prove that changing the coordinate representation of a free vector preserves its Euclidean norm. Finally, show that applying the same point transformation to two physical points $P$ and $Q$ preserves the distance between them.
+5. **Judgement:** Consider
+
+   $$
+   \mathbf M
+   =
+   \begin{bmatrix}
+   -1&0&0\\
+   0&1&0\\
+   0&0&1
+   \end{bmatrix}.
+   $$
+
+   Determine whether $\mathbf M$ is a valid rotation matrix. State which numerical rotation checks it passes or fails and explain the physical meaning of the failure.
+6. **Rigid-body application:** At one instant, all of the following coordinate columns are expressed in the same frame $\{a\}$:
+
+   $$
+   {}^{a}\boldsymbol\omega
+   =
+   \begin{bmatrix}
+   0\\0\\2
+   \end{bmatrix}
+   \mathrm{rad\,s^{-1}},
+   \qquad
+   {}^{a}\mathbf r_{OP}
+   =
+   \begin{bmatrix}
+   0.5\\-0.25\\0
+   \end{bmatrix}
+   \mathrm{m},
+   \qquad
+   {}^{a}\mathbf v_O
+   =
+   \begin{bmatrix}
+   0.2\\-0.1\\0
+   \end{bmatrix}
+   \mathrm{m\,s^{-1}}.
+   $$
+
+   Compute ${}^{a}\mathbf v_{P/O}$ and ${}^{a}\mathbf v_P$. Verify by a dot product which velocity contribution must be perpendicular to ${}^{a}\mathbf r_{OP}$, and state why the same conclusion need not hold for the total velocity.
+7. **Transfer to differential drive:** A planar robot has heading $\theta=-\pi/2\,\mathrm{rad}$ and signed forward speed $v=0.6\,\mathrm{m\,s^{-1}}$. Compute its world-frame velocity ${}^{w}\mathbf v$. Then use the reverse transformation to recover the original body-frame velocity.
+8. **Failure diagnosis:** A software interface documents $\mathbf R_{ab}$ as mapping coordinate columns from frame $\{b\}$ to frame $\{a\}$, but its implementation computes `R_ab.transpose() * v_b` and labels the result as frame $\{a\}$. Explain the semantic error. Give one simple basis-axis test that would expose it.
+9. **Contrast two situations:** Explain the difference between these statements: (a) one unchanged geometric vector is represented by ${}^{b}\mathbf v$ and ${}^{a}\mathbf v=\mathbf R_{ab}{}^{b}\mathbf v$; and (b) the coordinate column ${}^{b}\mathbf v$ is held fixed while frame $\{b\}$ physically rotates relative to frame $\{a\}$. What changes physically in each situation?
+10. **Limitations and engineering checks:** Name at least four declarations or validation checks required at a coordinate-transformation interface. Then name one real-world source of error that valid frame algebra alone cannot remove.
+
+### Cumulative answers and hints {.unnumbered}
+
+1. A frame $\{a\}$ consists of an origin $O_a$ and three right-handed orthonormal basis vectors $\mathbf e_{x,a}$, $\mathbf e_{y,a}$, and $\mathbf e_{z,a}$. The columns of $\mathbf R_{ab}$ are the axes of frame $\{b\}$ expressed in frame $\{a\}$, and $\mathbf R_{ab}$ maps coordinate columns from frame $\{b\}$ to frame $\{a\}$.
+2. At $\theta=\pi/2$, the frame-$\{b\}$ axes expressed in frame $\{a\}$ are
+
+   $$
+   {}^{a}\mathbf e_{x,b}
+   =
+   \begin{bmatrix}
+   0\\1\\0
+   \end{bmatrix},
+   \qquad
+   {}^{a}\mathbf e_{y,b}
+   =
+   \begin{bmatrix}
+   -1\\0\\0
+   \end{bmatrix},
+   \qquad
+   {}^{a}\mathbf e_{z,b}
+   =
+   \begin{bmatrix}
+   0\\0\\1
+   \end{bmatrix}.
+   $$
+
+   Placing these axes in the columns gives
+
+   $$
+   \mathbf R_{ab}(\pi/2)
+   =
+   \begin{bmatrix}
+   0&-1&0\\
+   1&0&0\\
+   0&0&1
+   \end{bmatrix}.
+   $$
+
+   The coordinate change is
+
+   $$
+   {}^{a}\mathbf v
+   =
+   \mathbf R_{ab}{}^{b}\mathbf v
+   =
+   \begin{bmatrix}
+   -1\\2\\0
+   \end{bmatrix}
+   \mathrm{m}.
+   $$
+
+   The geometric vector and its length are unchanged; only its coordinate representation changes. Its norm remains $\sqrt{5}\,\mathrm{m}$ because a rotation matrix is orthogonal.
+3. A point requires both rotation and translation:
+
+   $$
+   {}^{a}\mathbf p_P
+   =
+   \mathbf R_{ab}{}^{b}\mathbf p_P+{}^{a}\mathbf p_b
+   =
+   \begin{bmatrix}
+   -1\\2\\0
+   \end{bmatrix}
+   +
+   \begin{bmatrix}
+   3\\-1\\0
+   \end{bmatrix}
+   =
+   \begin{bmatrix}
+   2\\1\\0
+   \end{bmatrix}
+   \mathrm{m}.
+   $$
+
+   A free displacement vector is unaffected by the origin separation, so
+
+   $$
+   {}^{a}\mathbf v
+   =
+   \mathbf R_{ab}{}^{b}\mathbf v
+   =
+   \begin{bmatrix}
+   -1\\2\\0
+   \end{bmatrix}
+   \mathrm{m}.
+   $$
+
+   A point is located relative to a frame origin, whereas a free vector has direction and magnitude but no fixed origin.
+4. Since $\mathbf R_{ab}^{\mathsf T}\mathbf R_{ab}=\mathbf I_3$, the transpose satisfies the defining equation for the inverse, so $\mathbf R_{ab}^{-1}=\mathbf R_{ab}^{\mathsf T}$. The reverse coordinate map is the inverse of the forward map, hence $\mathbf R_{ba}=\mathbf R_{ab}^{-1}=\mathbf R_{ab}^{\mathsf T}$. For ${}^{a}\mathbf v=\mathbf R_{ab}{}^{b}\mathbf v$,
+
+   $$
+   \begin{aligned}
+   \left\|{}^{a}\mathbf v\right\|_2^2
+   &=({}^{a}\mathbf v)^{\mathsf T}{}^{a}\mathbf v\\
+   &=({}^{b}\mathbf v)^{\mathsf T}\mathbf R_{ab}^{\mathsf T}\mathbf R_{ab}{}^{b}\mathbf v\\
+   &=({}^{b}\mathbf v)^{\mathsf T}{}^{b}\mathbf v\\
+   &=\left\|{}^{b}\mathbf v\right\|_2^2.
+   \end{aligned}
+   $$
+
+   Norms are nonnegative, so equality of the squared norms implies equality of the norms. For two points transformed using the same $\mathbf R_{ab}$ and ${}^{a}\mathbf p_b$, subtracting their frame-$\{a\}$ coordinates cancels the translation:
+
+   $$
+   \begin{aligned}
+   {}^{a}\mathbf p_P-{}^{a}\mathbf p_Q
+   &=\left(\mathbf R_{ab}{}^{b}\mathbf p_P+{}^{a}\mathbf p_b\right)
+   -\left(\mathbf R_{ab}{}^{b}\mathbf p_Q+{}^{a}\mathbf p_b\right)\\
+   &=\mathbf R_{ab}\left({}^{b}\mathbf p_P-{}^{b}\mathbf p_Q\right).
+   \end{aligned}
+   $$
+
+   This difference is a free displacement vector, so the norm-preservation result gives
+
+   $$
+   \left\|{}^{a}\mathbf p_P-{}^{a}\mathbf p_Q\right\|_2
+   =
+   \left\|{}^{b}\mathbf p_P-{}^{b}\mathbf p_Q\right\|_2.
+   $$
+5. The matrix passes the orthonormality check because $\mathbf M^{\mathsf T}\mathbf M=\mathbf I_3$, but it fails the orientation check because $\det(\mathbf M)=-1$. It is a reflection across the $yz$-plane, not a right-handed rigid-body rotation. This is why an orthonormality check alone is insufficient.
+6. The rotational contribution is
+
+   $$
+   {}^{a}\mathbf v_{P/O}
+   =
+   {}^{a}\boldsymbol\omega\times{}^{a}\mathbf r_{OP}
+   =
+   \begin{bmatrix}
+   0.5\\1.0\\0
+   \end{bmatrix}
+   \mathrm{m\,s^{-1}}.
+   $$
+
+   Therefore,
+
+   $$
+   {}^{a}\mathbf v_P
+   =
+   {}^{a}\mathbf v_O+{}^{a}\mathbf v_{P/O}
+   =
+   \begin{bmatrix}
+   0.7\\0.9\\0
+   \end{bmatrix}
+   \mathrm{m\,s^{-1}}.
+   $$
+
+   The required orthogonality check is
+
+   $$
+   ({}^{a}\mathbf r_{OP})^{\mathsf T}{}^{a}\mathbf v_{P/O}
+   =0.5(0.5)-0.25(1.0)
+   =0.
+   $$
+
+   The total velocity also contains the independent translation ${}^{a}\mathbf v_O$, so it need not be perpendicular to ${}^{a}\mathbf r_{OP}$; here their dot product is $0.125\,\mathrm{m^2\,s^{-1}}$.
+7. Since
+
+   $$
+   \mathbf R_{wb}(-\pi/2)
+   =
+   \begin{bmatrix}
+   0&1\\
+   -1&0
+   \end{bmatrix},
+   $$
+
+   the world-frame velocity is
+
+   $$
+   {}^{w}\mathbf v
+   =
+   \mathbf R_{wb}{}^{b}\mathbf v
+   =
+   \begin{bmatrix}
+   0\\-0.6
+   \end{bmatrix}
+   \mathrm{m\,s^{-1}}.
+   $$
+
+   The reverse map is $\mathbf R_{bw}=\mathbf R_{wb}^{\mathsf T}$, and
+
+   $$
+   {}^{b}\mathbf v
+   =
+   \mathbf R_{bw}{}^{w}\mathbf v
+   =
+   \begin{bmatrix}
+   0.6\\0
+   \end{bmatrix}
+   \mathrm{m\,s^{-1}}.
+   $$
+8. The transpose is $\mathbf R_{ab}^{\mathsf T}=\mathbf R_{ba}$, whose declared input is a frame-$\{a\}$ coordinate column and whose output is a frame-$\{b\}$ coordinate column. Applying it to ${}^{b}\mathbf v$ violates the frame contract, even though the matrix dimensions agree, and the result cannot validly be labelled ${}^{a}\mathbf v$. A basis-axis test can provide ${}^{b}\mathbf e_{x,b}=[1\;0\;0]^{\mathsf T}$ and require the output to equal the first column of $\mathbf R_{ab}$; the transposed implementation generally fails this test.
+9. In situation (a), the geometric vector is unchanged and only its numerical description changes with the coordinate basis. In situation (b), the components relative to frame $\{b\}$ stay fixed while the basis vectors of $\{b\}$ turn relative to frame $\{a\}$, so the geometric vector constructed from those fixed components rotates physically with frame $\{b\}$. The same matrix entries can participate in both calculations, but the physical operation and the meanings of the input and output are different.
+10. Suitable declarations and checks include source and destination frame identifiers, point-versus-free-vector semantics, SI units and angle units, matrix and vector dimensions, finite inputs, the intended multiplication direction, approximate orthonormality, determinant near $+1$, and declared numerical tolerances. Valid algebra cannot remove effects such as sensor noise, calibration error, structural compliance, timing error, or model mismatch.
+
 ## References {.unnumbered}
 
 - Kevin M. Lynch and Frank C. Park, *Modern Robotics*, Chapter 3, especially Sections 3.1 and 3.2.1 on free vectors, frames, rotation matrices, and rigid-body motions.

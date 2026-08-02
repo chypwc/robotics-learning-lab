@@ -30,6 +30,7 @@ This note is the canonical notation registry for the project. Chapters may intro
 | $\mathbf{0}_n$ | Zero vector with $n$ components | Depends on the quantity |
 | $(\cdot)^\mathsf{T}$ | Transpose | — |
 | $(\cdot)^{-1}$ | Inverse, when it exists | — |
+| $(\cdot)^{-\mathsf T}$ | Inverse transpose, $(\mathbf A^{-1})^\mathsf T=(\mathbf A^\mathsf T)^{-1}$ for nonsingular $\mathbf A$ | — |
 | $\lVert\mathbf{v}\rVert_2$ | Euclidean norm of $\mathbf{v}$ | Same units as $\mathbf{v}$ |
 | $\det(\mathbf A)$ | Determinant of a square matrix | Depends on the matrix units |
 | $\operatorname{rank}(\mathbf A)$ | Dimension of the column space of $\mathbf A$ | Nonnegative integer |
@@ -84,61 +85,59 @@ This note is the canonical notation registry for the project. Chapters may intro
 
 ### Notation introduced in @sec-planar-rigid-body-motion {.unnumbered .unlisted}
 
-| Symbol | Meaning | Units or convention |
-|---|---|---|
-| ${}^{a}\overline{\mathbf p}_P$ | Homogeneous point coordinate obtained by appending $1$ to ${}^{a}\mathbf p_P$ | Position entries in $\mathrm m$; final entry dimensionless |
-| $SO(2)$ | Special orthogonal group of planar rotation matrices | $\mathbf R^\mathsf T\mathbf R=\mathbf I_2$, $\det\mathbf R=1$ |
-| $SE(2)$ | Special Euclidean group of planar rigid transformations | Planar rotation and translation represented together |
-| $\mathbf{T}_{ab}$ | Homogeneous transform mapping coordinates from frame $\{b\}$ to frame $\{a\}$ | $\mathbf{T}_{ab}\in SE(2)$ |
-| $T_{\mathbf I_2}SO(2)$ | Tangent space of $SO(2)$ at the identity rotation $\mathbf I_2$ | Linear space of rotation-curve derivatives through $\mathbf I_2$ |
-| $T_{\mathbf I_3}SE(2)$ | Tangent space of $SE(2)$ at the identity transformation $\mathbf I_3$ | Linear space of transformation-curve derivatives through $\mathbf I_3$ |
-| $\mathbf S_2$ | Planar skew generator $\begin{bmatrix}0&-1\\1&0\end{bmatrix}$ | Dimensionless |
-| $\mathfrak{so}(2)$ | Lie algebra and identity tangent space of $SO(2)$ | $2\times2$ real skew-symmetric matrices |
-| $\mathfrak{se}(2)$ | Lie algebra and identity tangent space of $SE(2)$ | Structured $3\times3$ infinitesimal planar rigid-motion matrices |
-| $\boldsymbol\xi=[\boldsymbol\nu^\mathsf T\;\omega]^\mathsf T$ | Planar twist coordinate column with linear part $\boldsymbol\nu\in\mathbb R^2$ and angular part $\omega\in\mathbb R$ | $\mathrm{m\,s^{-1}}$ and $\mathrm{rad\,s^{-1}}$ |
-| $\widehat{\boldsymbol\xi}$ | Hat-operator matrix representing $\boldsymbol\xi$ in $\mathfrak{se}(2)$ | Upper-left block in $\mathrm{s^{-1}}$; translation column in $\mathrm{m\,s^{-1}}$ |
-| $(\cdot)^\vee$ | Vee operator, inverse of the declared hat operator | Returns the twist coordinate column |
-| $\boldsymbol\xi_b,\boldsymbol\xi_w$ | Body and spatial twist coordinates for the same instantaneous motion | Body axes/body origin and world axes/world origin conventions |
-| $\boldsymbol\nu_b,\boldsymbol\nu_w$ | Linear parts of the body and spatial twists | $\mathrm{m\,s^{-1}}$ |
-| $\operatorname{Ad}_{\mathbf T}$ | Adjoint mapping that changes twist coordinates according to rigid transform $\mathbf T$ | Matrix dimensions and mixed units follow the twist convention |
-| $\ell$ | Declared characteristic length used to compare linear and angular twist components | $\mathrm m$ |
+| Symbol                                                        | Meaning                                                                                                              | Units or convention                                                               |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| ${}^{a}\overline{\mathbf p}_P$                                | Homogeneous point coordinate obtained by appending $1$ to ${}^{a}\mathbf p_P$                                        | Position entries in $\mathrm m$; final entry dimensionless                        |
+| $SO(2)$                                                       | Special orthogonal group of planar rotation matrices                                                                 | $\mathbf R^\mathsf T\mathbf R=\mathbf I_2$, $\det\mathbf R=1$                     |
+| $SE(2)$                                                       | Special Euclidean group of planar rigid transformations                                                              | Planar rotation and translation represented together                              |
+| $\mathbf{T}_{ab}$                                             | Homogeneous transform mapping coordinates from frame $\{b\}$ to frame $\{a\}$                                        | $\mathbf{T}_{ab}\in SE(2)$                                                        |
+| $T_{\mathbf I_2}SO(2)$                                        | Tangent space of $SO(2)$ at the identity rotation $\mathbf I_2$                                                      | Linear space of rotation-curve derivatives through $\mathbf I_2$                  |
+| $T_{\mathbf I_3}SE(2)$                                        | Tangent space of $SE(2)$ at the identity transformation $\mathbf I_3$                                                | Linear space of transformation-curve derivatives through $\mathbf I_3$            |
+| $\mathbf S_2$                                                 | Planar skew generator $\begin{bmatrix}0&-1\\1&0\end{bmatrix}$                                                        | Dimensionless                                                                     |
+| $\mathfrak{so}(2)$                                            | Lie algebra and identity tangent space of $SO(2)$                                                                    | $2\times2$ real skew-symmetric matrices                                           |
+| $\mathfrak{se}(2)$                                            | Lie algebra and identity tangent space of $SE(2)$                                                                    | Structured $3\times3$ infinitesimal planar rigid-motion matrices                  |
+| $\boldsymbol\xi=[\boldsymbol\nu^\mathsf T\;\omega]^\mathsf T$ | Planar twist coordinate column with linear part $\boldsymbol\nu\in\mathbb R^2$ and angular part $\omega\in\mathbb R$ | $\mathrm{m\,s^{-1}}$ and $\mathrm{rad\,s^{-1}}$                                   |
+| $\widehat{\boldsymbol\xi}$                                    | Hat-operator matrix representing $\boldsymbol\xi$ in $\mathfrak{se}(2)$                                              | Upper-left block in $\mathrm{s^{-1}}$; translation column in $\mathrm{m\,s^{-1}}$ |
+| $(\cdot)^\vee$                                                | Vee operator, inverse of the declared hat operator                                                                   | Returns the twist coordinate column                                               |
+| $\boldsymbol\xi_b,\boldsymbol\xi_w$                           | Body and spatial twist coordinates for the same instantaneous motion                                                 | Body axes/body origin and world axes/world origin conventions                     |
+| $\boldsymbol\nu_b,\boldsymbol\nu_w$                           | Linear parts of the body and spatial twists                                                                          | $\mathrm{m\,s^{-1}}$                                                              |
+| $\operatorname{Ad}_{\mathbf T}$                               | Adjoint mapping that changes twist coordinates according to rigid transform $\mathbf T$                              | Matrix dimensions and mixed units follow the twist convention                     |
+| $\ell$                                                        | Declared characteristic length used to compare linear and angular twist components                                   | $\mathrm m$                                                                       |
 
 ### Notation introduced in @sec-spatial-rigid-body-motion {.unnumbered .unlisted}
 
-| Symbol | Meaning | Units or convention |
-|---|---|---|
-| $\mathcal C$ | Configuration space: the set of all configurations allowed by the model | May be curved and need not be a vector space |
-| $\mathbf q\in\mathcal C$ | Configuration or a chosen column of generalised coordinates | Components and units depend on the system |
-| $n_{\mathrm{dof}}$ | Number of configuration degrees of freedom | Nonnegative integer |
-| $n_v,n_c$ | Numbers of scalar variables and independent regular equality constraints in a local count | Nonnegative integers |
-| $\mathcal M$ | Smooth manifold: a space that locally resembles a Euclidean coordinate space | Dimension declared locally |
-| $T_{\mathbf G}\mathcal M$ | Tangent space of manifold $\mathcal M$ at $\mathbf G$ | Linear space of curve derivatives through $\mathbf G$ |
-| $SO(3)$ | Special orthogonal group of spatial rotation matrices | $\mathbf R^\mathsf T\mathbf R=\mathbf I_3$, $\det\mathbf R=1$ |
-| $SE(3)$ | Special Euclidean group of spatial rigid transformations | Spatial rotation and translation represented together |
-| $[\mathbf{v}]_\times$ | Skew-symmetric matrix satisfying $[\mathbf{v}]_\times\mathbf{w}=\mathbf{v}\times\mathbf{w}$ | Same units as $\mathbf{v}$ |
-
-### Notation introduced in @sec-dynamics-actuator-limits {.unnumbered .unlisted}
-
-| Symbol | Meaning | Units or convention |
-|---|---|---|
-| $s(t),v(t),a(t)$ | Signed one-dimensional position, velocity, and acceleration | $\mathrm m,\mathrm{m\,s^{-1}},\mathrm{m\,s^{-2}}$ |
-| $m$ | Robot mass | $\mathrm{kg}$ |
-| $\mathbf F,F$ | Force vector and force magnitude | $\mathrm N$ |
-| $F_j,F_{\mathrm{net}}$ | Signed component of external force $j$ and their signed net sum | $\mathrm N$ |
-| $F_{\mathrm{drive}},F_{\mathrm{resist}}$ | Nonnegative drive and resistance force magnitudes in the declared direction | $\mathrm N$ |
-| $\boldsymbol\rho$ | Position vector from a chosen moment point to a force application point | $\mathrm m$ |
-| $\boldsymbol\tau_O,\tau$ | Torque vector about point $O$ and its magnitude | $\mathrm{N\,m}$ |
-| $\tau_i,F_i$ | Signed axle torque and longitudinal ground force for wheel $i\in\{L,R\}$ | $\mathrm{N\,m},\mathrm N$ |
-| $I_i$ | Wheel mass moment of inertia about its axle | $\mathrm{kg\,m^2}$ |
-| $\ddot\phi_i$ | Wheel angular acceleration | $\mathrm{rad\,s^{-2}}$ |
-| $G$ | Positive gearbox reduction ratio | Dimensionless |
-| $\eta$ | Gearbox efficiency for the declared power-flow direction | Dimensionless, $0<\eta\leq1$ |
-| $\dot\phi_m,\dot\phi_w$ | Motor-shaft and wheel-side angular speeds | $\mathrm{rad\,s^{-1}}$ |
-| $\tau_m,\tau_w$ | Motor-shaft and wheel-side torques | $\mathrm{N\,m}$ |
-| $P=\tau\dot\phi$ | Rotational mechanical power | $\mathrm W=\mathrm{N\,m\,s^{-1}}$ |
-
-
-
+| Symbol                                                                             | Meaning                                                                                                    | Units or convention                                                               |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| $\mathcal B$                                                                       | Set of labelled material points belonging to the rigid body                                                | Abstract set                                                                      |
+| $\chi:\mathcal B\to\mathbb R^d$                                                    | Placement map assigning a world position to every material point in a $d$-dimensional model                | Output coordinates measured in $\mathrm m$                                        |
+| $\mathcal C$                                                                       | Configuration space: the set of all configurations allowed by the model                                    | May be curved and need not be a vector space                                      |
+| $\chi\in\mathcal C$                                                                | One complete physical configuration represented as an admissible placement map                             | Abstract element of $\mathcal C$                                                  |
+| $\mathbf q$                                                                        | Chosen column of generalised coordinates describing a configuration                                        | Components and units depend on the system                                         |
+| $n_{\mathrm{dof}}$                                                                 | Number of configuration degrees of freedom                                                                 | Nonnegative integer                                                               |
+| $n_v,n_c$                                                                          | Numbers of scalar variables and independent regular equality constraints in a local count                  | Nonnegative integers                                                              |
+| $\mathbf z\in\mathbb R^{n_v}$                                                      | Ambient coordinate column used to express equality constraints                                             | Components and units depend on the system                                         |
+| $\mathbf g:\mathbb R^{n_v}\to\mathbb R^{n_c}$                                      | Equality-constraint mapping, with valid coordinates satisfying $\mathbf g(\mathbf z)=\mathbf 0_{n_c}$      | Output units depend on the constraints                                            |
+| $\mathbf J_{\mathbf g}(\mathbf z)$                                                 | Constraint Jacobian with entries $\partial g_i/\partial z_j$                                               | $n_c\times n_v$; row units depend on $g_i$ and $z_j$                              |
+| $SO(3)$                                                                            | Special orthogonal group of spatial rotation matrices                                                      | $\mathbf R^\mathsf T\mathbf R=\mathbf I_3$, $\det\mathbf R=1$                     |
+| $\mathbf R_x(\theta),\mathbf R_y(\theta),\mathbf R_z(\theta)$                      | Active right-hand-rule rotations about the declared coordinate axes                                        | Elements of $SO(3)$                                                               |
+| $\mathbf Q_w,\mathbf Q_b$                                                          | Finite orientation increments expressed along world or body axes                                           | Elements of $SO(3)$; premultiply or postmultiply accordingly                      |
+| $\boldsymbol\omega_w,\boldsymbol\omega_b$                                          | Same world-relative angular velocity resolved along world or body axes                                     | $\mathrm{rad\,s^{-1}}$                                                            |
+| $SE(3)$                                                                            | Special Euclidean group of spatial rigid transformations                                                   | Spatial rotation and translation represented together                             |
+| $\mathbf T_{wb}\in SE(3)$                                                          | Spatial pose of frame $\{b\}$ relative to frame $\{w\}$ and transform from body to world point coordinates | Rotation block dimensionless; translation block in $\mathrm m$                    |
+| $[\mathbf v]_\times$                                                               | Cross-product matrix satisfying $[\mathbf v]_\times\mathbf y=\mathbf v\times\mathbf y$                     | Same units as $\mathbf v$                                                         |
+| $\mathfrak{so}(3)$                                                                 | Lie algebra and identity tangent space of $SO(3)$                                                          | $3\times3$ real skew-symmetric matrices                                           |
+| $\mathbf a_w,\alpha,\boldsymbol\varphi_w=\alpha\mathbf a_w$                        | Unit rotation axis, signed angle, and rotation-vector coordinates expressed along world axes               | Dimensionless axis; angle and rotation vector labelled in $\mathrm{rad}$          |
+| $\exp(\mathbf A)$                                                                  | Matrix exponential $\sum_{j=0}^{\infty}\mathbf A^j/j!$                                                     | Dimensionless output when $\mathbf A$ is dimensionless                            |
+| $\mathsf q=(q_w,\mathbf q_v)$                                                      | Quaternion written as an ordered scalar--vector pair                                                       | Dimensionless components                                                          |
+| $\otimes$                                                                          | Hamilton product of two quaternions                                                                        | Order follows rotation-composition order                                          |
+| $\mathsf q^*=(q_w,-\mathbf q_v)$                                                   | Quaternion conjugate; the inverse when $\mathsf q$ has unit norm                                           | Dimensionless                                                                     |
+| $\mathfrak{se}(3)$                                                                 | Lie algebra and identity tangent space of $SE(3)$                                                          | Structured $4\times4$ infinitesimal spatial rigid-motion matrices                 |
+| $\boldsymbol\xi=[\boldsymbol\nu^\mathsf T\;\boldsymbol\omega^\mathsf T]^\mathsf T$ | Spatial twist coordinate column in the project's linear-first order                                        | Three entries in $\mathrm{m\,s^{-1}}$ followed by three in $\mathrm{rad\,s^{-1}}$ |
+| $\|\mathbf M\|_{\mathrm F}$                                                        | Frobenius norm of a real matrix                                                                            | Units follow the matrix entries                                                   |
+| $e_{\mathrm{orth}},e_{\det},e_q$                                                   | Orthogonality, determinant, and unit-quaternion residuals                                                  | Dimensionless                                                                     |
+| $\|\boldsymbol\xi\|_\ell$                                                          | Twist comparison magnitude after choosing characteristic length $\ell$                                     | $\mathrm{m\,s^{-1}}$; application-dependent                                       |
+| $\boldsymbol\Omega_k=[\boldsymbol\omega_{b,k}]_\times$                             | Body-expressed angular-velocity matrix at sample $k$                                                       | $\mathrm{s^{-1}}$                                                                 |
+| $\widetilde{\mathbf R}_{k+1}$                                                      | Forward Euler candidate for the next orientation matrix                                                    | Dimensionless; not necessarily in $SO(3)$                                         |
 
 ```{=latex}
 \cleardoublepage

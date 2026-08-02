@@ -396,7 +396,8 @@ window.Quarto = {
   <li><a href="#sec-linear-algebra-vector-norm" id="toc-sec-linear-algebra-vector-norm" class="nav-link" data-scroll-target="#sec-linear-algebra-vector-norm"><span class="header-section-number">1.1.3</span> Length and unit direction</a></li>
   <li><a href="#dot-product-and-angle" id="toc-dot-product-and-angle" class="nav-link" data-scroll-target="#dot-product-and-angle"><span class="header-section-number">1.1.4</span> Dot product and angle</a></li>
   <li><a href="#sec-linear-algebra-cross-product" id="toc-sec-linear-algebra-cross-product" class="nav-link" data-scroll-target="#sec-linear-algebra-cross-product"><span class="header-section-number">1.1.5</span> Cross product and useful identities</a></li>
-  <li><a href="#linear-combinations-span-and-basis" id="toc-linear-combinations-span-and-basis" class="nav-link" data-scroll-target="#linear-combinations-span-and-basis"><span class="header-section-number">1.1.6</span> Linear combinations, span, and basis</a></li>
+  <li><a href="#sec-linear-algebra-scalar-triple-product" id="toc-sec-linear-algebra-scalar-triple-product" class="nav-link" data-scroll-target="#sec-linear-algebra-scalar-triple-product"><span class="header-section-number">1.1.6</span> Scalar triple product</a></li>
+  <li><a href="#linear-combinations-span-and-basis" id="toc-linear-combinations-span-and-basis" class="nav-link" data-scroll-target="#linear-combinations-span-and-basis"><span class="header-section-number">1.1.7</span> Linear combinations, span, and basis</a></li>
   </ul></li>
   <li><a href="#quick-test-a-vectors-and-bases" id="toc-quick-test-a-vectors-and-bases" class="nav-link" data-scroll-target="#quick-test-a-vectors-and-bases">Quick test A: vectors and bases</a>
   <ul class="collapse">
@@ -412,11 +413,12 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#answers-and-hints-1" id="toc-answers-and-hints-1" class="nav-link" data-scroll-target="#answers-and-hints-1">Answers and hints</a></li>
   </ul></li>
-  <li><a href="#determinants-and-signed-volume" id="toc-determinants-and-signed-volume" class="nav-link" data-scroll-target="#determinants-and-signed-volume"><span class="header-section-number">1.3</span> Determinants and signed volume</a>
+  <li><a href="#sec-linear-algebra-determinants" id="toc-sec-linear-algebra-determinants" class="nav-link" data-scroll-target="#sec-linear-algebra-determinants"><span class="header-section-number">1.3</span> Determinants and signed volume</a>
   <ul class="collapse">
   <li><a href="#what-the-determinant-measures" id="toc-what-the-determinant-measures" class="nav-link" data-scroll-target="#what-the-determinant-measures"><span class="header-section-number">1.3.1</span> What the determinant measures</a></li>
   <li><a href="#algebraic-definition" id="toc-algebraic-definition" class="nav-link" data-scroll-target="#algebraic-definition"><span class="header-section-number">1.3.2</span> Algebraic definition</a></li>
   <li><a href="#why-determinants-multiply" id="toc-why-determinants-multiply" class="nav-link" data-scroll-target="#why-determinants-multiply"><span class="header-section-number">1.3.3</span> Why determinants multiply</a></li>
+  <li><a href="#sec-linear-algebra-cross-product-linear-map" id="toc-sec-linear-algebra-cross-product-linear-map" class="nav-link" data-scroll-target="#sec-linear-algebra-cross-product-linear-map"><span class="header-section-number">1.3.4</span> How an invertible linear map transforms a cross product</a></li>
   </ul></li>
   <li><a href="#quick-test-c-determinants" id="toc-quick-test-c-determinants" class="nav-link" data-scroll-target="#quick-test-c-determinants">Quick test C: determinants</a>
   <ul class="collapse">
@@ -830,8 +832,50 @@ b_3(\mathbf a^\mathsf T\mathbf c)-c_3(\mathbf a^\mathsf T\mathbf b)
 \]</span></p>
 <p>If <span class="math inline">\(\mathbf a\)</span> is a unit vector, then <span class="math inline">\(\mathbf a^\mathsf T\mathbf a=1\)</span>.</p>
 </section>
-<section id="linear-combinations-span-and-basis" class="level3" data-number="1.1.6">
-<h3 data-number="1.1.6" class="anchored" data-anchor-id="linear-combinations-span-and-basis"><span class="header-section-number">1.1.6</span> Linear combinations, span, and basis</h3>
+<section id="sec-linear-algebra-scalar-triple-product" class="level3" data-number="1.1.6">
+<h3 data-number="1.1.6" class="anchored" data-anchor-id="sec-linear-algebra-scalar-triple-product"><span class="header-section-number">1.1.6</span> Scalar triple product</h3>
+<p>A cross product supplies a direction perpendicular to two vectors and a magnitude equal to their parallelogram area. Taking its dot product with a third vector converts this area vector into a signed volume. For <span class="math inline">\(\mathbf a,\mathbf b,\mathbf c\in\mathbb R^3\)</span> expressed in the same right-handed orthonormal frame, the <strong>scalar triple product</strong> is</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf a^\mathsf T
+(\mathbf b\times\mathbf c)
+\in\mathbb R
+}.
+\]</span></p>
+<p>The word <em>scalar</em> records that the outer dot product returns one real number, while <em>triple</em> records that the expression uses three vectors. Substituting the cross-product components gives the explicit formula</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf a^\mathsf T(\mathbf b\times\mathbf c)
+&amp;=
+a_1(b_2c_3-b_3c_2)
++
+a_2(b_3c_1-b_1c_3)\\
+&amp;\quad+
+a_3(b_1c_2-b_2c_1).
+\end{aligned}
+\]</span></p>
+<p>Geometrically, <span class="math inline">\(\|\mathbf b\times\mathbf c\|_2\)</span> is the area of the parallelogram spanned by <span class="math inline">\(\mathbf b\)</span> and <span class="math inline">\(\mathbf c\)</span>. If <span class="math inline">\(\mathbf b\times\mathbf c\ne\mathbf 0_3\)</span>, define its unit normal by <span class="math inline">\(\mathbf n\mathrel{:=}(\mathbf b\times\mathbf c)/\|\mathbf b\times\mathbf c\|_2\)</span>. Then</p>
+<p><span class="math display">\[
+\mathbf a^\mathsf T(\mathbf b\times\mathbf c)
+=
+\underbrace{\mathbf a^\mathsf T\mathbf n}_{\text{signed height}}
+\underbrace{\|\mathbf b\times\mathbf c\|_2}_{\text{base area}}.
+\]</span></p>
+<p>Its absolute value is therefore the volume of the parallelepiped spanned by the three vectors. Its sign states whether the ordered directions <span class="math inline">\((\mathbf a,\mathbf b,\mathbf c)\)</span> have positive or negative orientation, and it is zero when the three vectors are coplanar. If the input vectors carry physical units, the scalar triple product carries the product of all three units.</p>
+<p>Direct component expansion also gives the cyclic identities</p>
+<p><span class="math display">\[
+\boxed{
+\mathbf a^\mathsf T(\mathbf b\times\mathbf c)
+=
+\mathbf b^\mathsf T(\mathbf c\times\mathbf a)
+=
+\mathbf c^\mathsf T(\mathbf a\times\mathbf b)
+}.
+\]</span></p>
+<p>Cyclically moving the three vectors does not change the value, but swapping any two vectors reverses its sign. This scalar-valued expression differs from the vector triple product in <a href="#sec-linear-algebra-cross-product" class="quarto-xref"><span>Section 1.1.5</span></a>, whose output is a vector. The determinant discussion in <a href="#sec-linear-algebra-determinants" class="quarto-xref"><span>Section 1.3</span></a> will show that the scalar triple product is also the determinant of the matrix whose columns are <span class="math inline">\(\mathbf a\)</span>, <span class="math inline">\(\mathbf b\)</span>, and <span class="math inline">\(\mathbf c\)</span> in that order.</p>
+</section>
+<section id="linear-combinations-span-and-basis" class="level3" data-number="1.1.7">
+<h3 data-number="1.1.7" class="anchored" data-anchor-id="linear-combinations-span-and-basis"><span class="header-section-number">1.1.7</span> Linear combinations, span, and basis</h3>
 <p>Let <span class="math inline">\(\mathbf v_1,\ldots,\mathbf v_k\in\mathbb R^n\)</span> and let <span class="math inline">\(\alpha_1,\ldots,\alpha_k\in\mathbb R\)</span>. A <strong>linear combination</strong> of these vectors is any vector of the form</p>
 <p><span class="math display">\[
 \alpha_1\mathbf v_1+\cdots+\alpha_k\mathbf v_k.
@@ -877,6 +921,7 @@ x_1&amp;\cdots&amp;x_n
 <li><strong>Limitations:</strong> Why is the angle formula undefined when either vector is zero?</li>
 <li><strong>Basis:</strong> Explain why two parallel nonzero vectors cannot form a basis of <span class="math inline">\(\mathbb R^2\)</span>.</li>
 <li><strong>Cross product:</strong> For a unit vector <span class="math inline">\(\mathbf a\in\mathbb R^3\)</span>, use the vector triple-product identity to simplify <span class="math inline">\(\mathbf a\times(\mathbf a\times\mathbf y)\)</span>.</li>
+<li><strong>Scalar triple product:</strong> Evaluate <span class="math inline">\(\mathbf e_1^\mathsf T(\mathbf e_2\times\mathbf e_3)\)</span>, then predict the value after swapping <span class="math inline">\(\mathbf e_2\)</span> and <span class="math inline">\(\mathbf e_3\)</span>. What geometric change causes the sign change?</li>
 </ol>
 <section id="answers-and-hints" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="answers-and-hints">Answers and hints</h3>
@@ -888,6 +933,7 @@ x_1&amp;\cdots&amp;x_n
 <li>The denominator <span class="math inline">\(\|\mathbf u\|_2\|\mathbf v\|_2\)</span> becomes zero, and a zero vector has no direction.</li>
 <li>One vector is a scalar multiple of the other, so their span is only a line and their coefficient representation is not unique.</li>
 <li><span class="math inline">\(\mathbf a\times(\mathbf a\times\mathbf y)=\mathbf a(\mathbf a^\mathsf T\mathbf y)-\mathbf y\)</span> because <span class="math inline">\(\mathbf a^\mathsf T\mathbf a=1\)</span>.</li>
+<li>Since <span class="math inline">\(\mathbf e_2\times\mathbf e_3=\mathbf e_1\)</span>, the first value is <span class="math inline">\(1\)</span>. Swapping the two cross-product inputs gives <span class="math inline">\(\mathbf e_3\times\mathbf e_2=-\mathbf e_1\)</span>, so the second value is <span class="math inline">\(-1\)</span>. The swap reverses the orientation of the ordered directions while preserving the volume magnitude.</li>
 </ol>
 </section>
 </section>
@@ -1200,8 +1246,8 @@ x_1\mathbf a_1+\cdots+x_n\mathbf a_n=\mathbf 0
 </ol>
 </section>
 </section>
-<section id="determinants-and-signed-volume" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="determinants-and-signed-volume"><span class="header-section-number">1.3</span> Determinants and signed volume</h2>
+<section id="sec-linear-algebra-determinants" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec-linear-algebra-determinants"><span class="header-section-number">1.3</span> Determinants and signed volume</h2>
 <section id="what-the-determinant-measures" class="level3" data-number="1.3.1">
 <h3 data-number="1.3.1" class="anchored" data-anchor-id="what-the-determinant-measures"><span class="header-section-number">1.3.1</span> What the determinant measures</h3>
 <p>The determinant is defined for a square matrix <span class="math inline">\(\mathbf A\in\mathbb R^{n\times n}\)</span> and returns a scalar:</p>
@@ -1213,7 +1259,7 @@ x_1\mathbf a_1+\cdots+x_n\mathbf a_n=\mathbf 0
 <p><span class="math display">\[
 \det(\mathbf A)=ad-bc.
 \]</span></p>
-<p>Its magnitude is the area of the parallelogram formed by the columns of <span class="math inline">\(\mathbf A\)</span>. For <span class="math inline">\(\mathbf A=[\mathbf a_1\;\mathbf a_2\;\mathbf a_3]\in\mathbb R^{3\times3}\)</span>, the determinant is the scalar triple product</p>
+<p>Its magnitude is the area of the parallelogram formed by the columns of <span class="math inline">\(\mathbf A\)</span>. For <span class="math inline">\(\mathbf A=[\mathbf a_1\;\mathbf a_2\;\mathbf a_3]\in\mathbb R^{3\times3}\)</span>, the determinant is the scalar triple product defined in <a href="#sec-linear-algebra-scalar-triple-product" class="quarto-xref"><span>Section 1.1.6</span></a>:</p>
 <p><span class="math display">\[
 \det(\mathbf A)
 =
@@ -1693,6 +1739,67 @@ a_{j,\sigma(j)}=a_{\tau(k),k}.
 \]</span></p>
 </section>
 </section>
+<section id="sec-linear-algebra-cross-product-linear-map" class="level3" data-number="1.3.4">
+<h3 data-number="1.3.4" class="anchored" data-anchor-id="sec-linear-algebra-cross-product-linear-map"><span class="header-section-number">1.3.4</span> How an invertible linear map transforms a cross product</h3>
+<p>The cross product depends on lengths, angles, and the handedness of the coordinate system. A general linear map may stretch those lengths, change the angles, or reverse the handedness, so it does not usually pass through a cross product unchanged.</p>
+<p>Let <span class="math inline">\(\mathbf A\in\mathbb R^{3\times3}\)</span> be nonsingular, and let <span class="math inline">\(\mathbf a,\mathbf b\in\mathbb R^3\)</span> be expressed in the same right-handed orthonormal coordinates. The transformed cross product is</p>
+<p><span class="math display">\[
+\boxed{
+(\mathbf A\mathbf a)\times(\mathbf A\mathbf b)
+=
+\det(\mathbf A)\mathbf A^{-\mathsf T}
+(\mathbf a\times\mathbf b)
+},
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf A^{-\mathsf T}\mathrel{:=}(\mathbf A^{-1})^\mathsf T=(\mathbf A^\mathsf T)^{-1}\)</span> is the <strong>inverse transpose</strong> of <span class="math inline">\(\mathbf A\)</span>. Nonsingularity is required because <span class="math inline">\(\mathbf A^{-1}\)</span> must exist.</p>
+<p>To prove the identity, compare the dot product of both sides with an arbitrary test column <span class="math inline">\(\mathbf c\in\mathbb R^3\)</span>. The scalar-triple-product formula from <a href="#sec-linear-algebra-scalar-triple-product" class="quarto-xref"><span>Section 1.1.6</span></a> gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf c^\mathsf T
+\left[
+(\mathbf A\mathbf a)\times(\mathbf A\mathbf b)
+\right]
+&amp;=
+\det
+\begin{bmatrix}
+\mathbf c&amp;\mathbf A\mathbf a&amp;\mathbf A\mathbf b
+\end{bmatrix}\\
+&amp;=
+\det
+\left(
+\mathbf A
+\begin{bmatrix}
+\mathbf A^{-1}\mathbf c&amp;\mathbf a&amp;\mathbf b
+\end{bmatrix}
+\right)\\
+&amp;=
+\det(\mathbf A)
+\det
+\begin{bmatrix}
+\mathbf A^{-1}\mathbf c&amp;\mathbf a&amp;\mathbf b
+\end{bmatrix}\\
+&amp;=
+\det(\mathbf A)
+(\mathbf A^{-1}\mathbf c)^\mathsf T
+(\mathbf a\times\mathbf b)\\
+&amp;=
+\mathbf c^\mathsf T
+\left[
+\det(\mathbf A)\mathbf A^{-\mathsf T}
+(\mathbf a\times\mathbf b)
+\right].
+\end{aligned}
+\]</span></p>
+<p>The second equality uses <span class="math inline">\(\mathbf c=\mathbf A(\mathbf A^{-1}\mathbf c)\)</span> to factor <span class="math inline">\(\mathbf A\)</span> from all three columns. The third uses determinant multiplicativity. The final equality uses <span class="math inline">\((\mathbf A^{-1}\mathbf c)^\mathsf T=\mathbf c^\mathsf T\mathbf A^{-\mathsf T}\)</span>. Because both candidate vectors have the same dot product with every <span class="math inline">\(\mathbf c\)</span>, they are equal.</p>
+<p>For an orthogonal matrix <span class="math inline">\(\mathbf Q\in\mathbb R^{3\times3}\)</span>, <span class="math inline">\(\mathbf Q^\mathsf T\mathbf Q=\mathbf I_3\)</span> implies <span class="math inline">\(\mathbf Q^{-\mathsf T}=\mathbf Q\)</span>. The general identity then becomes</p>
+<p><span class="math display">\[
+(\mathbf Q\mathbf a)\times(\mathbf Q\mathbf b)
+=
+\det(\mathbf Q)\mathbf Q
+(\mathbf a\times\mathbf b).
+\]</span></p>
+<p>If <span class="math inline">\(\det(\mathbf Q)=1\)</span>, then <span class="math inline">\(\mathbf Q\)</span> is a proper rotation and preserves the cross-product direction. If <span class="math inline">\(\det(\mathbf Q)=-1\)</span>, then <span class="math inline">\(\mathbf Q\)</span> contains a reflection and reverses that direction. This determinant sign is why orthogonality alone is insufficient for a rotation to preserve cross products.</p>
+</section>
 </section>
 <section id="quick-test-c-determinants" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="quick-test-c-determinants">Quick test C: determinants</h2>
@@ -1704,6 +1811,7 @@ a_{j,\sigma(j)}=a_{\tau(k),k}.
 <li><strong>Limitations:</strong> Why is the determinant not defined in the same way for a rectangular matrix?</li>
 <li><strong>Composition:</strong> Explain geometrically why <span class="math inline">\(\det(\mathbf A\mathbf B)=\det(\mathbf A)\det(\mathbf B)\)</span>.</li>
 <li><strong>Reindexing:</strong> If <span class="math inline">\(\sigma(1)=2\)</span>, <span class="math inline">\(\sigma(2)=3\)</span>, and <span class="math inline">\(\sigma(3)=1\)</span>, find <span class="math inline">\(\tau=\sigma^{-1}\)</span> and verify <span class="math inline">\(\prod_{j=1}^{3}a_{j,\sigma(j)}=\prod_{k=1}^{3}a_{\tau(k),k}\)</span>.</li>
+<li><strong>Cross products under linear maps:</strong> State how a nonsingular <span class="math inline">\(\mathbf A\in\mathbb R^{3\times3}\)</span> transforms a cross product. Why does a proper rotation preserve the cross product while a reflection reverses it?</li>
 </ol>
 <section id="answers-and-hints-2" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="answers-and-hints-2">Answers and hints</h3>
@@ -1715,6 +1823,7 @@ a_{j,\sigma(j)}=a_{\tau(k),k}.
 <li>A rectangular map changes dimension, so it does not map an <span class="math inline">\(n\)</span>-dimensional volume to another volume in the same <span class="math inline">\(n\)</span>-dimensional space.</li>
 <li><span class="math inline">\(\mathbf B\)</span> scales signed volume first and <span class="math inline">\(\mathbf A\)</span> scales the resulting signed volume second, so the factors multiply.</li>
 <li>The inverse is <span class="math inline">\(\tau(1)=3\)</span>, <span class="math inline">\(\tau(2)=1\)</span>, and <span class="math inline">\(\tau(3)=2\)</span>. The left product is <span class="math inline">\(a_{1,2}a_{2,3}a_{3,1}\)</span>, while the reindexed product is <span class="math inline">\(a_{3,1}a_{1,2}a_{2,3}\)</span>; these are equal because scalar factors commute.</li>
+<li><span class="math inline">\((\mathbf A\mathbf a)\times(\mathbf A\mathbf b)=\det(\mathbf A)\mathbf A^{-\mathsf T}(\mathbf a\times\mathbf b)\)</span>. For orthogonal <span class="math inline">\(\mathbf Q\)</span>, <span class="math inline">\(\mathbf Q^{-\mathsf T}=\mathbf Q\)</span>. A proper rotation has determinant <span class="math inline">\(+1\)</span> and therefore preserves the cross product, whereas an orthogonal reflection has determinant <span class="math inline">\(-1\)</span> and introduces a minus sign.</li>
 </ol>
 </section>
 </section>

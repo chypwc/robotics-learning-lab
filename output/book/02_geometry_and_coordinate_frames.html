@@ -405,12 +405,6 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./08_dynamics_forces_and_actuator_limits.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Dynamics, Forces, Torque, Friction, and Actuator Limits</span></span></a>
-  </div>
-</li>
       </ul>
   </li>
     </ul>
@@ -460,6 +454,10 @@ window.Quarto = {
   <li><a href="#quick-test-b-coordinate-frames-and-rotations" id="toc-quick-test-b-coordinate-frames-and-rotations" class="nav-link" data-scroll-target="#quick-test-b-coordinate-frames-and-rotations">Quick test B: coordinate frames and rotations</a>
   <ul class="collapse">
   <li><a href="#answers-and-hints-1" id="toc-answers-and-hints-1" class="nav-link" data-scroll-target="#answers-and-hints-1">Answers and hints</a></li>
+  </ul></li>
+  <li><a href="#cumulative-chapter-test" id="toc-cumulative-chapter-test" class="nav-link" data-scroll-target="#cumulative-chapter-test">Cumulative chapter test</a>
+  <ul class="collapse">
+  <li><a href="#cumulative-answers-and-hints" id="toc-cumulative-answers-and-hints" class="nav-link" data-scroll-target="#cumulative-answers-and-hints">Cumulative answers and hints</a></li>
   </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -1408,6 +1406,241 @@ v\sin\theta
 \sin\theta&amp;\cos\theta
 \end{bmatrix}.
 \]</span></p></li>
+</ol>
+</section>
+</section>
+<section id="cumulative-chapter-test" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="cumulative-chapter-test">Cumulative chapter test</h2>
+<p>Complete this test without looking back at the chapter. Show the intermediate steps in every calculation, preserve the frame labels, and state the physical units of every dimensional result.</p>
+<ol type="1">
+<li><p><strong>Recall and meaning:</strong> Define a three-dimensional coordinate frame <span class="math inline">\(\{a\}\)</span>. Then state what the columns of <span class="math inline">\(\mathbf R_{ab}\in\mathbb R^{3\times3}\)</span> represent and the direction in which this matrix maps coordinate columns.</p></li>
+<li><p><strong>Derivation, application, and explanation:</strong> Frame <span class="math inline">\(\{b\}\)</span> is rotated counter-clockwise by <span class="math inline">\(\theta=\pi/2\,\mathrm{rad}\)</span> relative to frame <span class="math inline">\(\{a\}\)</span>. Derive <span class="math inline">\(\mathbf R_{ab}(\pi/2)\)</span> by expressing the three axes of frame <span class="math inline">\(\{b\}\)</span> in frame <span class="math inline">\(\{a\}\)</span>. Then let</p>
+<p><span class="math display">\[
+{}^{b}\mathbf v
+=
+\begin{bmatrix}
+2\\1\\0
+\end{bmatrix}
+\mathrm{m}.
+\]</span></p>
+<p>Compute <span class="math inline">\({}^{a}\mathbf v\)</span>. Which physical property of the geometric free vector is unchanged, and why?</p></li>
+<li><p><strong>Point–vector contrast:</strong> Continue from Question 2: use the same frames, with frame <span class="math inline">\(\{b\}\)</span> rotated counter-clockwise by <span class="math inline">\(\theta=\pi/2\,\mathrm{rad}\)</span> relative to frame <span class="math inline">\(\{a\}\)</span>, and use the rotation matrix <span class="math inline">\(\mathbf R_{ab}(\pi/2)\)</span> derived there. Now let the position of <span class="math inline">\(O_b\)</span> relative to <span class="math inline">\(O_a\)</span>, expressed in frame <span class="math inline">\(\{a\}\)</span>, be</p>
+<p><span class="math display">\[
+{}^{a}\mathbf p_b
+=
+\begin{bmatrix}
+3\\-1\\0
+\end{bmatrix}
+\mathrm{m},
+\]</span></p>
+<p>and let a physical point <span class="math inline">\(P\)</span> have <span class="math inline">\({}^{b}\mathbf p_P=[2\;1\;0]^{\mathsf T}\,\mathrm{m}\)</span>. Compute <span class="math inline">\({}^{a}\mathbf p_P\)</span>. Then compute the frame-<span class="math inline">\(\{a\}\)</span> coordinates of a free displacement vector whose frame-<span class="math inline">\(\{b\}\)</span> coordinates are also <span class="math inline">\([2\;1\;0]^{\mathsf T}\,\mathrm{m}\)</span>. Explain why the two calculations differ.</p></li>
+<li><p><strong>Derivation:</strong> Starting from <span class="math inline">\(\mathbf R_{ab}^{\mathsf T}\mathbf R_{ab}=\mathbf I_3\)</span>, derive <span class="math inline">\(\mathbf R_{ba}=\mathbf R_{ab}^{\mathsf T}\)</span>. Then prove that changing the coordinate representation of a free vector preserves its Euclidean norm. Finally, show that applying the same point transformation to two physical points <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span> preserves the distance between them.</p></li>
+<li><p><strong>Judgement:</strong> Consider</p>
+<p><span class="math display">\[
+\mathbf M
+=
+\begin{bmatrix}
+-1&amp;0&amp;0\\
+0&amp;1&amp;0\\
+0&amp;0&amp;1
+\end{bmatrix}.
+\]</span></p>
+<p>Determine whether <span class="math inline">\(\mathbf M\)</span> is a valid rotation matrix. State which numerical rotation checks it passes or fails and explain the physical meaning of the failure.</p></li>
+<li><p><strong>Rigid-body application:</strong> At one instant, all of the following coordinate columns are expressed in the same frame <span class="math inline">\(\{a\}\)</span>:</p>
+<p><span class="math display">\[
+{}^{a}\boldsymbol\omega
+=
+\begin{bmatrix}
+0\\0\\2
+\end{bmatrix}
+\mathrm{rad\,s^{-1}},
+\qquad
+{}^{a}\mathbf r_{OP}
+=
+\begin{bmatrix}
+0.5\\-0.25\\0
+\end{bmatrix}
+\mathrm{m},
+\qquad
+{}^{a}\mathbf v_O
+=
+\begin{bmatrix}
+0.2\\-0.1\\0
+\end{bmatrix}
+\mathrm{m\,s^{-1}}.
+\]</span></p>
+<p>Compute <span class="math inline">\({}^{a}\mathbf v_{P/O}\)</span> and <span class="math inline">\({}^{a}\mathbf v_P\)</span>. Verify by a dot product which velocity contribution must be perpendicular to <span class="math inline">\({}^{a}\mathbf r_{OP}\)</span>, and state why the same conclusion need not hold for the total velocity.</p></li>
+<li><p><strong>Transfer to differential drive:</strong> A planar robot has heading <span class="math inline">\(\theta=-\pi/2\,\mathrm{rad}\)</span> and signed forward speed <span class="math inline">\(v=0.6\,\mathrm{m\,s^{-1}}\)</span>. Compute its world-frame velocity <span class="math inline">\({}^{w}\mathbf v\)</span>. Then use the reverse transformation to recover the original body-frame velocity.</p></li>
+<li><p><strong>Failure diagnosis:</strong> A software interface documents <span class="math inline">\(\mathbf R_{ab}\)</span> as mapping coordinate columns from frame <span class="math inline">\(\{b\}\)</span> to frame <span class="math inline">\(\{a\}\)</span>, but its implementation computes <code>R_ab.transpose() * v_b</code> and labels the result as frame <span class="math inline">\(\{a\}\)</span>. Explain the semantic error. Give one simple basis-axis test that would expose it.</p></li>
+<li><p><strong>Contrast two situations:</strong> Explain the difference between these statements: (a) one unchanged geometric vector is represented by <span class="math inline">\({}^{b}\mathbf v\)</span> and <span class="math inline">\({}^{a}\mathbf v=\mathbf R_{ab}{}^{b}\mathbf v\)</span>; and (b) the coordinate column <span class="math inline">\({}^{b}\mathbf v\)</span> is held fixed while frame <span class="math inline">\(\{b\}\)</span> physically rotates relative to frame <span class="math inline">\(\{a\}\)</span>. What changes physically in each situation?</p></li>
+<li><p><strong>Limitations and engineering checks:</strong> Name at least four declarations or validation checks required at a coordinate-transformation interface. Then name one real-world source of error that valid frame algebra alone cannot remove.</p></li>
+</ol>
+<section id="cumulative-answers-and-hints" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="cumulative-answers-and-hints">Cumulative answers and hints</h3>
+<ol type="1">
+<li><p>A frame <span class="math inline">\(\{a\}\)</span> consists of an origin <span class="math inline">\(O_a\)</span> and three right-handed orthonormal basis vectors <span class="math inline">\(\mathbf e_{x,a}\)</span>, <span class="math inline">\(\mathbf e_{y,a}\)</span>, and <span class="math inline">\(\mathbf e_{z,a}\)</span>. The columns of <span class="math inline">\(\mathbf R_{ab}\)</span> are the axes of frame <span class="math inline">\(\{b\}\)</span> expressed in frame <span class="math inline">\(\{a\}\)</span>, and <span class="math inline">\(\mathbf R_{ab}\)</span> maps coordinate columns from frame <span class="math inline">\(\{b\}\)</span> to frame <span class="math inline">\(\{a\}\)</span>.</p></li>
+<li><p>At <span class="math inline">\(\theta=\pi/2\)</span>, the frame-<span class="math inline">\(\{b\}\)</span> axes expressed in frame <span class="math inline">\(\{a\}\)</span> are</p>
+<p><span class="math display">\[
+{}^{a}\mathbf e_{x,b}
+=
+\begin{bmatrix}
+0\\1\\0
+\end{bmatrix},
+\qquad
+{}^{a}\mathbf e_{y,b}
+=
+\begin{bmatrix}
+-1\\0\\0
+\end{bmatrix},
+\qquad
+{}^{a}\mathbf e_{z,b}
+=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}.
+\]</span></p>
+<p>Placing these axes in the columns gives</p>
+<p><span class="math display">\[
+\mathbf R_{ab}(\pi/2)
+=
+\begin{bmatrix}
+0&amp;-1&amp;0\\
+1&amp;0&amp;0\\
+0&amp;0&amp;1
+\end{bmatrix}.
+\]</span></p>
+<p>The coordinate change is</p>
+<p><span class="math display">\[
+{}^{a}\mathbf v
+=
+\mathbf R_{ab}{}^{b}\mathbf v
+=
+\begin{bmatrix}
+-1\\2\\0
+\end{bmatrix}
+\mathrm{m}.
+\]</span></p>
+<p>The geometric vector and its length are unchanged; only its coordinate representation changes. Its norm remains <span class="math inline">\(\sqrt{5}\,\mathrm{m}\)</span> because a rotation matrix is orthogonal.</p></li>
+<li><p>A point requires both rotation and translation:</p>
+<p><span class="math display">\[
+{}^{a}\mathbf p_P
+=
+\mathbf R_{ab}{}^{b}\mathbf p_P+{}^{a}\mathbf p_b
+=
+\begin{bmatrix}
+-1\\2\\0
+\end{bmatrix}
++
+\begin{bmatrix}
+3\\-1\\0
+\end{bmatrix}
+=
+\begin{bmatrix}
+2\\1\\0
+\end{bmatrix}
+\mathrm{m}.
+\]</span></p>
+<p>A free displacement vector is unaffected by the origin separation, so</p>
+<p><span class="math display">\[
+{}^{a}\mathbf v
+=
+\mathbf R_{ab}{}^{b}\mathbf v
+=
+\begin{bmatrix}
+-1\\2\\0
+\end{bmatrix}
+\mathrm{m}.
+\]</span></p>
+<p>A point is located relative to a frame origin, whereas a free vector has direction and magnitude but no fixed origin.</p></li>
+<li><p>Since <span class="math inline">\(\mathbf R_{ab}^{\mathsf T}\mathbf R_{ab}=\mathbf I_3\)</span>, the transpose satisfies the defining equation for the inverse, so <span class="math inline">\(\mathbf R_{ab}^{-1}=\mathbf R_{ab}^{\mathsf T}\)</span>. The reverse coordinate map is the inverse of the forward map, hence <span class="math inline">\(\mathbf R_{ba}=\mathbf R_{ab}^{-1}=\mathbf R_{ab}^{\mathsf T}\)</span>. For <span class="math inline">\({}^{a}\mathbf v=\mathbf R_{ab}{}^{b}\mathbf v\)</span>,</p>
+<p><span class="math display">\[
+\begin{aligned}
+\left\|{}^{a}\mathbf v\right\|_2^2
+&amp;=({}^{a}\mathbf v)^{\mathsf T}{}^{a}\mathbf v\\
+&amp;=({}^{b}\mathbf v)^{\mathsf T}\mathbf R_{ab}^{\mathsf T}\mathbf R_{ab}{}^{b}\mathbf v\\
+&amp;=({}^{b}\mathbf v)^{\mathsf T}{}^{b}\mathbf v\\
+&amp;=\left\|{}^{b}\mathbf v\right\|_2^2.
+\end{aligned}
+\]</span></p>
+<p>Norms are nonnegative, so equality of the squared norms implies equality of the norms. For two points transformed using the same <span class="math inline">\(\mathbf R_{ab}\)</span> and <span class="math inline">\({}^{a}\mathbf p_b\)</span>, subtracting their frame-<span class="math inline">\(\{a\}\)</span> coordinates cancels the translation:</p>
+<p><span class="math display">\[
+\begin{aligned}
+{}^{a}\mathbf p_P-{}^{a}\mathbf p_Q
+&amp;=\left(\mathbf R_{ab}{}^{b}\mathbf p_P+{}^{a}\mathbf p_b\right)
+-\left(\mathbf R_{ab}{}^{b}\mathbf p_Q+{}^{a}\mathbf p_b\right)\\
+&amp;=\mathbf R_{ab}\left({}^{b}\mathbf p_P-{}^{b}\mathbf p_Q\right).
+\end{aligned}
+\]</span></p>
+<p>This difference is a free displacement vector, so the norm-preservation result gives</p>
+<p><span class="math display">\[
+\left\|{}^{a}\mathbf p_P-{}^{a}\mathbf p_Q\right\|_2
+=
+\left\|{}^{b}\mathbf p_P-{}^{b}\mathbf p_Q\right\|_2.
+\]</span></p></li>
+<li><p>The matrix passes the orthonormality check because <span class="math inline">\(\mathbf M^{\mathsf T}\mathbf M=\mathbf I_3\)</span>, but it fails the orientation check because <span class="math inline">\(\det(\mathbf M)=-1\)</span>. It is a reflection across the <span class="math inline">\(yz\)</span>-plane, not a right-handed rigid-body rotation. This is why an orthonormality check alone is insufficient.</p></li>
+<li><p>The rotational contribution is</p>
+<p><span class="math display">\[
+{}^{a}\mathbf v_{P/O}
+=
+{}^{a}\boldsymbol\omega\times{}^{a}\mathbf r_{OP}
+=
+\begin{bmatrix}
+0.5\\1.0\\0
+\end{bmatrix}
+\mathrm{m\,s^{-1}}.
+\]</span></p>
+<p>Therefore,</p>
+<p><span class="math display">\[
+{}^{a}\mathbf v_P
+=
+{}^{a}\mathbf v_O+{}^{a}\mathbf v_{P/O}
+=
+\begin{bmatrix}
+0.7\\0.9\\0
+\end{bmatrix}
+\mathrm{m\,s^{-1}}.
+\]</span></p>
+<p>The required orthogonality check is</p>
+<p><span class="math display">\[
+({}^{a}\mathbf r_{OP})^{\mathsf T}{}^{a}\mathbf v_{P/O}
+=0.5(0.5)-0.25(1.0)
+=0.
+\]</span></p>
+<p>The total velocity also contains the independent translation <span class="math inline">\({}^{a}\mathbf v_O\)</span>, so it need not be perpendicular to <span class="math inline">\({}^{a}\mathbf r_{OP}\)</span>; here their dot product is <span class="math inline">\(0.125\,\mathrm{m^2\,s^{-1}}\)</span>.</p></li>
+<li><p>Since</p>
+<p><span class="math display">\[
+\mathbf R_{wb}(-\pi/2)
+=
+\begin{bmatrix}
+0&amp;1\\
+-1&amp;0
+\end{bmatrix},
+\]</span></p>
+<p>the world-frame velocity is</p>
+<p><span class="math display">\[
+{}^{w}\mathbf v
+=
+\mathbf R_{wb}{}^{b}\mathbf v
+=
+\begin{bmatrix}
+0\\-0.6
+\end{bmatrix}
+\mathrm{m\,s^{-1}}.
+\]</span></p>
+<p>The reverse map is <span class="math inline">\(\mathbf R_{bw}=\mathbf R_{wb}^{\mathsf T}\)</span>, and</p>
+<p><span class="math display">\[
+{}^{b}\mathbf v
+=
+\mathbf R_{bw}{}^{w}\mathbf v
+=
+\begin{bmatrix}
+0.6\\0
+\end{bmatrix}
+\mathrm{m\,s^{-1}}.
+\]</span></p></li>
+<li><p>The transpose is <span class="math inline">\(\mathbf R_{ab}^{\mathsf T}=\mathbf R_{ba}\)</span>, whose declared input is a frame-<span class="math inline">\(\{a\}\)</span> coordinate column and whose output is a frame-<span class="math inline">\(\{b\}\)</span> coordinate column. Applying it to <span class="math inline">\({}^{b}\mathbf v\)</span> violates the frame contract, even though the matrix dimensions agree, and the result cannot validly be labelled <span class="math inline">\({}^{a}\mathbf v\)</span>. A basis-axis test can provide <span class="math inline">\({}^{b}\mathbf e_{x,b}=[1\;0\;0]^{\mathsf T}\)</span> and require the output to equal the first column of <span class="math inline">\(\mathbf R_{ab}\)</span>; the transposed implementation generally fails this test.</p></li>
+<li><p>In situation (a), the geometric vector is unchanged and only its numerical description changes with the coordinate basis. In situation (b), the components relative to frame <span class="math inline">\(\{b\}\)</span> stay fixed while the basis vectors of <span class="math inline">\(\{b\}\)</span> turn relative to frame <span class="math inline">\(\{a\}\)</span>, so the geometric vector constructed from those fixed components rotates physically with frame <span class="math inline">\(\{b\}\)</span>. The same matrix entries can participate in both calculations, but the physical operation and the meanings of the input and output are different.</p></li>
+<li><p>Suitable declarations and checks include source and destination frame identifiers, point-versus-free-vector semantics, SI units and angle units, matrix and vector dimensions, finite inputs, the intended multiplication direction, approximate orthonormality, determinant near <span class="math inline">\(+1\)</span>, and declared numerical tolerances. Valid algebra cannot remove effects such as sensor noise, calibration error, structural compliance, timing error, or model mismatch.</p></li>
 </ol>
 </section>
 </section>

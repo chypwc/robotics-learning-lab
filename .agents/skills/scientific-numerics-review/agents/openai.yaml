@@ -1,0 +1,4 @@
+interface:
+  display_name: "Scientific Numerics Review"
+  short_description: "Audit equations and numerical behaviour"
+  default_prompt: "Use $scientific-numerics-review to audit this mathematical implementation and its tests."

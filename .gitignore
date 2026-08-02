@@ -1,5 +1,5 @@
 .obsidian/
-.agents/
+# .agents/
 .codex/
 .venv/
 .vscode/
@@ -13,6 +13,9 @@ ros_ws/log/
 *:Zone.Identifier
 
 textbooks/
+archive/
+/PLAN.md
+
 
 .pytest_cache/
 

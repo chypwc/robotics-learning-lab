@@ -491,41 +491,46 @@ window.Quarto = {
 <td>—</td>
 </tr>
 <tr class="even">
+<td><span class="math inline">\((\cdot)^{-\mathsf T}\)</span></td>
+<td>Inverse transpose, <span class="math inline">\((\mathbf A^{-1})^\mathsf T=(\mathbf A^\mathsf T)^{-1}\)</span> for nonsingular <span class="math inline">\(\mathbf A\)</span></td>
+<td>—</td>
+</tr>
+<tr class="odd">
 <td><span class="math inline">\(\lVert\mathbf{v}\rVert_2\)</span></td>
 <td>Euclidean norm of <span class="math inline">\(\mathbf{v}\)</span></td>
 <td>Same units as <span class="math inline">\(\mathbf{v}\)</span></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><span class="math inline">\(\det(\mathbf A)\)</span></td>
 <td>Determinant of a square matrix</td>
 <td>Depends on the matrix units</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><span class="math inline">\(\operatorname{rank}(\mathbf A)\)</span></td>
 <td>Dimension of the column space of <span class="math inline">\(\mathbf A\)</span></td>
 <td>Nonnegative integer</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><span class="math inline">\(\operatorname{nullity}(\mathbf A)\)</span></td>
 <td>Dimension of the null space of <span class="math inline">\(\mathbf A\)</span></td>
 <td>Nonnegative integer</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><span class="math inline">\(\operatorname{span}(\mathbf v_1,\ldots,\mathbf v_k)\)</span></td>
 <td>Set of all linear combinations of the listed vectors</td>
 <td>Same vector space as the vectors</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><span class="math inline">\(\operatorname{Col}(\mathbf A),\mathcal N(\mathbf A)\)</span></td>
 <td>Column space and null space of <span class="math inline">\(\mathbf A\)</span></td>
 <td>Subspaces of the output and input spaces</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><span class="math inline">\(\mathbf u\times\mathbf v\)</span></td>
 <td>Three-dimensional cross product of vectors expressed in the same right-handed orthonormal frame</td>
 <td>Product of the input units</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><span class="math inline">\(O(n),SO(n)\)</span></td>
 <td>Orthogonal group and special orthogonal group of real <span class="math inline">\(n\times n\)</span> matrices</td>
 <td><span class="math inline">\(\mathbf Q^\mathsf T\mathbf Q=\mathbf I_n\)</span>; <span class="math inline">\(SO(n)\)</span> additionally requires <span class="math inline">\(\det\mathbf Q=1\)</span></td>
@@ -740,9 +745,9 @@ window.Quarto = {
 <h3 class="unnumbered unlisted anchored" data-anchor-id="notation-introduced-in-sec-planar-rigid-body-motion">Notation introduced in <a href="06_planar_rigid_body_motion_se2_and_twists.html" class="quarto-xref"><span>6&nbsp; Planar Rigid-Body Motion: SE(2) and Twists</span></a></h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
+<col style="width: 23%">
+<col style="width: 44%">
+<col style="width: 31%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -839,9 +844,9 @@ window.Quarto = {
 <h3 class="unnumbered unlisted anchored" data-anchor-id="notation-introduced-in-sec-spatial-rigid-body-motion">Notation introduced in <a href="07_degrees_of_freedom_and_spatial_motion_so3_se3.html" class="quarto-xref"><span>7&nbsp; Degrees of Freedom and Spatial Motion: SO(3) and SE(3)</span></a></h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
+<col style="width: 30%">
+<col style="width: 39%">
+<col style="width: 30%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -852,34 +857,54 @@ window.Quarto = {
 </thead>
 <tbody>
 <tr class="odd">
+<td><span class="math inline">\(\mathcal B\)</span></td>
+<td>Set of labelled material points belonging to the rigid body</td>
+<td>Abstract set</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\chi:\mathcal B\to\mathbb R^d\)</span></td>
+<td>Placement map assigning a world position to every material point in a <span class="math inline">\(d\)</span>-dimensional model</td>
+<td>Output coordinates measured in <span class="math inline">\(\mathrm m\)</span></td>
+</tr>
+<tr class="odd">
 <td><span class="math inline">\(\mathcal C\)</span></td>
 <td>Configuration space: the set of all configurations allowed by the model</td>
 <td>May be curved and need not be a vector space</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\mathbf q\in\mathcal C\)</span></td>
-<td>Configuration or a chosen column of generalised coordinates</td>
-<td>Components and units depend on the system</td>
+<td><span class="math inline">\(\chi\in\mathcal C\)</span></td>
+<td>One complete physical configuration represented as an admissible placement map</td>
+<td>Abstract element of <span class="math inline">\(\mathcal C\)</span></td>
 </tr>
 <tr class="odd">
+<td><span class="math inline">\(\mathbf q\)</span></td>
+<td>Chosen column of generalised coordinates describing a configuration</td>
+<td>Components and units depend on the system</td>
+</tr>
+<tr class="even">
 <td><span class="math inline">\(n_{\mathrm{dof}}\)</span></td>
 <td>Number of configuration degrees of freedom</td>
 <td>Nonnegative integer</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><span class="math inline">\(n_v,n_c\)</span></td>
 <td>Numbers of scalar variables and independent regular equality constraints in a local count</td>
 <td>Nonnegative integers</td>
 </tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf z\in\mathbb R^{n_v}\)</span></td>
+<td>Ambient coordinate column used to express equality constraints</td>
+<td>Components and units depend on the system</td>
+</tr>
 <tr class="odd">
-<td><span class="math inline">\(\mathcal M\)</span></td>
-<td>Smooth manifold: a space that locally resembles a Euclidean coordinate space</td>
-<td>Dimension declared locally</td>
+<td><span class="math inline">\(\mathbf g:\mathbb R^{n_v}\to\mathbb R^{n_c}\)</span></td>
+<td>Equality-constraint mapping, with valid coordinates satisfying <span class="math inline">\(\mathbf g(\mathbf z)=\mathbf 0_{n_c}\)</span></td>
+<td>Output units depend on the constraints</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(T_{\mathbf G}\mathcal M\)</span></td>
-<td>Tangent space of manifold <span class="math inline">\(\mathcal M\)</span> at <span class="math inline">\(\mathbf G\)</span></td>
-<td>Linear space of curve derivatives through <span class="math inline">\(\mathbf G\)</span></td>
+<td><span class="math inline">\(\mathbf J_{\mathbf g}(\mathbf z)\)</span></td>
+<td>Constraint Jacobian with entries <span class="math inline">\(\partial g_i/\partial z_j\)</span></td>
+<td><span class="math inline">\(n_c\times n_v\)</span>; row units depend on <span class="math inline">\(g_i\)</span> and <span class="math inline">\(z_j\)</span></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(SO(3)\)</span></td>
@@ -887,108 +912,99 @@ window.Quarto = {
 <td><span class="math inline">\(\mathbf R^\mathsf T\mathbf R=\mathbf I_3\)</span>, <span class="math inline">\(\det\mathbf R=1\)</span></td>
 </tr>
 <tr class="even">
+<td><span class="math inline">\(\mathbf R_x(\theta),\mathbf R_y(\theta),\mathbf R_z(\theta)\)</span></td>
+<td>Active right-hand-rule rotations about the declared coordinate axes</td>
+<td>Elements of <span class="math inline">\(SO(3)\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf Q_w,\mathbf Q_b\)</span></td>
+<td>Finite orientation increments expressed along world or body axes</td>
+<td>Elements of <span class="math inline">\(SO(3)\)</span>; premultiply or postmultiply accordingly</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\boldsymbol\omega_w,\boldsymbol\omega_b\)</span></td>
+<td>Same world-relative angular velocity resolved along world or body axes</td>
+<td><span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span></td>
+</tr>
+<tr class="odd">
 <td><span class="math inline">\(SE(3)\)</span></td>
 <td>Special Euclidean group of spatial rigid transformations</td>
 <td>Spatial rotation and translation represented together</td>
 </tr>
-<tr class="odd">
-<td><span class="math inline">\([\mathbf{v}]_\times\)</span></td>
-<td>Skew-symmetric matrix satisfying <span class="math inline">\([\mathbf{v}]_\times\mathbf{w}=\mathbf{v}\times\mathbf{w}\)</span></td>
-<td>Same units as <span class="math inline">\(\mathbf{v}\)</span></td>
+<tr class="even">
+<td><span class="math inline">\(\mathbf T_{wb}\in SE(3)\)</span></td>
+<td>Spatial pose of frame <span class="math inline">\(\{b\}\)</span> relative to frame <span class="math inline">\(\{w\}\)</span> and transform from body to world point coordinates</td>
+<td>Rotation block dimensionless; translation block in <span class="math inline">\(\mathrm m\)</span></td>
 </tr>
-</tbody>
-</table>
-</section>
-<section id="notation-introduced-in-sec-dynamics-actuator-limits" class="level3 unnumbered unlisted">
-<h3 class="unnumbered unlisted anchored" data-anchor-id="notation-introduced-in-sec-dynamics-actuator-limits">Notation introduced in <span class="quarto-unresolved-ref">?sec-dynamics-actuator-limits</span></h3>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Symbol</th>
-<th>Meaning</th>
-<th>Units or convention</th>
-</tr>
-</thead>
-<tbody>
 <tr class="odd">
-<td><span class="math inline">\(s(t),v(t),a(t)\)</span></td>
-<td>Signed one-dimensional position, velocity, and acceleration</td>
-<td><span class="math inline">\(\mathrm m,\mathrm{m\,s^{-1}},\mathrm{m\,s^{-2}}\)</span></td>
+<td><span class="math inline">\([\mathbf v]_\times\)</span></td>
+<td>Cross-product matrix satisfying <span class="math inline">\([\mathbf v]_\times\mathbf y=\mathbf v\times\mathbf y\)</span></td>
+<td>Same units as <span class="math inline">\(\mathbf v\)</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(m\)</span></td>
-<td>Robot mass</td>
-<td><span class="math inline">\(\mathrm{kg}\)</span></td>
+<td><span class="math inline">\(\mathfrak{so}(3)\)</span></td>
+<td>Lie algebra and identity tangent space of <span class="math inline">\(SO(3)\)</span></td>
+<td><span class="math inline">\(3\times3\)</span> real skew-symmetric matrices</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(\mathbf F,F\)</span></td>
-<td>Force vector and force magnitude</td>
-<td><span class="math inline">\(\mathrm N\)</span></td>
+<td><span class="math inline">\(\mathbf a_w,\alpha,\boldsymbol\varphi_w=\alpha\mathbf a_w\)</span></td>
+<td>Unit rotation axis, signed angle, and rotation-vector coordinates expressed along world axes</td>
+<td>Dimensionless axis; angle and rotation vector labelled in <span class="math inline">\(\mathrm{rad}\)</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(F_j,F_{\mathrm{net}}\)</span></td>
-<td>Signed component of external force <span class="math inline">\(j\)</span> and their signed net sum</td>
-<td><span class="math inline">\(\mathrm N\)</span></td>
+<td><span class="math inline">\(\exp(\mathbf A)\)</span></td>
+<td>Matrix exponential <span class="math inline">\(\sum_{j=0}^{\infty}\mathbf A^j/j!\)</span></td>
+<td>Dimensionless output when <span class="math inline">\(\mathbf A\)</span> is dimensionless</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(F_{\mathrm{drive}},F_{\mathrm{resist}}\)</span></td>
-<td>Nonnegative drive and resistance force magnitudes in the declared direction</td>
-<td><span class="math inline">\(\mathrm N\)</span></td>
+<td><span class="math inline">\(\mathsf q=(q_w,\mathbf q_v)\)</span></td>
+<td>Quaternion written as an ordered scalar–vector pair</td>
+<td>Dimensionless components</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\boldsymbol\rho\)</span></td>
-<td>Position vector from a chosen moment point to a force application point</td>
-<td><span class="math inline">\(\mathrm m\)</span></td>
+<td><span class="math inline">\(\otimes\)</span></td>
+<td>Hamilton product of two quaternions</td>
+<td>Order follows rotation-composition order</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(\boldsymbol\tau_O,\tau\)</span></td>
-<td>Torque vector about point <span class="math inline">\(O\)</span> and its magnitude</td>
-<td><span class="math inline">\(\mathrm{N\,m}\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\tau_i,F_i\)</span></td>
-<td>Signed axle torque and longitudinal ground force for wheel <span class="math inline">\(i\in\{L,R\}\)</span></td>
-<td><span class="math inline">\(\mathrm{N\,m},\mathrm N\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(I_i\)</span></td>
-<td>Wheel mass moment of inertia about its axle</td>
-<td><span class="math inline">\(\mathrm{kg\,m^2}\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\ddot\phi_i\)</span></td>
-<td>Wheel angular acceleration</td>
-<td><span class="math inline">\(\mathrm{rad\,s^{-2}}\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(G\)</span></td>
-<td>Positive gearbox reduction ratio</td>
+<td><span class="math inline">\(\mathsf q^*=(q_w,-\mathbf q_v)\)</span></td>
+<td>Quaternion conjugate; the inverse when <span class="math inline">\(\mathsf q\)</span> has unit norm</td>
 <td>Dimensionless</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\eta\)</span></td>
-<td>Gearbox efficiency for the declared power-flow direction</td>
-<td>Dimensionless, <span class="math inline">\(0&lt;\eta\leq1\)</span></td>
+<td><span class="math inline">\(\mathfrak{se}(3)\)</span></td>
+<td>Lie algebra and identity tangent space of <span class="math inline">\(SE(3)\)</span></td>
+<td>Structured <span class="math inline">\(4\times4\)</span> infinitesimal spatial rigid-motion matrices</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(\dot\phi_m,\dot\phi_w\)</span></td>
-<td>Motor-shaft and wheel-side angular speeds</td>
-<td><span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span></td>
+<td><span class="math inline">\(\boldsymbol\xi=[\boldsymbol\nu^\mathsf T\;\boldsymbol\omega^\mathsf T]^\mathsf T\)</span></td>
+<td>Spatial twist coordinate column in the project’s linear-first order</td>
+<td>Three entries in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span> followed by three in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\tau_m,\tau_w\)</span></td>
-<td>Motor-shaft and wheel-side torques</td>
-<td><span class="math inline">\(\mathrm{N\,m}\)</span></td>
+<td><span class="math inline">\(\|\mathbf M\|_{\mathrm F}\)</span></td>
+<td>Frobenius norm of a real matrix</td>
+<td>Units follow the matrix entries</td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(P=\tau\dot\phi\)</span></td>
-<td>Rotational mechanical power</td>
-<td><span class="math inline">\(\mathrm W=\mathrm{N\,m\,s^{-1}}\)</span></td>
+<td><span class="math inline">\(e_{\mathrm{orth}},e_{\det},e_q\)</span></td>
+<td>Orthogonality, determinant, and unit-quaternion residuals</td>
+<td>Dimensionless</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\|\boldsymbol\xi\|_\ell\)</span></td>
+<td>Twist comparison magnitude after choosing characteristic length <span class="math inline">\(\ell\)</span></td>
+<td><span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>; application-dependent</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\boldsymbol\Omega_k=[\boldsymbol\omega_{b,k}]_\times\)</span></td>
+<td>Body-expressed angular-velocity matrix at sample <span class="math inline">\(k\)</span></td>
+<td><span class="math inline">\(\mathrm{s^{-1}}\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\widetilde{\mathbf R}_{k+1}\)</span></td>
+<td>Forward Euler candidate for the next orientation matrix</td>
+<td>Dimensionless; not necessarily in <span class="math inline">\(SO(3)\)</span></td>
 </tr>
 </tbody>
 </table>

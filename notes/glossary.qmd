@@ -9,6 +9,9 @@ Add terminology from a chapter only after that chapter has been completed and re
 **Active rigid motion**
 : A physical motion that changes a geometric point or rigid body while the reference frame remains fixed. See @sec-planar-rigid-body-motion.
 
+**Active rotation**
+: A rotation that changes a geometric vector or body orientation while the coordinate frame used to describe the result remains fixed. See @sec-so3-axis-rotations-composition.
+
 **Adjoint representation**
 : The coordinate mapping that converts a twist between body and spatial conventions while accounting for both rotation and the change of reference origin. See @sec-se2-spatial-twist.
 
@@ -20,6 +23,9 @@ Add terminology from a chapter only after that chapter has been completed and re
 
 **Associativity**
 : The property that regrouping operations does not change their result; for matrix multiplication, $(\mathbf A\mathbf B)\mathbf C=\mathbf A(\mathbf B\mathbf C)$. See @sec-linear-algebra-foundations and @sec-se2-planar-rotations.
+
+**Axis--angle representation**
+: A finite-rotation representation consisting of a unit axis direction and a signed right-hand-rule rotation angle. See @sec-so3-axis-angle-exponential.
 
 ## B {.unnumbered}
 
@@ -61,6 +67,15 @@ Add terminology from a chapter only after that chapter has been completed and re
 **Console script**
 : An executable wrapper generated from a Python package entry point, allowing a named function to be launched as a command or through `ros2 run`. See @sec-ros2-package-development-workflow.
 
+**Configuration**
+: A complete geometric placement of all labelled material points of a system at one instant, without velocity or force information. See @sec-spatial-configuration-dof.
+
+**Configuration space**
+: The set of all configurations permitted by a system's geometric constraints; it is also called C-space. See @sec-spatial-configuration-dof.
+
+**Constraint Jacobian**
+: The matrix of first partial derivatives of a constraint mapping, used locally to identify infinitesimal coordinate changes that preserve the constraints. See @sec-spatial-configuration-dof.
+
 **Coordinate column**
 : An ordered column of scalar components that represents a geometric object relative to a declared basis or coordinate frame. See @sec-linear-algebra-foundations.
 
@@ -70,7 +85,13 @@ Add terminology from a chapter only after that chapter has been completed and re
 **Cross product**
 : A three-dimensional vector operation whose output is perpendicular to both inputs, with direction given by the right-hand rule and magnitude equal to the product of their lengths and the sine of their included angle. See @sec-linear-algebra-cross-product.
 
+**Cross-product matrix**
+: The skew-symmetric matrix $[\mathbf v]_\times$ that implements the linear mapping $\mathbf y\mapsto\mathbf v\times\mathbf y$. See @sec-so3-cross-product-matrix.
+
 ## D {.unnumbered}
+
+**Degree of freedom**
+: One independent local direction in which a configuration can change while satisfying all configuration constraints. See @sec-spatial-configuration-dof.
 
 **Determinant**
 : A scalar associated with a square matrix whose magnitude gives oriented volume scaling and whose sign records whether orientation is preserved or reversed. See @sec-linear-algebra-foundations.
@@ -86,11 +107,20 @@ Add terminology from a chapter only after that chapter has been completed and re
 
 ## E {.unnumbered}
 
+**Euler's rotation theorem**
+: The geometric result that every relative orientation change in $SO(3)$ can be represented as one rotation through an angle about an axis direction. See @sec-so3-angular-velocity.
+
 **Exact integration**
 : A finite-time state update that evaluates the solution of the stated continuous model exactly under its declared assumptions, rather than approximating the trajectory numerically. See @sec-differential-drive-model and @sec-kinematics-integration-implementation.
 
 **Executable**
 : An installed program that can be launched directly; in a ROS 2 package, `ros2 run` locates it under the package's runtime layout. See @sec-ros2-package-development-workflow.
+
+**Exponential coordinates of a rotation**
+: The rotation vector whose direction gives the rotation axis and whose norm gives the rotation-angle magnitude. See @sec-so3-axis-angle-exponential.
+
+**Exponential map**
+: The mapping that applies the matrix exponential to a Lie-algebra matrix to produce a finite Lie-group element, such as a rotation in $SO(3)$. See @sec-so3-axis-angle-exponential.
 
 ## F {.unnumbered}
 
@@ -103,10 +133,16 @@ Add terminology from a chapter only after that chapter has been completed and re
 **Free vector**
 : A vector with magnitude and direction but no fixed origin, so a coordinate-frame change rotates its components without adding a translation. See @sec-se2-transforming-point.
 
+**Frobenius norm**
+: The square root of the sum of the squared entries of a matrix, used here to measure matrix residuals. See @sec-spatial-representation-checks.
+
 **Full column rank**
 : The condition $\operatorname{rank}(\mathbf A)=n$ for $\mathbf A\in\mathbb R^{m\times n}$, meaning that all columns are linearly independent and the associated mapping is injective. See @sec-linear-algebra-foundations.
 
 ## G {.unnumbered}
+
+**Generalised coordinates**
+: A chosen set of scalar coordinates used locally to describe a configuration; the coordinate column is a representation, not the physical configuration itself. See @sec-spatial-configuration-dof.
 
 **Geometric vector**
 : A basis-independent quantity with magnitude and direction; a coordinate column is its numerical representation in a chosen basis. See @sec-linear-algebra-foundations.
@@ -117,13 +153,22 @@ Add terminology from a chapter only after that chapter has been completed and re
 **Group**
 : A set equipped with an operation satisfying closure, associativity, an identity element, and an inverse for every element. See @sec-se2-planar-rotations.
 
+**Group embedding**
+: A one-to-one mapping that places one group inside another while preserving the group operation. See @sec-se2-se3-embedding.
+
 ## H {.unnumbered}
+
+**Hamilton product**
+: The noncommutative quaternion multiplication operation used to compose quaternion rotations. See @sec-so3-unit-quaternion-yaw.
 
 **Handedness**
 : The orientation of an ordered coordinate basis; a right-handed frame follows the right-hand rule, whereas a reflection reverses handedness. See @sec-geometry-coordinate-frames.
 
 **Hat operator**
 : A mapping from a twist coordinate column to its structured Lie-algebra matrix representation. See @sec-se2-hat-operator.
+
+**Holonomic constraint**
+: A constraint expressible as an equation involving configuration coordinates only, so it directly restricts the configuration space. See @sec-spatial-configuration-dof.
 
 **Homogeneous coordinate**
 : An augmented coordinate column that appends $1$ to a point or $0$ to a free vector so rotation and translation can be represented by one matrix multiplication. See @sec-se2-transforming-point.
@@ -141,6 +186,9 @@ Add terminology from a chapter only after that chapter has been completed and re
 
 **Immutable value**
 : A software value whose stored fields cannot be changed after construction, helping prevent an operation from silently modifying an input state. See @sec-kinematics-integration-implementation.
+
+**Incremental rotation**
+: A finite rotation matrix describing only the change from an old orientation to a new orientation; the change need not be infinitesimal. See @sec-so3-fixed-body-increments.
 
 **Infinitesimal rigid motion**
 : A first-order direction or instantaneous rate from which nearby finite rigid transformations develop; it is not itself a finite transformation. See @sec-se2-hat-operator.
@@ -162,6 +210,9 @@ Add terminology from a chapter only after that chapter has been completed and re
 
 **Inverse matrix**
 : For a nonsingular square matrix $\mathbf A$, the matrix $\mathbf A^{-1}$ satisfying $\mathbf A^{-1}\mathbf A=\mathbf A\mathbf A^{-1}=\mathbf I$. See @sec-linear-algebra-foundations.
+
+**Inverse transpose**
+: For a nonsingular matrix $\mathbf A$, the matrix $\mathbf A^{-\mathsf T}=(\mathbf A^{-1})^\mathsf T=(\mathbf A^\mathsf T)^{-1}$. See @sec-linear-algebra-cross-product-linear-map.
 
 ## K {.unnumbered}
 
@@ -199,6 +250,9 @@ Add terminology from a chapter only after that chapter has been completed and re
 **Matrix commutator**
 : The difference $\mathbf A\mathbf B-\mathbf B\mathbf A$, which measures the failure of two matrix operations to commute. See @sec-se2-rotation-derivative-tangent.
 
+**Matrix exponential**
+: The matrix function $\exp(\mathbf A)=\sum_{j=0}^{\infty}\mathbf A^j/j!$, used here to convert an accumulated skew-symmetric rotation coordinate into a finite rotation matrix. See @sec-so3-axis-angle-exponential.
+
 **Matrix rank**
 : The dimension of a matrix's column space, equivalently the number of linearly independent columns. See @sec-linear-algebra-foundations.
 
@@ -212,6 +266,9 @@ Add terminology from a chapter only after that chapter has been completed and re
 
 **Noncommutative operation**
 : An operation for which changing operand order can change the result; general matrix multiplication and rigid-motion composition have this property. See @sec-se2-noncommutative.
+
+**Nonholonomic constraint**
+: A velocity-level constraint that cannot be replaced by an equivalent equation involving configuration alone; it can reduce instantaneous mobility without reducing C-space dimension. See @sec-spatial-configuration-dof.
 
 **Nonsingular matrix**
 : A square matrix with an inverse, full rank, and a null space containing only the zero vector. See @sec-linear-algebra-foundations.
@@ -229,6 +286,9 @@ Add terminology from a chapter only after that chapter has been completed and re
 : An algebraically equivalent computational form chosen to avoid avoidable loss of accuracy, undefined intermediate expressions, or fragile special cases. See @sec-kinematics-integration-implementation.
 
 ## O {.unnumbered}
+
+**Orientation**
+: The rotational placement of a body-attached frame relative to a reference frame; it describes the body's current angular alignment, not the turn used to reach it. See @sec-so3-spatial-orientation.
 
 **Orthogonal group**
 : The group $O(n)$ of real square matrices satisfying $\mathbf Q^\mathsf T\mathbf Q=\mathbf I_n$. See @sec-linear-algebra-foundations.
@@ -250,6 +310,9 @@ Add terminology from a chapter only after that chapter has been completed and re
 **Passive coordinate change**
 : A change in the coordinate frame used to describe an unchanged geometric object; nothing physically moves. See @sec-planar-rigid-body-motion.
 
+**Placement map**
+: A mapping that assigns a world position to every labelled material point of a body while satisfying its geometric constraints. See @sec-spatial-configuration-dof.
+
 **Planar pose**
 : The position and orientation of a planar rigid body relative to a reference frame, commonly represented by two position coordinates and one heading angle. See @sec-differential-drive-model and @sec-planar-rigid-body-motion.
 
@@ -262,8 +325,25 @@ Add terminology from a chapter only after that chapter has been completed and re
 **Position coordinate**
 : The coordinates of a geometric point relative to a frame origin, expressed along that frame's basis axes. See @sec-geometry-coordinate-frames.
 
+**Postmultiply**
+: Multiply an existing matrix on its right; a body-expressed incremental rotation postmultiplies the current body-to-world orientation. See @sec-so3-fixed-body-increments.
+
+**Premultiply**
+: Multiply an existing matrix on its left; a world-expressed incremental rotation premultiplies the current body-to-world orientation. See @sec-so3-fixed-body-increments.
+
+**Pure quaternion**
+: A quaternion with zero scalar part, used to embed a three-dimensional vector in quaternion rotation calculations. See @sec-so3-unit-quaternion-yaw.
+
 **Pure rolling**
 : The ideal wheel-ground condition in which wheel rim motion and longitudinal ground displacement agree without slip, giving $v_i=r\dot\phi_i$. See @sec-differential-drive-model.
+
+## Q {.unnumbered}
+
+**Quaternion**
+: An ordered scalar--vector pair equipped with the Hamilton product; unit quaternions are used here to represent spatial orientations. See @sec-so3-unit-quaternion-yaw.
+
+**Quaternion conjugate**
+: The quaternion obtained by retaining the scalar part and negating the vector part; for a unit quaternion it is also the multiplicative inverse. See @sec-so3-unit-quaternion-yaw.
 
 ## R {.unnumbered}
 
@@ -272,6 +352,12 @@ Add terminology from a chapter only after that chapter has been completed and re
 
 **Rank-nullity theorem**
 : For $\mathbf A\in\mathbb R^{m\times n}$, the identity $\operatorname{rank}(\mathbf A)+\operatorname{nullity}(\mathbf A)=n$. See @sec-linear-algebra-rank-nullity.
+
+**Reflection**
+: An orthogonal transformation with determinant $-1$ that preserves lengths and angles but reverses handedness, so it is not a proper rotation. See @sec-so3-definition.
+
+**Regular configuration**
+: A valid configuration around which the constraint Jacobian keeps constant rank, allowing its null space to describe the local configuration directions consistently. See @sec-spatial-configuration-dof.
 
 **Relative-position vector**
 : A vector directed from one declared point to another, expressed in a declared coordinate frame. See @sec-geometry-coordinate-frames.
@@ -285,6 +371,9 @@ Add terminology from a chapter only after that chapter has been completed and re
 **Rigid-body point-velocity relation**
 : The equation stating that a body-fixed point's velocity equals a reference point's translational velocity plus the rotational contribution from angular velocity and relative position. See @sec-geometry-coordinate-frames and @sec-se2-body-point-velocity.
 
+**Rodrigues' rotation formula**
+: The closed form of the $SO(3)$ rotation exponential in terms of a unit axis, rotation angle, and cross-product matrix. See @sec-so3-axis-angle-exponential.
+
 **ROS 2 package**
 : A unit combining source code with the metadata required for building, installing, dependency resolution, and discovery by ROS 2 tools. See @sec-ros2-package-development-workflow.
 
@@ -294,10 +383,16 @@ Add terminology from a chapter only after that chapter has been completed and re
 **Rotation matrix**
 : An orthogonal matrix with determinant $+1$ that maps vector coordinates between right-handed orthonormal frames while preserving lengths, angles, and orientation. See @sec-geometry-coordinate-frames.
 
+**Rotation vector**
+: A three-component axis--angle coordinate whose direction gives the rotation axis and whose norm gives the angle magnitude. See @sec-so3-axis-angle-exponential.
+
 ## S {.unnumbered}
 
 **Scalar multiplication**
 : Multiplication of a vector by a real number, scaling its magnitude and reversing its direction when the scalar is negative. See @sec-linear-algebra-foundations.
+
+**Scalar triple product**
+: The scalar $\mathbf a^\mathsf T(\mathbf b\times\mathbf c)$ whose magnitude is the volume of the parallelepiped spanned by three vectors and whose sign records their ordered orientation. See @sec-linear-algebra-scalar-triple-product.
 
 **Signed turning radius**
 : The instantaneous distance from the body origin to the centre of curvature with a sign indicating which side of the robot contains that centre. See @sec-differential-drive-model.
@@ -320,11 +415,20 @@ Add terminology from a chapter only after that chapter has been completed and re
 **Span**
 : The set of every linear combination that can be formed from a given collection of vectors. See @sec-linear-algebra-foundations.
 
+**Spatial orientation**
+: The orientation of a body-attached three-dimensional frame relative to a declared reference frame. See @sec-so3-spatial-orientation.
+
+**Spatial pose**
+: The physical placement of a body frame relative to a world frame, combining three-dimensional orientation and body-origin position. See @sec-se3-spatial-pose.
+
 **Spatial twist expressed in the world frame**
 : A twist representation whose velocity field is expressed using fixed world coordinates and referenced to the world origin. See @sec-se2-spatial-twist.
 
 **Special Euclidean group $SE(2)$**
 : The group of finite planar rigid transformations that combine a rotation in $SO(2)$ with a planar translation. See @sec-planar-rigid-body-motion.
+
+**Special Euclidean group $SE(3)$**
+: The group of finite spatial rigid transformations that combine a rotation in $SO(3)$ with a three-dimensional translation. See @sec-se3-spatial-pose.
 
 **Special orthogonal group**
 : The group $SO(n)$ of orthogonal matrices with determinant $+1$, representing proper rotations in $n$ dimensions. See @sec-linear-algebra-foundations and @sec-se2-planar-rotations.
@@ -362,6 +466,9 @@ Add terminology from a chapter only after that chapter has been completed and re
 
 **Underlay**
 : An existing sourced ROS installation or workspace on which another workspace depends. See @sec-ros2-package-development-workflow.
+
+**Unit quaternion**
+: A quaternion with Euclidean norm one that represents a spatial orientation; the two signs $\mathsf q$ and $-\mathsf q$ represent the same rotation. See @sec-so3-unit-quaternion-yaw.
 
 **Unit vector**
 : A nonzero vector divided by its Euclidean norm so that its resulting norm is one. See @sec-linear-algebra-vector-norm.

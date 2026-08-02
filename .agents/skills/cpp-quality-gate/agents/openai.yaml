@@ -1,0 +1,4 @@
+interface:
+  display_name: "C++ Quality Gate"
+  short_description: "Review and verify repository C++ changes"
+  default_prompt: "Use $cpp-quality-gate to review and verify this C++ change."

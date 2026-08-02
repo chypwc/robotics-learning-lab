@@ -6,7 +6,7 @@
 2. **Run natively in WSL:** Perform repository reads, edits, Git operations, builds, tests, and renders with Linux executables and native Linux paths.
 3. **Verify each batch:** Run `git diff --check`, inspect the affected diff and source region, then run the relevant test or render. Activate the repository virtual environment before Quarto executes Python blocks, and remove generated files when they are not requested deliverables.
 4. **Keep textbooks read-only:** Read textbook sources from the repository-local `textbooks/` directory; never modify them.
-5. **Read the project context:** Before project work, read `PLAN.md` for scope and architecture, `CHECKLIST.md` for complete phase requirements and evidence, and `CAPABILITY_TRACK.md` for the current milestone, active capability, and next action. Work from `CAPABILITY_TRACK.md`; use `CHECKLIST.md` for detail.
+5. **Read the project context:** Before project work, read `PLAN.md` for the programme purpose, scope, architecture, milestones, and phase outcomes, then read `CHECKLIST.md` for the current phase, active capability, ordered tasks, and evidence links. Work from `CHECKLIST.md`.
 
 ## Note writing
 
@@ -18,7 +18,7 @@
 6. **Unified notation:** Follow project-wide notation and map textbook notation to it; do not duplicate chapter-level notation tables.
 7. **Incremental notation registry:** After completing each chapter, add only the notation first introduced by that chapter to `notes/notation.qmd`, preserving chapter order. Do not pre-populate notation for unfinished chapters, and use chapter cross-references so reordered chapters update automatically.
 8. **Incremental concept glossary:** After completing and reviewing each chapter, add only its newly defined technical terms to `notes/glossary.qmd`. Keep entries alphabetical, concise, and linked to the first defining section; do not add terminology from unfinished chapters or duplicate the notation registry.
-9. **Clean scope:** Omit project status, phase questions, progress markers, local source paths, and implementation-status commentary. Cite books bibliographically. Keep detailed phase progress in `CHECKLIST.md` and the current capability state in `CAPABILITY_TRACK.md`.
+9. **Clean scope:** Omit project status, phase questions, progress markers, local source paths, and implementation-status commentary. Cite books bibliographically. Keep all live programme and capability status in `CHECKLIST.md`.
 10. **Retrieval tests:** After each major concept, test recall, explanation, derivation, application, and limitations. Include cumulative chapter tests with answers or hints.
 11. **Review cadence:** Write one small learning block at a time and wait for user review before continuing.
 12. **Paragraph formatting:** Keep each prose paragraph on one source line; use line breaks only for headings, lists, tables, code blocks, and display mathematics.
@@ -37,7 +37,14 @@
 ## Capability workflow
 
 1. **Dependency-gated cycle:** Move one active implementation-sized capability through learn and write → review → specify → implement and document → verify. Engineering may start when its prerequisite theory is approved and its minimum specification is ready; unrelated phase theory need not be complete.
-2. **Artifact boundaries:** Create an implementation companion only when implementation begins. Keep theory in learning notes, durable implementation know-how in companion notes, specifications in docs, production code in `ros_ws/src`, detailed phase requirements and evidence in `CHECKLIST.md`, and the current milestone, active capability, and next action in `CAPABILITY_TRACK.md`. Deterministic capability evidence may remain in automated tests and `CHECKLIST.md`. Create a separate verification report only for phase or release milestones, experiments, benchmarks, safety or performance claims, negative results, or results requiring interpretation.
+2. **Artifact boundaries:** Create an implementation companion only when implementation begins. Keep theory and retrieval checks in learning notes, durable implementation know-how in companion notes, requirements and acceptance criteria in specifications under `docs/`, production code and deterministic checks in `ros_ws/src`, and interpreted phase or release conclusions in verification reports under `docs/reports/`. `CHECKLIST.md` records status and links to this evidence; it does not duplicate the evidence itself. Create a separate verification report for phase or release milestones, experiments, benchmarks, safety or performance claims, negative results, or results requiring interpretation.
+
+## Document ownership
+
+1. **Programme plan:** `PLAN.md` is the stable source for the learning programme's purpose, scope, architecture, milestone dependencies, phase learning goals, capstone products, and completion criteria. Do not put live status or task checkboxes in it.
+2. **Live checklist:** `CHECKLIST.md` is the sole live progress tracker. Keep a compact programme-status table, expand only the current phase into ordered artifact-level capability tasks, name exactly one active task, and link rather than copy evidence.
+3. **Rolling detail:** When a phase closes, preserve its conclusions in the owning phase verification report, reduce it to one status row in `CHECKLIST.md`, and expand the next phase there. Git history preserves completed working detail.
+4. **Historical trackers:** Files marked as legacy archives are non-authoritative and must not be used to decide current work.
 
 ## Coding
 
