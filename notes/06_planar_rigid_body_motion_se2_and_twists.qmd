@@ -2163,7 +2163,7 @@ $$
 }.
 $$
 
-The symbol $O_w$ denotes the fixed origin of world frame $\{w\}$. Its world-coordinate column is $\mathbf 0_2$. Evaluating the velocity field at that location by setting ${}^w\mathbf p_P=\mathbf 0_2$ gives ${}^w\mathbf v_P=\boldsymbol\nu_w$. Thus, $\boldsymbol\nu_w$ is the velocity, expressed in world coordinates, assigned by the instantaneous rigid-motion field to the location $O_w$. The world origin need not be a physical point on the robot; the rigid-motion velocity field is being extended mathematically to that location. This dependence on the chosen origin explains why changing the reference origin changes the linear part of a twist.
+The symbol $O_w$ denotes the fixed origin of world frame $\{w\}$. Its world-coordinate column is $\mathbf 0_2$. Evaluating the velocity field at that location by setting ${}^w\mathbf p_P=\mathbf 0_2$ gives ${}^w\mathbf v_P=\boldsymbol\nu_w$. Thus, $\boldsymbol\nu_w$ is the velocity, expressed in world coordinates, assigned by the instantaneous rigid-motion field to the location $O_w$. *The world origin need not be a physical point on the robot; the rigid-motion velocity field is being extended mathematically to that location.* This dependence on the chosen origin explains why changing the reference origin changes the linear part of a twist.
 
 #### Physical meaning and use
 

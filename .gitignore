@@ -16,10 +16,6 @@ textbooks/
 
 .pytest_cache/
 
-AGENTS.md
-CHECKLIST.md
-PLAN.md
-CAPABILITY_TRACK.md
 
 # Quarto working state
 /.quarto/
