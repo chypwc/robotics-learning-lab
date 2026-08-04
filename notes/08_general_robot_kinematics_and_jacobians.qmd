@@ -1,0 +1,518 @@
+# General Robot Kinematics and Jacobians {#sec-general-robot-kinematics-jacobians}
+
+## Why this chapter matters {.unnumbered}
+
+A robot joint permits a constrained relative motion between two rigid links. To predict where a serial robot will move, the geometry of each joint must be expressed in a common frame, composed into a configuration-to-pose map, and differentiated to obtain rigid-body and task velocities. This chapter develops that chain from screw axes through forward kinematics and Jacobians.
+
+The chapter treats open serial chains with ideal rigid links and one-degree-of-freedom revolute or prismatic joints. It does not yet model joint compliance, backlash, closed kinematic loops, collision, forces, actuator dynamics, or feedback control.
+
+## Prerequisites and assumptions {.unnumbered}
+
+The reader should understand vectors, matrices, rank, null spaces, and constraints from @sec-linear-algebra-foundations; coordinate frames and cross products from @sec-geometry-coordinate-frames; and spatial poses, angular velocity, twists, the adjoint, and the project's linear-first twist order from @sec-spatial-rigid-body-motion.
+
+Physical space is modelled as three-dimensional Euclidean space. Frames are right-handed and orthonormal. Position and length are measured in metres, time in seconds, and angles in radians. Unless stated otherwise, every screw-axis coordinate column is referred to one declared fixed frame: that frame supplies both the coordinate axes and the reference origin of the associated spatial-twist velocity field.
+
+## Screw axes and one-degree-of-freedom joint motion {#sec-screw-axis-joint-motion}
+
+### The physical problem: one joint, one allowed motion
+
+A door hinge and a straight linear slide each have one degree of freedom, so one scalar joint coordinate is sufficient to describe the allowed relative configuration. Their motions are nevertheless different. The hinge permits rotation about a fixed line, whereas the slide permits translation along a fixed direction. A useful joint model must describe both cases, locate the permitted motion in physical space, and produce the instantaneous twist caused by a joint rate.
+
+A **screw motion** is rotation about an oriented line combined with translation along the same line. A **screw axis** specifies the line, its positive direction, and the translation per unit rotation. Pure rotation and pure translation are limiting cases of this model. Most robot manipulators use these two cases as **revolute joints** and **prismatic joints**, respectively.
+
+The physical motion must be distinguished from its representation. A joint axis is a geometric feature of the mechanism. Its coordinate column changes when the reference frame changes, even though the physical joint does not. The current joint angle or displacement is also separate from the axis: the axis states which motion is allowed, while the joint coordinate states how far the joint has moved.
+
+### An oriented line in a declared frame
+
+Let $\{a\}$ be a fixed reference frame with origin $O_a$. Let ${}^{a}\mathbf p_{\ell}\in\mathbb R^3$ be the coordinate column of any point on a joint-axis line, expressed along the axes of $\{a\}$ and measured in metres. Let ${}^{a}\mathbf s\in\mathbb R^3$ be a dimensionless unit column pointing in the chosen positive direction of that axis, so
+
+$$
+\left\|{}^{a}\mathbf s\right\|_2=1.
+$$
+
+The coordinate representation of the oriented line is the set
+
+$$
+\boxed{
+{}^{a}\mathcal L
+=
+\left\{
+{}^{a}\mathbf p_{\ell}
++
+\lambda\,{}^{a}\mathbf s
+\;\middle|\;
+\lambda\in\mathbb R
+\right\}
+},
+$$
+
+where the scalar $\lambda$ is measured in metres. The point ${}^{a}\mathbf p_{\ell}$ is not unique: adding any distance along the line gives another valid point. The unit direction fixes an orientation for the line, so replacing ${}^{a}\mathbf s$ by $-{}^{a}\mathbf s$ reverses the positive joint direction.
+
+This line description contains only geometry. It does not contain a joint position, a joint rate, or a finite rigid displacement.
+
+### Revolute motion about the line
+
+A **revolute joint** permits pure rotation about its joint-axis line. Let $t\in\mathbb R$ denote time in seconds, let $j$ denote the joint index, let $\theta_j(t)\in\mathbb R$ be joint $j$'s angle in radians, and let $\dot\theta_j(t)$ be its angular rate in $\mathrm{rad\,s^{-1}}$. The positive direction ${}^{a}\mathbf s$ and the right-hand rule determine the sign of $\theta_j$.
+
+The joint's angular velocity relative to the fixed frame, expressed along the axes of $\{a\}$, is
+
+$$
+{}^{a}\boldsymbol\omega
+=
+{}^{a}\mathbf s\,\dot\theta_j.
+$$
+
+The spatial-twist definition in @sec-se3-spatial-twist showed that a twist referred to a fixed frame defines the rigid-motion velocity field
+
+$$
+{}^{a}\mathbf v_P
+=
+{}^{a}\boldsymbol\nu
++
+{}^{a}\boldsymbol\omega
+\times
+{}^{a}\mathbf p_P,
+$$
+
+where ${}^{a}\mathbf p_P\in\mathbb R^3$ is the current position of a body-fixed point $P$ in metres, ${}^{a}\mathbf v_P\in\mathbb R^3$ is its velocity in $\mathrm{m\,s^{-1}}$, and ${}^{a}\boldsymbol\nu\in\mathbb R^3$ is the linear part of the spatial twist referred to $O_a$, also in $\mathrm{m\,s^{-1}}$. The quantity ${}^{a}\boldsymbol\nu$ is the velocity field evaluated at $O_a$; it is not generally the velocity of a link-frame origin.
+
+For pure rotation, every point on the joint axis is instantaneously stationary. Evaluate the velocity field at the chosen axis point ${}^{a}\mathbf p_{\ell}$ and set that velocity to zero:
+
+$$
+\mathbf 0_3
+=
+{}^{a}\boldsymbol\nu
++
+\left({}^{a}\mathbf s\,\dot\theta_j\right)
+\times
+{}^{a}\mathbf p_{\ell}.
+$$
+
+Solving for the linear part gives
+
+$$
+{}^{a}\boldsymbol\nu
+=
+-\left({}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}\right)\dot\theta_j.
+$$
+
+The project's twist convention places the linear component before the angular component. The **normalised revolute screw-axis coordinates** referred to frame $\{a\}$ are therefore
+
+$$
+\boxed{
+{}^{a}\mathbf S_R
+\mathrel{:=}
+\begin{bmatrix}
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}\\
+{}^{a}\mathbf s
+\end{bmatrix}
+\in\mathbb R^6
+}.
+$$
+
+The subscript $R$ labels the revolute case. Stacking the two parts of the joint-induced spatial twist now gives
+
+$$
+\boxed{
+{}^{a}\boldsymbol\xi
+=
+\begin{bmatrix}
+{}^{a}\boldsymbol\nu\\
+{}^{a}\boldsymbol\omega
+\end{bmatrix}
+=
+{}^{a}\mathbf S_R\dot\theta_j
+}.
+$$
+
+The first three entries of ${}^{a}\mathbf S_R$ have units of metres per radian, conventionally written as metres because radians are dimensionless, and the final three entries are dimensionless. Multiplication by $\dot\theta_j$ produces linear velocity in $\mathrm{m\,s^{-1}}$ and angular velocity in $\mathrm{rad\,s^{-1}}$.
+
+### Helical motion and screw pitch
+
+A **helical joint** permits rotation about an axis and translation along that same axis in a fixed proportion. Its **pitch** $h\in\mathbb R$ is the signed axial distance travelled per positive radian of rotation, measured in $\mathrm{m\,rad^{-1}}$. The axial speed is therefore $h\dot\theta_j$, and its direction is ${}^{a}\mathbf s$.
+
+For a helical motion, a point on the axis is no longer stationary. Its velocity is $h{}^{a}\mathbf s\dot\theta_j$. Evaluate the spatial velocity field at ${}^{a}\mathbf p_{\ell}$:
+
+$$
+h{}^{a}\mathbf s\dot\theta_j
+=
+{}^{a}\boldsymbol\nu
++
+\left({}^{a}\mathbf s\dot\theta_j\right)
+\times
+{}^{a}\mathbf p_{\ell}.
+$$
+
+Rearranging separates the geometry from the angular rate:
+
+$$
+{}^{a}\boldsymbol\nu
+=
+\left(
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}
++
+h{}^{a}\mathbf s
+\right)
+\dot\theta_j.
+$$
+
+Hence the normalised helical screw-axis coordinates are
+
+$$
+\boxed{
+{}^{a}\mathbf S_H
+\mathrel{:=}
+\begin{bmatrix}
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}+h{}^{a}\mathbf s\\
+{}^{a}\mathbf s
+\end{bmatrix}
+\in\mathbb R^6,
+\qquad
+{}^{a}\boldsymbol\xi
+=
+{}^{a}\mathbf S_H\dot\theta_j
+}.
+$$
+
+The subscript $H$ labels the helical case. Setting $h=0$ recovers the revolute screw axis. A positive pitch translates in the ${}^{a}\mathbf s$ direction during positive rotation; a negative pitch translates in the opposite direction.
+
+The choice of point on the line does not change the screw-axis coordinates. If ${}^{a}\mathbf p_{\ell}'={}^{a}\mathbf p_{\ell}+\lambda{}^{a}\mathbf s$ for any $\lambda\in\mathbb R$ measured in metres, then
+
+$$
+\begin{aligned}
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}'
++h{}^{a}\mathbf s
+&=
+-{}^{a}\mathbf s\times
+\left({}^{a}\mathbf p_{\ell}+\lambda{}^{a}\mathbf s\right)
++h{}^{a}\mathbf s\\
+&=
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}
+-\lambda
+\underbrace{{}^{a}\mathbf s\times{}^{a}\mathbf s}_{\mathbf 0_3}
++h{}^{a}\mathbf s\\
+&=
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}
++h{}^{a}\mathbf s.
+\end{aligned}
+$$
+
+The coordinate column therefore depends on the oriented line, pitch, and reference frame, but not on which point is selected along that line.
+
+### Prismatic motion along a direction
+
+A **prismatic joint** permits pure translation along a fixed direction. Let $d_j(t)\in\mathbb R$ be the joint displacement in metres and let $\dot d_j(t)$ be its rate in $\mathrm{m\,s^{-1}}$. There is no angular velocity, and every point of the moving link has the same instantaneous velocity:
+
+$$
+{}^{a}\boldsymbol\omega
+=
+\mathbf 0_3,
+\qquad
+{}^{a}\mathbf v_P
+=
+{}^{a}\mathbf s\dot d_j.
+$$
+
+The normalised prismatic screw-axis coordinates and resulting twist are therefore
+
+$$
+\boxed{
+{}^{a}\mathbf S_P
+\mathrel{:=}
+\begin{bmatrix}
+{}^{a}\mathbf s\\
+\mathbf 0_3
+\end{bmatrix}
+\in\mathbb R^6,
+\qquad
+{}^{a}\boldsymbol\xi
+=
+{}^{a}\mathbf S_P\dot d_j
+}.
+$$
+
+The subscript $P$ labels the prismatic case. The first three entries of ${}^{a}\mathbf S_P$ are dimensionless direction components, and multiplication by $\dot d_j$ produces linear velocity in $\mathrm{m\,s^{-1}}$. The angular entries remain zero. Unlike a revolute or helical motion, a pure translation has no unique finite axis location; its direction is sufficient.
+
+Pure translation is sometimes described as screw motion with infinite pitch. That phrase is a geometric limiting interpretation, not a numerical instruction. A software model should use the finite prismatic form ${}^{a}\mathbf S_P$ and should not store $h=\infty$.
+
+### The normalisation rule and the declared component order
+
+Write any normalised screw-axis coordinate column in the project's linear-first order as
+
+$$
+{}^{a}\mathbf S
+=
+\begin{bmatrix}
+{}^{a}\mathbf s_v\\
+{}^{a}\mathbf s_\omega
+\end{bmatrix}
+\in\mathbb R^6.
+$$
+
+The subscripts $v$ and $\omega$ identify the coefficients that generate the linear and angular parts of the twist after multiplication by the appropriate scalar joint rate. The two valid normalisation cases are
+
+$$
+\boxed{
+\begin{aligned}
+\left\|{}^{a}\mathbf s_\omega\right\|_2&=1,
+&
+{}^{a}\mathbf s_v
+&=
+-{}^{a}\mathbf s_\omega\times{}^{a}\mathbf p_{\ell}
++h{}^{a}\mathbf s_\omega
+&&\text{for revolute or helical motion},\\
+{}^{a}\mathbf s_\omega&=\mathbf 0_3,
+&
+\left\|{}^{a}\mathbf s_v\right\|_2&=1
+&&\text{for prismatic motion}.
+\end{aligned}
+}
+$$
+
+These are separate normalisation rules because the coordinate column has mixed physical units. Taking one ordinary Euclidean norm of all six entries would add squared lengths to squared dimensionless quantities and would not define a physical magnitude.
+
+*Modern Robotics* writes twists and screw axes in angular-first order, $[\boldsymbol\omega^\mathsf T\;\boldsymbol\nu^\mathsf T]^\mathsf T$. This project uses the linear-first order established in @sec-se3-body-twist and @sec-se3-spatial-twist, $[\boldsymbol\nu^\mathsf T\;\boldsymbol\omega^\mathsf T]^\mathsf T$. The formulas above have already been reordered; copying an angular-first six-vector directly into this convention would describe the wrong motion.
+
+If the same physical screw is represented in another fixed frame $\{b\}$, its coordinate column changes through the adjoint already defined in @sec-se3-adjoint-twist. If $\mathbf T_{ab}\in SE(3)$ transforms point coordinates from $\{b\}$ to $\{a\}$, then
+
+$$
+\boxed{
+{}^{a}\mathbf S
+=
+\operatorname{Ad}_{\mathbf T_{ab}}\,{}^{b}\mathbf S
+}.
+$$
+
+The physical joint axis has not moved in this equation. Only the reference axes and origin used to represent it have changed.
+
+### Worked checks
+
+Consider a pure revolute joint whose axis points along positive $z_a$ and passes through
+
+$$
+{}^{a}\mathbf p_{\ell}
+=
+\begin{bmatrix}
+1\\2\\0
+\end{bmatrix}
+\mathrm m,
+\qquad
+{}^{a}\mathbf s
+=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}.
+$$
+
+The linear coefficient is
+
+$$
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}
+=
+-
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}
+\times
+\begin{bmatrix}
+1\\2\\0
+\end{bmatrix}
+=
+\begin{bmatrix}
+2\\-1\\0
+\end{bmatrix}
+\mathrm m,
+$$
+
+so the linear-first screw-axis coordinates are
+
+$$
+{}^{a}\mathbf S_R
+=
+\begin{bmatrix}
+2&-1&0&0&0&1
+\end{bmatrix}^{\mathsf T}.
+$$
+
+At $\dot\theta_j=3\,\mathrm{rad\,s^{-1}}$, the twist parts are
+
+$$
+{}^{a}\boldsymbol\nu
+=
+\begin{bmatrix}
+6\\-3\\0
+\end{bmatrix}
+\mathrm{m\,s^{-1}},
+\qquad
+{}^{a}\boldsymbol\omega
+=
+\begin{bmatrix}
+0\\0\\3
+\end{bmatrix}
+\mathrm{rad\,s^{-1}}.
+$$
+
+Let ${}^{a}\mathbf v_{\ell}\in\mathbb R^3$ denote the velocity field evaluated at the selected axis point, expressed in frame $\{a\}$ and measured in $\mathrm{m\,s^{-1}}$. Its value verifies the required zero velocity:
+
+$$
+\begin{aligned}
+{}^{a}\mathbf v_{\ell}
+&=
+{}^{a}\boldsymbol\nu
++{}^{a}\boldsymbol\omega\times{}^{a}\mathbf p_{\ell}\\
+&=
+\begin{bmatrix}6\\-3\\0\end{bmatrix}
++
+\begin{bmatrix}0\\0\\3\end{bmatrix}
+\times
+\begin{bmatrix}1\\2\\0\end{bmatrix}\\
+&=
+\begin{bmatrix}6\\-3\\0\end{bmatrix}
++
+\begin{bmatrix}-6\\3\\0\end{bmatrix}
+=
+\mathbf 0_3\,\mathrm{m\,s^{-1}}.
+\end{aligned}
+$$
+
+As a contrasting prismatic example, take the unit direction
+
+$$
+{}^{a}\mathbf s
+=
+\frac{1}{3}
+\begin{bmatrix}
+1\\2\\2
+\end{bmatrix}.
+$$
+
+Its norm is one because $\sqrt{1^2+2^2+2^2}/3=1$. At $\dot d_j=0.3\,\mathrm{m\,s^{-1}}$, every moving-link point has velocity
+
+$$
+{}^{a}\mathbf v_P
+=
+{}^{a}\mathbf s\dot d_j
+=
+\begin{bmatrix}
+0.1\\0.2\\0.2
+\end{bmatrix}
+\mathrm{m\,s^{-1}},
+$$
+
+and the angular velocity is zero.
+
+### Contrasting the geometric and motion quantities
+
+The terms introduced above describe related but different objects:
+
+| Quantity | What it describes | What it depends on |
+| --- | --- | --- |
+| Oriented axis line $\mathcal L$ | A physical line and its positive direction | Joint geometry; its coordinate representation depends on the frame |
+| Screw pitch $h$ | Signed axial travel per radian of rotation | Joint geometry, not the current joint rate |
+| Normalised screw-axis coordinates ${}^{a}\mathbf S$ | A six-entry coordinate representation of the permitted instantaneous motion per unit joint rate | Axis, pitch, component order, and reference frame |
+| Twist ${}^{a}\boldsymbol\xi$ | The actual instantaneous rigid-motion velocity field at one instant | Screw-axis coordinates and the current joint rate |
+| Joint coordinate $\theta_j$ or $d_j$ | The current amount of rotation or translation from a declared zero configuration | The current joint configuration and zero convention |
+
+A finite relative pose is a further object. It will be obtained from a screw axis and a finite joint-coordinate change through the $SE(3)$ exponential in @sec-se3-screw-exponential. A screw-axis column alone is neither the current pose nor a finite transformation.
+
+## Quick test A: screw axes and joint motion {.unnumbered}
+
+1. **Recall:** What three geometric ingredients describe a finite-pitch screw axis before it is converted to a six-entry coordinate column?
+2. **Contrast:** Distinguish an oriented axis line, normalised screw-axis coordinates, a twist, and a joint coordinate.
+3. **Derivation:** A pure revolute axis has unit direction ${}^{a}\mathbf s$ and passes through ${}^{a}\mathbf p_{\ell}$. Starting from the spatial velocity field, derive the linear coefficient $-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}$.
+4. **Application:** Find the linear-first screw-axis coordinates of a pure revolute joint about positive $z_a$ through $[1\;2\;0]^\mathsf T\,\mathrm m$.
+5. **Application:** A prismatic joint translates along negative $y_a$ with $\dot d_j=0.4\,\mathrm{m\,s^{-1}}$. Write its normalised screw-axis coordinates and the resulting twist.
+6. **Pitch:** A helical joint has $h=0.01\,\mathrm{m\,rad^{-1}}$ and $\dot\theta_j=5\,\mathrm{rad\,s^{-1}}$. What is its signed axial speed?
+7. **Proof:** Show that replacing ${}^{a}\mathbf p_{\ell}$ by another point on the same line leaves the revolute or helical screw-axis coordinates unchanged.
+8. **Limitation:** Why should software use the prismatic screw form instead of storing an infinite pitch? Why should it not normalise a general six-entry screw column with one ordinary Euclidean norm?
+
+### Answers and hints {.unnumbered}
+
+1. Any point on the axis, a unit direction along the axis, and the signed pitch.
+2. The line is physical joint geometry; ${}^{a}\mathbf S$ is its frame-dependent six-entry motion coordinate; ${}^{a}\boldsymbol\xi$ is the instantaneous motion after multiplication by the current joint rate; and $\theta_j$ or $d_j$ records the joint's current displacement from a declared zero.
+3. For pure rotation, a point on the axis is stationary. Substitute ${}^{a}\boldsymbol\omega={}^{a}\mathbf s\dot\theta_j$ and ${}^{a}\mathbf p_P={}^{a}\mathbf p_{\ell}$ into ${}^{a}\mathbf v_P={}^{a}\boldsymbol\nu+{}^{a}\boldsymbol\omega\times{}^{a}\mathbf p_P$, set the result to zero, and collect the coefficient of $\dot\theta_j$.
+4. The result is $[2\;-1\;0\;0\;0\;1]^\mathsf T$ in the project's linear-first order.
+5. The unit direction is $[0\;-1\;0]^\mathsf T$, so ${}^{a}\mathbf S_P=[0\;-1\;0\;0\;0\;0]^\mathsf T$ and ${}^{a}\boldsymbol\xi=[0\;-0.4\;0\;0\;0\;0]^\mathsf T$, with linear entries in $\mathrm{m\,s^{-1}}$ and angular entries in $\mathrm{rad\,s^{-1}}$.
+6. The signed axial speed is $h\dot\theta_j=0.05\,\mathrm{m\,s^{-1}}$ in the positive axis direction.
+7. Write ${}^{a}\mathbf p_{\ell}'={}^{a}\mathbf p_{\ell}+\lambda{}^{a}\mathbf s$ and use ${}^{a}\mathbf s\times{}^{a}\mathbf s=\mathbf 0_3$.
+8. Infinity is not needed to represent pure translation and can create non-finite arithmetic. The six entries have mixed physical units, so their squared values cannot be added into one physically meaningful norm. Normalise the angular part for revolute or helical motion and the linear part for prismatic motion.
+
+## Rigid motion from the $SE(3)$ exponential {#sec-se3-screw-exponential}
+
+### From a constant twist to a finite pose
+
+### Closed forms for rotational and translational screws
+
+### Recovering screw coordinates with the $SE(3)$ logarithm
+
+## Constant-twist pose integration {#sec-se3-constant-twist-integration}
+
+### Space-twist pose updates
+
+### Body-twist pose updates
+
+### Multiplication side and physical interpretation
+
+## Numerical branches and validation {#sec-se3-numerical-branches}
+
+### Small angular displacements
+
+### Rotations near $\pi$ and logarithm branches
+
+### Invalid inputs and deterministic checks
+
+### Worked spatial cases
+
+## Configuration coordinates and forward kinematics {#sec-general-forward-kinematics}
+
+### Configuration space and coordinate vectors
+
+### Task variables and the forward map
+
+### The total derivative and multivariable chain rule
+
+## Serial-chain pose through products of exponentials {#sec-serial-product-of-exponentials}
+
+### Home configuration and joint screw axes
+
+### Space-form product of exponentials
+
+### Body-form product of exponentials
+
+### Equivalence with a transform chain
+
+## Velocity kinematics and robot Jacobians {#sec-general-robot-jacobians}
+
+### Task Jacobians
+
+### Space Jacobians
+
+### Body Jacobians
+
+### The body--space adjoint relation
+
+## Rank, singularities, and conditioning {#sec-robot-jacobian-rank}
+
+### Task-specific rank loss
+
+### Singular values and numerical conditioning
+
+### Full-twist and reduced-task Jacobians
+
+## Modelling limits and implementation checks {#sec-general-kinematics-checks}
+
+### Supported serial-chain model
+
+### Explicit exclusions
+
+### Analytic and finite-difference checks
+
+## Cumulative chapter review {.unnumbered}
+
+### Answers and hints {.unnumbered}
+
+## References {.unnumbered}
+
+- Kevin M. Lynch and Frank C. Park, *Modern Robotics: Mechanics, Planning, and Control*, Chapter 3, especially Section 3.3.2.2 on the screw interpretation of a twist and normalised screw axes.
+- John J. Craig, *Introduction to Robotics: Mechanics and Control*, Chapter 2 on spatial descriptions, transformations, and rotations about general axes, and Chapter 3 on one-degree-of-freedom revolute and prismatic joints.
+- Peter Corke, *Robotics, Vision and Control: Fundamental Algorithms in Python*, Chapters 2--3, especially the three-dimensional twist representation and its revolute, prismatic, and finite-pitch screw cases.

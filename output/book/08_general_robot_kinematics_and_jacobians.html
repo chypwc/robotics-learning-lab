@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-AU" xml:lang="en-AU"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>8&nbsp; General Robot Kinematics and Jacobians – Foundations of Autonomous Robotics</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./07_degrees_of_freedom_and_spatial_motion_so3_se3.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-a1d20fa37053390459103e27c0ac45a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-bff5d7cd845da349ee67ccc3e95b2326.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-a1d20fa37053390459103e27c0ac45a9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Foundations of Autonomous Robotics</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+    <a href="./Foundations-of-Autonomous-Robotics.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html"><span>Part I:</span> Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./08_general_robot_kinematics_and_jacobians.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unified Notation and Conventions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text"><span>Part I:</span> Motion, Mechanics, and Control</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_linear_algebra_foundations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Linear Algebra Foundations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_geometry_and_coordinate_frames.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Geometry and Coordinate Frames</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_kinematics_and_numerical_integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Model and Derivation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_kinematics_and_numerical_integration_implementation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Differential-Drive Kinematics and Numerical Integration: Implementation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_ros2_packages_and_development_workflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">ROS 2 Package Development Workflow</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_planar_rigid_body_motion_se2_and_twists.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Planar Rigid-Body Motion: <span class="math inline">\(SE(2)\)</span> and Twists</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_degrees_of_freedom_and_spatial_motion_so3_se3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_general_robot_kinematics_and_jacobians.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#why-this-chapter-matters" id="toc-why-this-chapter-matters" class="nav-link active" data-scroll-target="#why-this-chapter-matters">Why this chapter matters</a></li>
+  <li><a href="#prerequisites-and-assumptions" id="toc-prerequisites-and-assumptions" class="nav-link" data-scroll-target="#prerequisites-and-assumptions">Prerequisites and assumptions</a></li>
+  <li><a href="#sec-screw-axis-joint-motion" id="toc-sec-screw-axis-joint-motion" class="nav-link" data-scroll-target="#sec-screw-axis-joint-motion"><span class="header-section-number">8.1</span> Screw axes and one-degree-of-freedom joint motion</a>
+  <ul class="collapse">
+  <li><a href="#the-physical-problem-one-joint-one-allowed-motion" id="toc-the-physical-problem-one-joint-one-allowed-motion" class="nav-link" data-scroll-target="#the-physical-problem-one-joint-one-allowed-motion"><span class="header-section-number">8.1.1</span> The physical problem: one joint, one allowed motion</a></li>
+  <li><a href="#an-oriented-line-in-a-declared-frame" id="toc-an-oriented-line-in-a-declared-frame" class="nav-link" data-scroll-target="#an-oriented-line-in-a-declared-frame"><span class="header-section-number">8.1.2</span> An oriented line in a declared frame</a></li>
+  <li><a href="#revolute-motion-about-the-line" id="toc-revolute-motion-about-the-line" class="nav-link" data-scroll-target="#revolute-motion-about-the-line"><span class="header-section-number">8.1.3</span> Revolute motion about the line</a></li>
+  <li><a href="#helical-motion-and-screw-pitch" id="toc-helical-motion-and-screw-pitch" class="nav-link" data-scroll-target="#helical-motion-and-screw-pitch"><span class="header-section-number">8.1.4</span> Helical motion and screw pitch</a></li>
+  <li><a href="#prismatic-motion-along-a-direction" id="toc-prismatic-motion-along-a-direction" class="nav-link" data-scroll-target="#prismatic-motion-along-a-direction"><span class="header-section-number">8.1.5</span> Prismatic motion along a direction</a></li>
+  <li><a href="#the-normalisation-rule-and-the-declared-component-order" id="toc-the-normalisation-rule-and-the-declared-component-order" class="nav-link" data-scroll-target="#the-normalisation-rule-and-the-declared-component-order"><span class="header-section-number">8.1.6</span> The normalisation rule and the declared component order</a></li>
+  <li><a href="#worked-checks" id="toc-worked-checks" class="nav-link" data-scroll-target="#worked-checks"><span class="header-section-number">8.1.7</span> Worked checks</a></li>
+  <li><a href="#contrasting-the-geometric-and-motion-quantities" id="toc-contrasting-the-geometric-and-motion-quantities" class="nav-link" data-scroll-target="#contrasting-the-geometric-and-motion-quantities"><span class="header-section-number">8.1.8</span> Contrasting the geometric and motion quantities</a></li>
+  </ul></li>
+  <li><a href="#quick-test-a-screw-axes-and-joint-motion" id="toc-quick-test-a-screw-axes-and-joint-motion" class="nav-link" data-scroll-target="#quick-test-a-screw-axes-and-joint-motion">Quick test A: screw axes and joint motion</a>
+  <ul class="collapse">
+  <li><a href="#answers-and-hints" id="toc-answers-and-hints" class="nav-link" data-scroll-target="#answers-and-hints">Answers and hints</a></li>
+  </ul></li>
+  <li><a href="#sec-se3-screw-exponential" id="toc-sec-se3-screw-exponential" class="nav-link" data-scroll-target="#sec-se3-screw-exponential"><span class="header-section-number">8.2</span> Rigid motion from the <span class="math inline">\(SE(3)\)</span> exponential</a>
+  <ul class="collapse">
+  <li><a href="#from-a-constant-twist-to-a-finite-pose" id="toc-from-a-constant-twist-to-a-finite-pose" class="nav-link" data-scroll-target="#from-a-constant-twist-to-a-finite-pose"><span class="header-section-number">8.2.1</span> From a constant twist to a finite pose</a></li>
+  <li><a href="#closed-forms-for-rotational-and-translational-screws" id="toc-closed-forms-for-rotational-and-translational-screws" class="nav-link" data-scroll-target="#closed-forms-for-rotational-and-translational-screws"><span class="header-section-number">8.2.2</span> Closed forms for rotational and translational screws</a></li>
+  <li><a href="#recovering-screw-coordinates-with-the-se3-logarithm" id="toc-recovering-screw-coordinates-with-the-se3-logarithm" class="nav-link" data-scroll-target="#recovering-screw-coordinates-with-the-se3-logarithm"><span class="header-section-number">8.2.3</span> Recovering screw coordinates with the <span class="math inline">\(SE(3)\)</span> logarithm</a></li>
+  </ul></li>
+  <li><a href="#sec-se3-constant-twist-integration" id="toc-sec-se3-constant-twist-integration" class="nav-link" data-scroll-target="#sec-se3-constant-twist-integration"><span class="header-section-number">8.3</span> Constant-twist pose integration</a>
+  <ul class="collapse">
+  <li><a href="#space-twist-pose-updates" id="toc-space-twist-pose-updates" class="nav-link" data-scroll-target="#space-twist-pose-updates"><span class="header-section-number">8.3.1</span> Space-twist pose updates</a></li>
+  <li><a href="#body-twist-pose-updates" id="toc-body-twist-pose-updates" class="nav-link" data-scroll-target="#body-twist-pose-updates"><span class="header-section-number">8.3.2</span> Body-twist pose updates</a></li>
+  <li><a href="#multiplication-side-and-physical-interpretation" id="toc-multiplication-side-and-physical-interpretation" class="nav-link" data-scroll-target="#multiplication-side-and-physical-interpretation"><span class="header-section-number">8.3.3</span> Multiplication side and physical interpretation</a></li>
+  </ul></li>
+  <li><a href="#sec-se3-numerical-branches" id="toc-sec-se3-numerical-branches" class="nav-link" data-scroll-target="#sec-se3-numerical-branches"><span class="header-section-number">8.4</span> Numerical branches and validation</a>
+  <ul class="collapse">
+  <li><a href="#small-angular-displacements" id="toc-small-angular-displacements" class="nav-link" data-scroll-target="#small-angular-displacements"><span class="header-section-number">8.4.1</span> Small angular displacements</a></li>
+  <li><a href="#rotations-near-pi-and-logarithm-branches" id="toc-rotations-near-pi-and-logarithm-branches" class="nav-link" data-scroll-target="#rotations-near-pi-and-logarithm-branches"><span class="header-section-number">8.4.2</span> Rotations near <span class="math inline">\(\pi\)</span> and logarithm branches</a></li>
+  <li><a href="#invalid-inputs-and-deterministic-checks" id="toc-invalid-inputs-and-deterministic-checks" class="nav-link" data-scroll-target="#invalid-inputs-and-deterministic-checks"><span class="header-section-number">8.4.3</span> Invalid inputs and deterministic checks</a></li>
+  <li><a href="#worked-spatial-cases" id="toc-worked-spatial-cases" class="nav-link" data-scroll-target="#worked-spatial-cases"><span class="header-section-number">8.4.4</span> Worked spatial cases</a></li>
+  </ul></li>
+  <li><a href="#sec-general-forward-kinematics" id="toc-sec-general-forward-kinematics" class="nav-link" data-scroll-target="#sec-general-forward-kinematics"><span class="header-section-number">8.5</span> Configuration coordinates and forward kinematics</a>
+  <ul class="collapse">
+  <li><a href="#configuration-space-and-coordinate-vectors" id="toc-configuration-space-and-coordinate-vectors" class="nav-link" data-scroll-target="#configuration-space-and-coordinate-vectors"><span class="header-section-number">8.5.1</span> Configuration space and coordinate vectors</a></li>
+  <li><a href="#task-variables-and-the-forward-map" id="toc-task-variables-and-the-forward-map" class="nav-link" data-scroll-target="#task-variables-and-the-forward-map"><span class="header-section-number">8.5.2</span> Task variables and the forward map</a></li>
+  <li><a href="#the-total-derivative-and-multivariable-chain-rule" id="toc-the-total-derivative-and-multivariable-chain-rule" class="nav-link" data-scroll-target="#the-total-derivative-and-multivariable-chain-rule"><span class="header-section-number">8.5.3</span> The total derivative and multivariable chain rule</a></li>
+  </ul></li>
+  <li><a href="#sec-serial-product-of-exponentials" id="toc-sec-serial-product-of-exponentials" class="nav-link" data-scroll-target="#sec-serial-product-of-exponentials"><span class="header-section-number">8.6</span> Serial-chain pose through products of exponentials</a>
+  <ul class="collapse">
+  <li><a href="#home-configuration-and-joint-screw-axes" id="toc-home-configuration-and-joint-screw-axes" class="nav-link" data-scroll-target="#home-configuration-and-joint-screw-axes"><span class="header-section-number">8.6.1</span> Home configuration and joint screw axes</a></li>
+  <li><a href="#space-form-product-of-exponentials" id="toc-space-form-product-of-exponentials" class="nav-link" data-scroll-target="#space-form-product-of-exponentials"><span class="header-section-number">8.6.2</span> Space-form product of exponentials</a></li>
+  <li><a href="#body-form-product-of-exponentials" id="toc-body-form-product-of-exponentials" class="nav-link" data-scroll-target="#body-form-product-of-exponentials"><span class="header-section-number">8.6.3</span> Body-form product of exponentials</a></li>
+  <li><a href="#equivalence-with-a-transform-chain" id="toc-equivalence-with-a-transform-chain" class="nav-link" data-scroll-target="#equivalence-with-a-transform-chain"><span class="header-section-number">8.6.4</span> Equivalence with a transform chain</a></li>
+  </ul></li>
+  <li><a href="#sec-general-robot-jacobians" id="toc-sec-general-robot-jacobians" class="nav-link" data-scroll-target="#sec-general-robot-jacobians"><span class="header-section-number">8.7</span> Velocity kinematics and robot Jacobians</a>
+  <ul class="collapse">
+  <li><a href="#task-jacobians" id="toc-task-jacobians" class="nav-link" data-scroll-target="#task-jacobians"><span class="header-section-number">8.7.1</span> Task Jacobians</a></li>
+  <li><a href="#space-jacobians" id="toc-space-jacobians" class="nav-link" data-scroll-target="#space-jacobians"><span class="header-section-number">8.7.2</span> Space Jacobians</a></li>
+  <li><a href="#body-jacobians" id="toc-body-jacobians" class="nav-link" data-scroll-target="#body-jacobians"><span class="header-section-number">8.7.3</span> Body Jacobians</a></li>
+  <li><a href="#the-bodyspace-adjoint-relation" id="toc-the-bodyspace-adjoint-relation" class="nav-link" data-scroll-target="#the-bodyspace-adjoint-relation"><span class="header-section-number">8.7.4</span> The body–space adjoint relation</a></li>
+  </ul></li>
+  <li><a href="#sec-robot-jacobian-rank" id="toc-sec-robot-jacobian-rank" class="nav-link" data-scroll-target="#sec-robot-jacobian-rank"><span class="header-section-number">8.8</span> Rank, singularities, and conditioning</a>
+  <ul class="collapse">
+  <li><a href="#task-specific-rank-loss" id="toc-task-specific-rank-loss" class="nav-link" data-scroll-target="#task-specific-rank-loss"><span class="header-section-number">8.8.1</span> Task-specific rank loss</a></li>
+  <li><a href="#singular-values-and-numerical-conditioning" id="toc-singular-values-and-numerical-conditioning" class="nav-link" data-scroll-target="#singular-values-and-numerical-conditioning"><span class="header-section-number">8.8.2</span> Singular values and numerical conditioning</a></li>
+  <li><a href="#full-twist-and-reduced-task-jacobians" id="toc-full-twist-and-reduced-task-jacobians" class="nav-link" data-scroll-target="#full-twist-and-reduced-task-jacobians"><span class="header-section-number">8.8.3</span> Full-twist and reduced-task Jacobians</a></li>
+  </ul></li>
+  <li><a href="#sec-general-kinematics-checks" id="toc-sec-general-kinematics-checks" class="nav-link" data-scroll-target="#sec-general-kinematics-checks"><span class="header-section-number">8.9</span> Modelling limits and implementation checks</a>
+  <ul class="collapse">
+  <li><a href="#supported-serial-chain-model" id="toc-supported-serial-chain-model" class="nav-link" data-scroll-target="#supported-serial-chain-model"><span class="header-section-number">8.9.1</span> Supported serial-chain model</a></li>
+  <li><a href="#explicit-exclusions" id="toc-explicit-exclusions" class="nav-link" data-scroll-target="#explicit-exclusions"><span class="header-section-number">8.9.2</span> Explicit exclusions</a></li>
+  <li><a href="#analytic-and-finite-difference-checks" id="toc-analytic-and-finite-difference-checks" class="nav-link" data-scroll-target="#analytic-and-finite-difference-checks"><span class="header-section-number">8.9.3</span> Analytic and finite-difference checks</a></li>
+  </ul></li>
+  <li><a href="#cumulative-chapter-review" id="toc-cumulative-chapter-review" class="nav-link" data-scroll-target="#cumulative-chapter-review">Cumulative chapter review</a>
+  <ul class="collapse">
+  <li><a href="#answers-and-hints-1" id="toc-answers-and-hints-1" class="nav-link" data-scroll-target="#answers-and-hints-1">Answers and hints</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html"><span>Part I:</span> Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./08_general_robot_kinematics_and_jacobians.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-general-robot-kinematics-jacobians" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="why-this-chapter-matters" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="why-this-chapter-matters">Why this chapter matters</h2>
+<p>A robot joint permits a constrained relative motion between two rigid links. To predict where a serial robot will move, the geometry of each joint must be expressed in a common frame, composed into a configuration-to-pose map, and differentiated to obtain rigid-body and task velocities. This chapter develops that chain from screw axes through forward kinematics and Jacobians.</p>
+<p>The chapter treats open serial chains with ideal rigid links and one-degree-of-freedom revolute or prismatic joints. It does not yet model joint compliance, backlash, closed kinematic loops, collision, forces, actuator dynamics, or feedback control.</p>
+</section>
+<section id="prerequisites-and-assumptions" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="prerequisites-and-assumptions">Prerequisites and assumptions</h2>
+<p>The reader should understand vectors, matrices, rank, null spaces, and constraints from <a href="01_linear_algebra_foundations.html" class="quarto-xref"><span>Chapter 1</span></a>; coordinate frames and cross products from <a href="02_geometry_and_coordinate_frames.html" class="quarto-xref"><span>Chapter 2</span></a>; and spatial poses, angular velocity, twists, the adjoint, and the project’s linear-first twist order from <a href="07_degrees_of_freedom_and_spatial_motion_so3_se3.html" class="quarto-xref"><span>Chapter 7</span></a>.</p>
+<p>Physical space is modelled as three-dimensional Euclidean space. Frames are right-handed and orthonormal. Position and length are measured in metres, time in seconds, and angles in radians. Unless stated otherwise, every screw-axis coordinate column is referred to one declared fixed frame: that frame supplies both the coordinate axes and the reference origin of the associated spatial-twist velocity field.</p>
+</section>
+<section id="sec-screw-axis-joint-motion" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="sec-screw-axis-joint-motion"><span class="header-section-number">8.1</span> Screw axes and one-degree-of-freedom joint motion</h2>
+<section id="the-physical-problem-one-joint-one-allowed-motion" class="level3" data-number="8.1.1">
+<h3 data-number="8.1.1" class="anchored" data-anchor-id="the-physical-problem-one-joint-one-allowed-motion"><span class="header-section-number">8.1.1</span> The physical problem: one joint, one allowed motion</h3>
+<p>A door hinge and a straight linear slide each have one degree of freedom, so one scalar joint coordinate is sufficient to describe the allowed relative configuration. Their motions are nevertheless different. The hinge permits rotation about a fixed line, whereas the slide permits translation along a fixed direction. A useful joint model must describe both cases, locate the permitted motion in physical space, and produce the instantaneous twist caused by a joint rate.</p>
+<p>A <strong>screw motion</strong> is rotation about an oriented line combined with translation along the same line. A <strong>screw axis</strong> specifies the line, its positive direction, and the translation per unit rotation. Pure rotation and pure translation are limiting cases of this model. Most robot manipulators use these two cases as <strong>revolute joints</strong> and <strong>prismatic joints</strong>, respectively.</p>
+<p>The physical motion must be distinguished from its representation. A joint axis is a geometric feature of the mechanism. Its coordinate column changes when the reference frame changes, even though the physical joint does not. The current joint angle or displacement is also separate from the axis: the axis states which motion is allowed, while the joint coordinate states how far the joint has moved.</p>
+</section>
+<section id="an-oriented-line-in-a-declared-frame" class="level3" data-number="8.1.2">
+<h3 data-number="8.1.2" class="anchored" data-anchor-id="an-oriented-line-in-a-declared-frame"><span class="header-section-number">8.1.2</span> An oriented line in a declared frame</h3>
+<p>Let <span class="math inline">\(\{a\}\)</span> be a fixed reference frame with origin <span class="math inline">\(O_a\)</span>. Let <span class="math inline">\({}^{a}\mathbf p_{\ell}\in\mathbb R^3\)</span> be the coordinate column of any point on a joint-axis line, expressed along the axes of <span class="math inline">\(\{a\}\)</span> and measured in metres. Let <span class="math inline">\({}^{a}\mathbf s\in\mathbb R^3\)</span> be a dimensionless unit column pointing in the chosen positive direction of that axis, so</p>
+<p><span class="math display">\[
+\left\|{}^{a}\mathbf s\right\|_2=1.
+\]</span></p>
+<p>The coordinate representation of the oriented line is the set</p>
+<p><span class="math display">\[
+\boxed{
+{}^{a}\mathcal L
+=
+\left\{
+{}^{a}\mathbf p_{\ell}
++
+\lambda\,{}^{a}\mathbf s
+\;\middle|\;
+\lambda\in\mathbb R
+\right\}
+},
+\]</span></p>
+<p>where the scalar <span class="math inline">\(\lambda\)</span> is measured in metres. The point <span class="math inline">\({}^{a}\mathbf p_{\ell}\)</span> is not unique: adding any distance along the line gives another valid point. The unit direction fixes an orientation for the line, so replacing <span class="math inline">\({}^{a}\mathbf s\)</span> by <span class="math inline">\(-{}^{a}\mathbf s\)</span> reverses the positive joint direction.</p>
+<p>This line description contains only geometry. It does not contain a joint position, a joint rate, or a finite rigid displacement.</p>
+</section>
+<section id="revolute-motion-about-the-line" class="level3" data-number="8.1.3">
+<h3 data-number="8.1.3" class="anchored" data-anchor-id="revolute-motion-about-the-line"><span class="header-section-number">8.1.3</span> Revolute motion about the line</h3>
+<p>A <strong>revolute joint</strong> permits pure rotation about its joint-axis line. Let <span class="math inline">\(t\in\mathbb R\)</span> denote time in seconds, let <span class="math inline">\(j\)</span> denote the joint index, let <span class="math inline">\(\theta_j(t)\in\mathbb R\)</span> be joint <span class="math inline">\(j\)</span>’s angle in radians, and let <span class="math inline">\(\dot\theta_j(t)\)</span> be its angular rate in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>. The positive direction <span class="math inline">\({}^{a}\mathbf s\)</span> and the right-hand rule determine the sign of <span class="math inline">\(\theta_j\)</span>.</p>
+<p>The joint’s angular velocity relative to the fixed frame, expressed along the axes of <span class="math inline">\(\{a\}\)</span>, is</p>
+<p><span class="math display">\[
+{}^{a}\boldsymbol\omega
+=
+{}^{a}\mathbf s\,\dot\theta_j.
+\]</span></p>
+<p>The spatial-twist definition in <a href="07_degrees_of_freedom_and_spatial_motion_so3_se3.html#sec-se3-spatial-twist" class="quarto-xref"><span>Section 7.9.3</span></a> showed that a twist referred to a fixed frame defines the rigid-motion velocity field</p>
+<p><span class="math display">\[
+{}^{a}\mathbf v_P
+=
+{}^{a}\boldsymbol\nu
++
+{}^{a}\boldsymbol\omega
+\times
+{}^{a}\mathbf p_P,
+\]</span></p>
+<p>where <span class="math inline">\({}^{a}\mathbf p_P\in\mathbb R^3\)</span> is the current position of a body-fixed point <span class="math inline">\(P\)</span> in metres, <span class="math inline">\({}^{a}\mathbf v_P\in\mathbb R^3\)</span> is its velocity in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>, and <span class="math inline">\({}^{a}\boldsymbol\nu\in\mathbb R^3\)</span> is the linear part of the spatial twist referred to <span class="math inline">\(O_a\)</span>, also in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>. The quantity <span class="math inline">\({}^{a}\boldsymbol\nu\)</span> is the velocity field evaluated at <span class="math inline">\(O_a\)</span>; it is not generally the velocity of a link-frame origin.</p>
+<p>For pure rotation, every point on the joint axis is instantaneously stationary. Evaluate the velocity field at the chosen axis point <span class="math inline">\({}^{a}\mathbf p_{\ell}\)</span> and set that velocity to zero:</p>
+<p><span class="math display">\[
+\mathbf 0_3
+=
+{}^{a}\boldsymbol\nu
++
+\left({}^{a}\mathbf s\,\dot\theta_j\right)
+\times
+{}^{a}\mathbf p_{\ell}.
+\]</span></p>
+<p>Solving for the linear part gives</p>
+<p><span class="math display">\[
+{}^{a}\boldsymbol\nu
+=
+-\left({}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}\right)\dot\theta_j.
+\]</span></p>
+<p>The project’s twist convention places the linear component before the angular component. The <strong>normalised revolute screw-axis coordinates</strong> referred to frame <span class="math inline">\(\{a\}\)</span> are therefore</p>
+<p><span class="math display">\[
+\boxed{
+{}^{a}\mathbf S_R
+\mathrel{:=}
+\begin{bmatrix}
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}\\
+{}^{a}\mathbf s
+\end{bmatrix}
+\in\mathbb R^6
+}.
+\]</span></p>
+<p>The subscript <span class="math inline">\(R\)</span> labels the revolute case. Stacking the two parts of the joint-induced spatial twist now gives</p>
+<p><span class="math display">\[
+\boxed{
+{}^{a}\boldsymbol\xi
+=
+\begin{bmatrix}
+{}^{a}\boldsymbol\nu\\
+{}^{a}\boldsymbol\omega
+\end{bmatrix}
+=
+{}^{a}\mathbf S_R\dot\theta_j
+}.
+\]</span></p>
+<p>The first three entries of <span class="math inline">\({}^{a}\mathbf S_R\)</span> have units of metres per radian, conventionally written as metres because radians are dimensionless, and the final three entries are dimensionless. Multiplication by <span class="math inline">\(\dot\theta_j\)</span> produces linear velocity in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span> and angular velocity in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>.</p>
+</section>
+<section id="helical-motion-and-screw-pitch" class="level3" data-number="8.1.4">
+<h3 data-number="8.1.4" class="anchored" data-anchor-id="helical-motion-and-screw-pitch"><span class="header-section-number">8.1.4</span> Helical motion and screw pitch</h3>
+<p>A <strong>helical joint</strong> permits rotation about an axis and translation along that same axis in a fixed proportion. Its <strong>pitch</strong> <span class="math inline">\(h\in\mathbb R\)</span> is the signed axial distance travelled per positive radian of rotation, measured in <span class="math inline">\(\mathrm{m\,rad^{-1}}\)</span>. The axial speed is therefore <span class="math inline">\(h\dot\theta_j\)</span>, and its direction is <span class="math inline">\({}^{a}\mathbf s\)</span>.</p>
+<p>For a helical motion, a point on the axis is no longer stationary. Its velocity is <span class="math inline">\(h{}^{a}\mathbf s\dot\theta_j\)</span>. Evaluate the spatial velocity field at <span class="math inline">\({}^{a}\mathbf p_{\ell}\)</span>:</p>
+<p><span class="math display">\[
+h{}^{a}\mathbf s\dot\theta_j
+=
+{}^{a}\boldsymbol\nu
++
+\left({}^{a}\mathbf s\dot\theta_j\right)
+\times
+{}^{a}\mathbf p_{\ell}.
+\]</span></p>
+<p>Rearranging separates the geometry from the angular rate:</p>
+<p><span class="math display">\[
+{}^{a}\boldsymbol\nu
+=
+\left(
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}
++
+h{}^{a}\mathbf s
+\right)
+\dot\theta_j.
+\]</span></p>
+<p>Hence the normalised helical screw-axis coordinates are</p>
+<p><span class="math display">\[
+\boxed{
+{}^{a}\mathbf S_H
+\mathrel{:=}
+\begin{bmatrix}
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}+h{}^{a}\mathbf s\\
+{}^{a}\mathbf s
+\end{bmatrix}
+\in\mathbb R^6,
+\qquad
+{}^{a}\boldsymbol\xi
+=
+{}^{a}\mathbf S_H\dot\theta_j
+}.
+\]</span></p>
+<p>The subscript <span class="math inline">\(H\)</span> labels the helical case. Setting <span class="math inline">\(h=0\)</span> recovers the revolute screw axis. A positive pitch translates in the <span class="math inline">\({}^{a}\mathbf s\)</span> direction during positive rotation; a negative pitch translates in the opposite direction.</p>
+<p>The choice of point on the line does not change the screw-axis coordinates. If <span class="math inline">\({}^{a}\mathbf p_{\ell}'={}^{a}\mathbf p_{\ell}+\lambda{}^{a}\mathbf s\)</span> for any <span class="math inline">\(\lambda\in\mathbb R\)</span> measured in metres, then</p>
+<p><span class="math display">\[
+\begin{aligned}
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}'
++h{}^{a}\mathbf s
+&amp;=
+-{}^{a}\mathbf s\times
+\left({}^{a}\mathbf p_{\ell}+\lambda{}^{a}\mathbf s\right)
++h{}^{a}\mathbf s\\
+&amp;=
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}
+-\lambda
+\underbrace{{}^{a}\mathbf s\times{}^{a}\mathbf s}_{\mathbf 0_3}
++h{}^{a}\mathbf s\\
+&amp;=
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}
++h{}^{a}\mathbf s.
+\end{aligned}
+\]</span></p>
+<p>The coordinate column therefore depends on the oriented line, pitch, and reference frame, but not on which point is selected along that line.</p>
+</section>
+<section id="prismatic-motion-along-a-direction" class="level3" data-number="8.1.5">
+<h3 data-number="8.1.5" class="anchored" data-anchor-id="prismatic-motion-along-a-direction"><span class="header-section-number">8.1.5</span> Prismatic motion along a direction</h3>
+<p>A <strong>prismatic joint</strong> permits pure translation along a fixed direction. Let <span class="math inline">\(d_j(t)\in\mathbb R\)</span> be the joint displacement in metres and let <span class="math inline">\(\dot d_j(t)\)</span> be its rate in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>. There is no angular velocity, and every point of the moving link has the same instantaneous velocity:</p>
+<p><span class="math display">\[
+{}^{a}\boldsymbol\omega
+=
+\mathbf 0_3,
+\qquad
+{}^{a}\mathbf v_P
+=
+{}^{a}\mathbf s\dot d_j.
+\]</span></p>
+<p>The normalised prismatic screw-axis coordinates and resulting twist are therefore</p>
+<p><span class="math display">\[
+\boxed{
+{}^{a}\mathbf S_P
+\mathrel{:=}
+\begin{bmatrix}
+{}^{a}\mathbf s\\
+\mathbf 0_3
+\end{bmatrix}
+\in\mathbb R^6,
+\qquad
+{}^{a}\boldsymbol\xi
+=
+{}^{a}\mathbf S_P\dot d_j
+}.
+\]</span></p>
+<p>The subscript <span class="math inline">\(P\)</span> labels the prismatic case. The first three entries of <span class="math inline">\({}^{a}\mathbf S_P\)</span> are dimensionless direction components, and multiplication by <span class="math inline">\(\dot d_j\)</span> produces linear velocity in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>. The angular entries remain zero. Unlike a revolute or helical motion, a pure translation has no unique finite axis location; its direction is sufficient.</p>
+<p>Pure translation is sometimes described as screw motion with infinite pitch. That phrase is a geometric limiting interpretation, not a numerical instruction. A software model should use the finite prismatic form <span class="math inline">\({}^{a}\mathbf S_P\)</span> and should not store <span class="math inline">\(h=\infty\)</span>.</p>
+</section>
+<section id="the-normalisation-rule-and-the-declared-component-order" class="level3" data-number="8.1.6">
+<h3 data-number="8.1.6" class="anchored" data-anchor-id="the-normalisation-rule-and-the-declared-component-order"><span class="header-section-number">8.1.6</span> The normalisation rule and the declared component order</h3>
+<p>Write any normalised screw-axis coordinate column in the project’s linear-first order as</p>
+<p><span class="math display">\[
+{}^{a}\mathbf S
+=
+\begin{bmatrix}
+{}^{a}\mathbf s_v\\
+{}^{a}\mathbf s_\omega
+\end{bmatrix}
+\in\mathbb R^6.
+\]</span></p>
+<p>The subscripts <span class="math inline">\(v\)</span> and <span class="math inline">\(\omega\)</span> identify the coefficients that generate the linear and angular parts of the twist after multiplication by the appropriate scalar joint rate. The two valid normalisation cases are</p>
+<p><span class="math display">\[
+\boxed{
+\begin{aligned}
+\left\|{}^{a}\mathbf s_\omega\right\|_2&amp;=1,
+&amp;
+{}^{a}\mathbf s_v
+&amp;=
+-{}^{a}\mathbf s_\omega\times{}^{a}\mathbf p_{\ell}
++h{}^{a}\mathbf s_\omega
+&amp;&amp;\text{for revolute or helical motion},\\
+{}^{a}\mathbf s_\omega&amp;=\mathbf 0_3,
+&amp;
+\left\|{}^{a}\mathbf s_v\right\|_2&amp;=1
+&amp;&amp;\text{for prismatic motion}.
+\end{aligned}
+}
+\]</span></p>
+<p>These are separate normalisation rules because the coordinate column has mixed physical units. Taking one ordinary Euclidean norm of all six entries would add squared lengths to squared dimensionless quantities and would not define a physical magnitude.</p>
+<p><em>Modern Robotics</em> writes twists and screw axes in angular-first order, <span class="math inline">\([\boldsymbol\omega^\mathsf T\;\boldsymbol\nu^\mathsf T]^\mathsf T\)</span>. This project uses the linear-first order established in <a href="07_degrees_of_freedom_and_spatial_motion_so3_se3.html#sec-se3-body-twist" class="quarto-xref"><span>Section 7.9.2</span></a> and <a href="07_degrees_of_freedom_and_spatial_motion_so3_se3.html#sec-se3-spatial-twist" class="quarto-xref"><span>Section 7.9.3</span></a>, <span class="math inline">\([\boldsymbol\nu^\mathsf T\;\boldsymbol\omega^\mathsf T]^\mathsf T\)</span>. The formulas above have already been reordered; copying an angular-first six-vector directly into this convention would describe the wrong motion.</p>
+<p>If the same physical screw is represented in another fixed frame <span class="math inline">\(\{b\}\)</span>, its coordinate column changes through the adjoint already defined in <a href="07_degrees_of_freedom_and_spatial_motion_so3_se3.html#sec-se3-adjoint-twist" class="quarto-xref"><span>Section 7.9.4</span></a>. If <span class="math inline">\(\mathbf T_{ab}\in SE(3)\)</span> transforms point coordinates from <span class="math inline">\(\{b\}\)</span> to <span class="math inline">\(\{a\}\)</span>, then</p>
+<p><span class="math display">\[
+\boxed{
+{}^{a}\mathbf S
+=
+\operatorname{Ad}_{\mathbf T_{ab}}\,{}^{b}\mathbf S
+}.
+\]</span></p>
+<p>The physical joint axis has not moved in this equation. Only the reference axes and origin used to represent it have changed.</p>
+</section>
+<section id="worked-checks" class="level3" data-number="8.1.7">
+<h3 data-number="8.1.7" class="anchored" data-anchor-id="worked-checks"><span class="header-section-number">8.1.7</span> Worked checks</h3>
+<p>Consider a pure revolute joint whose axis points along positive <span class="math inline">\(z_a\)</span> and passes through</p>
+<p><span class="math display">\[
+{}^{a}\mathbf p_{\ell}
+=
+\begin{bmatrix}
+1\\2\\0
+\end{bmatrix}
+\mathrm m,
+\qquad
+{}^{a}\mathbf s
+=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}.
+\]</span></p>
+<p>The linear coefficient is</p>
+<p><span class="math display">\[
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}
+=
+-
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}
+\times
+\begin{bmatrix}
+1\\2\\0
+\end{bmatrix}
+=
+\begin{bmatrix}
+2\\-1\\0
+\end{bmatrix}
+\mathrm m,
+\]</span></p>
+<p>so the linear-first screw-axis coordinates are</p>
+<p><span class="math display">\[
+{}^{a}\mathbf S_R
+=
+\begin{bmatrix}
+2&amp;-1&amp;0&amp;0&amp;0&amp;1
+\end{bmatrix}^{\mathsf T}.
+\]</span></p>
+<p>At <span class="math inline">\(\dot\theta_j=3\,\mathrm{rad\,s^{-1}}\)</span>, the twist parts are</p>
+<p><span class="math display">\[
+{}^{a}\boldsymbol\nu
+=
+\begin{bmatrix}
+6\\-3\\0
+\end{bmatrix}
+\mathrm{m\,s^{-1}},
+\qquad
+{}^{a}\boldsymbol\omega
+=
+\begin{bmatrix}
+0\\0\\3
+\end{bmatrix}
+\mathrm{rad\,s^{-1}}.
+\]</span></p>
+<p>Let <span class="math inline">\({}^{a}\mathbf v_{\ell}\in\mathbb R^3\)</span> denote the velocity field evaluated at the selected axis point, expressed in frame <span class="math inline">\(\{a\}\)</span> and measured in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>. Its value verifies the required zero velocity:</p>
+<p><span class="math display">\[
+\begin{aligned}
+{}^{a}\mathbf v_{\ell}
+&amp;=
+{}^{a}\boldsymbol\nu
++{}^{a}\boldsymbol\omega\times{}^{a}\mathbf p_{\ell}\\
+&amp;=
+\begin{bmatrix}6\\-3\\0\end{bmatrix}
++
+\begin{bmatrix}0\\0\\3\end{bmatrix}
+\times
+\begin{bmatrix}1\\2\\0\end{bmatrix}\\
+&amp;=
+\begin{bmatrix}6\\-3\\0\end{bmatrix}
++
+\begin{bmatrix}-6\\3\\0\end{bmatrix}
+=
+\mathbf 0_3\,\mathrm{m\,s^{-1}}.
+\end{aligned}
+\]</span></p>
+<p>As a contrasting prismatic example, take the unit direction</p>
+<p><span class="math display">\[
+{}^{a}\mathbf s
+=
+\frac{1}{3}
+\begin{bmatrix}
+1\\2\\2
+\end{bmatrix}.
+\]</span></p>
+<p>Its norm is one because <span class="math inline">\(\sqrt{1^2+2^2+2^2}/3=1\)</span>. At <span class="math inline">\(\dot d_j=0.3\,\mathrm{m\,s^{-1}}\)</span>, every moving-link point has velocity</p>
+<p><span class="math display">\[
+{}^{a}\mathbf v_P
+=
+{}^{a}\mathbf s\dot d_j
+=
+\begin{bmatrix}
+0.1\\0.2\\0.2
+\end{bmatrix}
+\mathrm{m\,s^{-1}},
+\]</span></p>
+<p>and the angular velocity is zero.</p>
+</section>
+<section id="contrasting-the-geometric-and-motion-quantities" class="level3" data-number="8.1.8">
+<h3 data-number="8.1.8" class="anchored" data-anchor-id="contrasting-the-geometric-and-motion-quantities"><span class="header-section-number">8.1.8</span> Contrasting the geometric and motion quantities</h3>
+<p>The terms introduced above describe related but different objects:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Quantity</th>
+<th>What it describes</th>
+<th>What it depends on</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Oriented axis line <span class="math inline">\(\mathcal L\)</span></td>
+<td>A physical line and its positive direction</td>
+<td>Joint geometry; its coordinate representation depends on the frame</td>
+</tr>
+<tr class="even">
+<td>Screw pitch <span class="math inline">\(h\)</span></td>
+<td>Signed axial travel per radian of rotation</td>
+<td>Joint geometry, not the current joint rate</td>
+</tr>
+<tr class="odd">
+<td>Normalised screw-axis coordinates <span class="math inline">\({}^{a}\mathbf S\)</span></td>
+<td>A six-entry coordinate representation of the permitted instantaneous motion per unit joint rate</td>
+<td>Axis, pitch, component order, and reference frame</td>
+</tr>
+<tr class="even">
+<td>Twist <span class="math inline">\({}^{a}\boldsymbol\xi\)</span></td>
+<td>The actual instantaneous rigid-motion velocity field at one instant</td>
+<td>Screw-axis coordinates and the current joint rate</td>
+</tr>
+<tr class="odd">
+<td>Joint coordinate <span class="math inline">\(\theta_j\)</span> or <span class="math inline">\(d_j\)</span></td>
+<td>The current amount of rotation or translation from a declared zero configuration</td>
+<td>The current joint configuration and zero convention</td>
+</tr>
+</tbody>
+</table>
+<p>A finite relative pose is a further object. It will be obtained from a screw axis and a finite joint-coordinate change through the <span class="math inline">\(SE(3)\)</span> exponential in <a href="#sec-se3-screw-exponential" class="quarto-xref"><span>Section 8.2</span></a>. A screw-axis column alone is neither the current pose nor a finite transformation.</p>
+</section>
+</section>
+<section id="quick-test-a-screw-axes-and-joint-motion" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="quick-test-a-screw-axes-and-joint-motion">Quick test A: screw axes and joint motion</h2>
+<ol type="1">
+<li><strong>Recall:</strong> What three geometric ingredients describe a finite-pitch screw axis before it is converted to a six-entry coordinate column?</li>
+<li><strong>Contrast:</strong> Distinguish an oriented axis line, normalised screw-axis coordinates, a twist, and a joint coordinate.</li>
+<li><strong>Derivation:</strong> A pure revolute axis has unit direction <span class="math inline">\({}^{a}\mathbf s\)</span> and passes through <span class="math inline">\({}^{a}\mathbf p_{\ell}\)</span>. Starting from the spatial velocity field, derive the linear coefficient <span class="math inline">\(-{}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}\)</span>.</li>
+<li><strong>Application:</strong> Find the linear-first screw-axis coordinates of a pure revolute joint about positive <span class="math inline">\(z_a\)</span> through <span class="math inline">\([1\;2\;0]^\mathsf T\,\mathrm m\)</span>.</li>
+<li><strong>Application:</strong> A prismatic joint translates along negative <span class="math inline">\(y_a\)</span> with <span class="math inline">\(\dot d_j=0.4\,\mathrm{m\,s^{-1}}\)</span>. Write its normalised screw-axis coordinates and the resulting twist.</li>
+<li><strong>Pitch:</strong> A helical joint has <span class="math inline">\(h=0.01\,\mathrm{m\,rad^{-1}}\)</span> and <span class="math inline">\(\dot\theta_j=5\,\mathrm{rad\,s^{-1}}\)</span>. What is its signed axial speed?</li>
+<li><strong>Proof:</strong> Show that replacing <span class="math inline">\({}^{a}\mathbf p_{\ell}\)</span> by another point on the same line leaves the revolute or helical screw-axis coordinates unchanged.</li>
+<li><strong>Limitation:</strong> Why should software use the prismatic screw form instead of storing an infinite pitch? Why should it not normalise a general six-entry screw column with one ordinary Euclidean norm?</li>
+</ol>
+<section id="answers-and-hints" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="answers-and-hints">Answers and hints</h3>
+<ol type="1">
+<li>Any point on the axis, a unit direction along the axis, and the signed pitch.</li>
+<li>The line is physical joint geometry; <span class="math inline">\({}^{a}\mathbf S\)</span> is its frame-dependent six-entry motion coordinate; <span class="math inline">\({}^{a}\boldsymbol\xi\)</span> is the instantaneous motion after multiplication by the current joint rate; and <span class="math inline">\(\theta_j\)</span> or <span class="math inline">\(d_j\)</span> records the joint’s current displacement from a declared zero.</li>
+<li>For pure rotation, a point on the axis is stationary. Substitute <span class="math inline">\({}^{a}\boldsymbol\omega={}^{a}\mathbf s\dot\theta_j\)</span> and <span class="math inline">\({}^{a}\mathbf p_P={}^{a}\mathbf p_{\ell}\)</span> into <span class="math inline">\({}^{a}\mathbf v_P={}^{a}\boldsymbol\nu+{}^{a}\boldsymbol\omega\times{}^{a}\mathbf p_P\)</span>, set the result to zero, and collect the coefficient of <span class="math inline">\(\dot\theta_j\)</span>.</li>
+<li>The result is <span class="math inline">\([2\;-1\;0\;0\;0\;1]^\mathsf T\)</span> in the project’s linear-first order.</li>
+<li>The unit direction is <span class="math inline">\([0\;-1\;0]^\mathsf T\)</span>, so <span class="math inline">\({}^{a}\mathbf S_P=[0\;-1\;0\;0\;0\;0]^\mathsf T\)</span> and <span class="math inline">\({}^{a}\boldsymbol\xi=[0\;-0.4\;0\;0\;0\;0]^\mathsf T\)</span>, with linear entries in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span> and angular entries in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>.</li>
+<li>The signed axial speed is <span class="math inline">\(h\dot\theta_j=0.05\,\mathrm{m\,s^{-1}}\)</span> in the positive axis direction.</li>
+<li>Write <span class="math inline">\({}^{a}\mathbf p_{\ell}'={}^{a}\mathbf p_{\ell}+\lambda{}^{a}\mathbf s\)</span> and use <span class="math inline">\({}^{a}\mathbf s\times{}^{a}\mathbf s=\mathbf 0_3\)</span>.</li>
+<li>Infinity is not needed to represent pure translation and can create non-finite arithmetic. The six entries have mixed physical units, so their squared values cannot be added into one physically meaningful norm. Normalise the angular part for revolute or helical motion and the linear part for prismatic motion.</li>
+</ol>
+</section>
+</section>
+<section id="sec-se3-screw-exponential" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="sec-se3-screw-exponential"><span class="header-section-number">8.2</span> Rigid motion from the <span class="math inline">\(SE(3)\)</span> exponential</h2>
+<section id="from-a-constant-twist-to-a-finite-pose" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="from-a-constant-twist-to-a-finite-pose"><span class="header-section-number">8.2.1</span> From a constant twist to a finite pose</h3>
+</section>
+<section id="closed-forms-for-rotational-and-translational-screws" class="level3" data-number="8.2.2">
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="closed-forms-for-rotational-and-translational-screws"><span class="header-section-number">8.2.2</span> Closed forms for rotational and translational screws</h3>
+</section>
+<section id="recovering-screw-coordinates-with-the-se3-logarithm" class="level3" data-number="8.2.3">
+<h3 data-number="8.2.3" class="anchored" data-anchor-id="recovering-screw-coordinates-with-the-se3-logarithm"><span class="header-section-number">8.2.3</span> Recovering screw coordinates with the <span class="math inline">\(SE(3)\)</span> logarithm</h3>
+</section>
+</section>
+<section id="sec-se3-constant-twist-integration" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="sec-se3-constant-twist-integration"><span class="header-section-number">8.3</span> Constant-twist pose integration</h2>
+<section id="space-twist-pose-updates" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="space-twist-pose-updates"><span class="header-section-number">8.3.1</span> Space-twist pose updates</h3>
+</section>
+<section id="body-twist-pose-updates" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="body-twist-pose-updates"><span class="header-section-number">8.3.2</span> Body-twist pose updates</h3>
+</section>
+<section id="multiplication-side-and-physical-interpretation" class="level3" data-number="8.3.3">
+<h3 data-number="8.3.3" class="anchored" data-anchor-id="multiplication-side-and-physical-interpretation"><span class="header-section-number">8.3.3</span> Multiplication side and physical interpretation</h3>
+</section>
+</section>
+<section id="sec-se3-numerical-branches" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="sec-se3-numerical-branches"><span class="header-section-number">8.4</span> Numerical branches and validation</h2>
+<section id="small-angular-displacements" class="level3" data-number="8.4.1">
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="small-angular-displacements"><span class="header-section-number">8.4.1</span> Small angular displacements</h3>
+</section>
+<section id="rotations-near-pi-and-logarithm-branches" class="level3" data-number="8.4.2">
+<h3 data-number="8.4.2" class="anchored" data-anchor-id="rotations-near-pi-and-logarithm-branches"><span class="header-section-number">8.4.2</span> Rotations near <span class="math inline">\(\pi\)</span> and logarithm branches</h3>
+</section>
+<section id="invalid-inputs-and-deterministic-checks" class="level3" data-number="8.4.3">
+<h3 data-number="8.4.3" class="anchored" data-anchor-id="invalid-inputs-and-deterministic-checks"><span class="header-section-number">8.4.3</span> Invalid inputs and deterministic checks</h3>
+</section>
+<section id="worked-spatial-cases" class="level3" data-number="8.4.4">
+<h3 data-number="8.4.4" class="anchored" data-anchor-id="worked-spatial-cases"><span class="header-section-number">8.4.4</span> Worked spatial cases</h3>
+</section>
+</section>
+<section id="sec-general-forward-kinematics" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="sec-general-forward-kinematics"><span class="header-section-number">8.5</span> Configuration coordinates and forward kinematics</h2>
+<section id="configuration-space-and-coordinate-vectors" class="level3" data-number="8.5.1">
+<h3 data-number="8.5.1" class="anchored" data-anchor-id="configuration-space-and-coordinate-vectors"><span class="header-section-number">8.5.1</span> Configuration space and coordinate vectors</h3>
+</section>
+<section id="task-variables-and-the-forward-map" class="level3" data-number="8.5.2">
+<h3 data-number="8.5.2" class="anchored" data-anchor-id="task-variables-and-the-forward-map"><span class="header-section-number">8.5.2</span> Task variables and the forward map</h3>
+</section>
+<section id="the-total-derivative-and-multivariable-chain-rule" class="level3" data-number="8.5.3">
+<h3 data-number="8.5.3" class="anchored" data-anchor-id="the-total-derivative-and-multivariable-chain-rule"><span class="header-section-number">8.5.3</span> The total derivative and multivariable chain rule</h3>
+</section>
+</section>
+<section id="sec-serial-product-of-exponentials" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="sec-serial-product-of-exponentials"><span class="header-section-number">8.6</span> Serial-chain pose through products of exponentials</h2>
+<section id="home-configuration-and-joint-screw-axes" class="level3" data-number="8.6.1">
+<h3 data-number="8.6.1" class="anchored" data-anchor-id="home-configuration-and-joint-screw-axes"><span class="header-section-number">8.6.1</span> Home configuration and joint screw axes</h3>
+</section>
+<section id="space-form-product-of-exponentials" class="level3" data-number="8.6.2">
+<h3 data-number="8.6.2" class="anchored" data-anchor-id="space-form-product-of-exponentials"><span class="header-section-number">8.6.2</span> Space-form product of exponentials</h3>
+</section>
+<section id="body-form-product-of-exponentials" class="level3" data-number="8.6.3">
+<h3 data-number="8.6.3" class="anchored" data-anchor-id="body-form-product-of-exponentials"><span class="header-section-number">8.6.3</span> Body-form product of exponentials</h3>
+</section>
+<section id="equivalence-with-a-transform-chain" class="level3" data-number="8.6.4">
+<h3 data-number="8.6.4" class="anchored" data-anchor-id="equivalence-with-a-transform-chain"><span class="header-section-number">8.6.4</span> Equivalence with a transform chain</h3>
+</section>
+</section>
+<section id="sec-general-robot-jacobians" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="sec-general-robot-jacobians"><span class="header-section-number">8.7</span> Velocity kinematics and robot Jacobians</h2>
+<section id="task-jacobians" class="level3" data-number="8.7.1">
+<h3 data-number="8.7.1" class="anchored" data-anchor-id="task-jacobians"><span class="header-section-number">8.7.1</span> Task Jacobians</h3>
+</section>
+<section id="space-jacobians" class="level3" data-number="8.7.2">
+<h3 data-number="8.7.2" class="anchored" data-anchor-id="space-jacobians"><span class="header-section-number">8.7.2</span> Space Jacobians</h3>
+</section>
+<section id="body-jacobians" class="level3" data-number="8.7.3">
+<h3 data-number="8.7.3" class="anchored" data-anchor-id="body-jacobians"><span class="header-section-number">8.7.3</span> Body Jacobians</h3>
+</section>
+<section id="the-bodyspace-adjoint-relation" class="level3" data-number="8.7.4">
+<h3 data-number="8.7.4" class="anchored" data-anchor-id="the-bodyspace-adjoint-relation"><span class="header-section-number">8.7.4</span> The body–space adjoint relation</h3>
+</section>
+</section>
+<section id="sec-robot-jacobian-rank" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="sec-robot-jacobian-rank"><span class="header-section-number">8.8</span> Rank, singularities, and conditioning</h2>
+<section id="task-specific-rank-loss" class="level3" data-number="8.8.1">
+<h3 data-number="8.8.1" class="anchored" data-anchor-id="task-specific-rank-loss"><span class="header-section-number">8.8.1</span> Task-specific rank loss</h3>
+</section>
+<section id="singular-values-and-numerical-conditioning" class="level3" data-number="8.8.2">
+<h3 data-number="8.8.2" class="anchored" data-anchor-id="singular-values-and-numerical-conditioning"><span class="header-section-number">8.8.2</span> Singular values and numerical conditioning</h3>
+</section>
+<section id="full-twist-and-reduced-task-jacobians" class="level3" data-number="8.8.3">
+<h3 data-number="8.8.3" class="anchored" data-anchor-id="full-twist-and-reduced-task-jacobians"><span class="header-section-number">8.8.3</span> Full-twist and reduced-task Jacobians</h3>
+</section>
+</section>
+<section id="sec-general-kinematics-checks" class="level2" data-number="8.9">
+<h2 data-number="8.9" class="anchored" data-anchor-id="sec-general-kinematics-checks"><span class="header-section-number">8.9</span> Modelling limits and implementation checks</h2>
+<section id="supported-serial-chain-model" class="level3" data-number="8.9.1">
+<h3 data-number="8.9.1" class="anchored" data-anchor-id="supported-serial-chain-model"><span class="header-section-number">8.9.1</span> Supported serial-chain model</h3>
+</section>
+<section id="explicit-exclusions" class="level3" data-number="8.9.2">
+<h3 data-number="8.9.2" class="anchored" data-anchor-id="explicit-exclusions"><span class="header-section-number">8.9.2</span> Explicit exclusions</h3>
+</section>
+<section id="analytic-and-finite-difference-checks" class="level3" data-number="8.9.3">
+<h3 data-number="8.9.3" class="anchored" data-anchor-id="analytic-and-finite-difference-checks"><span class="header-section-number">8.9.3</span> Analytic and finite-difference checks</h3>
+</section>
+</section>
+<section id="cumulative-chapter-review" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="cumulative-chapter-review">Cumulative chapter review</h2>
+<section id="answers-and-hints-1" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="answers-and-hints-1">Answers and hints</h3>
+</section>
+</section>
+<section id="references" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<ul>
+<li>Kevin M. Lynch and Frank C. Park, <em>Modern Robotics: Mechanics, Planning, and Control</em>, Chapter 3, especially Section 3.3.2.2 on the screw interpretation of a twist and normalised screw axes.</li>
+<li>John J. Craig, <em>Introduction to Robotics: Mechanics and Control</em>, Chapter 2 on spatial descriptions, transformations, and rotations about general axes, and Chapter 3 on one-degree-of-freedom revolute and prismatic joints.</li>
+<li>Peter Corke, <em>Robotics, Vision and Control: Fundamental Algorithms in Python</em>, Chapters 2–3, especially the three-dimensional twist representation and its revolute, prismatic, and finite-pitch screw cases.</li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./07_degrees_of_freedom_and_spatial_motion_so3_se3.html" class="pagination-link" aria-label="Degrees of Freedom and Spatial Motion: $SO(3)$ and $SE(3)$">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Degrees of Freedom and Spatial Motion: <span class="math inline">\(SO(3)\)</span> and <span class="math inline">\(SE(3)\)</span></span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
