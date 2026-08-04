@@ -1,16 +1,352 @@
 # General Robot Kinematics and Jacobians {#sec-general-robot-kinematics-jacobians}
 
-## Why this chapter matters {.unnumbered}
-
-A robot joint permits a constrained relative motion between two rigid links. To predict where a serial robot will move, the geometry of each joint must be expressed in a common frame, composed into a configuration-to-pose map, and differentiated to obtain rigid-body and task velocities. This chapter develops that chain from screw axes through forward kinematics and Jacobians.
-
-The chapter treats open serial chains with ideal rigid links and one-degree-of-freedom revolute or prismatic joints. It does not yet model joint compliance, backlash, closed kinematic loops, collision, forces, actuator dynamics, or feedback control.
-
 ## Prerequisites and assumptions {.unnumbered}
 
 The reader should understand vectors, matrices, rank, null spaces, and constraints from @sec-linear-algebra-foundations; coordinate frames and cross products from @sec-geometry-coordinate-frames; and spatial poses, angular velocity, twists, the adjoint, and the project's linear-first twist order from @sec-spatial-rigid-body-motion.
 
 Physical space is modelled as three-dimensional Euclidean space. Frames are right-handed and orthonormal. Position and length are measured in metres, time in seconds, and angles in radians. Unless stated otherwise, every screw-axis coordinate column is referred to one declared fixed frame: that frame supplies both the coordinate axes and the reference origin of the associated spatial-twist velocity field.
+
+## Robot configurations, poses, and joint coordinates {#sec-robot-configurations-joint-coordinates}
+
+This chapter develops the geometry needed to predict the motion of a serial robot. It begins by reviewing configuration and pose for a collection of rigid links connected by joints, then introduces joint coordinates, forward kinematics, screw-axis representations, and Jacobians as successive descriptions of the same articulated system.
+
+The chapter treats open serial chains with ideal rigid links and one-degree-of-freedom revolute or prismatic joints. Finite-pitch helical motion is introduced to explain the general screw model, but it is not included as a supported serial-chain joint type. The chapter does not yet model joint compliance, backlash, closed kinematic loops, collision, forces, actuator dynamics, or feedback control.
+
+### Configuration and pose for links and joints {.unnumbered}
+
+An open serial robot consists of rigid links connected in sequence by joints. Each one-degree-of-freedom joint restricts the relative motion of two neighbouring links to one independent rotation or translation. Predicting the robot's geometry therefore requires more than locating one free rigid body: it requires determining the simultaneous placement of every link while satisfying every joint constraint.
+
+A **material point** is an ideal labelled point fixed in one physical part of the robot. Its label identifies the same point as the robot moves; its coordinate column may change.
+
+A **link** is a collection of material points modelled as moving together as one rigid object. The distance between every pair of its material points remains fixed. A link need not look like a straight bar: a base, chassis, bracket, shell, or several components bolted together may be one link when their relative motion and deformation are neglected.
+
+For example, a simple arm has the sequence
+
+$$
+\text{base link}
+\;-\;
+\text{shoulder joint}
+\;-\;
+\text{upper-arm link}
+\;-\;
+\text{elbow joint}
+\;-\;
+\text{forearm link}.
+$$
+
+The **upper-arm link** is the rigid assembly that moves as one object. The **forearm link** is another rigid assembly. The **elbow joint** allows the forearm link to rotate relative to the upper-arm link.
+
+Let $I$ be the finite set of link indices. For every $i\in I$, let $L_i$ denote link $i$ and let $\mathcal B_i$ be the set of labelled material points modelled as belonging to $L_i$. The robot's complete material-point set is
+
+$$
+\boxed{
+\mathcal B
+=
+\bigsqcup_{i\in I}\mathcal B_i
+},
+$$
+
+where $\bigsqcup$ denotes a **disjoint union**: every point retains its link identity. A joint is not another material-point set; it constrains the allowable relative placement of two links. Physical joint components are assigned to those links, represented as additional links when their relative motion matters, or omitted from the ideal model.
+
+A **configuration** is one complete geometric arrangement of the modelled robot at an instant. Reusing the placement-map definition from @sec-spatial-configuration-dof, a configuration $\chi$ assigns a world position to every material point in $\mathcal B$:
+
+$$
+\chi:\mathcal B\rightarrow\mathbb R^3,
+\qquad
+P\longmapsto\chi(P).
+$$
+
+Each value $\chi(P)\in\mathbb R^3$ is the position of material point $P$ relative to the fixed world, expressed in world coordinates and measured in metres. The configuration is the complete assignment $\chi$, not one material point and not only the end effector. Rigid-link preservation means that, for every link index $i\in I$ and every pair $P,Q\in\mathcal B_i$,
+
+$$
+\left\|\chi(P)-\chi(Q)\right\|_2
+=
+d_i(P,Q),
+$$
+
+where $d_i(P,Q)\in\mathbb R_{\geq0}$ is the fixed reference distance between the two labelled material points, measured in metres. Joint constraints impose additional relationships between points or attached frames belonging to different links. The **configuration space** $\mathcal C$ is the set of all assignments that satisfy both the rigid-link conditions and the joint constraints.
+
+The relationship among a configuration map, a pose, and a transformation matrix is clearest for one rigid link. Choose one link with material-point set $\mathcal B_b\subseteq\mathcal B$, and attach frame $\{b\}$ rigidly to it. Before placing the link in the world, assign every material point its constant body-frame coordinate:
+
+$$
+\boxed{
+c_b:\mathcal B_b\rightarrow\mathbb R^3,
+\qquad
+P\longmapsto c_b(P)\mathrel{:=}{}^{b}\mathbf p_P
+}.
+$$
+
+The **body-coordinate assignment** $c_b$ is fixed model data: it describes the link's reference geometry in frame $\{b\}$. It is not a configuration because its output is a body-frame coordinate column rather than the point's current world position, and it does not change when the link moves.
+
+The **pose of frame $\{b\}$ relative to frame $\{w\}$** is the physical position and orientation of the attached body frame relative to the fixed world frame. One representation of this pose is the ordered pair
+
+$$
+\boxed{
+\left(\mathbf R_{wb},{}^{w}\mathbf p_b\right)
+\in
+SO(3)\times\mathbb R^3
+},
+$$
+
+where the dimensionless rotation matrix $\mathbf R_{wb}\in SO(3)$ represents the orientation of $\{b\}$ relative to $\{w\}$ and maps body-frame vector coordinates to world-frame vector coordinates, and ${}^{w}\mathbf p_b\in\mathbb R^3$ is the position of the body-frame origin relative to the world-frame origin, expressed in world coordinates and measured in metres.
+
+The same pose is represented by the homogeneous transformation matrix
+
+$$
+\boxed{
+\mathbf T_{wb}
+\mathrel{:=}
+\begin{bmatrix}
+\mathbf R_{wb} & {}^{w}\mathbf p_b\\
+\mathbf 0_3^{\mathsf T} & 1
+\end{bmatrix}
+\in SE(3)
+}.
+$$
+
+Here, $\mathbf 0_3:=[0\;0\;0]^{\mathsf T}\in\mathbb R^3$ is the three-component zero column. Thus it is acceptable to say that the pose is represented by $(\mathbf R_{wb},{}^{w}\mathbf p_b)$ or, equivalently, by $\mathbf T_{wb}$. The physical pose and either coordinate representation should still be distinguished. To distinguish the matrix $\mathbf T_{wb}$ from the coordinate mapping that it induces, define
+
+$$
+\boxed{
+A_{\mathbf T_{wb}}:\mathbb R^3\rightarrow\mathbb R^3,
+\qquad
+{}^{b}\mathbf p
+\longmapsto
+A_{\mathbf T_{wb}}\!\left({}^{b}\mathbf p\right)
+\mathrel{:=}
+\mathbf R_{wb}{}^{b}\mathbf p
++
+{}^{w}\mathbf p_b
+}.
+$$
+
+Both the input ${}^{b}\mathbf p$ and output $A_{\mathbf T_{wb}}({}^{b}\mathbf p)$ are point-coordinate columns in metres. For a point, define its homogeneous-coordinate column by ${}^{b}\overline{\mathbf p}:=[({}^{b}\mathbf p)^{\mathsf T},1]^{\mathsf T}\in\mathbb R^4$, with the final entry dimensionless. The same action is then written as ${}^{w}\overline{\mathbf p}=\mathbf T_{wb}{}^{b}\overline{\mathbf p}$. Thus the $4\times4$ matrix $\mathbf T_{wb}$ acts directly on homogeneous point-coordinate columns, whereas $A_{\mathbf T_{wb}}$ names its induced affine action on ordinary three-component point coordinates.
+
+The current configuration of this rigid link is the composition of the fixed body-coordinate assignment with the pose-induced coordinate map:
+
+$$
+\boxed{
+\chi_{\mathbf T_{wb}}
+\mathrel{:=}
+A_{\mathbf T_{wb}}\circ c_b
+:
+\mathcal B_b\rightarrow\mathbb R^3
+}.
+$$
+
+This relationship is often written in the compact robotics shorthand requested here:
+
+$$
+\boxed{
+P
+\;\overset{c_b}{\longmapsto}\;
+{}^{b}\mathbf p_P
+\;\overset{\mathbf T_{wb}}{\longmapsto}\;
+{}^{w}\mathbf p_P
+}.
+$$
+
+The label $\mathbf T_{wb}$ over the second arrow is shorthand for applying the transformation represented by that matrix; it does not declare that a $4\times4$ matrix is literally a function from $\mathbb R^3$ to $\mathbb R^3$. The type-explicit ordinary-coordinate chain is
+
+$$
+\boxed{
+P
+\;\overset{c_b}{\longmapsto}\;
+{}^{b}\mathbf p_P
+\;\overset{A_{\mathbf T_{wb}}}{\longmapsto}\;
+{}^{w}\mathbf p_P
+=
+\chi_{\mathbf T_{wb}}(P)
+}.
+$$
+
+The configuration map $\chi_{\mathbf T_{wb}}$ and the pose-induced map $A_{\mathbf T_{wb}}$ therefore have different domains. The first accepts a labelled material point $P\in\mathcal B_b$; the second accepts a point-coordinate column in $\mathbb R^3$. The map $A_{\mathbf T_{wb}}$ is affine because it includes translation; it is not the transformation law for a free vector, whose components would be transformed by $\mathbf R_{wb}$ alone. The two maps encode the same rigid placement only after the fixed assignment $c_b$ connects a material point to its body-frame coordinates.
+
+Let $\mathcal C_b$ be the configuration space of this one free, orientation-preserving rigid link. Assume that $\mathcal B_b$ contains at least three non-collinear labelled material points, so their placement determines the link's rigid pose.[^three-point-rigid-pose]
+
+[^three-point-rigid-pose]: In three dimensions, **one point** determines only a location; the link can still rotate freely about that point. **Two distinct points** determine a line; the link can still rotate about that line. **Three non-collinear points** form a triangle; the triangle fixes two independent directions and therefore a third direction through their cross product, so no rotational freedom remains.
+
+For this rigid-link model, fixed frames $\{w\}$ and $\{b\}$, and fixed body-coordinate assignment $c_b$, each $\mathbf T_{wb}\in SE(3)$ produces exactly one configuration through $A_{\mathbf T_{wb}}\circ c_b$, and each configuration in $\mathcal C_b$ determines exactly one pose of $\{b\}$ relative to $\{w\}$. Define the correspondence map $\Phi_b$ by
+
+$$
+\begin{aligned}
+\Phi_b:SE(3)&\longrightarrow\mathcal C_b,\\
+\mathbf T_{wb}&\longmapsto
+\Phi_b(\mathbf T_{wb})
+\mathrel{:=}
+\chi_{\mathbf T_{wb}}
+=
+A_{\mathbf T_{wb}}\circ c_b.
+\end{aligned}
+$$
+
+The map $\Phi_b$ is one-to-one and onto: different pose matrices give different configuration maps, and every admissible configuration map is obtained from one pose matrix. Thus $\Phi_b$ is the one-to-one correspondence; it is neither a physical configuration nor a pose matrix. The correspondence is summarised by
+
+$$
+\boxed{
+\text{rigid-body configuration }\chi
+\quad\longleftrightarrow\quad
+\text{body pose represented by }\mathbf T_{wb}
+}.
+$$
+
+This correspondence is not an equality of mathematical types: $\chi$ is a placement map on material points, the pose is a physical relation between frames, $\mathbf T_{wb}$ is a matrix representation of that pose, and $A_{\mathbf T_{wb}}$ is the coordinate map induced by the matrix.
+
+### From free-body coordinates to joint coordinates {.unnumbered}
+
+A **fixed-base robot** has one base link whose pose relative to the world frame is constant, so no coordinates are needed to describe motion of the base. An **open serial chain** connects links one after another without forming a closed kinematic loop.
+
+A **closed kinematic loop** occurs when a sequence of links and joints eventually connects back to an earlier link. Consequently, there are two or more joint paths between some links. For example, a four-bar mechanism forms a loop:
+
+$$
+\text{base}
+\rightarrow L_1
+\rightarrow L_2
+\rightarrow L_3
+\rightarrow \text{base}.
+$$
+
+This differs from an open serial chain:
+
+$$
+\text{base}
+\rightarrow L_1
+\rightarrow L_2
+\rightarrow \text{end effector}.
+$$
+
+In the ideal model used here, each joint has one degree of freedom: it permits one independent relative motion between its two neighbouring links while preventing the other relative motions.
+
+Let $N\in\mathbb N$ be the number of physical joints and let $j\in\{1,\ldots,N\}$ be a joint index.
+
+For joint $j$, define the **zero arrangement** and oriented **joint axis** by
+
+$$
+\boxed{
+\begin{aligned}
+\text{zero arrangement}_j
+&:=
+\text{relative placement of the two links at coordinate zero},\\
+\text{oriented joint axis}_j
+&:=
+(\mathcal L_j,\mathbf s_j),
+\qquad
+\|\mathbf s_j\|_2=1,
+\qquad
+\mathbf s_j\parallel\mathcal L_j,
+\end{aligned}
+}
+$$
+
+where $\mathcal L_j$ is the geometric axis line and the dimensionless unit vector $\mathbf s_j$ chooses its positive direction. In a declared frame $\{a\}$, the axis line has the coordinate representation
+
+$$
+{}^{a}\mathcal L
+=
+\left\{
+{}^{a}\mathbf p_\ell+\lambda\,{}^{a}\mathbf s
+\;\middle|\;
+\lambda\in\mathbb R
+\right\}.
+$$
+
+Here ${}^{a}\mathbf p_\ell\in\mathbb R^3$ is the coordinate column of any point on the line, expressed in frame $\{a\}$ and measured in metres; ${}^{a}\mathbf s\in\mathbb R^3$ is its dimensionless unit positive direction; and $\lambda$ is signed distance along the line, measured in metres. The supported one-degree-of-freedom joint models are
+
+$$
+\boxed{
+\begin{aligned}
+\text{revolute joint:}\quad
+&\theta_j\in\mathbb R\ \text{radians},
+&&\text{relative rotation by }\theta_j\text{ about }\mathcal L_j,\\
+\text{prismatic joint:}\quad
+&d_j\in\mathbb R\ \text{metres},
+&&\text{relative translation }d_j\mathbf s_j.
+\end{aligned}
+}
+$$
+
+Positive revolute motion follows the right-hand rule about $\mathbf s_j$; positive prismatic motion is along $\mathbf s_j$. For a prismatic joint, the location of $\mathcal L_j$ does not affect the translation.
+
+Let $\mathcal Q$ be the **generalised-coordinate domain**: the set of all valid generalised-coordinate columns for the model, including any declared joint limits. Let $n\in\mathbb N$ be the number of scalar generalised coordinates. A **generalised-coordinate column** is
+
+$$
+\boxed{
+\mathbf q
+=
+\begin{bmatrix}
+q_1&\cdots&q_n
+\end{bmatrix}^{\mathsf T}
+\in\mathcal Q
+}.
+$$
+
+Here $i\in\{1,\ldots,n\}$ is a coordinate index, each $q_i$ is a **generalised coordinate**, and the entries of $\mathbf q$ are independent scalar parameters chosen so that $\mathbf q$ locally specifies one complete system configuration. The coordinate-to-configuration relationship is
+
+$$
+\boxed{
+\mathbf q\in\mathcal Q
+\longmapsto
+\chi(\mathbf q)\in\mathcal C
+}.
+$$
+
+Here $\mathcal C$ is the configuration space defined above. The meaning, units, and valid values of every $q_i$ must be declared for the model.
+
+For the fixed-base open chain considered here, $N$, the number of physical joints, equals $n$, the number of generalised coordinates, because every physical joint has one independent coordinate. Thus $n=N$. The coordinate associated with joint $j$ is
+
+$$
+q_j
+\mathrel{:=}
+\begin{cases}
+\theta_j, & \text{if joint $j$ is revolute},\\
+d_j, & \text{if joint $j$ is prismatic}.
+\end{cases}
+$$
+
+A robot containing both joint types has a coordinate column whose entries have different physical units, so $\mathbf q$ is not a geometric vector with one common unit and an unscaled Euclidean norm $\|\mathbf q\|_2$ has no direct physical meaning.
+
+Given the fixed base, link geometry, joint types, axis directions, and zero conventions, $\mathbf q$ determines a complete robot configuration $\chi(\mathbf q)\in\mathcal C$. The coordinate description need not be globally unique: for example, revolute coordinates that differ by a full turn can represent the same physical arrangement when no joint limit distinguishes them. A floating-base robot would additionally require coordinates for the base pose; that model is outside the present fixed-base scope.[^floating-base-robot]
+
+[^floating-base-robot]: A **floating-base robot** has no base link fixed relative to the world. Its base pose can change with three translational and three rotational degrees of freedom, represented by an element of $SE(3)$, in addition to any internal joint coordinates. *Floating* is a modelling term; the robot need not literally float.
+
+Next choose a **space frame** $\{s\}$ whose pose relative to the world frame $\{w\}$ is constant. In general, the space frame may be:
+
+- the world frame itself, so $\{s\}=\{w\}$;
+- a frame rigidly attached to the fixed base link; or
+- any other frame whose pose relative to $\{w\}$ is constant.
+
+Also choose a frame $\{e\}$ rigidly attached to the selected end-effector link. The **pose of $\{e\}$ relative to $\{s\}$** is the position and orientation of that one frame, represented by $\mathbf T_{se}\in SE(3)$ as defined in @sec-se3-spatial-pose. The transformation direction is from end-effector point coordinates to space-frame point coordinates.
+
+The chapter therefore uses the following modelling chain:
+
+$$
+\boxed{
+\underbrace{\mathbf q\in\mathcal Q}_{\text{joint-coordinate description}}
+\;\longmapsto\;
+\underbrace{\chi(\mathbf q)\in\mathcal C}_{\text{complete robot configuration}}
+\;\longmapsto\;
+\underbrace{\mathbf T_{se}(\mathbf q)\in SE(3)}_{\text{pose of the selected frame}}
+}.
+$$
+
+The composition of these two arrows is the **forward-kinematics map** for frame $\{e\}$:
+
+$$
+\boxed{
+\mathbf F_e:\mathcal Q\rightarrow SE(3),
+\qquad
+\mathbf q\longmapsto
+\mathbf F_e(\mathbf q)
+\mathrel{:=}
+\mathbf T_{se}(\mathbf q)
+}.
+$$
+
+The map $\mathbf F_e$ and its value $\mathbf T_{se}(\mathbf q)$ are different mathematical objects. The map is the rule defined for allowable joint coordinates; the matrix is the pose produced when that rule is evaluated at one selected $\mathbf q$. Robotics texts often use the shorthand $\mathbf T(\mathbf q)$ for both the forward-kinematics formula and its evaluated value, so the intended meaning must be read from context.
+
+The one-to-one rigid-body correspondence applies separately to each link. For an articulated robot, the complete configuration contains the compatible placement of every link, whereas $\mathbf T_{se}(\mathbf q)$ represents the pose of only the selected end-effector frame. The remaining links may have different placements, and distinct joint-coordinate columns may produce the same end-effector pose.
+
+This chapter expresses each joint's geometry in declared coordinates, composes those joint motions to construct $\mathbf F_e$, and later differentiates the forward kinematics to obtain a Jacobian. A rigid-body Jacobian maps joint rates to a declared body or spatial representation of the selected frame's twist; a task Jacobian instead maps joint rates to the rate of a declared task output, such as end-effector position alone.
 
 ## Screw axes and one-degree-of-freedom joint motion {#sec-screw-axis-joint-motion}
 
@@ -18,13 +354,28 @@ Physical space is modelled as three-dimensional Euclidean space. Frames are righ
 
 A door hinge and a straight linear slide each have one degree of freedom, so one scalar joint coordinate is sufficient to describe the allowed relative configuration. Their motions are nevertheless different. The hinge permits rotation about a fixed line, whereas the slide permits translation along a fixed direction. A useful joint model must describe both cases, locate the permitted motion in physical space, and produce the instantaneous twist caused by a joint rate.
 
-A **screw motion** is rotation about an oriented line combined with translation along the same line. A **screw axis** specifies the line, its positive direction, and the translation per unit rotation. Pure rotation and pure translation are limiting cases of this model. Most robot manipulators use these two cases as **revolute joints** and **prismatic joints**, respectively.
+Imagine turning an ideal threaded screw. As the screw rotates about its centreline, it also advances along that same line. If $\theta$ is the signed rotation in radians and $\Delta\ell$ is the signed advance in metres, the thread geometry imposes
+
+$$
+\boxed{
+\Delta\ell=h\theta
+},
+$$
+
+where $h$ is the signed **pitch**, measured in metres per radian. This coupled rotation and translation is a **screw motion**. Its **screw axis** specifies the centreline, its positive direction, and the pitch $h$. A door hinge is the pure-rotation case $h=0$: it rotates without advancing. A straight linear slide is the pure-translation case: it moves along the axis direction with zero rotation. These are the revolute and prismatic joint models used by most robot manipulators.
 
 The physical motion must be distinguished from its representation. A joint axis is a geometric feature of the mechanism. Its coordinate column changes when the reference frame changes, even though the physical joint does not. The current joint angle or displacement is also separate from the axis: the axis states which motion is allowed, while the joint coordinate states how far the joint has moved.
 
 ### An oriented line in a declared frame
 
-Let $\{a\}$ be a fixed reference frame with origin $O_a$. Let ${}^{a}\mathbf p_{\ell}\in\mathbb R^3$ be the coordinate column of any point on a joint-axis line, expressed along the axes of $\{a\}$ and measured in metres. Let ${}^{a}\mathbf s\in\mathbb R^3$ be a dimensionless unit column pointing in the chosen positive direction of that axis, so
+Let $\{a\}$ be a fixed reference frame with origin $O_a$. The origin is a reference point chosen by the modeller; it need not be a material point on the moving link. The modeller may place $O_a$:
+
+- at the world origin;
+- on the fixed base link;
+- on the joint axis for convenience; or
+- anywhere else fixed relative to the world.
+
+Let ${}^{a}\mathbf p_{\ell}\in\mathbb R^3$ be the coordinate column of any point on a joint-axis line, expressed along the axes of $\{a\}$ and measured in metres. Let ${}^{a}\mathbf s\in\mathbb R^3$ be a dimensionless unit column pointing in the chosen positive direction of that axis, so
 
 $$
 \left\|{}^{a}\mathbf s\right\|_2=1.
@@ -52,7 +403,7 @@ This line description contains only geometry. It does not contain a joint positi
 
 ### Revolute motion about the line
 
-A **revolute joint** permits pure rotation about its joint-axis line. Let $t\in\mathbb R$ denote time in seconds, let $j$ denote the joint index, let $\theta_j(t)\in\mathbb R$ be joint $j$'s angle in radians, and let $\dot\theta_j(t)$ be its angular rate in $\mathrm{rad\,s^{-1}}$. The positive direction ${}^{a}\mathbf s$ and the right-hand rule determine the sign of $\theta_j$.
+For the revolute joint introduced above, the permitted motion is pure rotation about its joint-axis line. Let $t\in\mathbb R$ denote time in seconds, let $j$ denote the joint index, let $\theta_j(t)\in\mathbb R$ be joint $j$'s angle in radians, and let $\dot\theta_j(t)$ be its angular rate in $\mathrm{rad\,s^{-1}}$. The positive direction ${}^{a}\mathbf s$ and the right-hand rule determine the sign of $\theta_j$.
 
 The joint's angular velocity relative to the fixed frame, expressed along the axes of $\{a\}$, is
 
@@ -96,7 +447,35 @@ $$
 -\left({}^{a}\mathbf s\times{}^{a}\mathbf p_{\ell}\right)\dot\theta_j.
 $$
 
-The project's twist convention places the linear component before the angular component. The **normalised revolute screw-axis coordinates** referred to frame $\{a\}$ are therefore
+Define the joint-induced spatial twist, referred to frame $\{a\}$, by ${}^{a}\boldsymbol\xi:=[({}^{a}\boldsymbol\nu)^{\mathsf T}\;({}^{a}\boldsymbol\omega)^{\mathsf T}]^{\mathsf T}\in\mathbb R^6$. The **normalised revolute screw-axis coordinate column** ${}^{a}\mathbf S_R\in\mathbb R^6$ is the column that maps the revolute joint rate to this spatial twist:
+
+$$
+{}^{a}\boldsymbol\xi
+=
+{}^{a}\mathbf S_R\dot\theta_j.
+$$
+
+Here *normalised* means that the axis-direction column satisfies $\|{}^{a}\mathbf s\|_2=1$; it does not mean that the complete six-component column has unit Euclidean norm. Using the project's linear-first twist convention and combining the two derived components gives
+
+$$
+{}^{a}\boldsymbol\xi
+=
+\begin{bmatrix}
+{}^{a}\boldsymbol\nu\\
+{}^{a}\boldsymbol\omega
+\end{bmatrix}
+=
+\underbrace{
+\begin{bmatrix}
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_\ell\\
+{}^{a}\mathbf s
+\end{bmatrix}
+}_{\displaystyle {}^{a}\mathbf S_R}
+\dot\theta_j.
+$$
+This separates the geometry of the allowed motion from the amount of motion: ${}^{a}\mathbf S_R$ encodes the oriented axis line and the pure-rotation rule in frame $\{a\}$, $\theta_j$ records the signed accumulated rotation about that axis, and $\dot\theta_j$ records how quickly that amount changes. Thus the same ${}^{a}\mathbf S_R$ can describe different joint angles and rates, while the resulting twist changes with $\dot\theta_j$.
+
+Therefore the explicit coordinate column referred to frame $\{a\}$ is
 
 $$
 \boxed{
@@ -110,24 +489,16 @@ $$
 }.
 $$
 
-The subscript $R$ labels the revolute case. Stacking the two parts of the joint-induced spatial twist now gives
+The column ${}^{a}\mathbf S_R$ describes the complete instantaneous rigid motion produced by one unit of revolute joint rate. Its blocks mean:
 
-$$
-\boxed{
-{}^{a}\boldsymbol\xi
-=
-\begin{bmatrix}
-{}^{a}\boldsymbol\nu\\
-{}^{a}\boldsymbol\omega
-\end{bmatrix}
-=
-{}^{a}\mathbf S_R\dot\theta_j
-}.
-$$
+- The bottom block ${}^{a}\mathbf s$ is the positive rotation-axis direction.
+- The top block $-{}^{a}\mathbf s\times{}^{a}\mathbf p_\ell$ is the velocity-field value at $O_a$ per unit joint rate. It accounts for the axis not necessarily passing through $O_a$.
+
+The subscript $R$ labels the revolute case.
 
 The first three entries of ${}^{a}\mathbf S_R$ have units of metres per radian, conventionally written as metres because radians are dimensionless, and the final three entries are dimensionless. Multiplication by $\dot\theta_j$ produces linear velocity in $\mathrm{m\,s^{-1}}$ and angular velocity in $\mathrm{rad\,s^{-1}}$.
 
-### Helical motion and screw pitch
+### Helical motion and screw pitch {#sec-helical-motion-screw-pitch}
 
 A **helical joint** permits rotation about an axis and translation along that same axis in a fixed proportion. Its **pitch** $h\in\mathbb R$ is the signed axial distance travelled per positive radian of rotation, measured in $\mathrm{m\,rad^{-1}}$. The axial speed is therefore $h\dot\theta_j$, and its direction is ${}^{a}\mathbf s$.
 
@@ -201,7 +572,7 @@ The coordinate column therefore depends on the oriented line, pitch, and referen
 
 ### Prismatic motion along a direction
 
-A **prismatic joint** permits pure translation along a fixed direction. Let $d_j(t)\in\mathbb R$ be the joint displacement in metres and let $\dot d_j(t)$ be its rate in $\mathrm{m\,s^{-1}}$. There is no angular velocity, and every point of the moving link has the same instantaneous velocity:
+For the prismatic joint introduced above, the permitted motion is pure translation along a fixed direction. Let $d_j(t)\in\mathbb R$ be the joint displacement in metres and let $\dot d_j(t)$ be its rate in $\mathrm{m\,s^{-1}}$. There is no angular velocity, and every point of the moving link has the same instantaneous velocity:
 
 $$
 {}^{a}\boldsymbol\omega
@@ -273,13 +644,78 @@ These are separate normalisation rules because the coordinate column has mixed p
 
 *Modern Robotics* writes twists and screw axes in angular-first order, $[\boldsymbol\omega^\mathsf T\;\boldsymbol\nu^\mathsf T]^\mathsf T$. This project uses the linear-first order established in @sec-se3-body-twist and @sec-se3-spatial-twist, $[\boldsymbol\nu^\mathsf T\;\boldsymbol\omega^\mathsf T]^\mathsf T$. The formulas above have already been reordered; copying an angular-first six-vector directly into this convention would describe the wrong motion.
 
-If the same physical screw is represented in another fixed frame $\{b\}$, its coordinate column changes through the adjoint already defined in @sec-se3-adjoint-twist. If $\mathbf T_{ab}\in SE(3)$ transforms point coordinates from $\{b\}$ to $\{a\}$, then
+If the same physical screw is represented in another fixed frame $\{b\}$, its coordinate column changes through the adjoint already defined in @sec-se3-adjoint-twist. Let $\mathbf T_{ab}\in SE(3)$ transform point coordinates from $\{b\}$ to $\{a\}$, and write
+
+$$
+\boxed{
+\mathbf T_{ab}
+=
+\begin{bmatrix}
+\mathbf R_{ab} & {}^{a}\mathbf p_b\\
+\mathbf 0_3^{\mathsf T} & 1
+\end{bmatrix}
+}.
+$$
+
+Here $\mathbf R_{ab}$ maps vector-coordinate columns from the axes of $\{b\}$ to the axes of $\{a\}$, and ${}^{a}\mathbf p_b$ is the position of $O_b$ relative to $O_a$, expressed in $\{a\}$ and measured in metres. For the project's linear-first ordering, the adjoint matrix is
+
+$$
+\boxed{
+\operatorname{Ad}_{\mathbf T_{ab}}
+=
+\begin{bmatrix}
+\mathbf R_{ab}
+&
+[{}^{a}\mathbf p_b]_{\times}\mathbf R_{ab}\\
+\mathbf 0_{3\times3}
+&
+\mathbf R_{ab}
+\end{bmatrix}
+}.
+$$
+
+The skew-symmetric matrix $[{}^{a}\mathbf p_b]_{\times}$ represents the cross product: $[{}^{a}\mathbf p_b]_{\times}\mathbf x={}^a\mathbf p_b\times\mathbf x$ for any $\mathbf x\in\mathbb R^3$.
+
+To see why screw-axis coordinate columns follow this transformation rule, let $\dot q_j$ be the scalar rate of the same one-degree-of-freedom joint. In frame $\{b\}$, its twist is
+
+$$
+{}^{b}\boldsymbol\xi
+=
+{}^{b}\mathbf S\,\dot q_j.
+$$
+
+Twists transform through the adjoint:
+
+$$
+{}^{a}\boldsymbol\xi
+=
+\operatorname{Ad}_{\mathbf T_{ab}}{}^{b}\boldsymbol\xi.
+$$
+
+Substitution gives
+
+$$
+{}^{a}\boldsymbol\xi
+=
+\operatorname{Ad}_{\mathbf T_{ab}}
+{}^{b}\mathbf S\,\dot q_j.
+$$
+
+The screw-axis coordinate column in frame $\{a\}$ must also satisfy
+
+$$
+{}^{a}\boldsymbol\xi
+=
+{}^{a}\mathbf S\,\dot q_j.
+$$
+
+Because these equations describe the same twist for every joint rate, the columns multiplying $\dot q_j$ must be equal:
 
 $$
 \boxed{
 {}^{a}\mathbf S
 =
-\operatorname{Ad}_{\mathbf T_{ab}}\,{}^{b}\mathbf S
+\operatorname{Ad}_{\mathbf T_{ab}}{}^{b}\mathbf S
 }.
 $$
 
@@ -441,9 +877,655 @@ A finite relative pose is a further object. It will be obtained from a screw axi
 
 ### From a constant twist to a finite pose
 
+The screw-axis coordinate column from @sec-screw-axis-joint-motion describes an instantaneous motion per unit joint rate. It does not yet answer the finite question: after the joint moves through a signed angle or displacement, what rigid transformation has occurred?
+
+Let frame $\{a\}$ be the fixed frame in which the screw is represented, and write a normalised screw-axis coordinate column in the project's linear-first order as
+
+$$
+{}^{a}\mathbf S
+=
+\begin{bmatrix}
+{}^{a}\mathbf s_v\\
+{}^{a}\mathbf s_\omega
+\end{bmatrix}
+\in\mathbb R^6.
+$$
+
+The columns ${}^{a}\mathbf s_v,{}^{a}\mathbf s_\omega\in\mathbb R^3$ are the linear and angular coefficients defined in the previous section. Apply the same hat operator used for twists to define the **matrix representation of the screw axis**:
+
+$$
+\boxed{
+\widehat{{}^{a}\mathbf S}
+\mathrel{:=}
+\begin{bmatrix}
+[{}^{a}\mathbf s_\omega]_\times&{}^{a}\mathbf s_v\\
+\mathbf 0_3^{\mathsf T}&0
+\end{bmatrix}
+\in\mathfrak{se}(3)
+}.
+$$ {#eq-se3-screw-hat}
+
+Here $[{}^{a}\mathbf s_\omega]_\times\in\mathbb R^{3\times3}$ is the skew-symmetric matrix satisfying $[{}^{a}\mathbf s_\omega]_\times\mathbf x={}^a\mathbf s_\omega\times\mathbf x$ for every $\mathbf x\in\mathbb R^3$. The hat operator changes the representation from a six-entry column to a structured $4\times4$ matrix; it does not change the represented screw motion.
+
+Let $\sigma\in\mathbb R$ denote the signed amount of motion along the normalised screw. For a revolute or finite-pitch helical screw, $\sigma=\theta$ is an angle in radians. For a prismatic screw, $\sigma=d$ is a displacement in metres. The product ${}^{a}\mathbf S\sigma\in\mathbb R^6$ is called the **exponential-coordinate column** of the finite rigid displacement. The screw axis ${}^{a}\mathbf S$ specifies *which* one-parameter motion is followed, whereas $\sigma$ specifies *how far* it is followed.
+
+For any square matrix $\mathbf A\in\mathbb R^{m\times m}$, its **matrix exponential** is defined by the convergent power series
+
+$$
+\exp(\mathbf A)
+\mathrel{:=}
+\mathbf I_m
++\mathbf A
++\frac{\mathbf A^2}{2!}
++\frac{\mathbf A^3}{3!}
++\cdots.
+$$
+
+This is a matrix operation, not an entry-by-entry scalar exponential. Applying it to the hatted exponential coordinates produces the finite rigid transformation
+
+$$
+\boxed{
+\mathbf T_\Delta(\sigma)
+\mathrel{:=}
+\exp\!\left(
+\widehat{{}^{a}\mathbf S}\,\sigma
+\right)
+\in SE(3)
+}.
+$$ {#eq-se3-screw-exponential}
+
+The notation $\mathbf T_\Delta(\sigma)$ follows the active-displacement convention established in @sec-se3-spatial-pose: input and output point coordinates are expressed in frame $\{a\}$, and the matrix moves the represented point or rigid body.
+
+Let $P$ denote a material point before the displacement and let $P'$ denote the same material point after the displacement. Their homogeneous position-coordinate columns, both expressed in frame $\{a\}$, satisfy
+
+$$
+{}^{a}\overline{\mathbf p}_{P'}
+=
+\mathbf T_\Delta(\sigma)\,
+{}^{a}\overline{\mathbf p}_{P}.
+$$
+
+Writing the active-displacement matrix in block form gives
+
+$$
+\mathbf T_\Delta(\sigma)
+=
+\begin{bmatrix}
+\mathbf R_\Delta(\sigma)&{}^{a}\mathbf p_\Delta(\sigma)\\
+\mathbf 0_3^{\mathsf T}&1
+\end{bmatrix},
+$$
+
+where $\mathbf R_\Delta(\sigma)\in SO(3)$ is the dimensionless rotation block and ${}^{a}\mathbf p_\Delta(\sigma)\in\mathbb R^3$ is the translation column expressed in frame $\{a\}$ and measured in metres. The important distinctions are:
+
+- $P$ and $P'$ are different physical positions of the same material point.
+- Both coordinate columns are expressed in the same frame $\{a\}$.
+- $\mathbf T_\Delta(\sigma)$ rotates and translates the point through the screw displacement.
+- Applying the same transformation to every material point moves the complete rigid body.
+
+Because every term in @eq-se3-screw-exponential contains the same generator $\widehat{{}^{a}\mathbf S}$, two successive displacements along this same screw combine by adding their signed amounts:
+
+$$
+\mathbf T_\Delta(\sigma_1)
+\mathbf T_\Delta(\sigma_2)
+=
+\mathbf T_\Delta(\sigma_1+\sigma_2),
+\qquad
+\sigma_1,\sigma_2\in\mathbb R.
+$$
+
+In particular, $\mathbf T_\Delta(0)=\mathbf I_4$ and $\mathbf T_\Delta(-\sigma)=\mathbf T_\Delta(\sigma)^{-1}$. The exponential therefore converts one fixed instantaneous motion direction into a one-parameter family of finite rigid displacements.
+
 ### Closed forms for rotational and translational screws
 
+The exponential above solves the forward problem: a chosen screw axis and signed amount produce a finite transformation. The **Chasles--Mozzi theorem** supplies the converse:
+
+$$
+\boxed{
+\text{for every }\mathbf T_\Delta\in SE(3),
+\text{ there exist }{}^{a}\mathbf S\text{ and }\sigma
+\text{ such that }
+\mathbf T_\Delta
+=
+\exp\!\left(
+\widehat{{}^{a}\mathbf S}\,\sigma
+\right)
+}.
+$$
+
+This is an existence statement about a given initial-to-final transformation. Write that transformation as
+
+$$
+\mathbf T_\Delta
+=
+\begin{bmatrix}
+\mathbf R_\Delta&{}^{a}\mathbf p_\Delta\\
+\mathbf 0_3^{\mathsf T}&1
+\end{bmatrix}
+\in SE(3).
+$$
+
+The theorem separates its possible forms into three cases:
+
+- If $\mathbf R_\Delta\ne\mathbf I_3$, there exist a dimensionless unit direction ${}^{a}\mathbf s_\omega\in\mathbb R^3$, a principal angle $\theta\in(0,\pi]$ in radians, an axis point ${}^{a}\mathbf p_\ell\in\mathbb R^3$ in metres, and a pitch $h\in\mathbb R$ in $\mathrm{m\,rad^{-1}}$ such that
+
+  $$
+  \mathbf R_\Delta
+  =
+  \exp\!\left(
+  [{}^{a}\mathbf s_\omega]_\times\theta
+  \right),
+  \qquad
+  {}^{a}\mathbf p_\Delta
+  =
+  (\mathbf I_3-\mathbf R_\Delta){}^{a}\mathbf p_\ell
+  +h\theta{}^{a}\mathbf s_\omega.
+  $$
+
+  Thus the same endpoint transformation is produced by rotating through $\theta$ about the oriented line $\{{}^{a}\mathbf p_\ell+\lambda{}^{a}\mathbf s_\omega\mid\lambda\in\mathbb R\}$, where $\lambda$ is measured in metres, and translating through $h\theta$ along that line. The case $h=0$ is pure rotation.
+
+- If $\mathbf R_\Delta=\mathbf I_3$ and ${}^{a}\mathbf p_\Delta\ne\mathbf 0_3$, define
+
+  $$
+  d
+  \mathrel{:=}
+  \|{}^{a}\mathbf p_\Delta\|_2,
+  \qquad
+  {}^{a}\mathbf s_v
+  \mathrel{:=}
+  \frac{{}^{a}\mathbf p_\Delta}{d},
+  \qquad
+  {}^{a}\mathbf s_\omega
+  \mathrel{:=}
+  \mathbf 0_3.
+  $$
+
+  The transformation is pure translation through the distance $d>0$ along the oriented direction ${}^{a}\mathbf s_v$ and satisfies $\mathbf T_\Delta=\exp(\widehat{{}^{a}\mathbf S}\,d)$ for ${}^{a}\mathbf S=[({}^{a}\mathbf s_v)^{\mathsf T}\;\mathbf 0_3^{\mathsf T}]^{\mathsf T}$.
+
+- If $\mathbf T_\Delta=\mathbf I_4$, choose $\sigma=0$. Then $\exp(\widehat{{}^{a}\mathbf S}\,0)=\mathbf I_4$ for every admissible normalised screw axis, so the axis is not unique.
+
+These cases cover every element of $SE(3)$. They construct a screw path with the specified initial and final poses; they do not assert that the body's actual past trajectory followed that path. The complete theorem and proof are given in @sec-appendix-chasles-mozzi.
+
+For the development below, the theorem is the completeness bridge: it guarantees that the rotational or helical closed form for a non-identity rotation and the prismatic closed form for a pure translation are together sufficient to represent every finite spatial rigid displacement, rather than being only selected examples.
+
+The power-series definition is general, but the structure of a normalised screw gives simpler formulas with a direct geometric interpretation. Consider first a revolute or finite-pitch helical screw. Define
+
+$$
+\boldsymbol\Omega
+\mathrel{:=}
+[{}^{a}\mathbf s_\omega]_\times
+\in\mathbb R^{3\times3}.
+$$
+
+where $\|{}^{a}\mathbf s_\omega\|_2=1$. The already-defined column ${}^{a}\mathbf s_v\in\mathbb R^3$ is the linear screw coefficient, measured in metres per radian; it is not an instantaneous velocity until it is multiplied by an angular rate. The finite displacement parameter is the signed angle $\theta\in\mathbb R$ in radians.
+
+The powers of the hatted screw have a repeated block structure. For every integer $k\geq1$, direct block multiplication gives
+
+$$
+\left(
+\widehat{{}^{a}\mathbf S}
+\right)^k
+=
+\begin{bmatrix}
+\boldsymbol\Omega^k&
+\boldsymbol\Omega^{k-1}{}^{a}\mathbf s_v\\
+\mathbf 0_3^{\mathsf T}&0
+\end{bmatrix}.
+$$
+
+Substituting these powers into the exponential series separates its rotation and translation blocks:
+
+$$
+\exp\!\left(
+\widehat{{}^{a}\mathbf S}\,\theta
+\right)
+=
+\begin{bmatrix}
+\displaystyle
+\mathbf I_3+
+\sum_{k=1}^{\infty}
+\frac{\boldsymbol\Omega^k\theta^k}{k!}
+&
+\displaystyle
+\sum_{k=1}^{\infty}
+\frac{\boldsymbol\Omega^{k-1}\theta^k}{k!}
+{}^{a}\mathbf s_v\\
+\mathbf 0_3^{\mathsf T}&1
+\end{bmatrix}.
+$$
+
+The upper-left series is $\exp(\boldsymbol\Omega\theta)$. Because ${}^{a}\mathbf s_\omega$ is a unit column, $\boldsymbol\Omega^3=-\boldsymbol\Omega$. Grouping the odd and even powers therefore gives Rodrigues' formula
+
+$$
+\mathbf R(\theta)
+\mathrel{:=}
+\exp(\boldsymbol\Omega\theta)
+=
+\mathbf I_3
++\sin\theta\,\boldsymbol\Omega
++(1-\cos\theta)\boldsymbol\Omega^2
+\in SO(3).
+$$ {#eq-se3-screw-rotation-block}
+
+The upper-right series contains one lower power of $\boldsymbol\Omega$. Define
+
+$$
+\begin{aligned}
+\mathbf G(\theta)
+&\mathrel{:=}
+\mathbf I_3\theta
++\frac{\boldsymbol\Omega\theta^2}{2!}
++\frac{\boldsymbol\Omega^2\theta^3}{3!}
++\cdots\\
+&=
+\mathbf I_3\theta
++(1-\cos\theta)\boldsymbol\Omega
++(\theta-\sin\theta)\boldsymbol\Omega^2.
+\end{aligned}
+$$
+
+The second equality follows because the coefficient of $\boldsymbol\Omega$ is $\theta^2/2!-\theta^4/4!+\cdots=1-\cos\theta$, while the coefficient of $\boldsymbol\Omega^2$ is $\theta^3/3!-\theta^5/5!+\cdots=\theta-\sin\theta$. Combining the two blocks yields the closed form
+
+$$
+\boxed{
+\exp\!\left(
+\widehat{{}^{a}\mathbf S}\,\theta
+\right)
+=
+\begin{bmatrix}
+\mathbf R(\theta)&\mathbf G(\theta){}^{a}\mathbf s_v\\
+\mathbf 0_3^{\mathsf T}&1
+\end{bmatrix}
+}.
+$$ {#eq-se3-rotational-screw-exponential}
+
+Radians are dimensionless in the algebra, but retaining the unit label prevents physical mistakes: ${}^{a}\mathbf s_v$ has units of $\mathrm{m\,rad^{-1}}$, so $\mathbf G(\theta){}^{a}\mathbf s_v$ is a position column measured in metres.
+
+The translation block becomes more transparent when the screw is written using its physical axis and pitch. Let ${}^{a}\mathbf p_\ell\in\mathbb R^3$ be the position column of any point $P_\ell$ on the oriented axis, expressed in frame $\{a\}$ and measured in metres, and let $h\in\mathbb R$ be the pitch in $\mathrm{m\,rad^{-1}}$. The helical screw-axis derivation in @sec-helical-motion-screw-pitch already established that the linear block of the normalised screw is
+
+$$
+{}^{a}\mathbf s_v
+=
+-{}^{a}\mathbf s_\omega\times{}^{a}\mathbf p_\ell
++h{}^{a}\mathbf s_\omega.
+$$
+
+Because $\boldsymbol\Omega=[{}^{a}\mathbf s_\omega]_\times$, the same result can be written in the matrix form needed by the exponential calculation:
+
+$$
+\boxed{
+{}^{a}\mathbf s_v
+=
+-\boldsymbol\Omega{}^{a}\mathbf p_\ell
++h{}^{a}\mathbf s_\omega
+}.
+$$
+
+The term $-\boldsymbol\Omega{}^{a}\mathbf p_\ell=-{}^{a}\mathbf s_\omega\times{}^{a}\mathbf p_\ell$ accounts for the axis being offset from $O_a$; it is the rotational velocity-field value at $O_a$ per unit angle. The term $h{}^{a}\mathbf s_\omega$ adds the translation along the axis per unit angle. Choosing another point ${}^{a}\mathbf p_\ell+\lambda{}^{a}\mathbf s_\omega$ on the same axis does not change ${}^{a}\mathbf s_v$ because $\boldsymbol\Omega{}^{a}\mathbf s_\omega=\mathbf 0_3$.
+
+Rodrigues' formula implies
+
+$$
+\mathbf G(\theta)\boldsymbol\Omega
+=
+\mathbf R(\theta)-\mathbf I_3.
+$$
+
+Also, $\boldsymbol\Omega{}^{a}\mathbf s_\omega=\mathbf 0_3$, so $\mathbf G(\theta){}^{a}\mathbf s_\omega=\theta{}^{a}\mathbf s_\omega$. Substitution into the translation block of @eq-se3-rotational-screw-exponential gives
+
+$$
+\begin{aligned}
+\mathbf G(\theta){}^{a}\mathbf s_v
+&=
+-\mathbf G(\theta)\boldsymbol\Omega{}^{a}\mathbf p_\ell
++h\mathbf G(\theta){}^{a}\mathbf s_\omega\\
+&=
+\left(\mathbf I_3-\mathbf R(\theta)\right){}^{a}\mathbf p_\ell
++h\theta{}^{a}\mathbf s_\omega.
+\end{aligned}
+$$
+
+Therefore a finite-pitch screw has the geometric closed form
+
+$$
+\boxed{
+\mathbf T_{\Delta,H}(\theta)
+=
+\begin{bmatrix}
+\mathbf R(\theta)&
+\left(\mathbf I_3-\mathbf R(\theta)\right){}^{a}\mathbf p_\ell
++h\theta{}^{a}\mathbf s_\omega\\
+\mathbf 0_3^{\mathsf T}&1
+\end{bmatrix}
+}.
+$$ {#eq-se3-helical-screw-geometric-exponential}
+
+The term $(\mathbf I_3-\mathbf R){}^{a}\mathbf p_\ell$ moves the frame around an axis that need not pass through $O_a$. The term $h\theta{}^{a}\mathbf s_\omega$ advances it along the axis. Setting $h=0$ gives pure revolute motion.
+
+For example, consider a positive $z_a$ revolute axis through ${}^{a}\mathbf p_\ell=[1\;0\;0]^{\mathsf T}\,\mathrm m$ and a rotation $\theta=\pi/2\,\mathrm{rad}$. Its unit direction and linear screw coefficient are
+
+$$
+{}^{a}\mathbf s_\omega
+=
+\begin{bmatrix}0\\0\\1\end{bmatrix},
+\qquad
+{}^{a}\mathbf s_v
+=
+-{}^{a}\mathbf s_\omega\times{}^{a}\mathbf p_\ell
+=
+\begin{bmatrix}0\\-1\\0\end{bmatrix}
+\mathrm{m\,rad^{-1}}.
+$$
+
+The rotation and translation blocks are
+
+$$
+\mathbf R\!\left(\frac{\pi}{2}\right)
+=
+\begin{bmatrix}
+0&-1&0\\
+1&0&0\\
+0&0&1
+\end{bmatrix},
+\qquad
+\left(\mathbf I_3-\mathbf R\!\left(\frac{\pi}{2}\right)\right)
+{}^{a}\mathbf p_\ell
+=
+\begin{bmatrix}1\\-1\\0\end{bmatrix}
+\mathrm m.
+$$
+
+Hence the finite displacement is
+
+$$
+\mathbf T_{\Delta,R}\!\left(\frac{\pi}{2}\right)
+=
+\begin{bmatrix}
+0&-1&0&1\\
+1&0&0&-1\\
+0&0&1&0\\
+0&0&0&1
+\end{bmatrix}.
+$$
+
+Applying this transformation to the axis point returns the same point because $\mathbf R{}^{a}\mathbf p_\ell+(\mathbf I_3-\mathbf R){}^{a}\mathbf p_\ell={}^a\mathbf p_\ell$. This confirms that the finite motion rotates about the declared offset line rather than about $O_a$.
+
+Now consider a normalised prismatic screw ${}^{a}\mathbf S_P=[({}^{a}\mathbf s)^{\mathsf T}\;\mathbf 0_3^{\mathsf T}]^{\mathsf T}$ with $\|{}^{a}\mathbf s\|_2=1$ and signed displacement $d\in\mathbb R$ in metres. Its hatted matrix satisfies
+
+$$
+\widehat{{}^{a}\mathbf S_P}
+=
+\begin{bmatrix}
+\mathbf 0_{3\times3}&{}^{a}\mathbf s\\
+\mathbf 0_3^{\mathsf T}&0
+\end{bmatrix},
+\qquad
+\left(\widehat{{}^{a}\mathbf S_P}\right)^2
+=
+\mathbf 0_{4\times4}.
+$$
+
+All exponential-series terms of order two and higher therefore vanish, giving
+
+$$
+\boxed{
+\mathbf T_{\Delta,P}(d)
+=
+\exp\!\left(
+\widehat{{}^{a}\mathbf S_P}\,d
+\right)
+= \mathbf I_4 + \widehat{{}^{a}\mathbf S_P}\,d
+=
+\begin{bmatrix}
+\mathbf I_3&{}^{a}\mathbf s d\\
+\mathbf 0_3^{\mathsf T}&1
+\end{bmatrix}
+}.
+$$ {#eq-se3-prismatic-screw-exponential}
+
+This transformation has no rotation and translates every point by the signed vector ${}^{a}\mathbf s d$. The rotational and prismatic formulas are different branches of the same exponential map, but software should evaluate each with formulas appropriate to its normalisation and numerical domain.
+
 ### Recovering screw coordinates with the $SE(3)$ logarithm
+
+The exponential solves the forward problem: given a screw axis and a signed displacement, construct a rigid transformation. The inverse problem starts from a relative transformation and asks for a constant screw displacement that would produce it. This inverse is the **matrix logarithm** on $SE(3)$.
+
+Assume that the given transformation has already been validated as an element of $SE(3)$ and write
+
+$$
+\mathbf T
+=
+\begin{bmatrix}
+\mathbf R&\mathbf p\\
+\mathbf 0_3^{\mathsf T}&1
+\end{bmatrix}
+\in SE(3),
+$$
+
+where $\mathbf R\in SO(3)$ and $\mathbf p\in\mathbb R^3$ is measured in metres. A matrix logarithm seeks a screw axis ${}^{a}\mathbf S$ and signed displacement $\sigma$ satisfying
+
+$$
+\boxed{
+\mathbf T
+=
+\exp\!\left(
+\widehat{{}^{a}\mathbf S}\,\sigma
+\right),
+\qquad
+\log(\mathbf T)
+=
+\widehat{{}^{a}\mathbf S}\,\sigma
+\in\mathfrak{se}(3)
+}.
+$$ {#eq-se3-rigid-motion-logarithm}
+
+The matrix $\log(\mathbf T)$ and the column ${}^{a}\mathbf S\sigma$ contain the same exponential coordinates in hatted and six-entry representations. The operation $\log(\mathbf T)$ is a matrix logarithm; taking a scalar logarithm of each entry of $\mathbf T$ would not recover a rigid motion.
+
+The recovery has three geometric cases. First, if $\mathbf R=\mathbf I_3$ and $\mathbf p=\mathbf 0_3$, then $\mathbf T=\mathbf I_4$. The principal logarithm is the zero matrix:
+
+$$
+\log(\mathbf I_4)
+=
+\mathbf 0_{4\times4}.
+$$
+
+There is no unique normalised screw axis for zero displacement because following any screw through zero distance leaves the identity unchanged.
+
+Second, suppose that $\mathbf R=\mathbf I_3$ but $\mathbf p\ne\mathbf 0_3$. The principal motion is pure translation. Define
+
+$$
+d
+\mathrel{:=}
+\|\mathbf p\|_2
+>0,
+\qquad
+{}^{a}\mathbf s
+\mathrel{:=}
+\frac{\mathbf p}{d},
+\qquad
+{}^{a}\mathbf S_P
+=
+\begin{bmatrix}
+{}^{a}\mathbf s\\
+\mathbf 0_3
+\end{bmatrix}.
+$$
+
+Then $\|{}^{a}\mathbf s\|_2=1$, $\mathbf p={}^a\mathbf s d$, and the prismatic result @eq-se3-prismatic-screw-exponential gives
+
+$$
+\log(\mathbf T)
+=
+\widehat{{}^{a}\mathbf S_P}\,d
+=
+\begin{bmatrix}
+\mathbf 0_{3\times3}&\mathbf p\\
+\mathbf 0_3^{\mathsf T}&0
+\end{bmatrix}.
+$$
+
+Third, suppose that $\mathbf R\ne\mathbf I_3$. Use the $SO(3)$ logarithm from @sec-so3-axis-angle-exponential to choose a principal angle $\theta\in(0,\pi]$ and a dimensionless unit axis ${}^{a}\mathbf s_\omega\in\mathbb R^3$ such that
+
+$$
+\mathbf R
+=
+\exp\!\left(
+[{}^{a}\mathbf s_\omega]_\times\theta
+\right).
+$$
+
+Let $\boldsymbol\Omega=[{}^{a}\mathbf s_\omega]_\times$. The translation equation from @eq-se3-rotational-screw-exponential is $\mathbf p=\mathbf G(\theta){}^{a}\mathbf s_v$. Recovering ${}^{a}\mathbf s_v$ therefore requires the inverse of $\mathbf G(\theta)$.
+
+To derive that inverse, define the dimensionless scalars $c_1\mathrel{:=}1-\cos\theta$ and $c_2\mathrel{:=}\theta-\sin\theta$, so
+
+$$
+\mathbf G(\theta)
+=
+\theta\mathbf I_3
++c_1\boldsymbol\Omega
++c_2\boldsymbol\Omega^2.
+$$
+
+Every power of $\boldsymbol\Omega$ reduces to a linear combination of $\mathbf I_3$, $\boldsymbol\Omega$, and $\boldsymbol\Omega^2$ because $\boldsymbol\Omega^3=-\boldsymbol\Omega$. Therefore seek the inverse in the form
+
+$$
+\mathbf H
+=
+a\mathbf I_3
++b\boldsymbol\Omega
++c\boldsymbol\Omega^2,
+\qquad
+\mathbf H\in\mathbb R^{3\times3},
+\qquad
+a,b,c\in\mathbb R.
+$$
+
+Multiplying $\mathbf H$ by $\mathbf G(\theta)$ and reducing $\boldsymbol\Omega^3$ and $\boldsymbol\Omega^4=-\boldsymbol\Omega^2$ gives
+
+$$
+\mathbf H\mathbf G(\theta)
+=
+a\theta\mathbf I_3
++\left[c_1(a-c)+b\sin\theta\right]\boldsymbol\Omega
++\left[ac_2+bc_1+c\sin\theta\right]\boldsymbol\Omega^2.
+$$
+
+For $\mathbf H$ to be the inverse, the coefficient of $\mathbf I_3$ must be one and the other two coefficients must be zero. Hence
+
+$$
+a\theta=1,
+\qquad
+c_1(a-c)+b\sin\theta=0,
+\qquad
+ac_2+bc_1+c\sin\theta=0.
+$$
+
+For the principal rotational branch $\theta\in(0,\pi]$, solving these three scalar equations and using the half-angle identities gives
+
+$$
+a=\frac{1}{\theta},
+\qquad
+b=-\frac{1}{2},
+\qquad
+c=
+\frac{1}{\theta}
+-\frac{1}{2}\cot\frac{\theta}{2}.
+$$
+
+Thus ${}^{a}\mathbf s_v=\mathbf G(\theta)^{-1}\mathbf p$, with
+
+$$
+\boxed{
+{}^{a}\mathbf s_v
+=
+\mathbf G(\theta)^{-1}\mathbf p,
+\qquad
+\mathbf G(\theta)^{-1}
+=
+\frac{1}{\theta}\mathbf I_3
+-\frac{1}{2}\boldsymbol\Omega
++\left(
+\frac{1}{\theta}
+-\frac{1}{2}\cot\frac{\theta}{2}
+\right)
+\boldsymbol\Omega^2
+}.
+$$ {#eq-se3-g-inverse}
+
+The recovered normalised screw-axis coordinate column and principal matrix logarithm are therefore
+
+$$
+\boxed{
+{}^{a}\mathbf S
+=
+\begin{bmatrix}
+{}^{a}\mathbf s_v\\
+{}^{a}\mathbf s_\omega
+\end{bmatrix},
+\qquad
+\log(\mathbf T)
+=
+\begin{bmatrix}
+\boldsymbol\Omega\theta&{}^{a}\mathbf s_v\theta\\
+\mathbf 0_3^{\mathsf T}&0
+\end{bmatrix}
+}.
+$$
+
+The inverse $\mathbf G(\theta)^{-1}$ is not an extra physical motion. It removes the coupling between rotation about an offset axis and the translation column of the homogeneous transformation so that the linear screw coefficient can be recovered.
+
+When the recovered motion has finite pitch, its axis geometry can also be reconstructed. Define
+
+$$
+h
+\mathrel{:=}
+({}^{a}\mathbf s_\omega)^{\mathsf T}{}^{a}\mathbf s_v
+\in\mathbb R
+$$
+
+in metres per radian. Taking the dot product of ${}^{a}\mathbf s_v=-{}^{a}\mathbf s_\omega\times{}^{a}\mathbf p_\ell+h{}^{a}\mathbf s_\omega$ with the unit direction gives this result because the cross-product term is perpendicular to ${}^{a}\mathbf s_\omega$. A convenient unique point on the axis is the point closest to $O_a$, which satisfies $({}^{a}\mathbf s_\omega)^{\mathsf T}{}^{a}\mathbf p_\ell=0$. Crossing the same screw relation with ${}^{a}\mathbf s_\omega$ then gives
+
+$$
+\boxed{
+{}^{a}\mathbf p_\ell
+=
+{}^{a}\mathbf s_\omega\times{}^{a}\mathbf s_v
+},
+$$
+
+measured in metres. Other points on the axis are obtained by adding $\lambda{}^{a}\mathbf s_\omega$ for any $\lambda\in\mathbb R$ measured in metres.
+
+The logarithm requires a branch convention because finite rotations repeat after integer multiples of $2\pi$. The principal convention above chooses $\theta\in[0,\pi]$, uses zero for the identity, and uses pure translation when $\mathbf R=\mathbf I_3$ but $\mathbf p\ne\mathbf 0_3$. Even with that convention, the rotation axis needs special handling at $\theta=\pi$, and direct evaluation of $\mathbf G(\theta)^{-1}$ suffers cancellation for very small nonzero $\theta$. @sec-se3-numerical-branches owns the stable small-angle, near-$\pi$, validation, and deterministic branch policies; the equations here establish the mathematical result those algorithms must preserve.
+
+### Quick test B: the $SE(3)$ exponential and logarithm {.unnumbered}
+
+1. **Contrast:** Distinguish a normalised screw-axis coordinate column ${}^{a}\mathbf S$, an exponential-coordinate column ${}^{a}\mathbf S\sigma$, its hatted matrix, and the finite displacement $\mathbf T_\Delta(\sigma)$.
+2. **Derivation:** For a rotational screw, show by block multiplication that the upper-right block of $(\widehat{{}^{a}\mathbf S})^k$ is $\boldsymbol\Omega^{k-1}{}^{a}\mathbf s_v$ for every integer $k\geq1$.
+3. **Geometry:** Starting from ${}^{a}\mathbf s_v=-\boldsymbol\Omega{}^{a}\mathbf p_\ell+h{}^{a}\mathbf s$, derive the finite translation $(\mathbf I_3-\mathbf R){}^{a}\mathbf p_\ell+h\theta{}^{a}\mathbf s$.
+4. **Application:** A revolute axis points along positive $z_a$ and passes through $[1\;0\;0]^{\mathsf T}\,\mathrm m$. Calculate the transformation for a positive rotation of $\pi/2\,\mathrm{rad}$ and verify that the selected axis point is fixed.
+5. **Prismatic case:** Why does the exponential series for a prismatic screw stop after its first-order term? What finite translation results from ${}^{a}\mathbf s=[0\;-1\;0]^{\mathsf T}$ and $d=0.4\,\mathrm m$?
+6. **Inverse problem:** State the three principal logarithm cases for a transformation $\mathbf T=[\mathbf R\;\mathbf p;\mathbf 0_3^{\mathsf T}\;1]$.
+7. **Limitation:** Why are special numerical branches needed near zero rotation and at a rotation of $\pi$?
+
+#### Answers and hints {.unnumbered}
+
+1. ${}^{a}\mathbf S$ is the frame-dependent instantaneous motion per unit scalar rate; ${}^{a}\mathbf S\sigma$ adds the finite amount of motion; the hat operator writes those six coordinates as a structured element of $\mathfrak{se}(3)$; and the matrix exponential maps that element to a finite transformation in $SE(3)$.
+2. The statement is true for $k=1$. Multiplying $[\boldsymbol\Omega^k\;\boldsymbol\Omega^{k-1}{}^{a}\mathbf s_v;\mathbf 0_3^{\mathsf T}\;0]$ by $[\boldsymbol\Omega\;{}^{a}\mathbf s_v;\mathbf 0_3^{\mathsf T}\;0]$ produces $[\boldsymbol\Omega^{k+1}\;\boldsymbol\Omega^k{}^{a}\mathbf s_v;\mathbf 0_3^{\mathsf T}\;0]$, which proves the pattern by induction.
+3. Use $\mathbf G\boldsymbol\Omega=\mathbf R-\mathbf I_3$ and $\mathbf G{}^{a}\mathbf s=\theta{}^{a}\mathbf s$, then distribute $\mathbf G$ over the two terms in ${}^{a}\mathbf s_v$.
+4. The result is
+
+   $$
+   \begin{bmatrix}
+   0&-1&0&1\\
+   1&0&0&-1\\
+   0&0&1&0\\
+   0&0&0&1
+   \end{bmatrix}.
+   $$
+
+   Multiplying its rotation block by $[1\;0\;0]^{\mathsf T}$ and adding its translation gives $[1\;0\;0]^{\mathsf T}$, so the axis point is fixed.
+5. The hatted prismatic screw squares to the zero matrix, so all powers of order two and higher vanish. The result is a translation by $[0\;-0.4\;0]^{\mathsf T}\,\mathrm m$ with identity rotation.
+6. Identity: return the zero logarithm and no unique normalised axis. Pure translation: use $d=\|\mathbf p\|_2$ and ${}^{a}\mathbf s=\mathbf p/d$. Rotation present: recover the principal axis and angle from $\mathbf R$, then solve ${}^{a}\mathbf s_v=\mathbf G(\theta)^{-1}\mathbf p$.
+7. Near zero, subtracting nearly equal trigonometric quantities causes loss of floating-point precision. At $\theta=\pi$, formulas that divide by $\sin\theta$ cannot recover the rotation axis. Both cases need algebraically equivalent branch-specific formulas.
 
 ## Constant-twist pose integration {#sec-se3-constant-twist-integration}
 
@@ -511,8 +1593,609 @@ A finite relative pose is a further object. It will be obtained from a screw axi
 
 ### Answers and hints {.unnumbered}
 
+## Appendix: Chasles--Mozzi theorem and proof {#sec-appendix-chasles-mozzi .unnumbered}
+
+### Theorem {.unnumbered}
+
+The **Chasles--Mozzi theorem** states that every spatial rigid displacement can be represented by one rotation about an oriented line combined with one translation along that same line. Let
+
+$$
+\mathbf T_\Delta
+=
+\begin{bmatrix}
+\mathbf R_\Delta&{}^{a}\mathbf p_\Delta\\
+\mathbf 0_3^{\mathsf T}&1
+\end{bmatrix}
+\in SE(3)
+$$
+
+be any active rigid displacement represented in frame $\{a\}$. If $\mathbf R_\Delta\ne\mathbf I_3$, then there exist a dimensionless unit direction ${}^{a}\mathbf s\in\mathbb R^3$, a point ${}^{a}\mathbf p_\ell\in\mathbb R^3$ on the screw axis measured in metres, an angle $\theta\in\mathbb R$ in radians, and a pitch $h\in\mathbb R$ in $\mathrm{m\,rad^{-1}}$ such that
+
+$$
+\left\|{}^{a}\mathbf s\right\|_2=1,
+\qquad
+\mathbf R_\Delta
+=
+\exp\!\left(
+[{}^{a}\mathbf s]_\times\theta
+\right),
+\qquad
+{}^{a}\mathbf p_\Delta
+=
+\left(\mathbf I_3-\mathbf R_\Delta\right){}^{a}\mathbf p_\ell
++h\theta{}^{a}\mathbf s.
+$$
+
+Equivalently, define the normalised helical screw-axis coordinate column
+
+$$
+{}^{a}\mathbf S_H
+\mathrel{:=}
+\begin{bmatrix}
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_\ell+h{}^{a}\mathbf s\\
+{}^{a}\mathbf s
+\end{bmatrix}.
+$$
+
+The complete displacement then satisfies
+
+$$
+\boxed{
+\mathbf T_\Delta
+=
+\exp\!\left(
+\widehat{{}^{a}\mathbf S_H}\,\theta
+\right)
+}.
+$$
+
+If $\mathbf R_\Delta=\mathbf I_3$ and ${}^{a}\mathbf p_\Delta\ne\mathbf 0_3$, the displacement is pure translation. Define
+
+$$
+d
+\mathrel{:=}
+\left\|{}^{a}\mathbf p_\Delta\right\|_2,
+\qquad
+{}^{a}\mathbf s
+\mathrel{:=}
+\frac{{}^{a}\mathbf p_\Delta}{d},
+\qquad
+{}^{a}\mathbf S_P
+\mathrel{:=}
+\begin{bmatrix}
+{}^{a}\mathbf s\\
+\mathbf 0_3
+\end{bmatrix}.
+$$
+
+Then
+
+$$
+\boxed{
+\mathbf T_\Delta
+=
+\exp\!\left(
+\widehat{{}^{a}\mathbf S_P}\,d
+\right)
+}.
+$$
+
+The identity displacement $\mathbf T_\Delta=\mathbf I_4$ is obtained with zero displacement, but its normalised screw axis is not unique. More generally, the theorem guarantees that a screw representation exists; a logarithm branch convention selects one representation from the possible angle and axis choices. The theorem describes a single screw motion that produces the same initial and final poses; it does not claim that the body's actual past trajectory followed that screw.
+
+### Proof {.unnumbered}
+
+The proof has two cases. When the displacement contains a nonzero rotation, first decompose its translation into components parallel and perpendicular to the rotation axis, then show that the perpendicular component is produced by choosing an appropriate offset axis line. When the displacement has no rotation, show directly that it is the exponential of a prismatic screw.
+
+Assume first that $\mathbf R_\Delta\ne\mathbf I_3$. Euler's rotation theorem from @sec-so3-euler-rotation-theorem guarantees a dimensionless unit column ${}^{a}\mathbf s\in\mathbb R^3$ and a principal angle $\theta\in(0,\pi]$ such that
+
+$$
+\mathbf R_\Delta
+=
+\exp\!\left(
+[{}^{a}\mathbf s]_\times\theta
+\right),
+\qquad
+\mathbf R_\Delta{}^{a}\mathbf s
+=
+{}^{a}\mathbf s.
+$$
+
+Define the plane perpendicular to the rotation axis by
+
+$$
+\mathcal V
+\mathrel{:=}
+\left({}^{a}\mathbf s\right)^\perp
+=
+\left\{
+\mathbf x\in\mathbb R^3
+\;\middle|\;
+\left({}^{a}\mathbf s\right)^{\mathsf T}\mathbf x=0
+\right\}.
+$$
+
+The next step requires solving an equation of the form $(\mathbf I_3-\mathbf R_\Delta)\mathbf x=\mathbf y$ for columns $\mathbf x,\mathbf y\in\mathcal V$. We therefore need to prove that, for every $\mathbf y\in\mathcal V$, there is exactly one $\mathbf x\in\mathcal V$ satisfying this equation.
+
+First, $\mathbf I_3-\mathbf R_\Delta$ maps $\mathcal V$ into itself. Because $\mathbf R_\Delta{}^{a}\mathbf s={}^a\mathbf s$ and $\mathbf R_\Delta^{-1}=\mathbf R_\Delta^{\mathsf T}$, the axis column also satisfies $\mathbf R_\Delta^{\mathsf T}{}^{a}\mathbf s={}^a\mathbf s$. Hence, for every $\mathbf x\in\mathcal V$,
+
+$$
+\begin{aligned}
+\left({}^{a}\mathbf s\right)^{\mathsf T}
+(\mathbf I_3-\mathbf R_\Delta)\mathbf x
+&=
+\left({}^{a}\mathbf s\right)^{\mathsf T}\mathbf x
+-
+\left(
+\mathbf R_\Delta^{\mathsf T}{}^{a}\mathbf s
+\right)^{\mathsf T}\mathbf x\\
+&=
+0-0
+=0.
+\end{aligned}
+$$
+
+Therefore $(\mathbf I_3-\mathbf R_\Delta)\mathbf x\in\mathcal V$. The restriction is consequently a well-defined map from $\mathcal V$ to $\mathcal V$. Denote this map by
+
+$$
+\boxed{
+\begin{aligned}
+\mathcal A:
+\mathcal V&\longrightarrow\mathcal V,\\
+\mathbf x&\longmapsto
+(\mathbf I_3-\mathbf R_\Delta)\mathbf x.
+\end{aligned}
+}
+$$
+
+The map $\mathcal A$ is linear because it is multiplication by the fixed matrix $\mathbf I_3-\mathbf R_\Delta$. Thus, for all $\mathbf x_1,\mathbf x_2\in\mathcal V$ and all scalars $c_1,c_2\in\mathbb R$,
+
+$$
+\mathcal A(c_1\mathbf x_1+c_2\mathbf x_2)
+=
+c_1\mathcal A(\mathbf x_1)
++c_2\mathcal A(\mathbf x_2).
+$$
+
+Second, $\mathcal A$ sends no nonzero column to zero. If $\mathbf x\in\mathcal V$ and
+
+$$
+\mathcal A(\mathbf x)
+=
+\mathbf 0_3,
+$$
+
+then $\mathbf R_\Delta\mathbf x=\mathbf x$. However, $\mathbf R_\Delta$ rotates the plane $\mathcal V$ through the nonzero angle $\theta\in(0,\pi]$, so it fixes no nonzero column in that plane. Hence $\mathbf x=\mathbf 0_3$, and
+
+$$
+\ker(\mathcal A)
+=
+\{\mathbf 0_3\}.
+$$
+
+This zero kernel makes $\mathcal A$ one-to-one. To see why, suppose that $\mathcal A(\mathbf x_1)=\mathcal A(\mathbf x_2)$. Linearity gives
+
+$$
+\mathcal A(\mathbf x_1-\mathbf x_2)
+=
+\mathcal A(\mathbf x_1)-\mathcal A(\mathbf x_2)
+=
+\mathbf 0_3.
+$$
+
+Therefore $\mathbf x_1-\mathbf x_2\in\ker(\mathcal A)$. Because the kernel contains only $\mathbf 0_3$, it follows that $\mathbf x_1-\mathbf x_2=\mathbf 0_3$ and hence $\mathbf x_1=\mathbf x_2$. Equal outputs can therefore arise only from equal inputs, which is precisely the definition of a one-to-one map.
+
+Finally, the rank--nullity theorem applies to any linear map with a finite-dimensional domain. It applies here because $\mathcal A:\mathcal V\to\mathcal V$ is linear and its domain is the two-dimensional plane $\mathcal V$. The theorem gives
+
+$$
+\dim(\mathcal V)
+=
+\dim\!\left(\ker(\mathcal A)\right)
++
+\dim\!\left(\operatorname{image}(\mathcal A)\right).
+$$
+
+Substituting $\dim(\mathcal V)=2$ and $\dim(\ker(\mathcal A))=0$ yields
+
+$$
+\dim\!\left(\operatorname{image}(\mathcal A)\right)
+=
+2-0
+=2.
+$$
+
+The image is therefore a two-dimensional subspace of the two-dimensional plane $\mathcal V$, so the image must be all of $\mathcal V$. This is why one-to-one also implies onto here. Consequently, for every $\mathbf y\in\mathcal V$, there is exactly one $\mathbf x\in\mathcal V$ satisfying $(\mathbf I_3-\mathbf R_\Delta)\mathbf x=\mathbf y$.
+
+Decompose the translation column into parts parallel and perpendicular to the axis:
+
+$$
+{}^{a}\mathbf p_\Delta
+=
+{}^{a}\mathbf p_{\parallel}
++{}^{a}\mathbf p_{\perp},
+\qquad
+{}^{a}\mathbf p_{\parallel}
+\mathrel{:=}
+{}^{a}\mathbf s
+\left({}^{a}\mathbf s\right)^{\mathsf T}
+{}^{a}\mathbf p_\Delta,
+\qquad
+{}^{a}\mathbf p_{\perp}
+\mathrel{:=}
+\left(
+\mathbf I_3
+-{}^{a}\mathbf s
+\left({}^{a}\mathbf s\right)^{\mathsf T}
+\right)
+{}^{a}\mathbf p_\Delta.
+$$
+
+The defining property of a screw axis supplies the equation for its points. A point on the screw axis may move along the axis, but it has no displacement perpendicular to the axis. To apply this property, first consider any spatial point with initial position ${}^{a}\mathbf x\in\mathbb R^3$. Its displacement under $\mathbf T_\Delta$ is
+
+$$
+\mathbf R_\Delta{}^{a}\mathbf x
++{}^{a}\mathbf p_\Delta
+-{}^{a}\mathbf x.
+$$
+
+The component of this displacement along ${}^{a}\mathbf s$ is independent of ${}^{a}\mathbf x$. Indeed,
+
+$$
+\begin{aligned}
+\left({}^{a}\mathbf s\right)^{\mathsf T}
+\left(
+\mathbf R_\Delta{}^{a}\mathbf x
++{}^{a}\mathbf p_\Delta
+-{}^{a}\mathbf x
+\right)
+&=
+\left(
+\mathbf R_\Delta^{\mathsf T}{}^{a}\mathbf s
+-{}^{a}\mathbf s
+\right)^{\mathsf T}
+{}^{a}\mathbf x
++
+\left({}^{a}\mathbf s\right)^{\mathsf T}
+{}^{a}\mathbf p_\Delta\\
+&=
+\left({}^{a}\mathbf s\right)^{\mathsf T}
+{}^{a}\mathbf p_\Delta,
+\end{aligned}
+$$
+
+because $\mathbf R_\Delta^{\mathsf T}{}^{a}\mathbf s={}^a\mathbf s$. Multiplying this common scalar component by the unit direction gives the parallel vector component
+
+$$
+{}^{a}\mathbf s
+\left({}^{a}\mathbf s\right)^{\mathsf T}
+\left(
+\mathbf R_\Delta{}^{a}\mathbf x
++{}^{a}\mathbf p_\Delta
+-{}^{a}\mathbf x
+\right)
+=
+{}^{a}\mathbf s
+\left({}^{a}\mathbf s\right)^{\mathsf T}
+{}^{a}\mathbf p_\Delta
+=
+{}^{a}\mathbf p_\parallel.
+$$
+
+Therefore every point has the same displacement component parallel to the axis, namely ${}^{a}\mathbf p_\parallel$.
+
+To find a screw-axis point, let $P_\ell$ be a candidate point and let ${}^{a}\mathbf p_\ell\in\mathbb R^3$ be its position column in frame $\{a\}$. For $P_\ell$ to lie on the axis, it must have no displacement perpendicular to ${}^{a}\mathbf s$, so its complete displacement must equal ${}^{a}\mathbf p_\parallel$:
+
+$$
+\mathbf R_\Delta{}^{a}\mathbf p_\ell
++{}^{a}\mathbf p_\Delta
+-{}^{a}\mathbf p_\ell
+=
+{}^{a}\mathbf p_\parallel.
+$$
+
+Rearranging this defining condition and using ${}^{a}\mathbf p_\Delta-{}^{a}\mathbf p_\parallel={}^a\mathbf p_\perp$ gives
+
+$$
+\boxed{
+\left(
+\mathbf I_3-\mathbf R_\Delta
+\right)
+{}^{a}\mathbf p_\ell
+=
+{}^{a}\mathbf p_{\perp}
+}.
+$$
+
+The column ${}^{a}\mathbf p_{\perp}$ belongs to $\mathcal V$. The invertibility result above therefore guarantees a unique solution ${}^{a}\mathbf p_\ell\in\mathcal V$. The corresponding point $P_\ell$ satisfies the required axis-point condition: the rigid displacement moves it only by ${}^{a}\mathbf p_\parallel$, which is parallel to ${}^{a}\mathbf s$. It remains to verify that the complete line through this point is preserved by the displacement.
+
+The oriented line through $P_\ell$ in direction ${}^{a}\mathbf s$ is
+
+$$
+{}^{a}\mathcal L
+\mathrel{:=}
+\left\{
+{}^{a}\mathbf p_\ell
++\lambda{}^{a}\mathbf s
+\;\middle|\;
+\lambda\in\mathbb R
+\right\},
+$$
+
+where $\lambda$ is signed distance along the line, measured in metres. Every point on this line remains on it after the displacement because
+
+$$
+\begin{aligned}
+\mathbf R_\Delta
+\left(
+{}^{a}\mathbf p_\ell+\lambda{}^{a}\mathbf s
+\right)
++{}^{a}\mathbf p_\Delta
+&=
+\mathbf R_\Delta{}^{a}\mathbf p_\ell
++{}^{a}\mathbf p_\Delta
++\lambda\mathbf R_\Delta{}^{a}\mathbf s\\
+&=
+{}^{a}\mathbf p_\ell
++{}^{a}\mathbf p_\parallel
++\lambda{}^{a}\mathbf s\\
+&=
+\left(
+{}^{a}\mathbf p_\ell+\lambda{}^{a}\mathbf s
+\right)
++{}^{a}\mathbf p_\parallel.
+\end{aligned}
+$$
+
+Hence the whole line is mapped to itself and every point on it moves only along the line. This proves that ${}^{a}\mathcal L$ is the screw axis, rather than merely declaring a line through ${}^{a}\mathbf p_\ell$ to be the axis.
+
+The restriction ${}^{a}\mathbf p_\ell\in\mathcal V$ selects one convenient point from this line. It means
+
+$$
+\left({}^{a}\mathbf s\right)^{\mathsf T}
+{}^{a}\mathbf p_\ell
+=0,
+$$
+
+so the displacement vector from $O_a$ to $P_\ell$ is perpendicular to the axis direction. Consequently, $P_\ell$ is the point on the axis closest to $O_a$; the other axis points ${}^{a}\mathbf p_\ell+\lambda{}^{a}\mathbf s$ generally do not belong to $\mathcal V$. Define the pitch by
+
+$$
+h
+\mathrel{:=}
+\frac{
+\left({}^{a}\mathbf s\right)^{\mathsf T}
+{}^{a}\mathbf p_\Delta
+}{\theta}.
+$$
+
+The parallel translation then satisfies
+
+$$
+{}^{a}\mathbf p_{\parallel}
+=
+h\theta{}^{a}\mathbf s.
+$$
+
+Adding the perpendicular and parallel components proves the required translation formula:
+
+$$
+\boxed{
+{}^{a}\mathbf p_\Delta
+=
+\left(
+\mathbf I_3-\mathbf R_\Delta
+\right)
+{}^{a}\mathbf p_\ell
++h\theta{}^{a}\mathbf s
+}.
+$$
+
+To verify its geometric meaning, let ${}^{a}\mathbf x\in\mathbb R^3$ be the initial position of any material point, expressed in frame $\{a\}$ and measured in metres. The active displacement maps it to
+
+$$
+\begin{aligned}
+{}^{a}\mathbf x'
+&=
+\mathbf R_\Delta{}^{a}\mathbf x
++{}^{a}\mathbf p_\Delta\\
+&=
+\mathbf R_\Delta
+\left(
+{}^{a}\mathbf x-{}^{a}\mathbf p_\ell
+\right)
++{}^{a}\mathbf p_\ell
++h\theta{}^{a}\mathbf s.
+\end{aligned}
+$$
+
+This equation first rotates the point about the oriented line through ${}^{a}\mathbf p_\ell$ in direction ${}^{a}\mathbf s$, then translates it by $h\theta$ along that line. It is therefore exactly a screw displacement.
+
+It remains to prove the exponential representation. Let $\varphi\in[0,\theta]$ be an intermediate rotation angle and define
+
+$$
+\mathbf R(\varphi)
+\mathrel{:=}
+\exp\!\left(
+[{}^{a}\mathbf s]_\times\varphi
+\right),
+$$
+
+and
+
+$$
+{}^{a}\mathbf x(\varphi)
+\mathrel{:=}
+\mathbf R(\varphi)
+\left(
+{}^{a}\mathbf x(0)-{}^{a}\mathbf p_\ell
+\right)
++{}^{a}\mathbf p_\ell
++h\varphi{}^{a}\mathbf s.
+$$
+
+To differentiate this path, first differentiate its rotation matrix. Define the constant generator $\mathbf A\mathrel{:=}[{}^{a}\mathbf s]_\times\in\mathbb R^{3\times3}$. Because ${}^{a}\mathbf s$ is fixed in frame $\{a\}$, $\mathbf A$ does not depend on $\varphi$. Differentiating the matrix-exponential series term by term gives
+
+$$
+\begin{aligned}
+\frac{\mathrm d\mathbf R}{\mathrm d\varphi}
+&=
+\frac{\mathrm d}{\mathrm d\varphi}
+\sum_{k=0}^{\infty}
+\frac{\mathbf A^k\varphi^k}{k!}\\
+&=
+\sum_{k=1}^{\infty}
+\frac{\mathbf A^k\varphi^{k-1}}{(k-1)!}\\
+&=
+\mathbf A
+\sum_{j=0}^{\infty}
+\frac{\mathbf A^j\varphi^j}{j!}\\
+&=
+\mathbf A\mathbf R(\varphi)\\
+&=
+[{}^{a}\mathbf s]_\times\mathbf R(\varphi).
+\end{aligned}
+$$
+
+Here $k$ and $j$ are nonnegative integer summation indices, with $j=k-1$ in the third line. Geometrically, the identity states that increasing $\varphi$ rotates every already-rotated column infinitesimally about the fixed direction ${}^{a}\mathbf s$.
+
+The columns ${}^{a}\mathbf x(0)$ and ${}^{a}\mathbf p_\ell$, the pitch $h$, and the axis direction ${}^{a}\mathbf s$ are constant with respect to $\varphi$. Applying the derivative above to the point path therefore gives
+
+$$
+\frac{\mathrm d}{\mathrm d\varphi}
+{}^{a}\mathbf x(\varphi)
+=
+[{}^{a}\mathbf s]_\times
+\mathbf R(\varphi)
+\left(
+{}^{a}\mathbf x(0)-{}^{a}\mathbf p_\ell
+\right)
++h{}^{a}\mathbf s.
+$$
+
+The path definition can be rearranged as
+
+$$
+\mathbf R(\varphi)
+\left(
+{}^{a}\mathbf x(0)-{}^{a}\mathbf p_\ell
+\right)
+=
+{}^{a}\mathbf x(\varphi)
+-{}^{a}\mathbf p_\ell
+-h\varphi{}^{a}\mathbf s.
+$$
+
+Substituting this expression and using $[{}^{a}\mathbf s]_\times{}^{a}\mathbf s={}^a\mathbf s\times{}^{a}\mathbf s=\mathbf 0_3$ yields
+
+$$
+\begin{aligned}
+\frac{\mathrm d}{\mathrm d\varphi}
+{}^{a}\mathbf x(\varphi)
+&=
+[{}^{a}\mathbf s]_\times
+\left(
+{}^{a}\mathbf x(\varphi)
+-{}^{a}\mathbf p_\ell
+-h\varphi{}^{a}\mathbf s
+\right)
++h{}^{a}\mathbf s\\
+&=
+{}^{a}\mathbf s\times
+\left(
+{}^{a}\mathbf x(\varphi)-{}^{a}\mathbf p_\ell
+\right)
++h{}^{a}\mathbf s\\
+&=
+[{}^{a}\mathbf s]_\times
+{}^{a}\mathbf x(\varphi)
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_\ell
++h{}^{a}\mathbf s.
+\end{aligned}
+$$
+
+The first term in the second line is the tangential displacement per radian produced by rotation about the line through $P_\ell$; the second is the displacement per radian along that line. Thus this is a derivative with respect to the path angle, measured in metres per radian, rather than a velocity with respect to time.
+
+Using homogeneous point coordinates, this differential equation becomes
+
+$$
+\frac{\mathrm d}{\mathrm d\varphi}
+{}^{a}\overline{\mathbf x}(\varphi)
+=
+\underbrace{
+\begin{bmatrix}
+[{}^{a}\mathbf s]_\times&
+-{}^{a}\mathbf s\times{}^{a}\mathbf p_\ell+h{}^{a}\mathbf s\\
+\mathbf 0_3^{\mathsf T}&0
+\end{bmatrix}
+}_{\displaystyle \widehat{{}^{a}\mathbf S_H}}
+{}^{a}\overline{\mathbf x}(\varphi).
+$$
+
+The generator $\widehat{{}^{a}\mathbf S_H}$ is constant with respect to $\varphi$. Differentiating the matrix-exponential power series verifies that the solution from $\varphi=0$ to $\varphi=\theta$ is
+
+$$
+{}^{a}\overline{\mathbf x}(\theta)
+=
+\exp\!\left(
+\widehat{{}^{a}\mathbf S_H}\,\theta
+\right)
+{}^{a}\overline{\mathbf x}(0).
+$$
+
+This exponential and $\mathbf T_\Delta$ act identically on every homogeneous point column, so
+
+$$
+\mathbf T_\Delta
+=
+\exp\!\left(
+\widehat{{}^{a}\mathbf S_H}\,\theta
+\right).
+$$
+
+Now suppose that $\mathbf R_\Delta=\mathbf I_3$ and ${}^{a}\mathbf p_\Delta\ne\mathbf 0_3$. With $d=\|{}^{a}\mathbf p_\Delta\|_2$ and ${}^{a}\mathbf s={}^a\mathbf p_\Delta/d$, the prismatic screw satisfies
+
+$$
+\widehat{{}^{a}\mathbf S_P}
+=
+\begin{bmatrix}
+\mathbf 0_{3\times3}&{}^{a}\mathbf s\\
+\mathbf 0_3^{\mathsf T}&0
+\end{bmatrix},
+\qquad
+\left(
+\widehat{{}^{a}\mathbf S_P}
+\right)^2
+=
+\mathbf 0_{4\times4}.
+$$
+
+The exponential series therefore terminates after its first-order term:
+
+$$
+\begin{aligned}
+\exp\!\left(
+\widehat{{}^{a}\mathbf S_P}\,d
+\right)
+&=
+\mathbf I_4
++\widehat{{}^{a}\mathbf S_P}\,d\\
+&=
+\begin{bmatrix}
+\mathbf I_3&{}^{a}\mathbf s d\\
+\mathbf 0_3^{\mathsf T}&1
+\end{bmatrix}\\
+&=
+\begin{bmatrix}
+\mathbf I_3&{}^{a}\mathbf p_\Delta\\
+\mathbf 0_3^{\mathsf T}&1
+\end{bmatrix}
+=
+\mathbf T_\Delta.
+\end{aligned}
+$$
+
+Finally, if $\mathbf R_\Delta=\mathbf I_3$ and ${}^{a}\mathbf p_\Delta=\mathbf 0_3$, then $\mathbf T_\Delta=\mathbf I_4=\exp(\mathbf 0_{4\times4})$. These cases exhaust every element of $SE(3)$, completing the proof.
+
 ## References {.unnumbered}
 
-- Kevin M. Lynch and Frank C. Park, *Modern Robotics: Mechanics, Planning, and Control*, Chapter 3, especially Section 3.3.2.2 on the screw interpretation of a twist and normalised screw axes.
-- John J. Craig, *Introduction to Robotics: Mechanics and Control*, Chapter 2 on spatial descriptions, transformations, and rotations about general axes, and Chapter 3 on one-degree-of-freedom revolute and prismatic joints.
-- Peter Corke, *Robotics, Vision and Control: Fundamental Algorithms in Python*, Chapters 2--3, especially the three-dimensional twist representation and its revolute, prismatic, and finite-pitch screw cases.
+- Kevin M. Lynch and Frank C. Park, *Modern Robotics: Mechanics, Planning, and Control*, Chapter 2 on rigid links, joints, and robot configuration; Chapter 3, especially Section 3.3.2.2 on the screw interpretation of a twist and normalised screw axes and Section 3.3.3 on the $SE(3)$ exponential and logarithm; and Chapter 4 on forward kinematics as a mapping from joint values to the end-effector frame.
+- John J. Craig, *Introduction to Robotics: Mechanics and Control*, Chapter 2 on spatial descriptions, transformations, and rotations about general axes, and Chapter 3 on one-degree-of-freedom revolute and prismatic joints, joint space, and the end-link pose as a function of the joint variables.
+- Peter Corke, *Robotics, Vision and Control: Fundamental Algorithms in Python*, Chapter 2, especially Sections 2.3.2.2--2.3.2.3 and 2.4.8 on the matrix exponential for pose, three-dimensional twists, and their revolute, prismatic, and finite-pitch screw cases.

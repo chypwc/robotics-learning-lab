@@ -102,7 +102,9 @@ x\\y\\\theta
 \end{bmatrix}.
 $$
 
-where $x$ and $y$ are the entries of ${}^{w}\mathbf p_b=[x\;y]^\mathsf T$ and $\theta$ is the orientation of frame $\{b\}$ relative to frame $\{w\}$. These three **generalised coordinates** construct the transformation representing the configuration:
+Although $\mathbf q$ has three entries, it does not describe a point in three-dimensional physical space. The body is constrained to move in a plane: $x$ and $y$ are the entries of ${}^{w}\mathbf p_b=[x\;y]^\mathsf T$, measured in metres, while $\theta$ is the orientation of frame $\{b\}$ relative to frame $\{w\}$, measured in radians about the axis normal to the plane. Translation normal to the plane and rotation about either axis lying in the plane are excluded. Thus the body has two independent position coordinates and one independent orientation coordinate. The column $\mathbf q$ is an ordered coordinate description with mixed physical units, not a three-dimensional geometric vector with one common unit, and its ordinary Euclidean norm has no direct physical meaning.
+
+If $\theta$ is stored as an unwrapped real number, $\mathbf q$ can be manipulated locally as a three-component real column. Globally, however, $\theta$ and $\theta+2\pi n$ for any integer $n$ describe the same orientation. The planar configuration-coordinate domain is therefore not ordinary three-dimensional Cartesian physical space. These three **generalised coordinates** construct the transformation representing the configuration:
 
 $$
 \boxed{
@@ -119,7 +121,7 @@ $$
 }.
 $$
 
-Thus, $\chi$ denotes the complete physical placement, $\mathbf T_{wb}$ represents that placement as a rigid transformation, and $\mathbf q$ is a coordinate description used to construct the transformation. These objects contain equivalent placement information once the world and body frames, axis directions, units, positive rotation direction, and transformation direction have been defined, but they have different mathematical types. In particular, $\theta$ and $\theta+2\pi n$ for any integer $n$ construct the same rotation, so an unrestricted real-valued angle does not give a unique global coordinate for each configuration.
+Thus, $\chi$ denotes the complete physical placement, $\mathbf T_{wb}$ represents that placement as a rigid transformation, and $\mathbf q$ is a coordinate description used to construct the transformation. These objects contain equivalent placement information once the world and body frames, axis directions, units, positive rotation direction, and transformation direction have been defined, but they have different mathematical types. In particular, an unrestricted real-valued angle does not give a unique global coordinate for each configuration.
 
 A configuration space is different from a physical **workspace**. A workspace is a region of physical space that a robot or end-effector can reach. A C-space contains complete robot configurations. Different joint arrangements can place an end-effector at the same workspace point while representing different points in C-space.
 
@@ -2339,6 +2341,156 @@ $$
 
 ![Geometric interpretation of Rodrigues' formula for the example axis $\mathbf a_w=\mathbf e_z$. The vector's parallel component remains fixed while its perpendicular component rotates through $\alpha$.](figures/rodrigues_vector_decomposition.svg){#fig-so3-rodrigues-vector-decomposition width=90%}
 
+### Euler's rotation theorem: every spatial rotation has an axis {#sec-so3-euler-rotation-theorem}
+
+The matrix exponential and Rodrigues' formula solve the forward problem: a unit axis and an angle produce a rotation matrix. To use axis--angle coordinates for an arbitrary orientation, the reverse existence question must also be answered: does every matrix in $SO(3)$ represent one rotation about some axis? **Euler's rotation theorem** answers yes.
+
+Let $\mathbf Q\in SO(3)$ be any rotation matrix, interpreted here as an active finite rotation with components expressed in one declared frame. Euler's rotation theorem states that there exist a dimensionless unit axis column $\mathbf a\in\mathbb R^3$ and a principal angle $\alpha\in[0,\pi]$ such that
+
+$$
+\boxed{
+\|\mathbf a\|_2=1,
+\qquad
+\mathbf Q\mathbf a=\mathbf a,
+\qquad
+\mathbf Q
+=
+\exp\!\left(
+[\mathbf a]_\times\alpha
+\right)
+}.
+$$
+
+The equation $\mathbf Q\mathbf a=\mathbf a$ says that the rotation leaves the axis direction fixed. If $\mathbf Q=\mathbf I_3$, choose $\alpha=0$ and any unit axis. If $\mathbf Q\ne\mathbf I_3$, choose $\alpha\in(0,\pi]$. For $0<\alpha<\pi$, the oriented axis is fixed by the principal-angle convention. At $\alpha=\pi$, the columns $\mathbf a$ and $-\mathbf a$ describe the same unoriented axis line and the same rotation.
+
+#### Proof {.unnumbered}
+
+The proof first shows that every $3\times3$ proper rotation has a fixed nonzero direction. It then shows that the remaining perpendicular plane undergoes an ordinary two-dimensional rotation, which Rodrigues' formula represents as one axis--angle exponential.
+
+Because $\mathbf Q\in SO(3)$,
+
+$$
+\mathbf Q^{\mathsf T}\mathbf Q
+=
+\mathbf I_3,
+\qquad
+\det(\mathbf Q)=1.
+$$
+
+To prove that $1$ is an eigenvalue, consider $\det(\mathbf Q-\mathbf I_3)$. Left-multiplying the matrix inside the determinant by $\mathbf Q^{\mathsf T}$ does not change its determinant because $\det(\mathbf Q^{\mathsf T})=1$:
+
+$$
+\begin{aligned}
+\det(\mathbf Q-\mathbf I_3)
+&=
+\det\!\left[
+\mathbf Q^{\mathsf T}
+(\mathbf Q-\mathbf I_3)
+\right]\\
+&=
+\det(\mathbf I_3-\mathbf Q^{\mathsf T})\\
+&=
+\det\!\left[-(\mathbf Q^{\mathsf T}-\mathbf I_3)\right]\\
+&=
+-\det(\mathbf Q^{\mathsf T}-\mathbf I_3)\\
+&=
+-\det(\mathbf Q-\mathbf I_3).
+\end{aligned}
+$$
+
+The last equality uses $\det(\mathbf A^{\mathsf T})=\det(\mathbf A)$ for every square matrix $\mathbf A$. A real number equal to its own negative must be zero, so
+
+$$
+\det(\mathbf Q-\mathbf I_3)=0.
+$$
+
+Therefore $\mathbf Q-\mathbf I_3$ is singular and has a nonzero null-space column. Choose such a column and normalise it to obtain $\mathbf a\in\mathbb R^3$ with
+
+$$
+\|\mathbf a\|_2=1,
+\qquad
+(\mathbf Q-\mathbf I_3)\mathbf a=\mathbf 0_3,
+\qquad
+\mathbf Q\mathbf a=\mathbf a.
+$$
+
+Thus at least one axis direction is fixed. Define its perpendicular plane by
+
+$$
+\mathcal V
+\mathrel{:=}
+\mathbf a^\perp
+=
+\left\{
+\mathbf x\in\mathbb R^3
+\;\middle|\;
+\mathbf a^{\mathsf T}\mathbf x=0
+\right\}.
+$$
+
+The plane $\mathcal V$ is preserved by $\mathbf Q$. Indeed, $\mathbf Q^{-1}=\mathbf Q^{\mathsf T}$ and $\mathbf Q\mathbf a=\mathbf a$ imply $\mathbf Q^{\mathsf T}\mathbf a=\mathbf a$. Hence, for every $\mathbf x\in\mathcal V$,
+
+$$
+\mathbf a^{\mathsf T}\mathbf Q\mathbf x
+=
+\left(
+\mathbf Q^{\mathsf T}\mathbf a
+\right)^{\mathsf T}
+\mathbf x
+=
+\mathbf a^{\mathsf T}\mathbf x
+=
+0,
+$$
+
+so $\mathbf Q\mathbf x\in\mathcal V$.
+
+Choose any unit column $\mathbf u\in\mathcal V$ and define $\mathbf v\mathrel{:=}\mathbf a\times\mathbf u$. The columns $\mathbf u$, $\mathbf v$, and $\mathbf a$ form a right-handed orthonormal basis. Because $\mathbf Q$ preserves lengths and the plane $\mathcal V$, there are real scalars $c$ and $s$ satisfying $c^2+s^2=1$ such that
+
+$$
+\mathbf Q\mathbf u
+=
+c\mathbf u+s\mathbf v.
+$$
+
+The restriction of $\mathbf Q$ to $\mathcal V$ is a two-dimensional orthogonal map. Its determinant is $1$ because the full three-dimensional determinant is $1$ and the fixed-axis eigenvalue is $1$. Therefore it preserves the orientation of the ordered basis $(\mathbf u,\mathbf v)$, which requires
+
+$$
+\mathbf Q\mathbf v
+=
+-s\mathbf u+c\mathbf v.
+$$
+
+Since $c^2+s^2=1$, there is a signed angle $\beta\in(-\pi,\pi]$ such that $c=\cos\beta$ and $s=\sin\beta$. Thus $\mathbf Q$ fixes $\mathbf a$ and rotates every vector in $\mathcal V$ through $\beta$:
+
+$$
+\mathbf Q\mathbf u
+=
+\cos\beta\,\mathbf u
++\sin\beta\,\mathbf v,
+\qquad
+\mathbf Q\mathbf v
+=
+-\sin\beta\,\mathbf u
++\cos\beta\,\mathbf v.
+$$
+
+If $\beta\geq0$, set $\mathbf a'=\mathbf a$ and $\alpha=\beta$. If $\beta<0$, set $\mathbf a'=-\mathbf a$ and $\alpha=-\beta$. Reversing the axis reverses the positive right-hand-rule direction, so in both cases $\|\mathbf a'\|_2=1$ and $\alpha\in[0,\pi]$ describe the same rotation $\mathbf Q$.
+
+Rodrigues' geometric formula derived immediately above shows that $\exp([\mathbf a']_\times\alpha)$ fixes the axis line spanned by $\mathbf a$ and has the same action as $\mathbf Q$ on the perpendicular plane $\mathcal V$. The two matrices therefore act identically on every column in $\mathbb R^3$. Consequently,
+
+$$
+\boxed{
+\mathbf Q
+=
+\exp\!\left(
+[\mathbf a']_\times\alpha
+\right)
+}.
+$$
+
+Renaming the constructed axis $\mathbf a'$ as $\mathbf a$ gives the theorem's stated notation and completes the proof.
+
 ### Check: rotation about the world $z_w$-axis
 
 Choose
@@ -2466,9 +2618,10 @@ Axis--angle coordinates are not globally unique. The pairs $(\mathbf a_w,\alpha)
 3. Use the vector triple-product identity to derive $[\mathbf a_w]_\times^2=\mathbf a_w\mathbf a_w^\mathsf T-\mathbf I_3$ for a unit axis.
 4. Starting from the matrix-exponential series and $[\mathbf a_w]_\times^3=-[\mathbf a_w]_\times$, derive Rodrigues' rotation formula.
 5. Why does Rodrigues' formula leave the vector component parallel to $\mathbf a_w$ unchanged?
-6. A constant angular velocity $\boldsymbol\omega_w=[0\;0\;2]^\mathsf T\,\mathrm{rad\,s^{-1}}$ acts for $\Delta t=0.25\,\mathrm s$. Find the axis, angle, rotation vector, and finite orientation increment.
-7. Why does a world-expressed constant angular velocity premultiply $\mathbf R_{wb}$, while a body-expressed constant angular velocity postmultiplies it?
-8. Give two reasons why an axis--angle representation of a rotation is not unique.
+6. State Euler's rotation theorem. In its proof, why does $\det(\mathbf Q-\mathbf I_3)=0$ imply a fixed axis direction?
+7. A constant angular velocity $\boldsymbol\omega_w=[0\;0\;2]^\mathsf T\,\mathrm{rad\,s^{-1}}$ acts for $\Delta t=0.25\,\mathrm s$. Find the axis, angle, rotation vector, and finite orientation increment.
+8. Why does a world-expressed constant angular velocity premultiply $\mathbf R_{wb}$, while a body-expressed constant angular velocity postmultiplies it?
+9. Give two reasons why an axis--angle representation of a rotation is not unique.
 
 ### Answers and hints {.unnumbered}
 
@@ -2477,9 +2630,10 @@ Axis--angle coordinates are not globally unique. The pairs $(\mathbf a_w,\alpha)
 3. For every $\mathbf y$, $\mathbf a_w\times(\mathbf a_w\times\mathbf y)=\mathbf a_w(\mathbf a_w^\mathsf T\mathbf y)-(\mathbf a_w^\mathsf T\mathbf a_w)\mathbf y=(\mathbf a_w\mathbf a_w^\mathsf T-\mathbf I_3)\mathbf y$. Equality for every $\mathbf y$ proves the matrix identity.
 4. Replace successive odd powers by alternating $[\mathbf a_w]_\times$ and $-[\mathbf a_w]_\times$, and successive positive even powers by alternating $[\mathbf a_w]_\times^2$ and $-[\mathbf a_w]_\times^2$. Their scalar coefficients sum to $\sin\alpha$ and $1-\cos\alpha$, respectively.
 5. The cross product of the axis with a parallel vector is zero, so both $[\mathbf a_w]_\times\mathbf y_{\parallel}$ and $[\mathbf a_w]_\times^2\mathbf y_{\parallel}$ vanish.
-6. $\mathbf a_w=[0\;0\;1]^\mathsf T$, $\alpha=2(0.25)=0.5\,\mathrm{rad}$, and $\boldsymbol\varphi_w=[0\;0\;0.5]^\mathsf T\,\mathrm{rad}$. The increment is $\mathbf Q_w=\mathbf R_z(0.5)=\begin{bmatrix}\cos0.5&-\sin0.5&0\\\sin0.5&\cos0.5&0\\0&0&1\end{bmatrix}$.
-7. A finite increment expressed using world axes acts on the world-coordinate columns and therefore premultiplies. An increment expressed using the old body axes composes after the body-to-world mapping and therefore postmultiplies.
-8. Examples are $(\mathbf a_w,\alpha)\sim(-\mathbf a_w,-\alpha)$, angles differing by $2\pi k$ give the same rotation, and the axis is arbitrary for zero rotation.
+6. Euler's rotation theorem states that, for every $\mathbf Q\in SO(3)$, there are a unit axis $\mathbf a\in\mathbb R^3$ and a principal angle $\alpha\in[0,\pi]$ such that $\mathbf Q\mathbf a=\mathbf a$ and $\mathbf Q=\exp([\mathbf a]_\times\alpha)$. The zero determinant makes $\mathbf Q-\mathbf I_3$ singular, so its null space contains a nonzero column $\mathbf a$; normalising it gives the fixed axis direction $\mathbf Q\mathbf a=\mathbf a$.
+7. $\mathbf a_w=[0\;0\;1]^\mathsf T$, $\alpha=2(0.25)=0.5\,\mathrm{rad}$, and $\boldsymbol\varphi_w=[0\;0\;0.5]^\mathsf T\,\mathrm{rad}$. The increment is $\mathbf Q_w=\mathbf R_z(0.5)=\begin{bmatrix}\cos0.5&-\sin0.5&0\\\sin0.5&\cos0.5&0\\0&0&1\end{bmatrix}$.
+8. A finite increment expressed using world axes acts on the world-coordinate columns and therefore premultiplies. An increment expressed using the old body axes composes after the body-to-world mapping and therefore postmultiplies.
+9. Examples are $(\mathbf a_w,\alpha)\sim(-\mathbf a_w,-\alpha)$, angles differing by $2\pi k$ give the same rotation, and the axis is arbitrary for zero rotation.
 
 ## Spatial pose and $SE(3)$ {#sec-se3-spatial-pose}
 
