@@ -2398,13 +2398,46 @@ $$
 \end{aligned}
 $$
 
-The last equality uses $\det(\mathbf A^{\mathsf T})=\det(\mathbf A)$ for every square matrix $\mathbf A$. A real number equal to its own negative must be zero, so
+The last equality uses $\det(\mathbf A^{\mathsf T})=\det(\mathbf A)$ for every square matrix $\mathbf A$. Let $d\mathrel{:=}\det(\mathbf Q-\mathbf I_3)\in\mathbb R$. The calculation shows that $d=-d$. Adding $d$ to both sides gives $2d=0$, and hence
 
 $$
 \det(\mathbf Q-\mathbf I_3)=0.
 $$
 
-Therefore $\mathbf Q-\mathbf I_3$ is singular and has a nonzero null-space column. Choose such a column and normalise it to obtain $\mathbf a\in\mathbb R^3$ with
+Set $\mathbf M\mathrel{:=}\mathbf Q-\mathbf I_3\in\mathbb R^{3\times3}$. A square matrix has zero determinant exactly when it is not invertible; such a matrix is called **singular**. Therefore $\mathbf M$ is singular and $\operatorname{rank}(\mathbf M)<3$.
+
+The **null space**, or **kernel**, of $\mathbf M$ is the set of input columns mapped to the zero column:
+
+$$
+\ker(\mathbf M)
+\mathrel{:=}
+\left\{
+\mathbf x\in\mathbb R^3
+\;\middle|\;
+\mathbf M\mathbf x=\mathbf 0_3
+\right\}.
+$$
+
+The rank--nullity theorem gives
+
+$$
+\dim\!\left(\ker(\mathbf M)\right)
+=
+3-\operatorname{rank}(\mathbf M)
+>0.
+$$
+
+Thus the null space contains more than only $\mathbf 0_3$: there is at least one column $\mathbf a_0\in\mathbb R^3$ satisfying
+
+$$
+\mathbf a_0\ne\mathbf 0_3,
+\qquad
+(\mathbf Q-\mathbf I_3)\mathbf a_0
+=
+\mathbf 0_3.
+$$
+
+Normalise this nonzero column by defining $\mathbf a\mathrel{:=}\mathbf a_0/\|\mathbf a_0\|_2$. Linearity preserves the null-space equation, so
 
 $$
 \|\mathbf a\|_2=1,
@@ -2445,7 +2478,22 @@ $$
 
 so $\mathbf Q\mathbf x\in\mathcal V$.
 
-Choose any unit column $\mathbf u\in\mathcal V$ and define $\mathbf v\mathrel{:=}\mathbf a\times\mathbf u$. The columns $\mathbf u$, $\mathbf v$, and $\mathbf a$ form a right-handed orthonormal basis. Because $\mathbf Q$ preserves lengths and the plane $\mathcal V$, there are real scalars $c$ and $s$ satisfying $c^2+s^2=1$ such that
+The plane $\mathcal V$ is two-dimensional: its columns satisfy the one independent linear constraint $\mathbf a^{\mathsf T}\mathbf x=0$ in $\mathbb R^3$. Choose any unit column $\mathbf u\in\mathcal V$ and define $\mathbf v\mathrel{:=}\mathbf a\times\mathbf u$. Because $\mathbf a$ and $\mathbf u$ are perpendicular unit columns, $\mathbf v$ is a unit column perpendicular to both of them. Thus $\mathbf u,\mathbf v\in\mathcal V$, $\mathbf u^{\mathsf T}\mathbf v=0$, and $\|\mathbf u\|_2=\|\mathbf v\|_2=1$. The two nonzero orthogonal columns are linearly independent; because $\dim(\mathcal V)=2$, they form an orthonormal basis of $\mathcal V$. Moreover, the vector triple-product identity gives
+
+$$
+\mathbf u\times\mathbf v
+=
+\mathbf u\times(\mathbf a\times\mathbf u)
+=
+\mathbf a(\mathbf u^{\mathsf T}\mathbf u)
+-\mathbf u(\mathbf u^{\mathsf T}\mathbf a)
+=
+\mathbf a,
+$$
+
+so $(\mathbf u,\mathbf v,\mathbf a)$ is a right-handed orthonormal basis of $\mathbb R^3$.
+
+Because $\mathbf Q$ preserves $\mathcal V$, the column $\mathbf Q\mathbf u$ belongs to $\mathcal V$ and therefore has a unique expansion in the basis $(\mathbf u,\mathbf v)$. Hence there are real scalars $c$ and $s$ such that
 
 $$
 \mathbf Q\mathbf u
@@ -2453,7 +2501,200 @@ $$
 c\mathbf u+s\mathbf v.
 $$
 
-The restriction of $\mathbf Q$ to $\mathcal V$ is a two-dimensional orthogonal map. Its determinant is $1$ because the full three-dimensional determinant is $1$ and the fixed-axis eigenvalue is $1$. Therefore it preserves the orientation of the ordered basis $(\mathbf u,\mathbf v)$, which requires
+The matrix $\mathbf Q$ preserves lengths, so $\|\mathbf Q\mathbf u\|_2=\|\mathbf u\|_2=1$. Orthogonality of $\mathbf u$ and $\mathbf v$ then gives
+
+$$
+1
+=
+\|c\mathbf u+s\mathbf v\|_2^2
+=
+c^2+s^2.
+$$
+
+The **restriction of $\mathbf Q$ to $\mathcal V$** is the map $\mathbf Q|_{\mathcal V}:\mathcal V\to\mathcal V$ obtained by allowing only inputs from $\mathcal V$. It is a two-dimensional orthogonal map because, for every $\mathbf x,\mathbf y\in\mathcal V$,
+
+$$
+(\mathbf Q\mathbf x)^{\mathsf T}(\mathbf Q\mathbf y)
+=
+\mathbf x^{\mathsf T}\mathbf Q^{\mathsf T}\mathbf Q\mathbf y
+=
+\mathbf x^{\mathsf T}\mathbf y.
+$$
+
+The fixed-axis equation $\mathbf Q\mathbf a=\mathbf a$ also says that $1$ is an eigenvalue of $\mathbf Q$. By definition, a scalar $\lambda$ is an eigenvalue of a matrix when there is a nonzero column $\mathbf z$ satisfying $\mathbf Q\mathbf z=\lambda\mathbf z$. Here $\mathbf a\ne\mathbf 0_3$ and $\mathbf Q\mathbf a=1\mathbf a$, so the eigenvalue is $1$.
+
+Let $\mathcal B\mathrel{:=}(\mathbf u,\mathbf v,\mathbf a)$ denote the ordered basis of $\mathbb R^3$. If a column $\mathbf y\in\mathbb R^3$ is written as $\mathbf y=y_u\mathbf u+y_v\mathbf v+y_a\mathbf a$, define its coordinate column in this basis by
+
+$$
+[\mathbf y]_{\mathcal B}
+\mathrel{:=}
+\begin{bmatrix}
+y_u\\y_v\\y_a
+\end{bmatrix}.
+$$
+
+The **matrix representation of $\mathbf Q$ in the basis $\mathcal B$** is the unique matrix $[\mathbf Q]_{\mathcal B}\in\mathbb R^{3\times3}$ satisfying
+
+$$
+\boxed{
+[\mathbf Q\mathbf y]_{\mathcal B}
+=
+[\mathbf Q]_{\mathcal B}
+[\mathbf y]_{\mathcal B}
+\qquad
+\text{for every }\mathbf y\in\mathbb R^3
+}.
+$$
+
+The basis vectors themselves have coordinate columns
+
+$$
+[\mathbf u]_{\mathcal B}
+=
+\begin{bmatrix}1\\0\\0\end{bmatrix}
+=
+\mathbf e_1,
+\qquad
+[\mathbf v]_{\mathcal B}
+=
+\begin{bmatrix}0\\1\\0\end{bmatrix}
+=
+\mathbf e_2,
+\qquad
+[\mathbf a]_{\mathcal B}
+=
+\begin{bmatrix}0\\0\\1\end{bmatrix}
+=
+\mathbf e_3,
+$$
+
+where $\mathbf e_1,\mathbf e_2,\mathbf e_3\in\mathbb R^3$ are the standard coordinate columns. Applying the defining equation to $\mathbf u$ gives
+
+$$
+[\mathbf Q\mathbf u]_{\mathcal B}
+=
+[\mathbf Q]_{\mathcal B}\mathbf e_1.
+$$
+
+Multiplication by $\mathbf e_1$ selects the first matrix column, so the first column of $[\mathbf Q]_{\mathcal B}$ is $[\mathbf Q\mathbf u]_{\mathcal B}$. Similarly, multiplication by $\mathbf e_2$ and $\mathbf e_3$ shows that the second and third columns are $[\mathbf Q\mathbf v]_{\mathcal B}$ and $[\mathbf Q\mathbf a]_{\mathcal B}$, respectively. Thus
+
+$$
+\boxed{
+[\mathbf Q]_{\mathcal B}
+=
+\begin{bmatrix}
+\vert&\vert&\vert\\
+[\mathbf Q\mathbf u]_{\mathcal B}&
+[\mathbf Q\mathbf v]_{\mathcal B}&
+[\mathbf Q\mathbf a]_{\mathcal B}\\
+\vert&\vert&\vert
+\end{bmatrix}
+}.
+$$
+
+Let $\mathbf Q_{\mathcal V}\in\mathbb R^{2\times2}$ represent the restricted map $\mathbf Q|_{\mathcal V}$ in the ordered basis $(\mathbf u,\mathbf v)$. Write
+
+$$
+\mathbf Q\mathbf u
+=
+c\mathbf u+s\mathbf v,
+\qquad
+\mathbf Q\mathbf v
+=
+r\mathbf u+t\mathbf v,
+$$
+
+where $r,t\in\mathbb R$ are not yet known. The first column of $\mathbf Q_{\mathcal V}$ is $[c\;s]^{\mathsf T}$ because it contains the $(\mathbf u,\mathbf v)$-coordinates of $\mathbf Q\mathbf u$. Similarly, the second column is $[r\;t]^{\mathsf T}$ because it contains the coordinates of $\mathbf Q\mathbf v$. Hence
+
+$$
+\mathbf Q_{\mathcal V}
+=
+\begin{bmatrix}
+c&r\\
+s&t
+\end{bmatrix}.
+$$
+
+Because $\mathbf Q\mathbf u$ and $\mathbf Q\mathbf v$ remain in $\mathcal V$, their coordinate columns in $\mathcal B$ have zero $\mathbf a$ components. To determine the third column, use $\mathbf Q\mathbf a=\mathbf a$. The coordinate column $[\mathbf a]_{\mathcal B}$ stores the coefficients multiplying the ordered basis vectors $\mathbf u$, $\mathbf v$, and $\mathbf a$. Since
+
+$$
+\mathbf a
+=
+0\mathbf u+0\mathbf v+1\mathbf a,
+$$
+
+it follows that
+
+$$
+[\mathbf Q\mathbf a]_{\mathcal B}
+=
+[\mathbf a]_{\mathcal B}
+=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}.
+$$
+
+This coordinate column is relative to $\mathcal B$; it does not claim that $\mathbf a$ has entries $[0\;0\;1]^{\mathsf T}$ in the original coordinate frame. Therefore the full coordinate matrix has the block form
+
+$$
+[\mathbf Q]_{\mathcal B}
+=
+\begin{bmatrix}
+\mathbf Q_{\mathcal V}&\mathbf 0_2\\
+\mathbf 0_2^{\mathsf T}&1
+\end{bmatrix}.
+$$
+
+The upper-left block describes the action within $\mathcal V$; the zero blocks state that $\mathbf Q$ does not mix the plane $\mathcal V$ with the axis direction $\mathbf a$; and the lower-right entry states that $\mathbf a$ is multiplied by the eigenvalue $1$.
+
+A change of basis does not change a matrix's determinant. Therefore
+
+$$
+1
+=
+\det(\mathbf Q)
+=
+\det\!\left(
+[\mathbf Q]_{\mathcal B}
+\right)
+=
+\det(\mathbf Q_{\mathcal V})\,1,
+$$
+
+so $\det(\mathbf Q_{\mathcal V})=1$. Thus the restricted map preserves the orientation of the ordered basis $(\mathbf u,\mathbf v)$.
+
+Because $\mathbf Q_{\mathcal V}$ is orthogonal, its second column $[r\;t]^{\mathsf T}$ must be a unit column perpendicular to its first column $[c\;s]^{\mathsf T}$. The two possibilities are
+
+$$
+\begin{bmatrix}-s\\c\end{bmatrix}
+\qquad\text{and}\qquad
+\begin{bmatrix}s\\-c\end{bmatrix}.
+$$
+
+The determinant selects the first possibility because
+
+$$
+\det
+\begin{bmatrix}
+c&-s\\
+s&c
+\end{bmatrix}
+=
+c^2+s^2
+=1,
+\qquad
+\det
+\begin{bmatrix}
+c&s\\
+s&-c
+\end{bmatrix}
+=
+-(c^2+s^2)
+=-1.
+$$
+
+Therefore $[r\;t]^{\mathsf T}=[-s\;c]^{\mathsf T}$. Translating these coordinates back into the basis vectors gives
 
 $$
 \mathbf Q\mathbf v
@@ -2477,7 +2718,32 @@ $$
 
 If $\beta\geq0$, set $\mathbf a'=\mathbf a$ and $\alpha=\beta$. If $\beta<0$, set $\mathbf a'=-\mathbf a$ and $\alpha=-\beta$. Reversing the axis reverses the positive right-hand-rule direction, so in both cases $\|\mathbf a'\|_2=1$ and $\alpha\in[0,\pi]$ describe the same rotation $\mathbf Q$.
 
-Rodrigues' geometric formula derived immediately above shows that $\exp([\mathbf a']_\times\alpha)$ fixes the axis line spanned by $\mathbf a$ and has the same action as $\mathbf Q$ on the perpendicular plane $\mathcal V$. The two matrices therefore act identically on every column in $\mathbb R^3$. Consequently,
+The connection to Rodrigues' geometric formula is direct. Define $\mathbf E\mathrel{:=}\exp([\mathbf a']_\times\alpha)$. Because $\mathbf u$ and $\mathbf v$ are perpendicular to the axis, Rodrigues' formula contains only their perpendicular-plane terms. Using $\mathbf v=\mathbf a\times\mathbf u$, $\mathbf a\times\mathbf v=-\mathbf u$, and the axis-and-angle choice made above gives
+
+$$
+\begin{aligned}
+\mathbf E\mathbf u
+&=
+\cos\alpha\,\mathbf u
++\sin\alpha(\mathbf a'\times\mathbf u)\\
+&=
+\cos\beta\,\mathbf u
++\sin\beta\,\mathbf v\\
+&=
+\mathbf Q\mathbf u,\\[4pt]
+\mathbf E\mathbf v
+&=
+\cos\alpha\,\mathbf v
++\sin\alpha(\mathbf a'\times\mathbf v)\\
+&=
+-\sin\beta\,\mathbf u
++\cos\beta\,\mathbf v\\
+&=
+\mathbf Q\mathbf v.
+\end{aligned}
+$$
+
+Rodrigues' formula also fixes every vector parallel to $\mathbf a'$. Since $\mathbf a'=\pm\mathbf a$, it follows that $\mathbf E\mathbf a=\mathbf a=\mathbf Q\mathbf a$. Thus $\mathbf E$ and $\mathbf Q$ agree on the basis $(\mathbf u,\mathbf v,\mathbf a)$ and therefore on every column in $\mathbb R^3$. Consequently,
 
 $$
 \boxed{

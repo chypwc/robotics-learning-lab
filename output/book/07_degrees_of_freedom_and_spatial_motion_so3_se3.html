@@ -2667,11 +2667,37 @@ Figure&nbsp;7.2: Geometric interpretation of Rodrigues’ formula for the exampl
 -\det(\mathbf Q-\mathbf I_3).
 \end{aligned}
 \]</span></p>
-<p>The last equality uses <span class="math inline">\(\det(\mathbf A^{\mathsf T})=\det(\mathbf A)\)</span> for every square matrix <span class="math inline">\(\mathbf A\)</span>. A real number equal to its own negative must be zero, so</p>
+<p>The last equality uses <span class="math inline">\(\det(\mathbf A^{\mathsf T})=\det(\mathbf A)\)</span> for every square matrix <span class="math inline">\(\mathbf A\)</span>. Let <span class="math inline">\(d\mathrel{:=}\det(\mathbf Q-\mathbf I_3)\in\mathbb R\)</span>. The calculation shows that <span class="math inline">\(d=-d\)</span>. Adding <span class="math inline">\(d\)</span> to both sides gives <span class="math inline">\(2d=0\)</span>, and hence</p>
 <p><span class="math display">\[
 \det(\mathbf Q-\mathbf I_3)=0.
 \]</span></p>
-<p>Therefore <span class="math inline">\(\mathbf Q-\mathbf I_3\)</span> is singular and has a nonzero null-space column. Choose such a column and normalise it to obtain <span class="math inline">\(\mathbf a\in\mathbb R^3\)</span> with</p>
+<p>Set <span class="math inline">\(\mathbf M\mathrel{:=}\mathbf Q-\mathbf I_3\in\mathbb R^{3\times3}\)</span>. A square matrix has zero determinant exactly when it is not invertible; such a matrix is called <strong>singular</strong>. Therefore <span class="math inline">\(\mathbf M\)</span> is singular and <span class="math inline">\(\operatorname{rank}(\mathbf M)&lt;3\)</span>.</p>
+<p>The <strong>null space</strong>, or <strong>kernel</strong>, of <span class="math inline">\(\mathbf M\)</span> is the set of input columns mapped to the zero column:</p>
+<p><span class="math display">\[
+\ker(\mathbf M)
+\mathrel{:=}
+\left\{
+\mathbf x\in\mathbb R^3
+\;\middle|\;
+\mathbf M\mathbf x=\mathbf 0_3
+\right\}.
+\]</span></p>
+<p>The rank–nullity theorem gives</p>
+<p><span class="math display">\[
+\dim\!\left(\ker(\mathbf M)\right)
+=
+3-\operatorname{rank}(\mathbf M)
+&gt;0.
+\]</span></p>
+<p>Thus the null space contains more than only <span class="math inline">\(\mathbf 0_3\)</span>: there is at least one column <span class="math inline">\(\mathbf a_0\in\mathbb R^3\)</span> satisfying</p>
+<p><span class="math display">\[
+\mathbf a_0\ne\mathbf 0_3,
+\qquad
+(\mathbf Q-\mathbf I_3)\mathbf a_0
+=
+\mathbf 0_3.
+\]</span></p>
+<p>Normalise this nonzero column by defining <span class="math inline">\(\mathbf a\mathrel{:=}\mathbf a_0/\|\mathbf a_0\|_2\)</span>. Linearity preserves the null-space equation, so</p>
 <p><span class="math display">\[
 \|\mathbf a\|_2=1,
 \qquad
@@ -2705,13 +2731,185 @@ Figure&nbsp;7.2: Geometric interpretation of Rodrigues’ formula for the exampl
 0,
 \]</span></p>
 <p>so <span class="math inline">\(\mathbf Q\mathbf x\in\mathcal V\)</span>.</p>
-<p>Choose any unit column <span class="math inline">\(\mathbf u\in\mathcal V\)</span> and define <span class="math inline">\(\mathbf v\mathrel{:=}\mathbf a\times\mathbf u\)</span>. The columns <span class="math inline">\(\mathbf u\)</span>, <span class="math inline">\(\mathbf v\)</span>, and <span class="math inline">\(\mathbf a\)</span> form a right-handed orthonormal basis. Because <span class="math inline">\(\mathbf Q\)</span> preserves lengths and the plane <span class="math inline">\(\mathcal V\)</span>, there are real scalars <span class="math inline">\(c\)</span> and <span class="math inline">\(s\)</span> satisfying <span class="math inline">\(c^2+s^2=1\)</span> such that</p>
+<p>The plane <span class="math inline">\(\mathcal V\)</span> is two-dimensional: its columns satisfy the one independent linear constraint <span class="math inline">\(\mathbf a^{\mathsf T}\mathbf x=0\)</span> in <span class="math inline">\(\mathbb R^3\)</span>. Choose any unit column <span class="math inline">\(\mathbf u\in\mathcal V\)</span> and define <span class="math inline">\(\mathbf v\mathrel{:=}\mathbf a\times\mathbf u\)</span>. Because <span class="math inline">\(\mathbf a\)</span> and <span class="math inline">\(\mathbf u\)</span> are perpendicular unit columns, <span class="math inline">\(\mathbf v\)</span> is a unit column perpendicular to both of them. Thus <span class="math inline">\(\mathbf u,\mathbf v\in\mathcal V\)</span>, <span class="math inline">\(\mathbf u^{\mathsf T}\mathbf v=0\)</span>, and <span class="math inline">\(\|\mathbf u\|_2=\|\mathbf v\|_2=1\)</span>. The two nonzero orthogonal columns are linearly independent; because <span class="math inline">\(\dim(\mathcal V)=2\)</span>, they form an orthonormal basis of <span class="math inline">\(\mathcal V\)</span>. Moreover, the vector triple-product identity gives</p>
+<p><span class="math display">\[
+\mathbf u\times\mathbf v
+=
+\mathbf u\times(\mathbf a\times\mathbf u)
+=
+\mathbf a(\mathbf u^{\mathsf T}\mathbf u)
+-\mathbf u(\mathbf u^{\mathsf T}\mathbf a)
+=
+\mathbf a,
+\]</span></p>
+<p>so <span class="math inline">\((\mathbf u,\mathbf v,\mathbf a)\)</span> is a right-handed orthonormal basis of <span class="math inline">\(\mathbb R^3\)</span>.</p>
+<p>Because <span class="math inline">\(\mathbf Q\)</span> preserves <span class="math inline">\(\mathcal V\)</span>, the column <span class="math inline">\(\mathbf Q\mathbf u\)</span> belongs to <span class="math inline">\(\mathcal V\)</span> and therefore has a unique expansion in the basis <span class="math inline">\((\mathbf u,\mathbf v)\)</span>. Hence there are real scalars <span class="math inline">\(c\)</span> and <span class="math inline">\(s\)</span> such that</p>
 <p><span class="math display">\[
 \mathbf Q\mathbf u
 =
 c\mathbf u+s\mathbf v.
 \]</span></p>
-<p>The restriction of <span class="math inline">\(\mathbf Q\)</span> to <span class="math inline">\(\mathcal V\)</span> is a two-dimensional orthogonal map. Its determinant is <span class="math inline">\(1\)</span> because the full three-dimensional determinant is <span class="math inline">\(1\)</span> and the fixed-axis eigenvalue is <span class="math inline">\(1\)</span>. Therefore it preserves the orientation of the ordered basis <span class="math inline">\((\mathbf u,\mathbf v)\)</span>, which requires</p>
+<p>The matrix <span class="math inline">\(\mathbf Q\)</span> preserves lengths, so <span class="math inline">\(\|\mathbf Q\mathbf u\|_2=\|\mathbf u\|_2=1\)</span>. Orthogonality of <span class="math inline">\(\mathbf u\)</span> and <span class="math inline">\(\mathbf v\)</span> then gives</p>
+<p><span class="math display">\[
+1
+=
+\|c\mathbf u+s\mathbf v\|_2^2
+=
+c^2+s^2.
+\]</span></p>
+<p>The <strong>restriction of <span class="math inline">\(\mathbf Q\)</span> to <span class="math inline">\(\mathcal V\)</span></strong> is the map <span class="math inline">\(\mathbf Q|_{\mathcal V}:\mathcal V\to\mathcal V\)</span> obtained by allowing only inputs from <span class="math inline">\(\mathcal V\)</span>. It is a two-dimensional orthogonal map because, for every <span class="math inline">\(\mathbf x,\mathbf y\in\mathcal V\)</span>,</p>
+<p><span class="math display">\[
+(\mathbf Q\mathbf x)^{\mathsf T}(\mathbf Q\mathbf y)
+=
+\mathbf x^{\mathsf T}\mathbf Q^{\mathsf T}\mathbf Q\mathbf y
+=
+\mathbf x^{\mathsf T}\mathbf y.
+\]</span></p>
+<p>The fixed-axis equation <span class="math inline">\(\mathbf Q\mathbf a=\mathbf a\)</span> also says that <span class="math inline">\(1\)</span> is an eigenvalue of <span class="math inline">\(\mathbf Q\)</span>. By definition, a scalar <span class="math inline">\(\lambda\)</span> is an eigenvalue of a matrix when there is a nonzero column <span class="math inline">\(\mathbf z\)</span> satisfying <span class="math inline">\(\mathbf Q\mathbf z=\lambda\mathbf z\)</span>. Here <span class="math inline">\(\mathbf a\ne\mathbf 0_3\)</span> and <span class="math inline">\(\mathbf Q\mathbf a=1\mathbf a\)</span>, so the eigenvalue is <span class="math inline">\(1\)</span>.</p>
+<p>Let <span class="math inline">\(\mathcal B\mathrel{:=}(\mathbf u,\mathbf v,\mathbf a)\)</span> denote the ordered basis of <span class="math inline">\(\mathbb R^3\)</span>. If a column <span class="math inline">\(\mathbf y\in\mathbb R^3\)</span> is written as <span class="math inline">\(\mathbf y=y_u\mathbf u+y_v\mathbf v+y_a\mathbf a\)</span>, define its coordinate column in this basis by</p>
+<p><span class="math display">\[
+[\mathbf y]_{\mathcal B}
+\mathrel{:=}
+\begin{bmatrix}
+y_u\\y_v\\y_a
+\end{bmatrix}.
+\]</span></p>
+<p>The <strong>matrix representation of <span class="math inline">\(\mathbf Q\)</span> in the basis <span class="math inline">\(\mathcal B\)</span></strong> is the unique matrix <span class="math inline">\([\mathbf Q]_{\mathcal B}\in\mathbb R^{3\times3}\)</span> satisfying</p>
+<p><span class="math display">\[
+\boxed{
+[\mathbf Q\mathbf y]_{\mathcal B}
+=
+[\mathbf Q]_{\mathcal B}
+[\mathbf y]_{\mathcal B}
+\qquad
+\text{for every }\mathbf y\in\mathbb R^3
+}.
+\]</span></p>
+<p>The basis vectors themselves have coordinate columns</p>
+<p><span class="math display">\[
+[\mathbf u]_{\mathcal B}
+=
+\begin{bmatrix}1\\0\\0\end{bmatrix}
+=
+\mathbf e_1,
+\qquad
+[\mathbf v]_{\mathcal B}
+=
+\begin{bmatrix}0\\1\\0\end{bmatrix}
+=
+\mathbf e_2,
+\qquad
+[\mathbf a]_{\mathcal B}
+=
+\begin{bmatrix}0\\0\\1\end{bmatrix}
+=
+\mathbf e_3,
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf e_1,\mathbf e_2,\mathbf e_3\in\mathbb R^3\)</span> are the standard coordinate columns. Applying the defining equation to <span class="math inline">\(\mathbf u\)</span> gives</p>
+<p><span class="math display">\[
+[\mathbf Q\mathbf u]_{\mathcal B}
+=
+[\mathbf Q]_{\mathcal B}\mathbf e_1.
+\]</span></p>
+<p>Multiplication by <span class="math inline">\(\mathbf e_1\)</span> selects the first matrix column, so the first column of <span class="math inline">\([\mathbf Q]_{\mathcal B}\)</span> is <span class="math inline">\([\mathbf Q\mathbf u]_{\mathcal B}\)</span>. Similarly, multiplication by <span class="math inline">\(\mathbf e_2\)</span> and <span class="math inline">\(\mathbf e_3\)</span> shows that the second and third columns are <span class="math inline">\([\mathbf Q\mathbf v]_{\mathcal B}\)</span> and <span class="math inline">\([\mathbf Q\mathbf a]_{\mathcal B}\)</span>, respectively. Thus</p>
+<p><span class="math display">\[
+\boxed{
+[\mathbf Q]_{\mathcal B}
+=
+\begin{bmatrix}
+\vert&amp;\vert&amp;\vert\\
+[\mathbf Q\mathbf u]_{\mathcal B}&amp;
+[\mathbf Q\mathbf v]_{\mathcal B}&amp;
+[\mathbf Q\mathbf a]_{\mathcal B}\\
+\vert&amp;\vert&amp;\vert
+\end{bmatrix}
+}.
+\]</span></p>
+<p>Let <span class="math inline">\(\mathbf Q_{\mathcal V}\in\mathbb R^{2\times2}\)</span> represent the restricted map <span class="math inline">\(\mathbf Q|_{\mathcal V}\)</span> in the ordered basis <span class="math inline">\((\mathbf u,\mathbf v)\)</span>. Write</p>
+<p><span class="math display">\[
+\mathbf Q\mathbf u
+=
+c\mathbf u+s\mathbf v,
+\qquad
+\mathbf Q\mathbf v
+=
+r\mathbf u+t\mathbf v,
+\]</span></p>
+<p>where <span class="math inline">\(r,t\in\mathbb R\)</span> are not yet known. The first column of <span class="math inline">\(\mathbf Q_{\mathcal V}\)</span> is <span class="math inline">\([c\;s]^{\mathsf T}\)</span> because it contains the <span class="math inline">\((\mathbf u,\mathbf v)\)</span>-coordinates of <span class="math inline">\(\mathbf Q\mathbf u\)</span>. Similarly, the second column is <span class="math inline">\([r\;t]^{\mathsf T}\)</span> because it contains the coordinates of <span class="math inline">\(\mathbf Q\mathbf v\)</span>. Hence</p>
+<p><span class="math display">\[
+\mathbf Q_{\mathcal V}
+=
+\begin{bmatrix}
+c&amp;r\\
+s&amp;t
+\end{bmatrix}.
+\]</span></p>
+<p>Because <span class="math inline">\(\mathbf Q\mathbf u\)</span> and <span class="math inline">\(\mathbf Q\mathbf v\)</span> remain in <span class="math inline">\(\mathcal V\)</span>, their coordinate columns in <span class="math inline">\(\mathcal B\)</span> have zero <span class="math inline">\(\mathbf a\)</span> components. To determine the third column, use <span class="math inline">\(\mathbf Q\mathbf a=\mathbf a\)</span>. The coordinate column <span class="math inline">\([\mathbf a]_{\mathcal B}\)</span> stores the coefficients multiplying the ordered basis vectors <span class="math inline">\(\mathbf u\)</span>, <span class="math inline">\(\mathbf v\)</span>, and <span class="math inline">\(\mathbf a\)</span>. Since</p>
+<p><span class="math display">\[
+\mathbf a
+=
+0\mathbf u+0\mathbf v+1\mathbf a,
+\]</span></p>
+<p>it follows that</p>
+<p><span class="math display">\[
+[\mathbf Q\mathbf a]_{\mathcal B}
+=
+[\mathbf a]_{\mathcal B}
+=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}.
+\]</span></p>
+<p>This coordinate column is relative to <span class="math inline">\(\mathcal B\)</span>; it does not claim that <span class="math inline">\(\mathbf a\)</span> has entries <span class="math inline">\([0\;0\;1]^{\mathsf T}\)</span> in the original coordinate frame. Therefore the full coordinate matrix has the block form</p>
+<p><span class="math display">\[
+[\mathbf Q]_{\mathcal B}
+=
+\begin{bmatrix}
+\mathbf Q_{\mathcal V}&amp;\mathbf 0_2\\
+\mathbf 0_2^{\mathsf T}&amp;1
+\end{bmatrix}.
+\]</span></p>
+<p>The upper-left block describes the action within <span class="math inline">\(\mathcal V\)</span>; the zero blocks state that <span class="math inline">\(\mathbf Q\)</span> does not mix the plane <span class="math inline">\(\mathcal V\)</span> with the axis direction <span class="math inline">\(\mathbf a\)</span>; and the lower-right entry states that <span class="math inline">\(\mathbf a\)</span> is multiplied by the eigenvalue <span class="math inline">\(1\)</span>.</p>
+<p>A change of basis does not change a matrix’s determinant. Therefore</p>
+<p><span class="math display">\[
+1
+=
+\det(\mathbf Q)
+=
+\det\!\left(
+[\mathbf Q]_{\mathcal B}
+\right)
+=
+\det(\mathbf Q_{\mathcal V})\,1,
+\]</span></p>
+<p>so <span class="math inline">\(\det(\mathbf Q_{\mathcal V})=1\)</span>. Thus the restricted map preserves the orientation of the ordered basis <span class="math inline">\((\mathbf u,\mathbf v)\)</span>.</p>
+<p>Because <span class="math inline">\(\mathbf Q_{\mathcal V}\)</span> is orthogonal, its second column <span class="math inline">\([r\;t]^{\mathsf T}\)</span> must be a unit column perpendicular to its first column <span class="math inline">\([c\;s]^{\mathsf T}\)</span>. The two possibilities are</p>
+<p><span class="math display">\[
+\begin{bmatrix}-s\\c\end{bmatrix}
+\qquad\text{and}\qquad
+\begin{bmatrix}s\\-c\end{bmatrix}.
+\]</span></p>
+<p>The determinant selects the first possibility because</p>
+<p><span class="math display">\[
+\det
+\begin{bmatrix}
+c&amp;-s\\
+s&amp;c
+\end{bmatrix}
+=
+c^2+s^2
+=1,
+\qquad
+\det
+\begin{bmatrix}
+c&amp;s\\
+s&amp;-c
+\end{bmatrix}
+=
+-(c^2+s^2)
+=-1.
+\]</span></p>
+<p>Therefore <span class="math inline">\([r\;t]^{\mathsf T}=[-s\;c]^{\mathsf T}\)</span>. Translating these coordinates back into the basis vectors gives</p>
 <p><span class="math display">\[
 \mathbf Q\mathbf v
 =
@@ -2730,7 +2928,30 @@ c\mathbf u+s\mathbf v.
 +\cos\beta\,\mathbf v.
 \]</span></p>
 <p>If <span class="math inline">\(\beta\geq0\)</span>, set <span class="math inline">\(\mathbf a'=\mathbf a\)</span> and <span class="math inline">\(\alpha=\beta\)</span>. If <span class="math inline">\(\beta&lt;0\)</span>, set <span class="math inline">\(\mathbf a'=-\mathbf a\)</span> and <span class="math inline">\(\alpha=-\beta\)</span>. Reversing the axis reverses the positive right-hand-rule direction, so in both cases <span class="math inline">\(\|\mathbf a'\|_2=1\)</span> and <span class="math inline">\(\alpha\in[0,\pi]\)</span> describe the same rotation <span class="math inline">\(\mathbf Q\)</span>.</p>
-<p>Rodrigues’ geometric formula derived immediately above shows that <span class="math inline">\(\exp([\mathbf a']_\times\alpha)\)</span> fixes the axis line spanned by <span class="math inline">\(\mathbf a\)</span> and has the same action as <span class="math inline">\(\mathbf Q\)</span> on the perpendicular plane <span class="math inline">\(\mathcal V\)</span>. The two matrices therefore act identically on every column in <span class="math inline">\(\mathbb R^3\)</span>. Consequently,</p>
+<p>The connection to Rodrigues’ geometric formula is direct. Define <span class="math inline">\(\mathbf E\mathrel{:=}\exp([\mathbf a']_\times\alpha)\)</span>. Because <span class="math inline">\(\mathbf u\)</span> and <span class="math inline">\(\mathbf v\)</span> are perpendicular to the axis, Rodrigues’ formula contains only their perpendicular-plane terms. Using <span class="math inline">\(\mathbf v=\mathbf a\times\mathbf u\)</span>, <span class="math inline">\(\mathbf a\times\mathbf v=-\mathbf u\)</span>, and the axis-and-angle choice made above gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf E\mathbf u
+&amp;=
+\cos\alpha\,\mathbf u
++\sin\alpha(\mathbf a'\times\mathbf u)\\
+&amp;=
+\cos\beta\,\mathbf u
++\sin\beta\,\mathbf v\\
+&amp;=
+\mathbf Q\mathbf u,\\[4pt]
+\mathbf E\mathbf v
+&amp;=
+\cos\alpha\,\mathbf v
++\sin\alpha(\mathbf a'\times\mathbf v)\\
+&amp;=
+-\sin\beta\,\mathbf u
++\cos\beta\,\mathbf v\\
+&amp;=
+\mathbf Q\mathbf v.
+\end{aligned}
+\]</span></p>
+<p>Rodrigues’ formula also fixes every vector parallel to <span class="math inline">\(\mathbf a'\)</span>. Since <span class="math inline">\(\mathbf a'=\pm\mathbf a\)</span>, it follows that <span class="math inline">\(\mathbf E\mathbf a=\mathbf a=\mathbf Q\mathbf a\)</span>. Thus <span class="math inline">\(\mathbf E\)</span> and <span class="math inline">\(\mathbf Q\)</span> agree on the basis <span class="math inline">\((\mathbf u,\mathbf v,\mathbf a)\)</span> and therefore on every column in <span class="math inline">\(\mathbb R^3\)</span>. Consequently,</p>
 <p><span class="math display">\[
 \boxed{
 \mathbf Q
