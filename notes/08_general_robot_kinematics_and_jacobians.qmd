@@ -2341,7 +2341,7 @@ $$
 
 The upper block ${}^{a}\boldsymbol\rho\in\mathbb R^3$ is the finite linear exponential-coordinate block, measured in metres. The lower block ${}^{a}\boldsymbol\phi\in\mathbb R^3$ is the finite rotation-vector block, measured in radians. Both blocks are expressed in frame $\{a\}$. The logarithm does not prove that the body followed the recovered screw path in the past; it identifies one constant screw displacement with the same initial and final poses.
 
-## Constant-twist pose integration - {#sec-se3-constant-twist-integration}
+## Constant-twist pose integration  {#sec-se3-constant-twist-integration}
 
 The preceding section constructed a finite relative displacement
 
@@ -3814,35 +3814,47 @@ Computing ${}^{a}\boldsymbol\rho$ first is numerically and conceptually importan
 
 ### Recovering the principal logarithm, including rotations near $\pi$
 
-The input rotation matrix $\mathbf R\in SO(3)$ already describes the orientation change. The logarithm solves a different problem: it must return one rotation-vector column
+Suppose a validated rotation matrix $\mathbf R\in SO(3)$ is already known. If the task is only to rotate a point, compose orientations, or store the orientation change, no logarithm is needed: use $\mathbf R$ directly. The inverse calculation is needed only when the finite rotation must be expressed as a rotation-vector column. Examples include forming the rotational block of $\log(\mathbf T)$, expressing a relative orientation error as three components, constructing intermediate rotations along a selected exponential path, or recovering the screw motion represented by a transformation.
+
+The forward calculation developed above starts from a finite rotation-vector column and constructs a rotation matrix:
 
 $$
+\boxed{
+\begin{aligned}
+{}^{a}\boldsymbol\phi
+&=
+\theta{}^{a}\mathbf s_\omega,\\
+{}^{a}\boldsymbol\phi
+&\xmapsto{[\,\cdot\,]_\times}
+\boldsymbol\Phi
+=
+[{}^{a}\boldsymbol\phi]_\times,\\
+\boldsymbol\Phi
+&\xmapsto{\exp}
+\mathbf R
+=
+\exp(\boldsymbol\Phi).
+\end{aligned}
+}
+$$
+
+The rotation logarithm solves the inverse problem
+
+$$
+\boxed{
+\mathbf R
+\quad\longmapsto\quad
 {}^{a}\boldsymbol\phi
 =
-\theta{}^{a}\mathbf s_\omega,
+\theta{}^{a}\mathbf s_\omega
+},
 \qquad
 \theta\in[0,\pi],
 $$
 
-where $\theta$ is the selected principal angle and ${}^{a}\mathbf s_\omega$ is a unit axis direction expressed in frame $\{a\}$. The difficulty is that the usual axis formula contains $\sin\theta$, which vanishes at both $\theta=0$ and $\theta=\pi$.
+where $\theta$ is the selected principal angle and ${}^{a}\mathbf s_\omega$ is a unit axis direction expressed in frame $\{a\}$. Recovering ${}^{a}\boldsymbol\phi$ therefore requires both the angle $\theta$ and the axis direction ${}^{a}\mathbf s_\omega$.
 
-For example, a rotation of $\pi$ about positive $z_a$ is
-
-$$
-\mathbf R_z(\pi)
-=
-\begin{bmatrix}
--1&0&0\\
-0&-1&0\\
-0&0&1
-\end{bmatrix}.
-$$
-
-This matrix is symmetric, so $\mathbf R_z(\pi)-\mathbf R_z(\pi)^{\mathsf T}=\mathbf 0_{3\times3}$. The identity rotation has the same zero skew difference. A zero skew difference therefore does not by itself distinguish zero rotation from a rotation of $\pi$. The angle and axis must be recovered from complementary parts of $\mathbf R$.
-
-#### Recovering the principal angle {.unnumbered}
-
-Rodrigues' formula for a rotation through $\theta$ about ${}^{a}\mathbf s_\omega$ is
+Start from Rodrigues' formula for a rotation through $\theta$ about ${}^{a}\mathbf s_\omega$:
 
 $$
 \mathbf R
@@ -3856,7 +3868,23 @@ $$
 \sin\theta[{}^{a}\mathbf s_\omega]_\times.
 $$
 
-The trace of $[{}^{a}\mathbf s_\omega]_\times$ is zero, and the trace of ${}^{a}\mathbf s_\omega({}^{a}\mathbf s_\omega)^{\mathsf T}$ is $({}^{a}\mathbf s_\omega)^{\mathsf T}{}^{a}\mathbf s_\omega=1$. Taking the trace of Rodrigues' formula gives
+This form separates two symmetric matrices, $\mathbf I_3$ and ${}^{a}\mathbf s_\omega({}^{a}\mathbf s_\omega)^{\mathsf T}$, from the skew-symmetric matrix $[{}^{a}\mathbf s_\omega]_\times$. These properties let the trace and transpose expose different information about the unknown angle and axis.
+
+The trace of $[{}^{a}\mathbf s_\omega]_\times$ is zero. The trace of the outer product is
+
+$$
+\operatorname{tr}\!\left(
+{}^{a}\mathbf s_\omega
+({}^{a}\mathbf s_\omega)^{\mathsf T}
+\right)
+=
+({}^{a}\mathbf s_\omega)^{\mathsf T}
+{}^{a}\mathbf s_\omega
+=
+1,
+$$
+
+because ${}^{a}\mathbf s_\omega$ is a unit column. Taking the trace of Rodrigues' formula therefore gives
 
 $$
 \operatorname{tr}(\mathbf R)
@@ -3866,7 +3894,60 @@ $$
 1+2\cos\theta.
 $$
 
-Solving this equation motivates the scalar $c_\theta$. Subtracting the transpose of Rodrigues' formula from the original formula cancels its symmetric terms and leaves the skew-symmetric part, which motivates the column ${}^{a}\mathbf u$. Define
+Solving for the cosine gives
+
+$$
+\boxed{
+\frac{\operatorname{tr}(\mathbf R)-1}{2}
+=
+\cos\theta
+}.
+$$
+
+Now transpose Rodrigues' formula. Transposition leaves the two symmetric terms unchanged and changes the sign of the cross-product matrix because $[{}^{a}\mathbf s_\omega]_\times^{\mathsf T}=-[{}^{a}\mathbf s_\omega]_\times$:
+
+$$
+\mathbf R^{\mathsf T}
+=
+\cos\theta\,\mathbf I_3
++
+(1-\cos\theta)
+{}^{a}\mathbf s_\omega
+({}^{a}\mathbf s_\omega)^{\mathsf T}
+-
+\sin\theta[{}^{a}\mathbf s_\omega]_\times.
+$$
+
+Subtracting this equation from Rodrigues' original equation cancels both symmetric terms and doubles the skew-symmetric term:
+
+$$
+\boxed{
+\mathbf R-\mathbf R^{\mathsf T}
+=
+2\sin\theta
+[{}^{a}\mathbf s_\omega]_\times
+}.
+$$
+
+This subtraction matters because the inverse problem needs both $\theta$ and ${}^{a}\mathbf s_\omega$. The trace supplies $\cos\theta$. The skew difference supplies $\sin\theta$ multiplied by the axis direction. Its magnitude will provide the nonnegative principal sine, and its direction will provide the axis whenever $\sin\theta$ is not zero.
+
+The limitation appears at the boundary angles. At $\theta=0$, the skew difference is zero, but this causes no physical ambiguity because the rotation vector is $\mathbf 0_3$ and no axis is needed. At $\theta=\pi$, the skew difference is also zero even though the rotation is not the identity. For example,
+
+$$
+\mathbf R_z(\pi)
+=
+\begin{bmatrix}
+-1&0&0\\
+0&-1&0\\
+0&0&1
+\end{bmatrix}
+$$
+
+is symmetric and therefore satisfies $\mathbf R_z(\pi)-\mathbf R_z(\pi)^{\mathsf T}=\mathbf 0_{3\times3}$. The identity rotation has the same zero skew difference, although the complete matrices are different. The trace distinguishes the two angles: it gives $\cos\theta=1$ for the identity and $\cos\theta=-1$ for the rotation through $\pi$. Near $\pi$, a different, symmetric part of $\mathbf R$ will be needed to recover the axis line.
+
+#### Recovering the principal angle {.unnumbered}
+
+The two boxed identities motivate two quantities calculated from $\mathbf R$. Define the dimensionless scalar $c_\theta\in\mathbb R$ and the dimensionless column ${}^{a}\mathbf u\in\mathbb R^3$ by
 
 $$
 c_\theta
@@ -3883,16 +3964,23 @@ R_{21}-R_{12}
 \in\mathbb R^3.
 $$ {#eq-so3-logarithm-cosine-skew-data}
 
-The trace equation gives $c_\theta=\cos\theta$ in exact arithmetic. The skew part satisfies
+For an exact rotation matrix, the trace derivation above gives $c_\theta=\cos\theta$.
+
+To see why these particular entries are selected, write the skew difference explicitly:
 
 $$
 \mathbf R-\mathbf R^{\mathsf T}
 =
-2\sin\theta
-[{}^{a}\mathbf s_\omega]_\times.
+\begin{bmatrix}
+0&R_{12}-R_{21}&R_{13}-R_{31}\\
+R_{21}-R_{12}&0&R_{23}-R_{32}\\
+R_{31}-R_{13}&R_{32}-R_{23}&0
+\end{bmatrix}
+=
+[{}^{a}\mathbf u]_\times.
 $$
 
-For any column $\mathbf z=[z_1\;z_2\;z_3]^{\mathsf T}$, the entries $(3,2)$, $(1,3)$, and $(2,1)$ of $[\mathbf z]_\times$ are $z_1$, $z_2$, and $z_3$. Collecting those entries from the skew equation therefore gives
+The selected entries are exactly the first, second, and third components stored by a cross-product matrix: $u_1=R_{32}-R_{23}$, $u_2=R_{13}-R_{31}$, and $u_3=R_{21}-R_{12}$. Comparing $[{}^{a}\mathbf u]_\times=\mathbf R-\mathbf R^{\mathsf T}=2\sin\theta[{}^{a}\mathbf s_\omega]_\times$ with the boxed skew identity gives
 
 $$
 {}^{a}\mathbf u
@@ -3900,7 +3988,9 @@ $$
 2\sin\theta\,{}^{a}\mathbf s_\omega.
 $$
 
-The unit-length condition $\|{}^{a}\mathbf s_\omega\|_2=1$ gives $\|{}^{a}\mathbf u\|_2=2|\sin\theta|$. The principal interval $\theta\in[0,\pi]$ makes $\sin\theta$ nonnegative, so define
+Thus ${}^{a}\mathbf u$ is not an additional physical quantity. It is a convenient coordinate column extracted from the skew part of $\mathbf R$. Its direction is the axis direction, scaled by $2\sin\theta$.
+
+The unit-length condition $\|{}^{a}\mathbf s_\omega\|_2=1$ gives $\|{}^{a}\mathbf u\|_2=2|\sin\theta|$. The selected principal interval $\theta\in[0,\pi]$ makes $\sin\theta$ nonnegative, so define the dimensionless scalar
 
 $$
 s_\theta
@@ -3910,7 +4000,7 @@ s_\theta
 \geq0.
 $$
 
-For an exact rotation matrix, $c_\theta=\cos\theta$ and $s_\theta=\sin\theta$. The pair $(c_\theta,s_\theta)$ therefore contains the cosine and the nonnegative sine of the principal angle. The function $\operatorname{atan2}(y,x)$ uses the signs of both inputs to select the correct quadrant, so
+For an exact rotation matrix, $s_\theta=\sin\theta$. The pair $(c_\theta,s_\theta)$ therefore contains the cosine and the nonnegative sine of the principal angle. The function $\operatorname{atan2}(y,x)$ uses the signs of both inputs to select the correct quadrant, so
 
 $$
 \boxed{
@@ -3921,7 +4011,7 @@ $$
 }.
 $$ {#eq-so3-principal-angle-atan2}
 
-This returns $0$ from $(s_\theta,c_\theta)=(0,1)$ and $\pi$ from $(0,-1)$. It is preferable to using $\arccos(c_\theta)$ alone near the identity because $s_\theta$ changes to first order with the angle: $s_\theta\sim\theta$, whereas $1-c_\theta\sim\theta^2/2$. The validation section below explains how a floating-point value of $c_\theta$ may be corrected for a tiny round-off overshoot without concealing an invalid rotation matrix.
+This returns $0$ from $(s_\theta,c_\theta)=(0,1)$ and $\pi$ from $(0,-1)$. Near the identity, $\operatorname{atan2}(s_\theta,c_\theta)$ is numerically preferable to $\arccos(c_\theta)$ alone because $s_\theta$ retains a change proportional to the small angle, while $c_\theta$ differs from $1$ by a much smaller quantity proportional to the angle squared.^[The Taylor series $\sin\theta=\theta-\theta^3/6+O(\theta^5)$ and $\cos\theta=1-\theta^2/2+O(\theta^4)$ give $s_\theta\approx\theta$ but $1-c_\theta\approx\theta^2/2$. For example, at $\theta=10^{-8}$, these changes are about $10^{-8}$ and $5\times10^{-17}$, respectively. Floating-point rounding may therefore make $c_\theta$ equal to $1$ and $\arccos(c_\theta)$ equal to zero, while $s_\theta$ still preserves the nonzero angle for $\operatorname{atan2}$. In exact arithmetic, both methods recover the same principal angle.] The validation section below explains how a floating-point value of $c_\theta$ may be corrected for a tiny round-off overshoot without concealing an invalid rotation matrix.
 
 #### Recovering the axis away from $\pi$ {.unnumbered}
 
@@ -3996,9 +4086,9 @@ $$
 \end{bmatrix}.
 $$
 
-Each diagonal entry is the square of one axis component. Once one nonzero component has been recovered from a diagonal entry, the matching off-diagonal entries recover the other two components. For example, if ${}^{a}s_{\omega,1}\ne0$, then ${}^{a}s_{\omega,2}=Q_{21}/{}^as_{\omega,1}$ and ${}^{a}s_{\omega,3}=Q_{31}/{}^as_{\omega,1}$.
+Each diagonal entry is the square of one axis component. To recover the axis, select an index $k$ for which ${}^{a}s_{\omega,k}\ne0$ and first recover the magnitude of that component from $Q_{kk}=({}^{a}s_{\omega,k})^2$. Then use each off-diagonal entry in column $k$. Because $Q_{jk}={}^as_{\omega,j}{}^as_{\omega,k}$, dividing $Q_{jk}$ by the recovered component ${}^{a}s_{\omega,k}$ gives ${}^{a}s_{\omega,j}=Q_{jk}/{}^as_{\omega,k}$ for every $j\ne k$.
 
-The calculation should divide by the largest available component, not an arbitrarily selected component that might be close to zero. Choose its index by
+The denominator ${}^{a}s_{\omega,k}$ should be the largest-magnitude axis component. Choosing a component close to zero would make $Q_{jk}/{}^as_{\omega,k}$ sensitive to round-off or undefined when that component is zero. Because $Q_{kk}=({}^{a}s_{\omega,k})^2$, the largest diagonal entry of $\mathbf Q$ identifies the largest-magnitude component. Choose its index by
 
 $$
 k
@@ -4109,7 +4199,35 @@ $$
 \end{aligned}
 $$
 
-For the zero logarithm, no unique normalised screw axis exists. Near a pure translation, the finite logarithm ${}^{a}\boldsymbol\eta$ remains well behaved while the finite-pitch normalisation ${}^{a}\boldsymbol\rho/\theta$ can become very large. Software should therefore expose the finite logarithm as the primary result and treat normalised screw factorisation as a separate operation with its own domain.
+For the zero logarithm, no unique normalised screw axis exists.[^zero-logarithm-screw-axis] Near a pure translation, the finite logarithm ${}^{a}\boldsymbol\eta$ remains well behaved while the finite-pitch normalisation ${}^{a}\boldsymbol\rho/\theta$ can become very large. Software should therefore expose the finite logarithm as the primary result and treat normalised screw factorisation as a separate operation with its own domain.
+
+[^zero-logarithm-screw-axis]: The zero logarithm has ${}^{a}\boldsymbol\eta=\mathbf 0_6$ and may be factored as ${}^{a}\boldsymbol\eta={}^a\mathbf S\sigma$ with $\sigma=0$. Therefore
+
+    $$
+    {}^{a}\mathbf S\,0
+    =
+    \mathbf 0_6
+    $$
+
+    for every admissible normalised screw axis ${}^{a}\mathbf S$. For example, let ${}^{a}\mathbf S_{R,z}$ and ${}^{a}\mathbf S_{R,x}$ denote normalised revolute screws about the $z_a$- and $x_a$-axes through $O_a$, and let ${}^{a}\mathbf S_{P,y}$ denote a normalised prismatic screw along positive $y_a$. Then
+
+    $$
+    \exp\!\left(
+    \widehat{{}^{a}\mathbf S_{R,z}}\,0
+    \right)
+    =
+    \exp\!\left(
+    \widehat{{}^{a}\mathbf S_{R,x}}\,0
+    \right)
+    =
+    \exp\!\left(
+    \widehat{{}^{a}\mathbf S_{P,y}}\,0
+    \right)
+    =
+    \mathbf I_4.
+    $$
+
+    The identity transformation therefore contains no information that selects one of these screw axes.
 
 #### Why the implementation needs different thresholds {.unnumbered}
 
