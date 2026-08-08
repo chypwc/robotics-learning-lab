@@ -407,8 +407,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08_general_robot_kinematics_and_jacobians.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></span></a>
+  <a href="./08_screw_motion_se3_exponential_and_spatial_integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Screw Motion, the <span class="math inline">\(SE(3)\)</span> Exponential, and Spatial Pose Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_general_robot_kinematics_and_jacobians.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></span></a>
   </div>
 </li>
       </ul>
@@ -510,7 +516,7 @@ window.Quarto = {
 <h2 class="unnumbered anchored" data-anchor-id="prerequisites-and-assumptions">Prerequisites and assumptions</h2>
 <section id="prerequisites" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="prerequisites">Prerequisites</h3>
-<p>The reader should understand the material in <a href="#sec-linear-algebra-foundations" class="quarto-xref"><span class="quarto-unresolved-ref">sec-linear-algebra-foundations</span></a>, especially:</p>
+<p>The reader should understand the material in <a href="01_linear_algebra_foundations.html" class="quarto-xref"><span>Chapter 1</span></a>, especially:</p>
 <ul>
 <li>geometric vectors and coordinate columns;</li>
 <li>dot products, norms, and orthogonality;</li>
@@ -617,7 +623,7 @@ u_xv_y-u_yv_x
 \]</span></p>
 <section id="velocity-vector-construction" class="level4">
 <h4 class="anchored" data-anchor-id="velocity-vector-construction">Velocity-vector construction</h4>
-<p>The construction in <a href="#fig-rigid-body-point-velocity" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-rigid-body-point-velocity</span></a> shows this addition for one instant:</p>
+<p>The construction in <a href="#fig-rigid-body-point-velocity" class="quarto-xref">Figure&nbsp;<span>2.1</span></a> shows this addition for one instant:</p>
 <ul>
 <li>The green arrow <span class="math inline">\({}^{a}\mathbf r_{OP}\)</span> locates <span class="math inline">\(P\)</span> relative to <span class="math inline">\(O\)</span>.</li>
 <li>The magenta arrow is the reference-point velocity <span class="math inline">\({}^{a}\mathbf v_O\)</span>. It is deliberately not parallel to <span class="math inline">\({}^{a}\mathbf r_{OP}\)</span>.</li>

@@ -372,8 +372,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08_general_robot_kinematics_and_jacobians.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></span></a>
+  <a href="./08_screw_motion_se3_exponential_and_spatial_integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Screw Motion, the <span class="math inline">\(SE(3)\)</span> Exponential, and Spatial Pose Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_general_robot_kinematics_and_jacobians.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></span></a>
   </div>
 </li>
       </ul>
@@ -455,7 +461,7 @@ window.Quarto = {
 </section>
 <section id="prerequisites-and-assumptions" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="prerequisites-and-assumptions">Prerequisites and assumptions</h2>
-<p>The reader should understand vectors and matrices from <a href="#sec-linear-algebra-foundations" class="quarto-xref"><span class="quarto-unresolved-ref">sec-linear-algebra-foundations</span></a>, coordinate frames and rotations from <a href="#sec-geometry-coordinate-frames" class="quarto-xref"><span class="quarto-unresolved-ref">sec-geometry-coordinate-frames</span></a>, and elementary derivatives, integrals, sine, and cosine.</p>
+<p>The reader should understand vectors and matrices from <a href="01_linear_algebra_foundations.html" class="quarto-xref"><span>Chapter 1</span></a>, coordinate frames and rotations from <a href="02_geometry_and_coordinate_frames.html" class="quarto-xref"><span>Chapter 2</span></a>, and elementary derivatives, integrals, sine, and cosine.</p>
 <p>The system considered here is a differential-drive ground robot: a rigid chassis propelled by left and right drive wheels that are mounted on a common axle and can be driven independently. The robot operates on a stationary, level, rigid floor, and the model describes its motion as viewed from above. Any additional support hardware does not affect the ideal kinematic model.</p>
 <p>Frame <span class="math inline">\(\{w\}\)</span> is fixed to the floor and is called the world frame. Frame <span class="math inline">\(\{b\}\)</span> is rigidly attached to the robot and is called the body frame. Its origin <span class="math inline">\(O_b\)</span> lies midway between the two drive-wheel ground-contact centre lines. The positive <span class="math inline">\(x_b\)</span>-axis points forward, the positive <span class="math inline">\(y_b\)</span>-axis points left, and the positive <span class="math inline">\(z_b\)</span>-axis points upward, so frame <span class="math inline">\(\{b\}\)</span> is right-handed. As the robot moves, frame <span class="math inline">\(\{b\}\)</span> translates and rotates relative to the stationary frame <span class="math inline">\(\{w\}\)</span>.</p>
 <p>Both drive wheels have the same effective rolling radius <span class="math inline">\(r&gt;0\)</span>, measured in metres. The track width <span class="math inline">\(L&gt;0\)</span>, measured in metres, is the lateral distance between the left and right wheel ground-contact centre lines.</p>
@@ -469,7 +475,7 @@ window.Quarto = {
 <li>Length is measured in metres, time in seconds, and angle in radians; corresponding velocities are measured in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span> and <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>.</li>
 </ul>
 <p>Together, these assumptions define an ideal planar kinematic model rather than a complete physical model. A real robot violates them to some degree, especially during rapid acceleration, braking, collision, wheel slip, or motion over compliant or uneven terrain.</p>
-<p>Figure <a href="#fig-differential-drive-geometry" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-differential-drive-geometry</span></a> summarizes the frames, wheel dimensions, rolling condition, and lateral-velocity constraint used by the model.</p>
+<p>Figure <a href="#fig-differential-drive-geometry" class="quarto-xref">Figure&nbsp;<span>3.1</span></a> summarizes the frames, wheel dimensions, rolling condition, and lateral-velocity constraint used by the model.</p>
 <div id="fig-differential-drive-geometry" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-differential-drive-geometry-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -480,7 +486,7 @@ Figure&nbsp;3.1: Differential-drive robot geometry and ideal rolling constraints
 </figcaption>
 </figure>
 </div>
-<p>As a preview of the pure-rolling relation, <span class="math inline">\(v_i=r\dot\phi_i\)</span> for <span class="math inline">\(i\in\{L,R\}\)</span>, where <span class="math inline">\(v_i\)</span> is the signed longitudinal ground speed of wheel <span class="math inline">\(i\)</span> and <span class="math inline">\(\dot\phi_i\)</span> is its signed angular speed. <a href="#sec-wheel-speeds-body-motion" class="quarto-xref"><span class="quarto-unresolved-ref">sec-wheel-speeds-body-motion</span></a> derives how the individual wheel speeds determine the body-forward speed <span class="math inline">\(v\)</span> and yaw rate <span class="math inline">\(\omega\)</span>.</p>
+<p>As a preview of the pure-rolling relation, <span class="math inline">\(v_i=r\dot\phi_i\)</span> for <span class="math inline">\(i\in\{L,R\}\)</span>, where <span class="math inline">\(v_i\)</span> is the signed longitudinal ground speed of wheel <span class="math inline">\(i\)</span> and <span class="math inline">\(\dot\phi_i\)</span> is its signed angular speed. <a href="#sec-wheel-speeds-body-motion" class="quarto-xref"><span>Section 3.2.1</span></a> derives how the individual wheel speeds determine the body-forward speed <span class="math inline">\(v\)</span> and yaw rate <span class="math inline">\(\omega\)</span>.</p>
 </section>
 <section id="planar-pose-and-its-derivative" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="planar-pose-and-its-derivative"><span class="header-section-number">3.1</span> Planar pose and its derivative</h2>
@@ -947,7 +953,7 @@ R\,{}^{w}\mathbf e_{y,b},
 \begin{bmatrix}-\sin\theta\\\cos\theta\end{bmatrix}
 \in\mathbb R^2.
 \]</span></p>
-<p>The unit vector <span class="math inline">\({}^{w}\mathbf e_{y,b}\)</span> points along the robot lateral <span class="math inline">\(+y_b\)</span>-axis and is expressed in world coordinates. Multiplying it by <span class="math inline">\(R&gt;0\)</span> places <span class="math inline">\(C\)</span> to the left of <span class="math inline">\(O_b\)</span>, while multiplying it by <span class="math inline">\(R&lt;0\)</span> reverses the direction and places <span class="math inline">\(C\)</span> to the right. Figure <a href="#fig-signed-turning-radius" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-signed-turning-radius</span></a> shows both cases. The forward velocity is tangent to the circular path and therefore perpendicular to the radius direction.</p>
+<p>The unit vector <span class="math inline">\({}^{w}\mathbf e_{y,b}\)</span> points along the robot lateral <span class="math inline">\(+y_b\)</span>-axis and is expressed in world coordinates. Multiplying it by <span class="math inline">\(R&gt;0\)</span> places <span class="math inline">\(C\)</span> to the left of <span class="math inline">\(O_b\)</span>, while multiplying it by <span class="math inline">\(R&lt;0\)</span> reverses the direction and places <span class="math inline">\(C\)</span> to the right. Figure <a href="#fig-signed-turning-radius" class="quarto-xref">Figure&nbsp;<span>3.2</span></a> shows both cases. The forward velocity is tangent to the circular path and therefore perpendicular to the radius direction.</p>
 <div id="fig-signed-turning-radius" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-signed-turning-radius-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">

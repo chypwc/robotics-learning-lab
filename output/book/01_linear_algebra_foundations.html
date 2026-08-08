@@ -372,8 +372,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08_general_robot_kinematics_and_jacobians.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></span></a>
+  <a href="./08_screw_motion_se3_exponential_and_spatial_integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Screw Motion, the <span class="math inline">\(SE(3)\)</span> Exponential, and Spatial Pose Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_general_robot_kinematics_and_jacobians.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></span></a>
   </div>
 </li>
       </ul>
@@ -633,7 +639,7 @@ u_xv_x+u_yv_y+u_zv_z.
 \mathrel{:=}
 {}^{a}\mathbf{u}^\mathsf{T}\,{}^{a}\mathbf{v}.
 \]</span></p>
-<p>The norm introduced in <a href="#sec-linear-algebra-vector-norm" class="quarto-xref"><span class="quarto-unresolved-ref">sec-linear-algebra-vector-norm</span></a> can equivalently be defined from the dot product of a vector with itself:</p>
+<p>The norm introduced in <a href="#sec-linear-algebra-vector-norm" class="quarto-xref"><span>Section 1.1.3</span></a> can equivalently be defined from the dot product of a vector with itself:</p>
 <p><span class="math display">\[
 \begin{aligned}
 \left\|{}^{a}\mathbf{u}\right\|_2
@@ -878,7 +884,7 @@ a_3(b_1c_2-b_2c_1).
 \mathbf c^\mathsf T(\mathbf a\times\mathbf b)
 }.
 \]</span></p>
-<p>Cyclically moving the three vectors does not change the value, but swapping any two vectors reverses its sign. This scalar-valued expression differs from the vector triple product in <a href="#sec-linear-algebra-cross-product" class="quarto-xref"><span class="quarto-unresolved-ref">sec-linear-algebra-cross-product</span></a>, whose output is a vector. The determinant discussion in <a href="#sec-linear-algebra-determinants" class="quarto-xref"><span class="quarto-unresolved-ref">sec-linear-algebra-determinants</span></a> will show that the scalar triple product is also the determinant of the matrix whose columns are <span class="math inline">\(\mathbf a\)</span>, <span class="math inline">\(\mathbf b\)</span>, and <span class="math inline">\(\mathbf c\)</span> in that order.</p>
+<p>Cyclically moving the three vectors does not change the value, but swapping any two vectors reverses its sign. This scalar-valued expression differs from the vector triple product in <a href="#sec-linear-algebra-cross-product" class="quarto-xref"><span>Section 1.1.5</span></a>, whose output is a vector. The determinant discussion in <a href="#sec-linear-algebra-determinants" class="quarto-xref"><span>Section 1.3</span></a> will show that the scalar triple product is also the determinant of the matrix whose columns are <span class="math inline">\(\mathbf a\)</span>, <span class="math inline">\(\mathbf b\)</span>, and <span class="math inline">\(\mathbf c\)</span> in that order.</p>
 </section>
 <section id="linear-combinations-span-and-basis" class="level3" data-number="1.1.7">
 <h3 data-number="1.1.7" class="anchored" data-anchor-id="linear-combinations-span-and-basis"><span class="header-section-number">1.1.7</span> Linear combinations, span, and basis</h3>
@@ -1265,7 +1271,7 @@ x_1\mathbf a_1+\cdots+x_n\mathbf a_n=\mathbf 0
 <p><span class="math display">\[
 \det(\mathbf A)=ad-bc.
 \]</span></p>
-<p>Its magnitude is the area of the parallelogram formed by the columns of <span class="math inline">\(\mathbf A\)</span>. For <span class="math inline">\(\mathbf A=[\mathbf a_1\;\mathbf a_2\;\mathbf a_3]\in\mathbb R^{3\times3}\)</span>, the determinant is the scalar triple product defined in <a href="#sec-linear-algebra-scalar-triple-product" class="quarto-xref"><span class="quarto-unresolved-ref">sec-linear-algebra-scalar-triple-product</span></a>:</p>
+<p>Its magnitude is the area of the parallelogram formed by the columns of <span class="math inline">\(\mathbf A\)</span>. For <span class="math inline">\(\mathbf A=[\mathbf a_1\;\mathbf a_2\;\mathbf a_3]\in\mathbb R^{3\times3}\)</span>, the determinant is the scalar triple product defined in <a href="#sec-linear-algebra-scalar-triple-product" class="quarto-xref"><span>Section 1.1.6</span></a>:</p>
 <p><span class="math display">\[
 \det(\mathbf A)
 =
@@ -1758,7 +1764,7 @@ a_{j,\sigma(j)}=a_{\tau(k),k}.
 },
 \]</span></p>
 <p>where <span class="math inline">\(\mathbf A^{-\mathsf T}\mathrel{:=}(\mathbf A^{-1})^\mathsf T=(\mathbf A^\mathsf T)^{-1}\)</span> is the <strong>inverse transpose</strong> of <span class="math inline">\(\mathbf A\)</span>. Nonsingularity is required because <span class="math inline">\(\mathbf A^{-1}\)</span> must exist.</p>
-<p>To prove the identity, compare the dot product of both sides with an arbitrary test column <span class="math inline">\(\mathbf c\in\mathbb R^3\)</span>. The scalar-triple-product formula from <a href="#sec-linear-algebra-scalar-triple-product" class="quarto-xref"><span class="quarto-unresolved-ref">sec-linear-algebra-scalar-triple-product</span></a> gives</p>
+<p>To prove the identity, compare the dot product of both sides with an arbitrary test column <span class="math inline">\(\mathbf c\in\mathbb R^3\)</span>. The scalar-triple-product formula from <a href="#sec-linear-algebra-scalar-triple-product" class="quarto-xref"><span>Section 1.1.6</span></a> gives</p>
 <p><span class="math display">\[
 \begin{aligned}
 \mathbf c^\mathsf T

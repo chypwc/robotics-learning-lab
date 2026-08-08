@@ -372,8 +372,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08_general_robot_kinematics_and_jacobians.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></span></a>
+  <a href="./08_screw_motion_se3_exponential_and_spatial_integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Screw Motion, the <span class="math inline">\(SE(3)\)</span> Exponential, and Spatial Pose Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_general_robot_kinematics_and_jacobians.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></span></a>
   </div>
 </li>
       </ul>
@@ -483,7 +489,7 @@ window.Quarto = {
 </section>
 <section id="prerequisites-and-assumptions" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="prerequisites-and-assumptions">Prerequisites and assumptions</h2>
-<p>The reader should understand matrices and matrix multiplication from <a href="#sec-linear-algebra-foundations" class="quarto-xref"><span class="quarto-unresolved-ref">sec-linear-algebra-foundations</span></a>, coordinate frames and rotation matrices from <a href="#sec-geometry-coordinate-frames" class="quarto-xref"><span class="quarto-unresolved-ref">sec-geometry-coordinate-frames</span></a>, and planar pose notation from <a href="#sec-differential-drive-model" class="quarto-xref"><span class="quarto-unresolved-ref">sec-differential-drive-model</span></a>.</p>
+<p>The reader should understand matrices and matrix multiplication from <a href="01_linear_algebra_foundations.html" class="quarto-xref"><span>Chapter 1</span></a>, coordinate frames and rotation matrices from <a href="02_geometry_and_coordinate_frames.html" class="quarto-xref"><span>Chapter 2</span></a>, and planar pose notation from <a href="03_kinematics_and_numerical_integration.html" class="quarto-xref"><span>Chapter 3</span></a>.</p>
 <p>All frames in this learning block are right-handed planar frames embedded in three-dimensional physical space with a common vertical axis. Frame <span class="math inline">\(\{w\}\)</span> is the fixed world frame and frame <span class="math inline">\(\{b\}\)</span> is attached rigidly to the robot body. Distances are measured in metres and angles in radians.</p>
 </section>
 <section id="pose-coordinates-and-rigid-transformations" class="level2" data-number="6.1">
@@ -577,7 +583,7 @@ SO(2)
 </section>
 <section id="homogeneous-transformations-and-se2" class="level3" data-number="6.1.4">
 <h3 data-number="6.1.4" class="anchored" data-anchor-id="homogeneous-transformations-and-se2"><span class="header-section-number">6.1.4</span> Homogeneous transformations and <span class="math inline">\(SE(2)\)</span></h3>
-<p>The point mapping in <a href="#sec-se2-transforming-point" class="quarto-xref"><span class="quarto-unresolved-ref">sec-se2-transforming-point</span></a> contains both a matrix multiplication and a vector addition. Homogeneous coordinates package these two operations into one matrix multiplication. Define the body- and world-frame homogeneous coordinate columns of point <span class="math inline">\(P\)</span> by appending a <span class="math inline">\(1\)</span>:</p>
+<p>The point mapping in <a href="#sec-se2-transforming-point" class="quarto-xref"><span>Section 6.1.3</span></a> contains both a matrix multiplication and a vector addition. Homogeneous coordinates package these two operations into one matrix multiplication. Define the body- and world-frame homogeneous coordinate columns of point <span class="math inline">\(P\)</span> by appending a <span class="math inline">\(1\)</span>:</p>
 <p><span class="math display">\[
 {}^{b}\overline{\mathbf p}_P
 \mathrel{:=}
@@ -679,7 +685,7 @@ SE(2)
 \mathbf p\in\mathbb R^2
 \right\}.
 \]</span></p>
-<p>Here, <em>Euclidean</em> indicates rigid motions that preserve Euclidean distances and angles. Matrix multiplication is the group operation, the <span class="math inline">\(3\times3\)</span> identity <span class="math inline">\(\mathbf I_3\)</span> is the identity motion, and every element has an inverse that reverses the coordinate mapping. <a href="#sec-se2-inverting-transformation" class="quarto-xref"><span class="quarto-unresolved-ref">sec-se2-inverting-transformation</span></a> derives that inverse explicitly.</p>
+<p>Here, <em>Euclidean</em> indicates rigid motions that preserve Euclidean distances and angles. Matrix multiplication is the group operation, the <span class="math inline">\(3\times3\)</span> identity <span class="math inline">\(\mathbf I_3\)</span> is the identity motion, and every element has an inverse that reverses the coordinate mapping. <a href="#sec-se2-inverting-transformation" class="quarto-xref"><span>Section 6.1.6</span></a> derives that inverse explicitly.</p>
 </section>
 <section id="composing-transformations" class="level3" data-number="6.1.5">
 <h3 data-number="6.1.5" class="anchored" data-anchor-id="composing-transformations"><span class="header-section-number">6.1.5</span> Composing transformations</h3>
@@ -1148,7 +1154,7 @@ x\\y\\\theta
 <li>Explain the three interpretations of a homogeneous transformation used in this chapter.</li>
 <li>In <span class="math inline">\(\mathbf T_{ab}\mathbf T_{bc}{}^{c}\overline{\mathbf p}_P\)</span>, which matrix acts first, and what frame sequence does the product represent?</li>
 <li>For active motions, what sequence is represented by <span class="math inline">\(\mathbf T_2\mathbf T_1{}^{w}\overline{\mathbf p}_P\)</span>?</li>
-<li>Using <span class="math inline">\(\mathbf T_D\)</span> and <span class="math inline">\(\mathbf T_R\)</span> from <a href="#sec-se2-noncommutative" class="quarto-xref"><span class="quarto-unresolved-ref">sec-se2-noncommutative</span></a>, explain geometrically why applying them to the origin in opposite orders gives different results.</li>
+<li>Using <span class="math inline">\(\mathbf T_D\)</span> and <span class="math inline">\(\mathbf T_R\)</span> from <a href="#sec-se2-noncommutative" class="quarto-xref"><span>Section 6.2.5</span></a>, explain geometrically why applying them to the origin in opposite orders gives different results.</li>
 <li>Does the commutativity of planar rotations imply that all elements of <span class="math inline">\(SE(2)\)</span> commute? Explain.</li>
 <li>A program receives an unlabelled matrix <span class="math inline">\(\mathbf T\)</span> and an unlabelled coordinate column <span class="math inline">\(\mathbf p\)</span>. What information is missing before the multiplication can be interpreted safely?</li>
 </ol>
@@ -1519,7 +1525,7 @@ T_{\mathbf I_2}SO(2)
 </section>
 <section id="lie-group-terminology-and-the-local-linear-model" class="level4">
 <h4 class="anchored" data-anchor-id="lie-group-terminology-and-the-local-linear-model">Lie-group terminology and the local linear model</h4>
-<p><a href="#sec-se2-planar-rotations" class="quarto-xref"><span class="quarto-unresolved-ref">sec-se2-planar-rotations</span></a> established that <span class="math inline">\(SO(2)\)</span> is a group under matrix multiplication. Its matrices also vary smoothly with the continuous angle <span class="math inline">\(\theta\)</span>, and its multiplication and inverse operations are differentiable. A group with such a compatible smooth structure is called a <strong>Lie group</strong>. The tangent space at the identity of a Lie group, together with an operation called the Lie bracket, is its <strong>Lie algebra</strong>. Thus, <span class="math inline">\(\mathfrak{so}(2)\)</span> is the Lie algebra of <span class="math inline">\(SO(2)\)</span>.</p>
+<p><a href="#sec-se2-planar-rotations" class="quarto-xref"><span>Section 6.1.2</span></a> established that <span class="math inline">\(SO(2)\)</span> is a group under matrix multiplication. Its matrices also vary smoothly with the continuous angle <span class="math inline">\(\theta\)</span>, and its multiplication and inverse operations are differentiable. A group with such a compatible smooth structure is called a <strong>Lie group</strong>. The tangent space at the identity of a Lie group, together with an operation called the Lie bracket, is its <strong>Lie algebra</strong>. Thus, <span class="math inline">\(\mathfrak{so}(2)\)</span> is the Lie algebra of <span class="math inline">\(SO(2)\)</span>.</p>
 <p>The Lie algebra is useful because it is linear even though the rotation group is not. For any <span class="math inline">\(\alpha,\beta,c\in\mathbb R\)</span>,</p>
 <p><span class="math display">\[
 \alpha\mathbf S_2+\beta\mathbf S_2
@@ -1580,7 +1586,7 @@ c(\alpha\mathbf S_2)
 </section>
 <section id="returning-to-the-physical-rotation-trajectory" class="level4">
 <h4 class="anchored" data-anchor-id="returning-to-the-physical-rotation-trajectory">Returning to the physical rotation trajectory</h4>
-<p>For the physical trajectory <span class="math inline">\(\mathbf R_{wb}(t)\)</span>, <a href="#sec-se2-rotation-matrix-derivative" class="quarto-xref"><span class="quarto-unresolved-ref">sec-se2-rotation-matrix-derivative</span></a> established</p>
+<p>For the physical trajectory <span class="math inline">\(\mathbf R_{wb}(t)\)</span>, <a href="#sec-se2-rotation-matrix-derivative" class="quarto-xref"><span>Section 6.3.2</span></a> established</p>
 <p><span class="math display">\[
 \dot{\mathbf R}_{wb}
 =
@@ -1664,7 +1670,7 @@ c(\alpha\mathbf S_2)
 }.
 \]</span></p>
 <p>The first term is the translational velocity shared with the body origin. The second term is the additional velocity caused by rotation about the body origin. Because <span class="math inline">\(\mathbf S_2\)</span> rotates <span class="math inline">\({}^{w}\mathbf r_{O_bP}\)</span> by <span class="math inline">\(\pi/2\)</span>, the rotational contribution is perpendicular to the relative-position vector.</p>
-<p>The two panels in <a href="#fig-planar-rigid-body-point-velocity" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-planar-rigid-body-point-velocity</span></a> separate the position-vector identity from the velocity-vector addition. In the left panel, the two solid vectors add head to tail to produce the dashed world-position vector of <span class="math inline">\(P\)</span>. In the right panel, translated copies of the two velocity contributions form a parallelogram whose diagonal is <span class="math inline">\({}^{w}\mathbf v_P\)</span>; the right-angle marker applies specifically to the rotational contribution and <span class="math inline">\({}^{w}\mathbf r_{O_bP}\)</span>.</p>
+<p>The two panels in <a href="#fig-planar-rigid-body-point-velocity" class="quarto-xref">Figure&nbsp;<span>6.1</span></a> separate the position-vector identity from the velocity-vector addition. In the left panel, the two solid vectors add head to tail to produce the dashed world-position vector of <span class="math inline">\(P\)</span>. In the right panel, translated copies of the two velocity contributions form a parallelogram whose diagonal is <span class="math inline">\({}^{w}\mathbf v_P\)</span>; the right-angle marker applies specifically to the rotational contribution and <span class="math inline">\({}^{w}\mathbf r_{O_bP}\)</span>.</p>
 <div id="fig-planar-rigid-body-point-velocity" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="H">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-planar-rigid-body-point-velocity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1812,7 +1818,7 @@ r_x\\r_y\\0
 <h3 class="unnumbered anchored" data-anchor-id="answers-and-hints-2">Answers and hints</h3>
 <ol type="1">
 <li><span class="math inline">\({}^{w}\mathbf v_b=d({}^{w}\mathbf p_b)/dt=[\dot x\;\dot y]^\mathsf T\)</span> is the velocity of the body origin relative to the fixed world frame and expressed in world coordinates, measured in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>. The scalar <span class="math inline">\(\omega=\dot\theta\)</span> is the signed yaw rate, measured in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>.</li>
-<li>Entrywise differentiation and the chain rule give the matrix displayed in <a href="#sec-se2-rotation-matrix-derivative" class="quarto-xref"><span class="quarto-unresolved-ref">sec-se2-rotation-matrix-derivative</span></a>. Direct multiplication shows that its coefficient of <span class="math inline">\(\omega\)</span> equals <span class="math inline">\(\mathbf S_2\mathbf R_{wb}\)</span>, so <span class="math inline">\(\dot{\mathbf R}_{wb}=\omega\mathbf S_2\mathbf R_{wb}\)</span>.</li>
+<li>Entrywise differentiation and the chain rule give the matrix displayed in <a href="#sec-se2-rotation-matrix-derivative" class="quarto-xref"><span>Section 6.3.2</span></a>. Direct multiplication shows that its coefficient of <span class="math inline">\(\omega\)</span> equals <span class="math inline">\(\mathbf S_2\mathbf R_{wb}\)</span>, so <span class="math inline">\(\dot{\mathbf R}_{wb}=\omega\mathbf S_2\mathbf R_{wb}\)</span>.</li>
 <li><span class="math inline">\(\mathbf S_2[a\;b]^\mathsf T=[-b\;a]^\mathsf T\)</span>, so it rotates the coordinate column counter-clockwise by <span class="math inline">\(\pi/2\)</span> without changing its length.</li>
 <li>Its entries have units of <span class="math inline">\(\mathrm{s^{-1}}\)</span>, and it does not generally satisfy <span class="math inline">\(\dot{\mathbf R}_{wb}^\mathsf T\dot{\mathbf R}_{wb}=\mathbf I_2\)</span> or have determinant <span class="math inline">\(1\)</span>.</li>
 <li>Differentiation gives <span class="math inline">\(\dot{\mathbf R}^\mathsf T\mathbf R+\mathbf R^\mathsf T\dot{\mathbf R}=\mathbf 0\)</span>. Therefore, <span class="math inline">\((\mathbf R^\mathsf T\dot{\mathbf R})^\mathsf T=\dot{\mathbf R}^\mathsf T\mathbf R=-\mathbf R^\mathsf T\dot{\mathbf R}\)</span>.</li>
@@ -1840,13 +1846,13 @@ r_x\\r_y\\0
 \in\mathbb R^3
 }.
 \]</span></p>
-<p>Here, <span class="math inline">\(\nu_x\)</span> and <span class="math inline">\(\nu_y\)</span> use the Greek letter <em>nu</em>, <span class="math inline">\(\nu\)</span>, not the Latin letter <span class="math inline">\(v\)</span>. They are <strong>generic placeholders</strong> for the <span class="math inline">\(x\)</span>- and <span class="math inline">\(y\)</span>-components of the twist’s linear part. Because neither the coordinate frame nor the point chosen as the velocity reference has been specified yet, these symbols do not yet identify a unique physical velocity. Together they form the column <span class="math inline">\(\boldsymbol\nu=[\nu_x\;\nu_y]^\mathsf T\in\mathbb R^2\)</span>, whose entries are measured in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>. The body and spatial cases are defined in <a href="#sec-se2-body-twist" class="quarto-xref"><span class="quarto-unresolved-ref">sec-se2-body-twist</span></a> and <a href="#sec-se2-spatial-twist" class="quarto-xref"><span class="quarto-unresolved-ref">sec-se2-spatial-twist</span></a>.</p>
+<p>Here, <span class="math inline">\(\nu_x\)</span> and <span class="math inline">\(\nu_y\)</span> use the Greek letter <em>nu</em>, <span class="math inline">\(\nu\)</span>, not the Latin letter <span class="math inline">\(v\)</span>. They are <strong>generic placeholders</strong> for the <span class="math inline">\(x\)</span>- and <span class="math inline">\(y\)</span>-components of the twist’s linear part. Because neither the coordinate frame nor the point chosen as the velocity reference has been specified yet, these symbols do not yet identify a unique physical velocity. Together they form the column <span class="math inline">\(\boldsymbol\nu=[\nu_x\;\nu_y]^\mathsf T\in\mathbb R^2\)</span>, whose entries are measured in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>. The body and spatial cases are defined in <a href="#sec-se2-body-twist" class="quarto-xref"><span>Section 6.4.3</span></a> and <a href="#sec-se2-spatial-twist" class="quarto-xref"><span>Section 6.4.4</span></a>.</p>
 <p>The third entry <span class="math inline">\(\omega\in\mathbb R\)</span> is angular velocity, measured in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>. The symbol <span class="math inline">\(\boldsymbol\xi\)</span> is the Greek letter <em>xi</em>. The word <em>twist</em> refers to an instantaneous rigid-body velocity, not to a pose or a finite displacement.</p>
 <p>This chapter uses the component order <span class="math inline">\([\nu_x\;\nu_y\;\omega]^\mathsf T\)</span>. Some textbooks and software libraries place angular velocity first, so the component order must always be declared. Although <span class="math inline">\(\boldsymbol\xi\)</span> is mathematically a three-entry real column, its entries have different physical units. A norm such as <span class="math inline">\(\lVert\boldsymbol\xi\rVert_2\)</span> therefore has no direct physical meaning unless a length scale is introduced to compare translation with rotation.</p>
 </section>
 <section id="sec-se2-hat-operator" class="level3" data-number="6.4.2">
 <h3 data-number="6.4.2" class="anchored" data-anchor-id="sec-se2-hat-operator"><span class="header-section-number">6.4.2</span> The hat operator and <span class="math inline">\(\mathfrak{se}(2)\)</span></h3>
-<p><a href="#sec-se2-rotation-derivative-tangent" class="quarto-xref"><span class="quarto-unresolved-ref">sec-se2-rotation-derivative-tangent</span></a> showed that <span class="math inline">\(\mathfrak{so}(2)\)</span> contains the tangent directions of the rotation group <span class="math inline">\(SO(2)\)</span> at <span class="math inline">\(\mathbf I_2\)</span>. A planar rigid motion also includes translation, so its instantaneous direction must combine one rotational component with two translational components.</p>
+<p><a href="#sec-se2-rotation-derivative-tangent" class="quarto-xref"><span>Section 6.3.3</span></a> showed that <span class="math inline">\(\mathfrak{so}(2)\)</span> contains the tangent directions of the rotation group <span class="math inline">\(SO(2)\)</span> at <span class="math inline">\(\mathbf I_2\)</span>. A planar rigid motion also includes translation, so its instantaneous direction must combine one rotational component with two translational components.</p>
 <section id="from-twist-coordinates-to-a-matrix" class="level4">
 <h4 class="anchored" data-anchor-id="from-twist-coordinates-to-a-matrix">From twist coordinates to a matrix</h4>
 <p>The <strong>hat operator</strong> maps the twist coordinate column to a <span class="math inline">\(3\times3\)</span> matrix:</p>
@@ -1968,7 +1974,7 @@ T_{\mathbf I_3}SE(2)
 =
 \mathbf 0_{2\times2}.
 \]</span></p>
-<p>Thus, <span class="math inline">\(\mathbf R'(0)\)</span> is skew-symmetric and belongs to <span class="math inline">\(\mathfrak{so}(2)\)</span>. <a href="#sec-se2-rotation-derivative-tangent" class="quarto-xref"><span class="quarto-unresolved-ref">sec-se2-rotation-derivative-tangent</span></a> established that every matrix in <span class="math inline">\(\mathfrak{so}(2)\)</span> has the form <span class="math inline">\(a\mathbf S_2\)</span> for some <span class="math inline">\(a\in\mathbb R\)</span>, so <span class="math inline">\(\mathbf R'(0)=a\mathbf S_2\)</span>. Define <span class="math inline">\(\mathbf u\mathrel{:=}\mathbf p'(0)\in\mathbb R^2\)</span>. Substitution gives</p>
+<p>Thus, <span class="math inline">\(\mathbf R'(0)\)</span> is skew-symmetric and belongs to <span class="math inline">\(\mathfrak{so}(2)\)</span>. <a href="#sec-se2-rotation-derivative-tangent" class="quarto-xref"><span>Section 6.3.3</span></a> established that every matrix in <span class="math inline">\(\mathfrak{so}(2)\)</span> has the form <span class="math inline">\(a\mathbf S_2\)</span> for some <span class="math inline">\(a\in\mathbb R\)</span>, so <span class="math inline">\(\mathbf R'(0)=a\mathbf S_2\)</span>. Define <span class="math inline">\(\mathbf u\mathrel{:=}\mathbf p'(0)\in\mathbb R^2\)</span>. Substitution gives</p>
 <p><span class="math display">\[
 \mathbf A
 =
@@ -2198,7 +2204,7 @@ a\in\mathbb R,\;
 \mathbf T_{wb}\widehat{\boldsymbol\xi}_b
 \]</span></p>
 <p><strong>predicts how the pose changes</strong>: given the current pose and a body-frame twist, it produces the corresponding world-frame pose rate. This is the form commonly used to propagate mobile-robot odometry, simulate motion, and predict a future pose from a commanded or estimated body velocity.</p>
-<p>For an ideal differential-drive robot, the no-sideways-motion constraint gives <span class="math inline">\(\nu_{y_b}=0\)</span>. The wheel-to-body mapping from <a href="#sec-wheel-speeds-body-motion" class="quarto-xref"><span class="quarto-unresolved-ref">sec-wheel-speeds-body-motion</span></a> therefore supplies</p>
+<p>For an ideal differential-drive robot, the no-sideways-motion constraint gives <span class="math inline">\(\nu_{y_b}=0\)</span>. The wheel-to-body mapping from <a href="03_kinematics_and_numerical_integration.html#sec-wheel-speeds-body-motion" class="quarto-xref"><span>Section 3.2.1</span></a> therefore supplies</p>
 <p><span class="math display">\[
 \boxed{
 \boldsymbol\xi_b
@@ -2309,7 +2315,7 @@ v
 =
 {}^w\mathbf v_b
 \]</span></p>
-<p>in general. The column <span class="math inline">\(\boldsymbol\nu_w\)</span> is the linear part of the spatial twist, not simply the body-origin velocity expressed in world coordinates. Its meaning follows from the rigid-body point-velocity equation derived in <a href="#sec-se2-body-point-velocity" class="quarto-xref"><span class="quarto-unresolved-ref">sec-se2-body-point-velocity</span></a>:</p>
+<p>in general. The column <span class="math inline">\(\boldsymbol\nu_w\)</span> is the linear part of the spatial twist, not simply the body-origin velocity expressed in world coordinates. Its meaning follows from the rigid-body point-velocity equation derived in <a href="#sec-se2-body-point-velocity" class="quarto-xref"><span>Section 6.3.4</span></a>:</p>
 <p><span class="math display">\[
 {}^w\mathbf v_P
 =
@@ -2474,7 +2480,7 @@ v
 \mathbf 0_2^\mathsf T&amp;0
 \end{bmatrix}.
 \]</span></p>
-<p>As shown in <a href="#sec-se2-rotation-matrix-derivative" class="quarto-xref"><span class="quarto-unresolved-ref">sec-se2-rotation-matrix-derivative</span></a>, every planar rotation <span class="math inline">\(\mathbf R\)</span> commutes with <span class="math inline">\(\mathbf S_2\)</span>. Using <span class="math inline">\(\mathbf R\mathbf S_2=\mathbf S_2\mathbf R\)</span> and <span class="math inline">\(\mathbf R\mathbf R^\mathsf T=\mathbf I_2\)</span> gives <span class="math inline">\(\mathbf R\mathbf S_2\mathbf R^\mathsf T=\mathbf S_2\)</span>. Therefore,</p>
+<p>As shown in <a href="#sec-se2-rotation-matrix-derivative" class="quarto-xref"><span>Section 6.3.2</span></a>, every planar rotation <span class="math inline">\(\mathbf R\)</span> commutes with <span class="math inline">\(\mathbf S_2\)</span>. Using <span class="math inline">\(\mathbf R\mathbf S_2=\mathbf S_2\mathbf R\)</span> and <span class="math inline">\(\mathbf R\mathbf R^\mathsf T=\mathbf I_2\)</span> gives <span class="math inline">\(\mathbf R\mathbf S_2\mathbf R^\mathsf T=\mathbf S_2\)</span>. Therefore,</p>
 <p><span class="math display">\[
 \widehat{\boldsymbol\xi}_w
 =
@@ -2503,7 +2509,7 @@ v
 \omega\mathbf S_2\mathbf p
 }.
 \]</span></p>
-<p>This result also follows directly from the definition of <span class="math inline">\(\boldsymbol\nu_w\)</span> or <span class="math inline">\({}^w\mathbf v_b=\boldsymbol\nu_w+\omega\mathbf S_2\mathbf p\)</span> in <a href="#eq-se2-spatial-twist-body-origin-velocity" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-se2-spatial-twist-body-origin-velocity</span></a>. The body-origin velocity expressed in world coordinates is <span class="math inline">\({}^w\mathbf v_b=\mathbf R\boldsymbol\nu_b\)</span>, so that equation becomes</p>
+<p>This result also follows directly from the definition of <span class="math inline">\(\boldsymbol\nu_w\)</span> or <span class="math inline">\({}^w\mathbf v_b=\boldsymbol\nu_w+\omega\mathbf S_2\mathbf p\)</span> in <a href="#eq-se2-spatial-twist-body-origin-velocity" class="quarto-xref">Equation&nbsp;<span>6.1</span></a>. The body-origin velocity expressed in world coordinates is <span class="math inline">\({}^w\mathbf v_b=\mathbf R\boldsymbol\nu_b\)</span>, so that equation becomes</p>
 <p><span class="math display">\[
 \mathbf R\boldsymbol\nu_b
 =
@@ -2700,7 +2706,7 @@ v\sin\theta
 \end{bmatrix}.
 \end{aligned}
 \]</span></p>
-<p>The rotation derivative derived in <a href="#sec-se2-rotation-matrix-derivative" class="quarto-xref"><span class="quarto-unresolved-ref">sec-se2-rotation-matrix-derivative</span></a> is <span class="math inline">\(\dot{\mathbf R}_{wb}=\mathbf R_{wb}\dot\theta\mathbf S_2\)</span>. Comparing it with <span class="math inline">\(\dot{\mathbf R}_{wb}=\mathbf R_{wb}\omega\mathbf S_2\)</span> gives <span class="math inline">\(\dot\theta=\omega\)</span>.</p>
+<p>The rotation derivative derived in <a href="#sec-se2-rotation-matrix-derivative" class="quarto-xref"><span>Section 6.3.2</span></a> is <span class="math inline">\(\dot{\mathbf R}_{wb}=\mathbf R_{wb}\dot\theta\mathbf S_2\)</span>. Comparing it with <span class="math inline">\(\dot{\mathbf R}_{wb}=\mathbf R_{wb}\omega\mathbf S_2\)</span> gives <span class="math inline">\(\dot\theta=\omega\)</span>.</p>
 <p>Therefore, the familiar differential-drive state equation is recovered:</p>
 <p><span class="math display">\[
 \boxed{
@@ -2834,7 +2840,7 @@ v\sin\theta\\
 <h3 class="unnumbered anchored" data-anchor-id="answers-and-hints-3">Answers and hints</h3>
 <ol type="1">
 <li><span class="math inline">\(\nu_x\)</span> and <span class="math inline">\(\nu_y\)</span> are the two components of a linear velocity, measured in <span class="math inline">\(\mathrm{m\,s^{-1}}\)</span>; <span class="math inline">\(\omega\)</span> is angular velocity, measured in <span class="math inline">\(\mathrm{rad\,s^{-1}}\)</span>. Their frame and reference point must also be declared.</li>
-<li>The hat matrix has <span class="math inline">\(\omega\mathbf S_2\)</span> as its upper-left <span class="math inline">\(2\times2\)</span> block, <span class="math inline">\(\boldsymbol\nu\)</span> as its upper-right <span class="math inline">\(2\times1\)</span> block, and a zero bottom row, as displayed in <a href="#sec-se2-hat-operator" class="quarto-xref"><span class="quarto-unresolved-ref">sec-se2-hat-operator</span></a>.</li>
+<li>The hat matrix has <span class="math inline">\(\omega\mathbf S_2\)</span> as its upper-left <span class="math inline">\(2\times2\)</span> block, <span class="math inline">\(\boldsymbol\nu\)</span> as its upper-right <span class="math inline">\(2\times1\)</span> block, and a zero bottom row, as displayed in <a href="#sec-se2-hat-operator" class="quarto-xref"><span>Section 6.4.2</span></a>.</li>
 <li><span class="math inline">\(SE(2)\)</span> is the group of finite planar rigid transformations. Its Lie algebra <span class="math inline">\(\mathfrak{se}(2)\)</span> is the vector space of structured matrices representing infinitesimal rigid motions and instantaneous velocities.</li>
 <li>Block multiplication gives upper-left block <span class="math inline">\(\mathbf R^\mathsf T\dot{\mathbf R}\)</span>, upper-right block <span class="math inline">\(\mathbf R^\mathsf T\dot{\mathbf p}\)</span>, and a zero bottom row. Identify <span class="math inline">\(\mathbf R^\mathsf T\dot{\mathbf R}=\omega\mathbf S_2\)</span> and <span class="math inline">\(\boldsymbol\nu_b=\mathbf R^\mathsf T\dot{\mathbf p}\)</span>.</li>
 <li>A spatial twist uses the fixed world origin as its velocity reference. Therefore, its linear part is <span class="math inline">\(\boldsymbol\nu_w=\dot{\mathbf p}-\omega\mathbf S_2\mathbf p\)</span>; the second term accounts for the offset between the world and body origins.</li>

@@ -44,18 +44,18 @@ Phase 1 closes when two bounded learning systems pass. First, a deterministic 2R
 
 ### Evidence-based gap assessment
 
-| Area | Current evidence | Gap to the Phase 1 goal | Disposition |
-|---|---|---|---|
-| Linear algebra and coordinate frames | [Chapter 1](notes/01_linear_algebra_foundations.qmd) covers vectors, matrices, rank, null spaces, determinants, and orthogonal maps; [Chapter 2](notes/02_geometry_and_coordinate_frames.qmd) covers frames, coordinate changes, and a cumulative test; Chapter 7 introduces a constraint Jacobian, rank, and tangent null space | The total derivative, multivariable chain rule, task and robot Jacobians, linearisation, and eigenvalue-based stability have not yet been taught | Teach the new mathematics where general kinematics and control first require it |
-| Planar rigid-body and differential-drive motion | [Chapter 3](notes/03_kinematics_and_numerical_integration.qmd), [Chapter 6](notes/06_planar_rigid_body_motion_se2_and_twists.qmd), the [specification](docs/01_motion_models/differential_drive_motion_model.md), and the [package](ros_ws/src/differential_drive_motion_model) cover ideal planar kinematics, exact constant-input integration, and Forward Euler | Encoder odometry, timestamps, drift, and broader ODE treatment remain outside the closed ideal-motion capability | Preserve the accepted `P1.1` evidence and add the deferred topics only in their owning later capabilities |
-| Spatial rigid-body motion | The reviewed [Chapter 7](notes/07_degrees_of_freedom_and_spatial_motion_so3_se3.qmd) covers degrees of freedom, $SO(3)$, $SE(3)$, quaternions, body and spatial twists, the adjoint, retrieval tests, a cumulative review, limitations, and numerical checks | Screw motion and the $SE(3)$ exponential and logarithm remain intentionally outside Chapter 7 | Begin screw motion and spatial integration in Chapter 8 |
-| General robot kinematics | No current note or package defines a general configuration-to-pose map or maps generalised velocity to task or rigid-body velocity | The total derivative, multivariable chain rule, forward kinematics, revolute and prismatic screw axes, product-of-exponentials models, task and body/space Jacobians, and robot singularities are absent | Add one reusable general-kinematics chapter and workbench before specialising it to a planar manipulator laboratory |
-| Inverse kinematics and planar manipulation | No current note, specification, or package solves a manipulator task | Analytic and numerical inverse kinematics, convergence, multiple solutions, reachability, damped least squares, joint limits, redundancy, null-space objectives, manipulability, and manipulator-specific acceptance evidence are absent | Add a bounded 2R/3R planar manipulator kinematics stage in Phase 1; reserve the spatial production arm and manipulation mission for Phase 7 |
-| Wheeled constraints and odometry | Chapter 3 derives the ideal no-sideways differential-drive constraint and wheel/body mapping; Chapters 3 and 7 distinguish holonomic and nonholonomic constraints | The general Pfaffian-to-parametric framework, rolling-constraint matrices, encoder odometry, Ackermann steering, and the bicycle comparison are absent | Add a wheeled-constraints and odometry chapter, then implement one differential-drive odometry pipeline |
-| Dynamic systems and mechanics | The preserved [dynamics draft](notes/14_dynamic_systems_mechanics_and_actuator_limits.qmd) covers one-dimensional Newtonian motion, wheel traction balance, and ideal gearing | General state ODEs, planar yaw dynamics, manipulator mass, Coriolis/centrifugal and gravity terms, inertia, friction and traction bounds, resistance, actuator saturation, braking, and a reference numerical method are absent | Preserve and complete the shared dynamic-systems foundation, then derive separate bounded differential-drive and 2R manipulator plants |
-| Trajectory generation | No current learning or implementation artifact | Path versus trajectory, time scaling, curvature, velocity, acceleration, jerk, wheel feasibility, and safe rejection are absent | Add one bounded straight-and-constant-curvature trajectory chapter and generator |
-| Feedback and control | No current learning or implementation artifact | Error dynamics, stability, open-loop and feedback distinctions, P/PI/PD/PID, sampling, delay, saturation, anti-windup, derivative filtering, disturbance rejection, gravity compensation, computed-torque control, and metrics are absent | Establish the shared feedback foundation on the mobile benchmark, then apply it to the bounded planar manipulator without duplicating the generic theory |
-| ROS 2 integration and safety | [Chapter 5](notes/05_ros2_packages_and_development_workflow.qmd) covers package and build workflow; existing functions validate numeric inputs | ROS messages, `tf2`, simulation time, Gazebo acceptance, command supervision, watchdog, emergency stop, stopped-safe behaviour, telemetry, replay, and fault injection are absent | Learn these at their adapter boundary, verify simulation safety behaviour, and make no certified functional-safety claim |
+| Area                                            | Current evidence                                                                                                                                                                                                                                                                                                                                                   | Gap to the Phase 1 goal                                                                                                                                                                                                                   | Disposition                                                                                                                                              |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Linear algebra and coordinate frames            | [Chapter 1](notes/01_linear_algebra_foundations.qmd) covers vectors, matrices, rank, null spaces, determinants, and orthogonal maps; [Chapter 2](notes/02_geometry_and_coordinate_frames.qmd) covers frames, coordinate changes, and a cumulative test; Chapter 7 introduces a constraint Jacobian, rank, and tangent null space                                   | The total derivative, multivariable chain rule, task and robot Jacobians, linearisation, and eigenvalue-based stability have not yet been taught                                                                                          | Teach the new mathematics where general kinematics and control first require it                                                                          |
+| Planar rigid-body and differential-drive motion | [Chapter 3](notes/03_kinematics_and_numerical_integration.qmd), [Chapter 6](notes/06_planar_rigid_body_motion_se2_and_twists.qmd), the [specification](docs/01_motion_models/differential_drive_motion_model.md), and the [package](ros_ws/src/differential_drive_motion_model) cover ideal planar kinematics, exact constant-input integration, and Forward Euler | Encoder odometry, timestamps, drift, and broader ODE treatment remain outside the closed ideal-motion capability                                                                                                                          | Preserve the accepted `P1.1` evidence and add the deferred topics only in their owning later capabilities                                                |
+| Spatial rigid-body motion                       | The reviewed [Chapter 7](notes/07_degrees_of_freedom_and_spatial_motion_so3_se3.qmd) covers degrees of freedom, $SO(3)$, $SE(3)$, quaternions, body and spatial twists, the adjoint, retrieval tests, a cumulative review, limitations, and numerical checks                                                                                                       | Screw motion and the $SE(3)$ exponential and logarithm remain intentionally outside Chapter 7                                                                                                                                             | Begin screw motion and spatial integration in Chapter 8                                                                                                  |
+| General robot kinematics                        | No current note or package defines a general configuration-to-pose map or maps generalised velocity to task or rigid-body velocity                                                                                                                                                                                                                                 | The total derivative, multivariable chain rule, forward kinematics, revolute and prismatic screw axes, product-of-exponentials models, task and body/space Jacobians, and robot singularities are absent                                  | Add one reusable general-kinematics chapter and workbench before specialising it to a planar manipulator laboratory                                      |
+| Inverse kinematics and planar manipulation      | No current note, specification, or package solves a manipulator task                                                                                                                                                                                                                                                                                               | Analytic and numerical inverse kinematics, convergence, multiple solutions, reachability, damped least squares, joint limits, redundancy, null-space objectives, manipulability, and manipulator-specific acceptance evidence are absent  | Add a bounded 2R/3R planar manipulator kinematics stage in Phase 1; reserve the spatial production arm and manipulation mission for Phase 7              |
+| Wheeled constraints and odometry                | Chapter 3 derives the ideal no-sideways differential-drive constraint and wheel/body mapping; Chapters 3 and 7 distinguish holonomic and nonholonomic constraints                                                                                                                                                                                                  | The general Pfaffian-to-parametric framework, rolling-constraint matrices, encoder odometry, Ackermann steering, and the bicycle comparison are absent                                                                                    | Add a wheeled-constraints and odometry chapter, then implement one differential-drive odometry pipeline                                                  |
+| Dynamic systems and mechanics                   | The preserved [dynamics draft](notes/16_dynamic_systems_mechanics_and_actuator_limits.qmd) covers one-dimensional Newtonian motion, wheel traction balance, and ideal gearing                                                                                                                                                                                      | General state ODEs, planar yaw dynamics, manipulator mass, Coriolis/centrifugal and gravity terms, inertia, friction and traction bounds, resistance, actuator saturation, braking, and a reference numerical method are absent           | Preserve and complete the shared dynamic-systems foundation, then derive separate bounded differential-drive and 2R manipulator plants                   |
+| Trajectory generation                           | No current learning or implementation artifact                                                                                                                                                                                                                                                                                                                     | Path versus trajectory, time scaling, curvature, velocity, acceleration, jerk, wheel feasibility, and safe rejection are absent                                                                                                           | Add one bounded straight-and-constant-curvature trajectory chapter and generator                                                                         |
+| Feedback and control                            | No current learning or implementation artifact                                                                                                                                                                                                                                                                                                                     | Error dynamics, stability, open-loop and feedback distinctions, P/PI/PD/PID, sampling, delay, saturation, anti-windup, derivative filtering, disturbance rejection, gravity compensation, computed-torque control, and metrics are absent | Establish the shared feedback foundation on the mobile benchmark, then apply it to the bounded planar manipulator without duplicating the generic theory |
+| ROS 2 integration and safety                    | [Chapter 5](notes/05_ros2_packages_and_development_workflow.qmd) covers package and build workflow; existing functions validate numeric inputs                                                                                                                                                                                                                     | ROS messages, `tf2`, simulation time, Gazebo acceptance, command supervision, watchdog, emergency stop, stopped-safe behaviour, telemetry, replay, and fault injection are absent                                                         | Learn these at their adapter boundary, verify simulation safety behaviour, and make no certified functional-safety claim                                 |
 
 ### Scope boundary
 
@@ -87,17 +87,17 @@ Phase 1 closes when two bounded learning systems pass. First, a deterministic 2R
 | Capability | Learning artifact | Side project and principal tools | Status |
 |---|---|---|---|
 | `P1.1` — Ideal planar motion kernel | Close Chapters 2–3 and preserve Chapters 4 and 6 | Existing `differential_drive_motion_model`, Python and `pytest` | Complete |
-| `P1.2` — Spatial geometry kernel | Finish Chapter 7; begin Chapter 8 with screw motion and spatial integration | `rigid_body_kinematics`, modern C++, CMake, Eigen, and GTest | Active: Chapter 7 reviewed; Chapter 8 prerequisite blocks next |
-| `P1.3` — General kinematics and Jacobians | Complete Chapter 8 | Extend `rigid_body_kinematics` with bounded forward and velocity kinematics | Queued |
-| `P1.4` — Planar manipulator kinematics laboratory | Chapter 10 | Begin `planar_manipulator_lab` with 2R/3R inverse kinematics, modern C++, Eigen, GTest, and offline visualisation | Queued |
-| `P1.5` — Wheel-odometry pipeline | Chapter 12 | `differential_drive_odometry`, pure Python core plus thin ROS 2 adapter, `nav_msgs`, and `tf2` | Queued |
-| `P1.6` — Differential-drive dynamics laboratory | Complete the renamed Chapter 14 | `differential_drive_planar_plant`, modern C++ and deterministic numerical tests | Queued |
-| `P1.7` — Bounded trajectory generator | Chapter 16 | `differential_drive_trajectory`, modern C++ and independent constraint checks | Queued |
-| `P1.8` — Offline controller benchmark | Chapter 18 | `differential_drive_control`, modern C++ core and Python analysis | Queued |
-| `P1.9` — Planar manipulator dynamics and control laboratory | Chapter 20 | Extend `planar_manipulator_lab` with a 2R plant, joint trajectories, classical controllers, and frozen comparisons | Queued |
-| `P1.10` — Nominal Gazebo integration | Chapter 22 implementation companion | `differential_drive_gazebo`, thin ROS 2 adapters, and evaluator-only ground truth | Queued |
-| `P1.11` — Motion safety and fault acceptance | Extend Chapter 22 | `motion_safety_supervisor`, diagnostics, fault injection, and `rosbag2` MCAP | Queued |
-| `P1.12` — Phase 1 evaluation and learning closure | Chapter 23 cumulative review | Final acceptance campaign, phase verification report, and book render | Queued |
+| `P1.2` — Spatial geometry kernel | Complete Chapter 8 and its Chapter 9 implementation companion | `rigid_body_kinematics`, modern C++, CMake, Eigen, and GTest | Active: Chapter 7 reviewed; Chapter 8 prerequisite blocks next |
+| `P1.3` — General kinematics and Jacobians | Complete Chapter 10 and its Chapter 11 implementation companion | Extend `rigid_body_kinematics` with bounded forward and velocity kinematics | Queued |
+| `P1.4` — Planar manipulator kinematics laboratory | Chapter 12 and its Chapter 13 implementation companion | Begin `planar_manipulator_lab` with 2R/3R inverse kinematics, modern C++, Eigen, GTest, and offline visualisation | Queued |
+| `P1.5` — Wheel-odometry pipeline | Chapter 14 and its Chapter 15 implementation companion | `differential_drive_odometry`, pure Python core plus thin ROS 2 adapter, `nav_msgs`, and `tf2` | Queued |
+| `P1.6` — Differential-drive dynamics laboratory | Chapter 16 and its Chapter 17 implementation companion | `differential_drive_planar_plant`, modern C++ and deterministic numerical tests | Queued |
+| `P1.7` — Bounded trajectory generator | Chapter 18 and its Chapter 19 implementation companion | `differential_drive_trajectory`, modern C++ and independent constraint checks | Queued |
+| `P1.8` — Offline controller benchmark | Chapter 20 and its Chapter 21 implementation companion | `differential_drive_control`, modern C++ core and Python analysis | Queued |
+| `P1.9` — Planar manipulator dynamics and control laboratory | Chapter 22 and its Chapter 23 implementation companion | Extend `planar_manipulator_lab` with a 2R plant, joint trajectories, classical controllers, and frozen comparisons | Queued |
+| `P1.10` — Nominal Gazebo integration | Chapter 24 implementation companion | `differential_drive_gazebo`, thin ROS 2 adapters, and evaluator-only ground truth | Queued |
+| `P1.11` — Motion safety and fault acceptance | Extend Chapter 24 | `motion_safety_supervisor`, diagnostics, fault injection, and `rosbag2` MCAP | Queued |
+| `P1.12` — Phase 1 evaluation and learning closure | Chapter 25 cumulative review | Final acceptance campaign, phase verification report, and book render | Queued |
 
 ### P1.1 — Close the preserved ideal planar motion kernel
 
@@ -132,9 +132,11 @@ The outcome is the geometry layer of the spatial and general kinematics workbenc
 - [x] Review and approve Chapter 7 one small learning block at a time.
 - [x] After approval, reconcile its already-started notation entries and add only its newly approved glossary terms.
 - [x] Reconcile `notes/_quarto.yml` with the reviewed source set, render and inspect Chapter 7, and remove stale generated pages that are not requested deliverables.
-- [x] Rename the preserved dynamics draft to `notes/14_dynamic_systems_mechanics_and_actuator_limits.qmd` without rewriting or losing its content; update every repository reference to the new path and run a local-link check in the same batch.
+- [x] Preserve the dynamics draft and its useful content through the earlier chapter-number migration.
 - [ ] Before drafting Chapter 8, route its prerequisite blocks through *Modern Robotics*, Chapter 3, and compare the formulation with Craig, Chapter 2, and Corke, Chapters 2–3.
-- [ ] Draft and review the screw-axis, pitch, and revolute-versus-prismatic motion block in `notes/08_general_robot_kinematics_and_jacobians.qmd`.
+- [x] Split the former Chapter 8 source without rewriting reviewed content: retain the spatial-geometry material through the motion-workflow summary and the Chasles--Mozzi appendix in `notes/08_screw_motion_se3_exponential_and_spatial_integration.qmd`; move the material beginning at “Configuration coordinates and forward kinematics” into `notes/10_general_robot_kinematics_and_jacobians.qmd`; update chapter introductions, cross-references, `notes/_quarto.yml`, and local links in the same batch.
+- [x] In the same chapter-renumbering batch, rename the preserved dynamics draft to `notes/16_dynamic_systems_mechanics_and_actuator_limits.qmd` without rewriting or losing its content, and update every repository reference.
+- [ ] Draft and review the screw-axis, pitch, and revolute-versus-prismatic motion block in `notes/08_screw_motion_se3_exponential_and_spatial_integration.qmd`.
 - [ ] Draft and review the $SE(3)$ exponential and logarithm block, including how project linear-first twists map to each textbook's convention.
 - [ ] Draft and review the constant-twist body-versus-space integration block.
 - [ ] Draft and review the small-angle, near-$\pi$, branch-ambiguity, and worked-spatial-example block.
@@ -146,7 +148,7 @@ The outcome is the geometry layer of the spatial and general kinematics workbenc
 
 #### Implement and document
 
-- [ ] When implementation begins, create `notes/09_general_robot_kinematics_and_jacobians_implementation.qmd` and document the CMake target, Eigen representation choices, public headers, validation policy, and test strategy.
+- [ ] When implementation begins, create `notes/09_spatial_geometry_kernel_implementation.qmd` and document the CMake target, Eigen representation choices, public headers, validation policy, and test strategy.
 - [ ] Create `ros_ws/src/rigid_body_kinematics` as an `ament_cmake` C++ package with Eigen, GTest, explicit compiler warnings, and no ROS runtime dependency in the mathematical core.
 - [ ] Implement distinct vector rotation and point transformation operations together with bounded $SO(3)$ and $SE(3)$ validation, composition, and inversion.
 - [ ] Implement hat and vee maps, $SO(3)$ and $SE(3)$ exponential and logarithm maps, constant-twist integration, and the $SE(3)$ adjoint using the project's linear-first twist order.
@@ -167,7 +169,7 @@ The outcome is a bounded reusable implementation of general forward and velocity
 #### Learn and review
 
 - [ ] Before drafting, route the chapter through *Modern Robotics*, Chapters 4–5, compare with Craig, Chapters 3 and 5, and use Corke, Chapters 7–8, for an independent numerical viewpoint.
-- [ ] Draft and review the Chapter 8 block on configuration space versus coordinate vector, task variables, the forward map $T(\mathbf q)$, the total derivative, and the multivariable chain rule.
+- [ ] Draft and review the opening block of `notes/10_general_robot_kinematics_and_jacobians.qmd` on configuration space versus coordinate vector, task variables, the forward map $T(\mathbf q)$, the total derivative, and the multivariable chain rule.
 - [ ] Draft and review the transform-chain and space-form/body-form product-of-exponentials block for validated revolute and prismatic screw axes.
 - [ ] Draft and review the task, body, and space Jacobian block, including derivation from pose rate and frame conversion through the adjoint.
 - [ ] Draft and review the rank, range, null-space, and singularity block, including finite-difference verification on a planar 2R chain embedded in $SE(3)$ and one small non-planar chain.
@@ -180,7 +182,7 @@ The outcome is a bounded reusable implementation of general forward and velocity
 
 #### Implement and document
 
-- [ ] Extend the implementation companion with the serial-chain representation, multiplication order, public interfaces, and finite-difference verification method.
+- [ ] When implementation begins, create `notes/11_general_robot_kinematics_and_jacobians_implementation.qmd` with the serial-chain representation, multiplication order, public interfaces, and finite-difference verification method.
 - [ ] Extend `rigid_body_kinematics` with space-form and body-form product-of-exponentials forward kinematics.
 - [ ] Implement space and body Jacobians for a validated $n$-joint open chain without adding inverse kinematics, pseudoinverse control, URDF parsing, collision, or dynamics to this general-purpose package.
 
@@ -198,7 +200,7 @@ The outcome is the first stage of one educational planar-manipulator side projec
 
 #### Learn and review
 
-- [ ] Draft `notes/10_inverse_kinematics_redundancy_and_planar_manipulators.qmd` from *Modern Robotics*, Chapter 6, while reusing Chapters 4–5, supported by Craig, Chapters 3–5, and Corke, Chapters 7–8.
+- [ ] Draft `notes/12_inverse_kinematics_redundancy_and_planar_manipulators.qmd` from *Modern Robotics*, Chapter 6, while reusing Chapters 4–5, supported by Craig, Chapters 3–5, and Corke, Chapters 7–8.
 - [ ] Define an inverse-kinematics problem from the forward map and a declared task error; distinguish existence, reachability, uniqueness, branch choice, exact solutions, approximate solutions, convergence, and solver failure.
 - [ ] Derive closed-form position inverse kinematics for a planar 2R arm, including its reachable annulus, elbow-up and elbow-down branches, boundary cases, and the effect of joint limits.
 - [ ] Analyse the 2R position-task Jacobian through rank and singular values and connect task-specific rank loss to singular configurations and numerical conditioning.
@@ -216,7 +218,7 @@ The outcome is the first stage of one educational planar-manipulator side projec
 
 #### Implement and document
 
-- [ ] When implementation begins, create `notes/11_planar_manipulator_kinematics_implementation.qmd` with equation-to-code mappings, angle normalisation, branch enumeration, solver state, stopping order, damping and step policy, joint-limit handling, status semantics, and verification oracles.
+- [ ] When implementation begins, create `notes/13_planar_manipulator_kinematics_implementation.qmd` with equation-to-code mappings, angle normalisation, branch enumeration, solver state, stopping order, damping and step policy, joint-limit handling, status semantics, and verification oracles.
 - [ ] Create `ros_ws/src/planar_manipulator_lab` as a pure C++ `ament_cmake` package that depends on `rigid_body_kinematics`, Eigen, and GTest but has no ROS runtime, URDF, Pinocchio, MoveIt 2, `ros2_control`, Gazebo, collision, or contact dependency.
 - [ ] Implement the independent closed-form 2R position solver, a bounded iterative pseudoinverse/damped-least-squares solver that consumes the reusable forward map and Jacobian, and the declared 3R exact-pseudoinverse null-space joint-centering experiment without duplicating the general kinematics core.
 - [ ] Add a deterministic offline scenario runner that writes a versioned machine-readable result table; use a small Python plotting script only to visualise arm configurations, residual histories, branch choices, and joint-limit behaviour from those results.
@@ -236,7 +238,7 @@ The outcome is one deterministic differential-drive odometry pipeline. The bicyc
 
 #### Learn and review
 
-- [ ] Draft `notes/12_wheeled_robot_constraints_and_odometry.qmd` from *Modern Robotics*, Chapter 13, supported by Corke, Chapter 4, *Probabilistic Robotics*, Chapter 5, and LaValle, Chapter 13.
+- [ ] Draft `notes/14_wheeled_robot_constraints_and_odometry.qmd` from *Modern Robotics*, Chapter 13, supported by Corke, Chapter 4, *Probabilistic Robotics*, Chapter 5, and LaValle, Chapter 13.
 - [ ] Derive rolling and no-slip constraints in Pfaffian form, distinguish holonomic from nonholonomic constraints, and relate $A(\mathbf q)\dot{\mathbf q}=0$ to $\dot{\mathbf q}=G(\mathbf q)\mathbf u$.
 - [ ] Derive the full and reduced differential-drive models, wheel/body Jacobians, feasible wheel-speed set, cumulative encoder increments, timestamped pose and twist update, and exact $SE(2)$ odometry integration.
 - [ ] Derive Ackermann steering geometry, the bounded kinematic bicycle model, $\kappa=\tan\delta/L$, and minimum turning radius; compare its feasible motions with differential drive without implementing a car.
@@ -249,7 +251,7 @@ The outcome is one deterministic differential-drive odometry pipeline. The bicyc
 
 #### Implement and document
 
-- [ ] When implementation begins, create `notes/13_wheeled_robot_constraints_and_odometry_implementation.qmd` covering encoder differencing, timestamp validation, state ownership, ROS message semantics, `tf2`, parameters, and the pure-core/adapter boundary.
+- [ ] When implementation begins, create `notes/15_wheeled_robot_constraints_and_odometry_implementation.qmd` covering encoder differencing, timestamp validation, state ownership, ROS message semantics, `tf2`, parameters, and the pure-core/adapter boundary.
 - [ ] Create `ros_ws/src/differential_drive_odometry` as an `ament_python` package that depends on and reuses `differential_drive_motion_model`; do not duplicate its wheel/body mapping or exact integration.
 - [ ] Implement a pure odometer state machine that accepts cumulative wheel angles and a timestamp and returns planar pose, body twist, status, and timestamp.
 - [ ] Add a thin ROS 2 node that consumes `sensor_msgs/JointState` and publishes consistent `nav_msgs/Odometry` and `odom` to `base_link` transforms through `tf2`.
@@ -268,7 +270,7 @@ The outcome is a deterministic plant that makes actuator limits and controller c
 #### Learn and review
 
 - [ ] Before drafting, route dynamic-system concepts through *Feedback Systems*, Chapters 3, 5, and 6; route mechanics through *Modern Robotics*, Chapter 8, supported by Craig, Chapters 6 and 8, Corke, Chapter 9, and LaValle, Section 13.2.4, for the smooth differential-drive state model.
-- [ ] Continue `notes/14_dynamic_systems_mechanics_and_actuator_limits.qmd`, preserving all useful material from the renamed draft.
+- [ ] Continue `notes/16_dynamic_systems_mechanics_and_actuator_limits.qmd`, preserving all useful material from the renamed draft.
 - [ ] Define state, input, output, the vector ODE $\dot{\mathbf x}=f(\mathbf x,\mathbf u,t)$, conversion of higher-order mechanics to first-order state equations, equilibrium, local linearisation, and the eigenvalue intuition needed later for stability.
 - [ ] Generalise numerical integration from scalar Forward Euler to vector state, compare it with one declared higher-order reference method, and explain accuracy, convergence, step size, and numerical stability.
 - [ ] Derive planar Newton–Euler longitudinal and yaw dynamics, mass moment of inertia, unequal wheel-force yaw moment, wheel torque to traction, gearing, and simple resistance; for two declared identical driven wheels, reflect wheel inertia into effective longitudinal mass and yaw inertia through the ideal no-slip relation, and define bare chassis inertias so the wheel contribution is not counted twice.
@@ -284,7 +286,7 @@ The outcome is a deterministic plant that makes actuator limits and controller c
 
 #### Implement and document
 
-- [ ] When implementation begins, create `notes/15_dynamic_systems_mechanics_and_actuator_limits_implementation.qmd` with state layout, force and moment balance, reflected wheel inertia, saturation order, integrator choice, configuration, and diagnostics.
+- [ ] When implementation begins, create `notes/17_dynamic_systems_mechanics_and_actuator_limits_implementation.qmd` with state layout, force and moment balance, reflected wheel inertia, saturation order, integrator choice, configuration, and diagnostics.
 - [ ] Create `ros_ws/src/differential_drive_planar_plant` as a deterministic C++ `ament_cmake` package with a pure library and GTest suite.
 - [ ] Implement symmetric and differential wheel-torque dynamics, declared resistance, actuator saturation, traction limiting, external longitudinal force and yaw-moment disturbances, and explicit actuator-limited and traction-limited status.
 - [ ] Implement Forward Euler for comparison and the reviewed higher-order method as the reference simulation path.
@@ -302,7 +304,7 @@ The outcome is the smallest trajectory set needed for the Phase 1 controller com
 
 #### Learn and review
 
-- [ ] Draft `notes/16_bounded_trajectory_generation.qmd` from *Modern Robotics*, Chapters 9 and 13, supported by Craig, Chapter 7, and Corke, Chapters 3–4.
+- [ ] Draft `notes/18_bounded_trajectory_generation.qmd` from *Modern Robotics*, Chapters 9 and 13, supported by Craig, Chapter 7, and Corke, Chapters 3–4.
 - [ ] Distinguish path, trajectory, and sampled command sequence; define path coordinate $s$, time scaling $s(t)$, and derive pose, velocity, acceleration, curvature, angular rate, and jerk through the chain rule.
 - [ ] Derive straight and constant-curvature differential-drive paths, $\omega=v\kappa$, wheel-speed and wheel-acceleration feasibility, and endpoint continuity.
 - [ ] Derive one bounded quintic time scaling with duration selected from analytic derivative limits; use a trapezoidal profile only as a comparison that exposes acceleration or jerk discontinuities.
@@ -315,7 +317,7 @@ The outcome is the smallest trajectory set needed for the Phase 1 controller com
 
 #### Implement and document
 
-- [ ] When implementation begins, create `notes/17_bounded_trajectory_generation_implementation.qmd` with duration selection, analytic derivatives, sample construction, constraint checker, and floating-point tolerances.
+- [ ] When implementation begins, create `notes/19_bounded_trajectory_generation_implementation.qmd` with duration selection, analytic derivatives, sample construction, constraint checker, and floating-point tolerances.
 - [ ] Create `ros_ws/src/differential_drive_trajectory` as a pure C++ `ament_cmake` package with no ROS runtime dependency.
 - [ ] Implement deterministic straight and constant-curvature trajectories that start and finish at rest and expose time, pose, $v_d$, $\omega_d$, acceleration, angular acceleration, jerk, curvature, and wheel demands.
 - [ ] Implement the constraint checker as a test/evaluation oracle that does not share the generator's duration-selection path.
@@ -333,7 +335,7 @@ The outcome is a reproducible controller comparison on the same plant, trajector
 
 #### Learn and review
 
-- [ ] Draft `notes/18_feedback_stability_and_practical_pid_control.qmd` primarily from *Feedback Systems*, Chapters 3, 5–6, and 11, supported by *Modern Robotics*, Chapter 11 and Section 13.3.4, and Corke, Chapter 9.
+- [ ] Draft `notes/20_feedback_stability_and_practical_pid_control.qmd` primarily from *Feedback Systems*, Chapters 3, 5–6, and 11, supported by *Modern Robotics*, Chapter 11 and Section 13.3.4, and Corke, Chapter 9.
 - [ ] Define plant, reference, output, error, sensor, controller, actuator, feedforward, open loop, closed loop, and disturbance paths before deriving a controller.
 - [ ] Derive first- and second-order error dynamics, equilibria, poles or eigenvalues, local stability, damping ratio, natural frequency, steady-state error, overshoot, settling time, and control effort.
 - [ ] Derive the roles and limitations of P, PI, PD, and PID; include constant-disturbance rejection, sampled implementation, derivative filtering, saturation, integrator windup, and one explicit anti-windup method.
@@ -350,7 +352,7 @@ The outcome is a reproducible controller comparison on the same plant, trajector
 
 #### Implement and document
 
-- [ ] When implementation begins, create `notes/19_feedback_stability_and_practical_pid_control_implementation.qmd` with error coordinates, discrete state, gain units, update order, saturation and anti-windup order, latency buffer, telemetry schema, and reproducibility controls.
+- [ ] When implementation begins, create `notes/21_feedback_stability_and_practical_pid_control_implementation.qmd` with error coordinates, discrete state, gain units, update order, saturation and anti-windup order, latency buffer, telemetry schema, and reproducibility controls.
 - [ ] Create `ros_ws/src/differential_drive_control` as a C++ `ament_cmake` package with pure controller and experiment-runner libraries independent of ROS and Gazebo.
 - [ ] Implement the frozen feedforward, proportional, and PID-based stacks without changing their contracts between scenarios.
 - [ ] Implement deterministic injection of bounded sensor noise and command latency, and configure the depended-on plant to realise wheel-effort saturation, traction limits, external force and yaw-moment disturbance, and declared parameter mismatch; do not reimplement plant constraints in the benchmark runner.
@@ -372,7 +374,7 @@ The outcome is the second and final stage of `planar_manipulator_lab`: a determi
 
 #### Learn and review
 
-- [ ] Draft `notes/20_planar_manipulator_dynamics_and_classical_control.qmd` primarily from *Modern Robotics*, Chapters 8 and 11, supported by Craig, Chapters 6 and 9–10, Corke, Chapter 9, and the already approved feedback chapter.
+- [ ] Draft `notes/22_planar_manipulator_dynamics_and_classical_control.qmd` primarily from *Modern Robotics*, Chapters 8 and 11, supported by Craig, Chapters 6 and 9–10, Corke, Chapter 9, and the already approved feedback chapter.
 - [ ] Define the fixed-base vertical-plane 2R model with link length, mass, centre-of-mass distance, planar mass moment of inertia, joint position and velocity, gravity, viscous joint friction, joint limits, and torque limits, including the frames and SI units of every quantity.
 - [ ] Derive kinetic and potential energy and then the Euler–Lagrange equations in the form $M(\mathbf q)\ddot{\mathbf q}+\mathbf c(\mathbf q,\dot{\mathbf q})+\mathbf g(\mathbf q)+D\dot{\mathbf q}=\boldsymbol\tau$; distinguish the Coriolis/centrifugal bias vector from one possible matrix representation.
 - [ ] Derive forward dynamics, inverse dynamics, static gravity torque, and the symmetry and positive-definiteness properties of the mass matrix over the declared model domain.
@@ -388,7 +390,7 @@ The outcome is the second and final stage of `planar_manipulator_lab`: a determi
 
 #### Implement and document
 
-- [ ] When implementation begins, create `notes/21_planar_manipulator_dynamics_and_classical_control_implementation.qmd` with state layout, model-term evaluation, forward/inverse-dynamics order, integrator, saturation, controller update order, gain units, telemetry, scenario configuration, and reproducibility controls.
+- [ ] When implementation begins, create `notes/23_planar_manipulator_dynamics_and_classical_control_implementation.qmd` with state layout, model-term evaluation, forward/inverse-dynamics order, integrator, saturation, controller update order, gain units, telemetry, scenario configuration, and reproducibility controls.
 - [ ] Extend `ros_ws/src/planar_manipulator_lab` with separate pure model, controller, simulation, metric, and experiment-runner components; do not couple it to the differential-drive plant or controller packages and do not add a ROS runtime or simulator adapter.
 - [ ] Implement the fixed 2R mass matrix, Coriolis/centrifugal bias, gravity, viscous friction, forward and inverse dynamics, declared reference, deterministic integrator, torque saturation, joint-envelope monitoring, external joint-disturbance input, and model-mismatch injection.
 - [ ] Implement the frozen joint-space PD, gravity-compensated PD, and computed-torque PD stacks without per-scenario retuning; keep the controller's nominal model distinct from the evaluator-owned plant parameters.
@@ -419,7 +421,7 @@ The outcome is one headless nominal integration path that demonstrably exercises
 
 #### Implement and document
 
-- [ ] When implementation begins, create `notes/22_ros2_gazebo_integration_and_motion_safety_implementation.qmd` with the durable simulation-clock, launch, bridge, effort-adapter, frame, timestamp, and evaluator boundary.
+- [ ] When implementation begins, create `notes/24_ros2_gazebo_integration_and_motion_safety_implementation.qmd` with the durable simulation-clock, launch, bridge, effort-adapter, frame, timestamp, and evaluator boundary.
 - [ ] Create `ros_ws/src/differential_drive_gazebo` with the minimum robot, world, launch, nominal scenario runner, and evaluator required by the specification.
 - [ ] Add thin ROS 2 adapters to the trajectory and controller packages; do not duplicate their pure algorithms in the Gazebo package.
 - [ ] Integrate trajectory reference, odometry and joint-state feedback, controller wheel-effort request, the selected Gazebo effort adapter, `tf2`, and evaluator-only ground truth with explicit units, frames, and timestamps.
@@ -452,7 +454,7 @@ The outcome is separately owned, reusable command-safety logic verified through 
 
 #### Implement and document
 
-- [ ] Extend `notes/22_ros2_gazebo_integration_and_motion_safety_implementation.qmd` with command validation, watchdog clock, state transitions, emergency-stop priority, reset, diagnostics, recording, and shutdown behaviour only when implementation begins.
+- [ ] Extend `notes/24_ros2_gazebo_integration_and_motion_safety_implementation.qmd` with command validation, watchdog clock, state transitions, emergency-stop priority, reset, diagnostics, recording, and shutdown behaviour only when implementation begins.
 - [ ] Create `ros_ws/src/motion_safety_supervisor` with a pure deterministic state machine, focused unit tests, and a thin ROS 2 node; keep Gazebo assets and scenario orchestration in `differential_drive_gazebo`.
 - [ ] Implement safe-envelope validation, sequence and timestamp checks, command and feedback watchdogs, latched emergency stop, explicit reset policy, stopped-safe output, and structured diagnostic status.
 - [ ] Add fault scenarios and record reference, raw and validated efforts, odometry, joint states, ground truth, diagnostics, limit events, and safety interventions through `rosbag2` with MCAP storage.
@@ -471,7 +473,7 @@ The outcome is the final Phase 1 conclusion. This capability evaluates accepted 
 
 #### Learn and review
 
-- [ ] Create `notes/23_geometry_mechanics_and_control_cumulative_review.qmd` with separate retrieval, derivation, application, and limitation blocks spanning frames, planar and spatial kinematics, Jacobians, inverse kinematics, redundancy, odometry, mobile and manipulator dynamics, trajectories, classical control, integration, and safety.
+- [ ] Create `notes/25_geometry_mechanics_and_control_cumulative_review.qmd` with separate retrieval, derivation, application, and limitation blocks spanning frames, planar and spatial kinematics, Jacobians, inverse kinematics, redundancy, odometry, mobile and manipulator dynamics, trajectories, classical control, integration, and safety.
 - [ ] Complete and self-check every cumulative block, correct each blocking misconception, and obtain user approval.
 - [ ] Add the approved cumulative review to `notes/_quarto.yml`; because it introduces no new concepts or notation, verify rather than duplicate glossary and notation entries.
 

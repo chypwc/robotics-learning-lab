@@ -27,7 +27,8 @@ book:
         - 05_ros2_packages_and_development_workflow.qmd
         - 06_planar_rigid_body_motion_se2_and_twists.qmd
         - 07_degrees_of_freedom_and_spatial_motion_so3_se3.qmd
-        - 08_general_robot_kinematics_and_jacobians.qmd
+        - 08_screw_motion_se3_exponential_and_spatial_integration.qmd
+        - 10_general_robot_kinematics_and_jacobians.qmd
         
 
 lang: en-AU

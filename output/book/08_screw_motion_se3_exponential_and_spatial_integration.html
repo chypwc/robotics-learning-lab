@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>8&nbsp; General Robot Kinematics and Jacobians – Foundations of Autonomous Robotics</title>
+<title>8&nbsp; Screw Motion, the SE(3) Exponential, and Spatial Pose Integration – Foundations of Autonomous Robotics</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -33,6 +33,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./10_general_robot_kinematics_and_jacobians.html" rel="next">
 <link href="./07_degrees_of_freedom_and_spatial_motion_so3_se3.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -294,7 +295,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html"><span>Part I:</span> Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./08_general_robot_kinematics_and_jacobians.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html"><span>Part I:</span> Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./08_screw_motion_se3_exponential_and_spatial_integration.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Screw Motion, the <span class="math inline">\(SE(3)\)</span> Exponential, and Spatial Pose Integration</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -371,8 +372,14 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./08_general_robot_kinematics_and_jacobians.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></span></a>
+  <a href="./08_screw_motion_se3_exponential_and_spatial_integration.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Screw Motion, the <span class="math inline">\(SE(3)\)</span> Exponential, and Spatial Pose Integration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_general_robot_kinematics_and_jacobians.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></span></a>
   </div>
 </li>
       </ul>
@@ -432,44 +439,9 @@ window.Quarto = {
   <li><a href="#sec-motion-workflow-symbol-summary" id="toc-sec-motion-workflow-symbol-summary" class="nav-link" data-scroll-target="#sec-motion-workflow-symbol-summary">Motion workflow and symbol summary</a>
   <ul class="collapse">
   <li><a href="#the-three-workflows" id="toc-the-three-workflows" class="nav-link" data-scroll-target="#the-three-workflows">The three workflows</a></li>
+  <li><a href="#from-aboldsymboleta-to-mathbf-t_delta-and-back" id="toc-from-aboldsymboleta-to-mathbf-t_delta-and-back" class="nav-link" data-scroll-target="#from-aboldsymboleta-to-mathbf-t_delta-and-back">From <span class="math inline">\({}^{a}\boldsymbol\eta\)</span> to <span class="math inline">\(\mathbf T_\Delta\)</span> and back</a></li>
   <li><a href="#separating-geometry-from-motion-amount" id="toc-separating-geometry-from-motion-amount" class="nav-link" data-scroll-target="#separating-geometry-from-motion-amount">Separating geometry from motion amount</a></li>
   <li><a href="#symbol-and-purpose-reference" id="toc-symbol-and-purpose-reference" class="nav-link" data-scroll-target="#symbol-and-purpose-reference">Symbol and purpose reference</a></li>
-  </ul></li>
-  <li><a href="#sec-general-forward-kinematics" id="toc-sec-general-forward-kinematics" class="nav-link" data-scroll-target="#sec-general-forward-kinematics"><span class="header-section-number">8.6</span> Configuration coordinates and forward kinematics</a>
-  <ul class="collapse">
-  <li><a href="#configuration-space-and-coordinate-vectors" id="toc-configuration-space-and-coordinate-vectors" class="nav-link" data-scroll-target="#configuration-space-and-coordinate-vectors"><span class="header-section-number">8.6.1</span> Configuration space and coordinate vectors</a></li>
-  <li><a href="#task-variables-and-the-forward-map" id="toc-task-variables-and-the-forward-map" class="nav-link" data-scroll-target="#task-variables-and-the-forward-map"><span class="header-section-number">8.6.2</span> Task variables and the forward map</a></li>
-  <li><a href="#the-total-derivative-and-multivariable-chain-rule" id="toc-the-total-derivative-and-multivariable-chain-rule" class="nav-link" data-scroll-target="#the-total-derivative-and-multivariable-chain-rule"><span class="header-section-number">8.6.3</span> The total derivative and multivariable chain rule</a></li>
-  </ul></li>
-  <li><a href="#sec-serial-product-of-exponentials" id="toc-sec-serial-product-of-exponentials" class="nav-link" data-scroll-target="#sec-serial-product-of-exponentials"><span class="header-section-number">8.7</span> Serial-chain pose through products of exponentials</a>
-  <ul class="collapse">
-  <li><a href="#home-configuration-and-joint-screw-axes" id="toc-home-configuration-and-joint-screw-axes" class="nav-link" data-scroll-target="#home-configuration-and-joint-screw-axes"><span class="header-section-number">8.7.1</span> Home configuration and joint screw axes</a></li>
-  <li><a href="#space-form-product-of-exponentials" id="toc-space-form-product-of-exponentials" class="nav-link" data-scroll-target="#space-form-product-of-exponentials"><span class="header-section-number">8.7.2</span> Space-form product of exponentials</a></li>
-  <li><a href="#body-form-product-of-exponentials" id="toc-body-form-product-of-exponentials" class="nav-link" data-scroll-target="#body-form-product-of-exponentials"><span class="header-section-number">8.7.3</span> Body-form product of exponentials</a></li>
-  <li><a href="#equivalence-with-a-transform-chain" id="toc-equivalence-with-a-transform-chain" class="nav-link" data-scroll-target="#equivalence-with-a-transform-chain"><span class="header-section-number">8.7.4</span> Equivalence with a transform chain</a></li>
-  </ul></li>
-  <li><a href="#sec-general-robot-jacobians" id="toc-sec-general-robot-jacobians" class="nav-link" data-scroll-target="#sec-general-robot-jacobians"><span class="header-section-number">8.8</span> Velocity kinematics and robot Jacobians</a>
-  <ul class="collapse">
-  <li><a href="#task-jacobians" id="toc-task-jacobians" class="nav-link" data-scroll-target="#task-jacobians"><span class="header-section-number">8.8.1</span> Task Jacobians</a></li>
-  <li><a href="#space-jacobians" id="toc-space-jacobians" class="nav-link" data-scroll-target="#space-jacobians"><span class="header-section-number">8.8.2</span> Space Jacobians</a></li>
-  <li><a href="#body-jacobians" id="toc-body-jacobians" class="nav-link" data-scroll-target="#body-jacobians"><span class="header-section-number">8.8.3</span> Body Jacobians</a></li>
-  <li><a href="#the-bodyspace-adjoint-relation" id="toc-the-bodyspace-adjoint-relation" class="nav-link" data-scroll-target="#the-bodyspace-adjoint-relation"><span class="header-section-number">8.8.4</span> The body–space adjoint relation</a></li>
-  </ul></li>
-  <li><a href="#sec-robot-jacobian-rank" id="toc-sec-robot-jacobian-rank" class="nav-link" data-scroll-target="#sec-robot-jacobian-rank"><span class="header-section-number">8.9</span> Rank, singularities, and conditioning</a>
-  <ul class="collapse">
-  <li><a href="#task-specific-rank-loss" id="toc-task-specific-rank-loss" class="nav-link" data-scroll-target="#task-specific-rank-loss"><span class="header-section-number">8.9.1</span> Task-specific rank loss</a></li>
-  <li><a href="#singular-values-and-numerical-conditioning" id="toc-singular-values-and-numerical-conditioning" class="nav-link" data-scroll-target="#singular-values-and-numerical-conditioning"><span class="header-section-number">8.9.2</span> Singular values and numerical conditioning</a></li>
-  <li><a href="#full-twist-and-reduced-task-jacobians" id="toc-full-twist-and-reduced-task-jacobians" class="nav-link" data-scroll-target="#full-twist-and-reduced-task-jacobians"><span class="header-section-number">8.9.3</span> Full-twist and reduced-task Jacobians</a></li>
-  </ul></li>
-  <li><a href="#sec-general-kinematics-checks" id="toc-sec-general-kinematics-checks" class="nav-link" data-scroll-target="#sec-general-kinematics-checks"><span class="header-section-number">8.10</span> Modelling limits and implementation checks</a>
-  <ul class="collapse">
-  <li><a href="#supported-serial-chain-model" id="toc-supported-serial-chain-model" class="nav-link" data-scroll-target="#supported-serial-chain-model"><span class="header-section-number">8.10.1</span> Supported serial-chain model</a></li>
-  <li><a href="#explicit-exclusions" id="toc-explicit-exclusions" class="nav-link" data-scroll-target="#explicit-exclusions"><span class="header-section-number">8.10.2</span> Explicit exclusions</a></li>
-  <li><a href="#analytic-and-finite-difference-checks" id="toc-analytic-and-finite-difference-checks" class="nav-link" data-scroll-target="#analytic-and-finite-difference-checks"><span class="header-section-number">8.10.3</span> Analytic and finite-difference checks</a></li>
-  </ul></li>
-  <li><a href="#cumulative-chapter-review" id="toc-cumulative-chapter-review" class="nav-link" data-scroll-target="#cumulative-chapter-review">Cumulative chapter review</a>
-  <ul class="collapse">
-  <li><a href="#answers-and-hints-4" id="toc-answers-and-hints-4" class="nav-link" data-scroll-target="#answers-and-hints-4">Answers and hints</a></li>
   </ul></li>
   <li><a href="#sec-appendix-chasles-mozzi" id="toc-sec-appendix-chasles-mozzi" class="nav-link" data-scroll-target="#sec-appendix-chasles-mozzi">Appendix: Chasles–Mozzi theorem and proof</a>
   <ul class="collapse">
@@ -484,9 +456,9 @@ window.Quarto = {
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html"><span>Part I:</span> Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./08_general_robot_kinematics_and_jacobians.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01_linear_algebra_foundations.html"><span>Part I:</span> Motion, Mechanics, and Control</a></li><li class="breadcrumb-item"><a href="./08_screw_motion_se3_exponential_and_spatial_integration.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Screw Motion, the <span class="math inline">\(SE(3)\)</span> Exponential, and Spatial Pose Integration</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-general-robot-kinematics-jacobians" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></span></h1>
+<h1 class="title"><span id="sec-screw-motion-se3-exponential-spatial-integration" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Screw Motion, the <span class="math inline">\(SE(3)\)</span> Exponential, and Spatial Pose Integration</span></span></h1>
 </div>
 
 
@@ -510,8 +482,8 @@ window.Quarto = {
 </section>
 <section id="sec-robot-configurations-joint-coordinates" class="level2" data-number="8.1">
 <h2 data-number="8.1" class="anchored" data-anchor-id="sec-robot-configurations-joint-coordinates"><span class="header-section-number">8.1</span> Robot configurations, poses, and joint coordinates</h2>
-<p>This chapter develops the geometry needed to predict the motion of a serial robot. It begins by reviewing configuration and pose for a collection of rigid links connected by joints, then introduces joint coordinates, forward kinematics, screw-axis representations, and Jacobians as successive descriptions of the same articulated system.</p>
-<p>The chapter treats open serial chains with ideal rigid links and one-degree-of-freedom revolute or prismatic joints. Finite-pitch helical motion is introduced to explain the general screw model, but it is not included as a supported serial-chain joint type. The chapter does not yet model joint compliance, backlash, closed kinematic loops, collision, forces, actuator dynamics, or feedback control.</p>
+<p>This chapter develops the spatial geometry needed to represent the motion permitted by one robot joint. It begins by reviewing configuration and pose for rigid links connected by joints, then introduces joint coordinates, screw-axis representations, finite rigid displacements through the <span class="math inline">\(SE(3)\)</span> exponential and logarithm, and constant-twist pose integration.</p>
+<p>The chapter treats ideal rigid links and one-degree-of-freedom revolute or prismatic joints. Finite-pitch helical motion is introduced to explain the general screw model, but it is not included as a supported robot-joint type. Composing several joints into a serial-chain forward map and differentiating that map to obtain robot Jacobians belong to <a href="10_general_robot_kinematics_and_jacobians.html" class="quarto-xref"><span>Chapter 9</span></a>. This chapter does not model joint compliance, backlash, closed kinematic loops, collision, forces, actuator dynamics, or feedback control.</p>
 <section id="configuration-and-pose-for-links-and-joints" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="configuration-and-pose-for-links-and-joints">Configuration and pose for links and joints</h3>
 <p>An open serial robot consists of rigid links connected in sequence by joints. Each one-degree-of-freedom joint restricts the relative motion of two neighbouring links to one independent rotation or translation. Predicting the robot’s geometry therefore requires more than locating one free rigid body: it requires determining the simultaneous placement of every link while satisfying every joint constraint.</p>
@@ -3789,12 +3761,12 @@ D(\theta)
 &amp;=
 \theta{}^{a}\mathbf s_\omega,\\
 {}^{a}\boldsymbol\phi
-&amp;\xmapsto{[\,\cdot\,]_\times}
+&amp;\overset{[\,\cdot\,]_\times}{\longmapsto}
 \boldsymbol\Phi
 =
 [{}^{a}\boldsymbol\phi]_\times,\\
 \boldsymbol\Phi
-&amp;\xmapsto{\exp}
+&amp;\overset{\exp}{\longmapsto}
 \mathbf R
 =
 \exp(\boldsymbol\Phi).
@@ -4109,6 +4081,22 @@ Q_{ii},
 <p>A <strong>threshold</strong> is a declared cutoff used by an implementation to choose a case. The following thresholds answer different questions and therefore must not be merged.</p>
 <p>The series threshold <span class="math inline">\(\theta_{\mathrm{series}}\)</span> asks: <em>Is the angle small enough that a Taylor series is more accurate than direct trigonometric subtraction?</em> The near-<span class="math inline">\(\pi\)</span> threshold <span class="math inline">\(\varepsilon_\pi\)</span> asks: <em>Is the angle close enough to <span class="math inline">\(\pi\)</span> that the skew column is unreliable and the symmetric axis formula should be used?</em> Both select between formulas for the same mathematical result.</p>
 <p>The zero threshold <span class="math inline">\(\varepsilon_{\mathrm{zero}}\)</span> asks a different question: <em>Does this interface intentionally treat a sufficiently small measured or modelled rotation as exactly zero?</em> This policy may change a nonzero input into the identity rotation, so it changes the returned model rather than merely changing the evaluation formula.</p>
+<p>The translation-zero tolerance <span class="math inline">\(\varepsilon_{p,0}\)</span> asks whether the translation column <span class="math inline">\({}^{a}\mathbf p\)</span> is small enough to receive a zero-translation status. It is used when an identity rotation must be classified as either a complete identity or a pure translation. Define</p>
+<p><span class="math display">\[
+\boxed{
+\varepsilon_{p,0}
+\in
+[0,\infty)\,\mathrm m,
+\qquad
+\left\|{}^{a}\mathbf p\right\|_2
+\leq
+\varepsilon_{p,0}
+\quad\Longrightarrow\quad
+{}^{a}\mathbf p
+\text{ is classified as zero translation}
+}.
+\]</span></p>
+<p>This comparison is measured in metres and cannot use an angular tolerance. By itself, the classification does not replace <span class="math inline">\({}^{a}\mathbf p\)</span> or <span class="math inline">\({}^{a}\boldsymbol\rho\)</span> with <span class="math inline">\(\mathbf 0_3\)</span>; an interface that also canonicalises the stored or returned translation to zero must declare that separate behaviour. An interface that preserves every representable nonzero translation should set <span class="math inline">\(\varepsilon_{p,0}=0\,\mathrm m\)</span>.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 23%">
@@ -4143,11 +4131,16 @@ Q_{ii},
 <td>Declares an angle indistinguishable from zero at an interface</td>
 <td>Yes, if a nonzero angle is canonicalised to zero</td>
 </tr>
+<tr class="even">
+<td><span class="math inline">\(\varepsilon_{p,0}\)</span></td>
+<td style="text-align: right;">m</td>
+<td>Classifies a translation as zero or nonzero</td>
+<td>No, unless the interface also canonicalises the translation column</td>
+</tr>
 </tbody>
 </table>
-<p>The first two thresholds choose stable formulas whose outputs should agree where their domains overlap. The third is a modelling or measurement-resolution policy and must be explicit. An interface that promises to preserve every representable nonzero rotation should use the small-angle series and reserve the zero case for an exact identity. If an interface deliberately canonicalises small rotations to zero, it must document that behaviour.</p>
-<p>A separate translation-zero tolerance <span class="math inline">\(\varepsilon_{p,0}\)</span> answers whether a translation is treated as zero. It is measured in metres, whereas all three angular thresholds are measured in radians. An angular tolerance cannot decide whether a metre-valued translation is zero.</p>
-<p>These cutoffs are part of the public numerical behaviour. Every threshold must be finite and nonnegative, with <span class="math inline">\(0&lt;\theta_{\mathrm{series}}&lt;\pi\)</span> and <span class="math inline">\(0\leq\varepsilon_\pi&lt;\pi\)</span>. Formula-selection regions should not overlap; for example, require <span class="math inline">\(\theta_{\mathrm{series}}&lt;\pi-\varepsilon_\pi\)</span>. If overlap is allowed, the implementation must declare which case takes precedence. Residual tolerances and <span class="math inline">\(\varepsilon_{p,0}\)</span> must likewise be finite and nonnegative. Reject an invalid threshold configuration before processing a transformation.</p>
+<p>The first two thresholds choose stable formulas whose outputs should agree where their domains overlap. The angular zero threshold and translation-zero tolerance are interface-resolution policies and must be explicit. An interface that promises to preserve every representable nonzero rotation should use the small-angle series and reserve the zero case for an exact identity. If an interface deliberately canonicalises small rotations or translations to zero, it must document that behaviour.</p>
+<p>These cutoffs are part of the public numerical behaviour. Every configured value must be finite and nonnegative, with <span class="math inline">\(0&lt;\theta_{\mathrm{series}}&lt;\pi\)</span> and <span class="math inline">\(0\leq\varepsilon_\pi&lt;\pi\)</span>. Formula-selection regions should not overlap; for example, require <span class="math inline">\(\theta_{\mathrm{series}}&lt;\pi-\varepsilon_\pi\)</span>. If overlap is allowed, the implementation must declare which case takes precedence. Reject an invalid threshold configuration before processing a transformation.</p>
 </section>
 </section>
 <section id="validation-deterministic-evaluation-and-evidence" class="level3" data-number="8.5.4">
@@ -4305,6 +4298,33 @@ e_{p,\mathrm{rt}}
 <section id="a-small-rotation-with-finite-translation" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="a-small-rotation-with-finite-translation">A small rotation with finite translation</h4>
 <p>This case asks whether a very small but nonzero rotation can be preserved without losing its effect on translation. The series formulas should produce a transformation close to pure translation while retaining the first-order rotational correction.</p>
+<p>The finite exponential-coordinate formulas used in this case are</p>
+<p><span class="math display">\[
+\begin{aligned}
+\theta
+&amp;=
+\left\|{}^{a}\boldsymbol\phi\right\|_2,
+&amp;
+\boldsymbol\Phi
+&amp;=
+[{}^{a}\boldsymbol\phi]_\times,\\
+\mathbf R
+&amp;=
+\mathbf I_3
++A(\theta)\boldsymbol\Phi
++B(\theta)\boldsymbol\Phi^2,
+&amp;
+\mathbf J
+&amp;=
+\mathbf I_3
++B(\theta)\boldsymbol\Phi
++C(\theta)\boldsymbol\Phi^2,\\
+{}^{a}\mathbf p
+&amp;=
+\mathbf J{}^{a}\boldsymbol\rho.
+\end{aligned}
+\]</span></p>
+<p>For a sufficiently small <span class="math inline">\(\theta\)</span>, the series values <span class="math inline">\(A(\theta)=1+O(\theta^2)\)</span>, <span class="math inline">\(B(\theta)=1/2+O(\theta^2)\)</span>, and <span class="math inline">\(C(\theta)=1/6+O(\theta^2)\)</span> replace direct evaluation of the trigonometric ratios.</p>
 <p>Let the finite exponential-coordinate blocks referred to frame <span class="math inline">\(\{a\}\)</span> be</p>
 <p><span class="math display">\[
 {}^{a}\boldsymbol\rho
@@ -4388,6 +4408,42 @@ e_{p,\mathrm{rt}}
 <section id="an-exact-pi-rotation-about-a-non-coordinate-axis" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="an-exact-pi-rotation-about-a-non-coordinate-axis">An exact <span class="math inline">\(\pi\)</span> rotation about a non-coordinate axis</h4>
 <p>This case shows why the skew-column axis formula cannot be used at <span class="math inline">\(\theta=\pi\)</span> and how the symmetric matrix <span class="math inline">\(\mathbf Q\)</span> recovers the unsigned axis.</p>
+<p>The principal-angle formulas used first are</p>
+<p><span class="math display">\[
+\begin{aligned}
+c_\theta
+&amp;=
+\frac{\operatorname{tr}(\mathbf R)-1}{2},
+&amp;
+{}^{a}\mathbf u
+&amp;=
+\begin{bmatrix}
+R_{32}-R_{23}\\
+R_{13}-R_{31}\\
+R_{21}-R_{12}
+\end{bmatrix},\\
+s_\theta
+&amp;=
+\frac12\left\|{}^{a}\mathbf u\right\|_2,
+&amp;
+\theta
+&amp;=
+\operatorname{atan2}(s_\theta,c_\theta).
+\end{aligned}
+\]</span></p>
+<p>When <span class="math inline">\(s_\theta\)</span> vanishes at <span class="math inline">\(\theta=\pi\)</span>, the axis is recovered from</p>
+<p><span class="math display">\[
+\mathbf Q
+=
+\frac{
+\dfrac12(\mathbf R+\mathbf R^{\mathsf T})
+-c_\theta\mathbf I_3
+}{1-c_\theta}
+=
+{}^{a}\mathbf s_\omega
+({}^{a}\mathbf s_\omega)^{\mathsf T}.
+\]</span></p>
+<p>The component calculation selects <span class="math inline">\(k=\operatorname{arg\,max}_i Q_{ii}\)</span>, recovers <span class="math inline">\({}^{a}s_{\omega,k}=\sqrt{Q_{kk}}\)</span>, and then uses <span class="math inline">\({}^{a}s_{\omega,j}=Q_{jk}/{}^as_{\omega,k}\)</span> for <span class="math inline">\(j\ne k\)</span>, followed by the declared sign rule.</p>
 <p>Consider the unit axis and rotation</p>
 <p><span class="math display">\[
 {}^{a}\mathbf s_\omega
@@ -4409,7 +4465,18 @@ e_{p,\mathrm{rt}}
 0&amp;0&amp;-1
 \end{bmatrix}.
 \]</span></p>
-<p>Here <span class="math inline">\(c_\theta=-1\)</span>, <span class="math inline">\({}^{a}\mathbf u=\mathbf 0_3\)</span>, and <span class="math inline">\(\theta=\operatorname{atan2}(0,-1)=\pi\)</span>. The nominal formula would divide by <span class="math inline">\(s_\theta=0\)</span>, but the symmetric near-<span class="math inline">\(\pi\)</span> formula branch gives</p>
+<p>Here <span class="math inline">\(c_\theta=-1\)</span>, <span class="math inline">\({}^{a}\mathbf u=\mathbf 0_3\)</span>, and <span class="math inline">\(\theta=\operatorname{atan2}(0,-1)=\pi\)</span>. Away from <span class="math inline">\(\pi\)</span>, the ordinary skew-based formulas recover the axis and rotation vector through</p>
+<p><span class="math display">\[
+{}^{a}\mathbf s_\omega
+=
+\frac{{}^{a}\mathbf u}{2s_\theta},
+\qquad
+{}^{a}\boldsymbol\phi
+=
+\frac{\theta}{2s_\theta}
+{}^{a}\mathbf u.
+\]</span></p>
+<p>At <span class="math inline">\(\theta=\pi\)</span>, both formulas would divide <span class="math inline">\({}^{a}\mathbf u=\mathbf 0_3\)</span> by <span class="math inline">\(s_\theta=0\)</span> and therefore contain the undefined ratio <span class="math inline">\(\mathbf 0_3/0\)</span>. The symmetric near-<span class="math inline">\(\pi\)</span> formula avoids this division and gives</p>
 <p><span class="math display">\[
 \mathbf Q
 =
@@ -4438,10 +4505,80 @@ e_{p,\mathrm{rt}}
 \end{bmatrix}.
 \]</span></p>
 <p>The opposite axis would describe the same physical <span class="math inline">\(\pi\)</span> rotation, but the canonical rule ensures that repeated logarithms return the same component column.</p>
+<p>Recovering <span class="math inline">\({}^{a}\boldsymbol\phi\)</span> from <span class="math inline">\(\mathbf R\)</span> completes only the rotational part of the logarithm. The finite linear block <span class="math inline">\({}^{a}\boldsymbol\rho\)</span> also depends on the transformation’s translation column <span class="math inline">\({}^{a}\mathbf p\)</span>, because</p>
+<p><span class="math display">\[
+{}^{a}\mathbf p
+=
+\mathbf J({}^{a}\boldsymbol\phi){}^{a}\boldsymbol\rho,
+\qquad
+{}^{a}\boldsymbol\rho
+=
+\mathbf J({}^{a}\boldsymbol\phi)^{-1}{}^{a}\mathbf p.
+\]</span></p>
+<p>In this example, take the complete transformation to be a pure rotation about an axis through the frame origin <span class="math inline">\(O_a\)</span>, so</p>
+<p><span class="math display">\[
+\mathbf T
+=
+\begin{bmatrix}
+\mathbf R&amp;\mathbf 0_3\\
+\mathbf 0_3^{\mathsf T}&amp;1
+\end{bmatrix},
+\qquad
+{}^{a}\mathbf p=\mathbf 0_3.
+\]</span></p>
+<p>The principal-angle matrix <span class="math inline">\(\mathbf J({}^{a}\boldsymbol\phi)\)</span> is invertible at <span class="math inline">\(\theta=\pi\)</span>, and therefore</p>
+<p><span class="math display">\[
+\boxed{
+{}^{a}\boldsymbol\rho
+=
+\mathbf J({}^{a}\boldsymbol\phi)^{-1}\mathbf 0_3
+=
+\mathbf 0_3
+}.
+\]</span></p>
+<p>If the same rotation block were paired with a nonzero translation column, the rotation vector would remain the same, but <span class="math inline">\({}^{a}\boldsymbol\rho\)</span> would instead be obtained by applying <span class="math inline">\(\mathbf J({}^{a}\boldsymbol\phi)^{-1}\)</span> to that declared translation column.</p>
 </section>
 <section id="a-finite-pitch-helical-round-trip" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="a-finite-pitch-helical-round-trip">A finite-pitch helical round trip</h4>
 <p>This case starts from independently declared screw geometry, constructs its transformation, and then applies the logarithm. Recovering the original finite blocks checks that the exponential and logarithm agree on a motion that combines an offset rotation axis with axial translation.</p>
+<p>The screw-coordinate formulas used to construct the finite motion are</p>
+<p><span class="math display">\[
+\begin{aligned}
+{}^{a}\mathbf s_v
+&amp;=
+-{}^{a}\mathbf s_\omega
+\times{}^{a}\mathbf p_\ell
++h{}^{a}\mathbf s_\omega,\\
+{}^{a}\boldsymbol\rho
+&amp;=
+{}^{a}\mathbf s_v\theta,
+&amp;
+{}^{a}\boldsymbol\phi
+&amp;=
+{}^{a}\mathbf s_\omega\theta.
+\end{aligned}
+\]</span></p>
+<p>The geometric helical exponential then gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf R
+&amp;=
+\exp\!\left(
+[{}^{a}\mathbf s_\omega]_\times\theta
+\right),\\
+{}^{a}\mathbf p
+&amp;=
+(\mathbf I_3-\mathbf R){}^{a}\mathbf p_\ell
++h\theta{}^{a}\mathbf s_\omega,\\
+\mathbf T
+&amp;=
+\begin{bmatrix}
+\mathbf R&amp;{}^{a}\mathbf p\\
+\mathbf 0_3^{\mathsf T}&amp;1
+\end{bmatrix}.
+\end{aligned}
+\]</span></p>
+<p>For the reverse calculation, the logarithm recovers <span class="math inline">\({}^{a}\boldsymbol\phi\)</span> from <span class="math inline">\(\mathbf R\)</span> and then uses <span class="math inline">\({}^{a}\boldsymbol\rho=\mathbf J({}^{a}\boldsymbol\phi)^{-1}{}^a\mathbf p\)</span>.</p>
 <p>Let the oriented axis point along positive <span class="math inline">\(z_a\)</span>, pass through</p>
 <p><span class="math display">\[
 {}^{a}\mathbf p_\ell
@@ -4489,16 +4626,49 @@ e_{p,\mathrm{rt}}
 \end{bmatrix}
 \mathrm{rad}.
 \]</span></p>
-<p>The geometric exponential from <a href="#eq-se3-helical-screw-geometric-exponential" class="quarto-xref">Equation&nbsp;<span>8.5</span></a> gives</p>
+<p>To calculate the rotation block, first form the cross-product matrix of the unit axis and its square:</p>
 <p><span class="math display">\[
-\mathbf R
+\boldsymbol\Omega
+\mathrel{:=}
+[{}^{a}\mathbf s_\omega]_\times
 =
 \begin{bmatrix}
 0&amp;-1&amp;0\\
 1&amp;0&amp;0\\
-0&amp;0&amp;1
+0&amp;0&amp;0
 \end{bmatrix},
 \qquad
+\boldsymbol\Omega^2
+=
+\begin{bmatrix}
+-1&amp;0&amp;0\\
+0&amp;-1&amp;0\\
+0&amp;0&amp;0
+\end{bmatrix}.
+\]</span></p>
+<p>Rodrigues’ formula evaluates the rotational exponential:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathbf R
+&amp;=
+\exp(\boldsymbol\Omega\theta)\\
+&amp;=
+\mathbf I_3
++\sin\theta\,\boldsymbol\Omega
++(1-\cos\theta)\boldsymbol\Omega^2\\
+&amp;=
+\mathbf I_3+\boldsymbol\Omega+\boldsymbol\Omega^2\\
+&amp;=
+\begin{bmatrix}
+0&amp;-1&amp;0\\
+1&amp;0&amp;0\\
+0&amp;0&amp;1
+\end{bmatrix}.
+\end{aligned}
+\]</span></p>
+<p>where the third equality uses <span class="math inline">\(\sin(\pi/2)=1\)</span> and <span class="math inline">\(\cos(\pi/2)=0\)</span>. Geometrically, this matrix rotates the positive <span class="math inline">\(x_a\)</span> direction onto positive <span class="math inline">\(y_a\)</span>, rotates positive <span class="math inline">\(y_a\)</span> onto negative <span class="math inline">\(x_a\)</span>, and leaves the axis direction <span class="math inline">\(z_a\)</span> fixed.</p>
+<p>The translation formula from the geometric helical exponential <a href="#eq-se3-helical-screw-geometric-exponential" class="quarto-xref">Equation&nbsp;<span>8.5</span></a> then gives</p>
+<p><span class="math display">\[
 {}^{a}\mathbf p
 =
 (\mathbf I_3-\mathbf R){}^{a}\mathbf p_\ell
@@ -4521,7 +4691,140 @@ e_{p,\mathrm{rt}}
 \end{bmatrix}.
 \]</span></p>
 <p>The first three entries of the fourth column are measured in metres; the rotation block and bottom row are dimensionless.</p>
-<p>Applying the logarithm pipeline gives <span class="math inline">\(c_\theta=0\)</span>, <span class="math inline">\(s_\theta=1\)</span>, and <span class="math inline">\({}^{a}\boldsymbol\phi=[0\;0\;\pi/2]^{\mathsf T}\,\mathrm{rad}\)</span>. Substitution into <a href="#eq-se3-logarithm-linear-exponential-block" class="quarto-xref">Equation&nbsp;<span>8.30</span></a> gives <span class="math inline">\({}^{a}\boldsymbol\rho=[0\;-\pi/2\;\pi/10]^{\mathsf T}\,\mathrm m\)</span>. Factoring out <span class="math inline">\(\theta\)</span> therefore recovers the original <span class="math inline">\({}^{a}\mathbf s_v\)</span>, <span class="math inline">\({}^{a}\mathbf s_\omega\)</span>, and pitch. This checks the logarithm against the independent axis-point and pitch construction rather than against a duplicate exponential implementation.</p>
+<p>Now apply the logarithm to the constructed transformation. The trace of <span class="math inline">\(\mathbf R\)</span> is <span class="math inline">\(1\)</span>, and its skew-difference data column is</p>
+<p><span class="math display">\[
+{}^{a}\mathbf u
+=
+\begin{bmatrix}
+R_{32}-R_{23}\\
+R_{13}-R_{31}\\
+R_{21}-R_{12}
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\0\\2
+\end{bmatrix}.
+\]</span></p>
+<p>Therefore</p>
+<p><span class="math display">\[
+\begin{aligned}
+c_\theta
+&amp;=
+\frac{\operatorname{tr}(\mathbf R)-1}{2}
+=0,\\
+s_\theta
+&amp;=
+\frac12\|{}^{a}\mathbf u\|_2
+=1,\\
+\theta
+&amp;=
+\operatorname{atan2}(s_\theta,c_\theta)
+=\frac{\pi}{2},\\
+{}^{a}\mathbf s_\omega
+&amp;=
+\frac{{}^{a}\mathbf u}{2s_\theta}
+=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix},\\
+{}^{a}\boldsymbol\phi
+&amp;=
+\theta{}^{a}\mathbf s_\omega
+=
+\begin{bmatrix}
+0\\0\\\pi/2
+\end{bmatrix}
+\mathrm{rad}.
+\end{aligned}
+\]</span></p>
+<p>The rotation block has now recovered <span class="math inline">\({}^{a}\boldsymbol\phi\)</span>, but the translation column must still be converted into the finite linear exponential-coordinate block. For this rotation vector,</p>
+<p><span class="math display">\[
+\boldsymbol\Phi
+=
+[{}^{a}\boldsymbol\phi]_\times
+=
+\begin{bmatrix}
+0&amp;-\pi/2&amp;0\\
+\pi/2&amp;0&amp;0\\
+0&amp;0&amp;0
+\end{bmatrix}.
+\]</span></p>
+<p>Substituting <span class="math inline">\(\theta=\pi/2\)</span> into the left-Jacobian formula</p>
+<p><span class="math display">\[
+\mathbf J({}^{a}\boldsymbol\phi)
+=
+\mathbf I_3
++\frac{1-\cos\theta}{\theta^2}\boldsymbol\Phi
++\frac{\theta-\sin\theta}{\theta^3}\boldsymbol\Phi^2
+\]</span></p>
+<p>gives the following matrix. Its inverse is obtained by inverting the upper-left <span class="math inline">\(2\times2\)</span> block; its third coordinate remains unchanged because rotation about <span class="math inline">\(z_a\)</span> does not mix that coordinate with the perpendicular plane:</p>
+<p><span class="math display">\[
+\mathbf J({}^{a}\boldsymbol\phi)
+=
+\begin{bmatrix}
+2/\pi&amp;-2/\pi&amp;0\\
+2/\pi&amp;2/\pi&amp;0\\
+0&amp;0&amp;1
+\end{bmatrix},
+\qquad
+\mathbf J({}^{a}\boldsymbol\phi)^{-1}
+=
+\begin{bmatrix}
+\pi/4&amp;\pi/4&amp;0\\
+-\pi/4&amp;\pi/4&amp;0\\
+0&amp;0&amp;1
+\end{bmatrix}.
+\]</span></p>
+<p>Using <a href="#eq-se3-logarithm-linear-exponential-block" class="quarto-xref">Equation&nbsp;<span>8.30</span></a> gives</p>
+<p><span class="math display">\[
+\begin{aligned}
+{}^{a}\boldsymbol\rho
+&amp;=
+\mathbf J({}^{a}\boldsymbol\phi)^{-1}{}^{a}\mathbf p\\
+&amp;=
+\begin{bmatrix}
+\pi/4&amp;\pi/4&amp;0\\
+-\pi/4&amp;\pi/4&amp;0\\
+0&amp;0&amp;1
+\end{bmatrix}
+\begin{bmatrix}
+1\\-1\\\pi/10
+\end{bmatrix}
+\mathrm m\\
+&amp;=
+\begin{bmatrix}
+0\\-\pi/2\\\pi/10
+\end{bmatrix}
+\mathrm m.
+\end{aligned}
+\]</span></p>
+<p>Finally, the finite blocks factor as <span class="math inline">\({}^{a}\boldsymbol\rho={}^a\mathbf s_v\theta\)</span> and <span class="math inline">\({}^{a}\boldsymbol\phi={}^a\mathbf s_\omega\theta\)</span>. Dividing both blocks by the recovered angle gives</p>
+<p><span class="math display">\[
+{}^{a}\mathbf s_v
+=
+\frac{{}^{a}\boldsymbol\rho}{\theta}
+=
+\begin{bmatrix}
+0\\-1\\0.2
+\end{bmatrix}
+\mathrm{m\,rad^{-1}},
+\qquad
+{}^{a}\mathbf s_\omega
+=
+\frac{{}^{a}\boldsymbol\phi}{\theta}
+=
+\begin{bmatrix}
+0\\0\\1
+\end{bmatrix}.
+\]</span></p>
+<p>The pitch recovered from these screw coordinates is</p>
+<p><span class="math display">\[
+h
+=
+({}^{a}\mathbf s_\omega)^{\mathsf T}{}^{a}\mathbf s_v
+=0.2\,\mathrm{m\,rad^{-1}},
+\]</span></p>
+<p>which matches the declared screw geometry. The forward calculation began with the physical axis point, axis direction, and pitch, whereas the inverse calculation used only the resulting matrix blocks <span class="math inline">\(\mathbf R\)</span> and <span class="math inline">\({}^{a}\mathbf p\)</span>. Recovering the original screw data therefore checks the logarithm against an independently expressed geometric construction rather than merely reversing the same matrix formula.</p>
 </section>
 </section>
 <section id="quick-test-d-numerical-branches-and-validation" class="level3 unnumbered">
@@ -4571,7 +4874,7 @@ e_{p,\mathrm{rt}}
 &amp;\longmapsto
 \widehat{{}^{a}\boldsymbol\eta},\\
 \widehat{{}^{a}\boldsymbol\eta}
-&amp;\xmapsto{\exp}
+&amp;\overset{\exp}{\longmapsto}
 \mathbf T_\Delta.
 \end{aligned}
 }
@@ -4606,10 +4909,10 @@ e_{p,\mathrm{rt}}
 \boxed{
 \begin{aligned}
 \mathbf T_\Delta
-&amp;\xmapsto{\text{selected }\log}
+&amp;\overset{\text{selected }\log}{\longmapsto}
 \widehat{{}^{a}\boldsymbol\eta},\\
 \widehat{{}^{a}\boldsymbol\eta}
-&amp;\xmapsto{\text{vee}}
+&amp;\overset{\text{vee}}{\longmapsto}
 {}^{a}\boldsymbol\eta
 =
 \begin{bmatrix}
@@ -4620,6 +4923,99 @@ e_{p,\mathrm{rt}}
 }
 \]</span></p>
 <p>The vee operator reverses the hat operator by extracting the six-component column from its structured <span class="math inline">\(4\times4\)</span> matrix. The inverse workflow is useful when recovering a screw displacement, constructing intermediate poses along the selected screw path, or converting a relative pose error into a six-component column. If the task is only to transform points or compose known poses, <span class="math inline">\(\mathbf T_\Delta\)</span> is already sufficient and its logarithm is unnecessary.</p>
+</section>
+<section id="from-aboldsymboleta-to-mathbf-t_delta-and-back" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="from-aboldsymboleta-to-mathbf-t_delta-and-back">From <span class="math inline">\({}^{a}\boldsymbol\eta\)</span> to <span class="math inline">\(\mathbf T_\Delta\)</span> and back</h3>
+<p>The finite-displacement and inverse workflows form a forward-and-back pair. The forward direction starts with the finite exponential-coordinate column</p>
+<p><span class="math display">\[
+{}^{a}\boldsymbol\eta
+=
+\begin{bmatrix}
+{}^{a}\boldsymbol\rho\\
+{}^{a}\boldsymbol\phi
+\end{bmatrix},
+\]</span></p>
+<p>where <span class="math inline">\({}^{a}\boldsymbol\rho\in\mathbb R^3\)</span> is measured in metres and <span class="math inline">\({}^{a}\boldsymbol\phi\in\mathbb R^3\)</span> is measured in radians. Form its hat matrix using <span class="math inline">\(\boldsymbol\Phi=[{}^{a}\boldsymbol\phi]_\times\)</span>:</p>
+<p><span class="math display">\[
+\widehat{{}^{a}\boldsymbol\eta}
+=
+\begin{bmatrix}
+\boldsymbol\Phi&amp;{}^{a}\boldsymbol\rho\\
+\mathbf 0_3^{\mathsf T}&amp;0
+\end{bmatrix}.
+\]</span></p>
+<p>The exponential converts this finite generator into a rigid-displacement transformation:</p>
+<p><span class="math display">\[
+\boxed{
+\begin{aligned}
+\mathbf T_\Delta
+&amp;=
+\exp\!\left(
+\widehat{{}^{a}\boldsymbol\eta}
+\right)\\
+&amp;=
+\begin{bmatrix}
+\mathbf R({}^{a}\boldsymbol\phi)
+&amp;
+\mathbf J({}^{a}\boldsymbol\phi){}^{a}\boldsymbol\rho\\
+\mathbf 0_3^{\mathsf T}&amp;1
+\end{bmatrix}.
+\end{aligned}
+}
+\]</span></p>
+<p>Thus <span class="math inline">\({}^{a}\boldsymbol\phi\)</span> determines the rotation block <span class="math inline">\(\mathbf R\)</span>, while <span class="math inline">\({}^{a}\boldsymbol\rho\)</span> and the same rotation vector together determine the final translation column</p>
+<p><span class="math display">\[
+{}^{a}\mathbf p
+=
+\mathbf J({}^{a}\boldsymbol\phi){}^{a}\boldsymbol\rho.
+\]</span></p>
+<p>The inverse direction starts with a validated transformation</p>
+<p><span class="math display">\[
+\mathbf T_\Delta
+=
+\begin{bmatrix}
+\mathbf R&amp;{}^{a}\mathbf p\\
+\mathbf 0_3^{\mathsf T}&amp;1
+\end{bmatrix}.
+\]</span></p>
+<p>First apply the selected <span class="math inline">\(SO(3)\)</span> logarithm rule to <span class="math inline">\(\mathbf R\)</span> to recover the finite rotation vector <span class="math inline">\({}^{a}\boldsymbol\phi\)</span>. Then recover the finite linear block from the translation column:</p>
+<p><span class="math display">\[
+\boxed{
+{}^{a}\boldsymbol\rho
+=
+\mathbf J({}^{a}\boldsymbol\phi)^{-1}
+{}^{a}\mathbf p
+}.
+\]</span></p>
+<p>Finally assemble <span class="math inline">\({}^{a}\boldsymbol\eta=[({}^{a}\boldsymbol\rho)^{\mathsf T}\;({}^{a}\boldsymbol\phi)^{\mathsf T}]^{\mathsf T}\)</span>. Equivalently, the selected matrix logarithm and vee operator perform these steps together:</p>
+<p><span class="math display">\[
+\boxed{
+\begin{aligned}
+{}^{a}\boldsymbol\eta
+&amp;\overset{\text{hat}}{\longmapsto}
+\widehat{{}^{a}\boldsymbol\eta}
+\overset{\exp}{\longmapsto}
+\mathbf T_\Delta,\\[0.4em]
+\mathbf T_\Delta
+&amp;\overset{\text{selected }\log}{\longmapsto}
+\widehat{{}^{a}\boldsymbol\eta}
+\overset{\text{vee}}{\longmapsto}
+{}^{a}\boldsymbol\eta.
+\end{aligned}
+}
+\]</span></p>
+<p>The column <span class="math inline">\({}^{a}\boldsymbol\eta\)</span> contains finite displacement amounts, not rates per second, so it is not an instantaneous twist. The transformation <span class="math inline">\(\mathbf T_\Delta\)</span> represents the resulting finite displacement; applying it to points or composing it with an existing pose produces the corresponding finite motion.</p>
+<p>For every validated transformation in the selected logarithm branch,</p>
+<p><span class="math display">\[
+\boxed{
+\exp\!\left(
+\log_{\mathrm{selected}}(\mathbf T_\Delta)
+\right)
+=
+\mathbf T_\Delta
+}.
+\]</span></p>
+<p>Here <span class="math inline">\(\log_{\mathrm{selected}}\)</span> denotes the declared single-valued logarithm branch, including its identity and <span class="math inline">\(\pi\)</span> conventions. The reverse coordinate round trip requires a branch qualification. Starting with an arbitrary <span class="math inline">\({}^{a}\boldsymbol\eta\)</span>, exponentiating and then applying the selected logarithm returns the selected representative of that displacement, which need not be the original column when its rotation angle lies outside the principal interval or at an ambiguous branch boundary.</p>
 </section>
 <section id="separating-geometry-from-motion-amount" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="separating-geometry-from-motion-amount">Separating geometry from motion amount</h3>
@@ -4645,9 +5041,9 @@ e_{p,\mathrm{rt}}
 <h3 class="unnumbered anchored" data-anchor-id="symbol-and-purpose-reference">Symbol and purpose reference</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
+<col style="width: 17%">
+<col style="width: 29%">
+<col style="width: 52%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -4732,78 +5128,6 @@ e_{p,\mathrm{rt}}
 }.
 \]</span></p>
 <p>The shortest memory rule is: <span class="math inline">\({}^{a}\mathbf S\)</span> says <strong>how</strong>, <span class="math inline">\(\sigma\)</span> says <strong>how much</strong>, and <span class="math inline">\(\dot\sigma\)</span> says <strong>how fast</strong>. Multiplying <span class="math inline">\({}^{a}\mathbf S\)</span> by <span class="math inline">\(\sigma\)</span> produces the finite coordinates <span class="math inline">\({}^{a}\boldsymbol\eta\)</span>; multiplying it by <span class="math inline">\(\dot\sigma\)</span> produces the instantaneous twist <span class="math inline">\({}^{a}\boldsymbol\xi\)</span>. The exponential constructs <span class="math inline">\(\mathbf T_\Delta\)</span>. A selected logarithm recovers <span class="math inline">\({}^{a}\boldsymbol\eta\)</span> only when the inverse description is needed.</p>
-</section>
-</section>
-<section id="sec-general-forward-kinematics" class="level2" data-number="8.6">
-<h2 data-number="8.6" class="anchored" data-anchor-id="sec-general-forward-kinematics"><span class="header-section-number">8.6</span> Configuration coordinates and forward kinematics</h2>
-<section id="configuration-space-and-coordinate-vectors" class="level3" data-number="8.6.1">
-<h3 data-number="8.6.1" class="anchored" data-anchor-id="configuration-space-and-coordinate-vectors"><span class="header-section-number">8.6.1</span> Configuration space and coordinate vectors</h3>
-</section>
-<section id="task-variables-and-the-forward-map" class="level3" data-number="8.6.2">
-<h3 data-number="8.6.2" class="anchored" data-anchor-id="task-variables-and-the-forward-map"><span class="header-section-number">8.6.2</span> Task variables and the forward map</h3>
-</section>
-<section id="the-total-derivative-and-multivariable-chain-rule" class="level3" data-number="8.6.3">
-<h3 data-number="8.6.3" class="anchored" data-anchor-id="the-total-derivative-and-multivariable-chain-rule"><span class="header-section-number">8.6.3</span> The total derivative and multivariable chain rule</h3>
-</section>
-</section>
-<section id="sec-serial-product-of-exponentials" class="level2" data-number="8.7">
-<h2 data-number="8.7" class="anchored" data-anchor-id="sec-serial-product-of-exponentials"><span class="header-section-number">8.7</span> Serial-chain pose through products of exponentials</h2>
-<section id="home-configuration-and-joint-screw-axes" class="level3" data-number="8.7.1">
-<h3 data-number="8.7.1" class="anchored" data-anchor-id="home-configuration-and-joint-screw-axes"><span class="header-section-number">8.7.1</span> Home configuration and joint screw axes</h3>
-</section>
-<section id="space-form-product-of-exponentials" class="level3" data-number="8.7.2">
-<h3 data-number="8.7.2" class="anchored" data-anchor-id="space-form-product-of-exponentials"><span class="header-section-number">8.7.2</span> Space-form product of exponentials</h3>
-</section>
-<section id="body-form-product-of-exponentials" class="level3" data-number="8.7.3">
-<h3 data-number="8.7.3" class="anchored" data-anchor-id="body-form-product-of-exponentials"><span class="header-section-number">8.7.3</span> Body-form product of exponentials</h3>
-</section>
-<section id="equivalence-with-a-transform-chain" class="level3" data-number="8.7.4">
-<h3 data-number="8.7.4" class="anchored" data-anchor-id="equivalence-with-a-transform-chain"><span class="header-section-number">8.7.4</span> Equivalence with a transform chain</h3>
-</section>
-</section>
-<section id="sec-general-robot-jacobians" class="level2" data-number="8.8">
-<h2 data-number="8.8" class="anchored" data-anchor-id="sec-general-robot-jacobians"><span class="header-section-number">8.8</span> Velocity kinematics and robot Jacobians</h2>
-<section id="task-jacobians" class="level3" data-number="8.8.1">
-<h3 data-number="8.8.1" class="anchored" data-anchor-id="task-jacobians"><span class="header-section-number">8.8.1</span> Task Jacobians</h3>
-</section>
-<section id="space-jacobians" class="level3" data-number="8.8.2">
-<h3 data-number="8.8.2" class="anchored" data-anchor-id="space-jacobians"><span class="header-section-number">8.8.2</span> Space Jacobians</h3>
-</section>
-<section id="body-jacobians" class="level3" data-number="8.8.3">
-<h3 data-number="8.8.3" class="anchored" data-anchor-id="body-jacobians"><span class="header-section-number">8.8.3</span> Body Jacobians</h3>
-</section>
-<section id="the-bodyspace-adjoint-relation" class="level3" data-number="8.8.4">
-<h3 data-number="8.8.4" class="anchored" data-anchor-id="the-bodyspace-adjoint-relation"><span class="header-section-number">8.8.4</span> The body–space adjoint relation</h3>
-</section>
-</section>
-<section id="sec-robot-jacobian-rank" class="level2" data-number="8.9">
-<h2 data-number="8.9" class="anchored" data-anchor-id="sec-robot-jacobian-rank"><span class="header-section-number">8.9</span> Rank, singularities, and conditioning</h2>
-<section id="task-specific-rank-loss" class="level3" data-number="8.9.1">
-<h3 data-number="8.9.1" class="anchored" data-anchor-id="task-specific-rank-loss"><span class="header-section-number">8.9.1</span> Task-specific rank loss</h3>
-</section>
-<section id="singular-values-and-numerical-conditioning" class="level3" data-number="8.9.2">
-<h3 data-number="8.9.2" class="anchored" data-anchor-id="singular-values-and-numerical-conditioning"><span class="header-section-number">8.9.2</span> Singular values and numerical conditioning</h3>
-</section>
-<section id="full-twist-and-reduced-task-jacobians" class="level3" data-number="8.9.3">
-<h3 data-number="8.9.3" class="anchored" data-anchor-id="full-twist-and-reduced-task-jacobians"><span class="header-section-number">8.9.3</span> Full-twist and reduced-task Jacobians</h3>
-</section>
-</section>
-<section id="sec-general-kinematics-checks" class="level2" data-number="8.10">
-<h2 data-number="8.10" class="anchored" data-anchor-id="sec-general-kinematics-checks"><span class="header-section-number">8.10</span> Modelling limits and implementation checks</h2>
-<section id="supported-serial-chain-model" class="level3" data-number="8.10.1">
-<h3 data-number="8.10.1" class="anchored" data-anchor-id="supported-serial-chain-model"><span class="header-section-number">8.10.1</span> Supported serial-chain model</h3>
-</section>
-<section id="explicit-exclusions" class="level3" data-number="8.10.2">
-<h3 data-number="8.10.2" class="anchored" data-anchor-id="explicit-exclusions"><span class="header-section-number">8.10.2</span> Explicit exclusions</h3>
-</section>
-<section id="analytic-and-finite-difference-checks" class="level3" data-number="8.10.3">
-<h3 data-number="8.10.3" class="anchored" data-anchor-id="analytic-and-finite-difference-checks"><span class="header-section-number">8.10.3</span> Analytic and finite-difference checks</h3>
-</section>
-</section>
-<section id="cumulative-chapter-review" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="cumulative-chapter-review">Cumulative chapter review</h2>
-<section id="answers-and-hints-4" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="answers-and-hints-4">Answers and hints</h3>
 </section>
 </section>
 <section id="sec-appendix-chasles-mozzi" class="level2 unnumbered">
@@ -5321,8 +5645,8 @@ h\theta{}^{a}\mathbf s.
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
 <ul>
-<li>Kevin M. Lynch and Frank C. Park, <em>Modern Robotics: Mechanics, Planning, and Control</em>, Chapter 2 on rigid links, joints, and robot configuration; Chapter 3, especially Section 3.3.2 on body and space twists, Section 3.3.2.2 on the screw interpretation of a twist and normalised screw axes, and Section 3.3.3 on the <span class="math inline">\(SE(3)\)</span> exponential and logarithm; and Chapter 4 on forward kinematics as a mapping from joint values to the end-effector frame.</li>
-<li>John J. Craig, <em>Introduction to Robotics: Mechanics and Control</em>, Chapter 2 on spatial descriptions, homogeneous transformation mappings, composition order, and rotations about general axes; Chapter 3 on one-degree-of-freedom revolute and prismatic joints, joint space, and the end-link pose as a function of the joint variables; and Chapter 5 on time-varying position, orientation, and rigid-body velocities.</li>
+<li>Kevin M. Lynch and Frank C. Park, <em>Modern Robotics: Mechanics, Planning, and Control</em>, Chapter 2 on rigid links, joints, and robot configuration; and Chapter 3, especially Section 3.3.2 on body and space twists, Section 3.3.2.2 on the screw interpretation of a twist and normalised screw axes, and Section 3.3.3 on the <span class="math inline">\(SE(3)\)</span> exponential and logarithm.</li>
+<li>John J. Craig, <em>Introduction to Robotics: Mechanics and Control</em>, Chapter 2 on spatial descriptions, homogeneous transformation mappings, composition order, and rotations about general axes; and Chapter 3 on one-degree-of-freedom revolute and prismatic joints.</li>
 <li>Peter Corke, <em>Robotics, Vision and Control: Fundamental Algorithms in Python</em>, Chapter 2, especially Sections 2.3.2.2–2.3.2.3 and 2.4.8 on the matrix exponential for pose, three-dimensional twists, and their revolute, prismatic, and finite-pitch screw cases; and Chapter 3, especially Sections 3.1.1–3.1.5 on time-varying pose, frame-dependent velocity coordinates, exponential rotation updates, and incremental rigid-body motion.</li>
 </ul>
 
@@ -5782,6 +6106,9 @@ h\theta{}^{a}\mathbf s.
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./10_general_robot_kinematics_and_jacobians.html" class="pagination-link" aria-label="General Robot Kinematics and Jacobians">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">General Robot Kinematics and Jacobians</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
